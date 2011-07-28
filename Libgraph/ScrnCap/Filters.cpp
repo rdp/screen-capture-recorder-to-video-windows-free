@@ -51,7 +51,7 @@ CScreenCapStream::CScreenCapStream(HRESULT *phr, CScreenCap *pParent, LPCWSTR pP
 {
     m_hDeskDC = GetDC(GetDesktopWindow());
     m_hDC = CreateCompatibleDC(0);
-    SetCaptureRect(0, 0, 1024, 768, 30);
+    SetCaptureRect(0, 0, 300, 200, 30); // 30 fps
 }
 
 void CScreenCapStream::SetCaptureRect(int x, int y, int w, int h, int fps)
@@ -62,7 +62,7 @@ void CScreenCapStream::SetCaptureRect(int x, int y, int w, int h, int fps)
     m_w = w;
     m_h = h;
 
-    // Measure capture rate
+    // Measure how fast we can capture, at all...
     DWORD tick = GetTickCount();
     for(int i = 0; i < 5; ++i)
     {
