@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScreenCap Filter", "Filters.vcxproj", "{61601C2F-5EAD-4798-B777-C6891EE63503}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61601C2F-5EAD-4798-B777-C6891EE63503}.Debug|Win32.ActiveCfg = Debug|Win32
+		{61601C2F-5EAD-4798-B777-C6891EE63503}.Debug|Win32.Build.0 = Debug|Win32
+		{61601C2F-5EAD-4798-B777-C6891EE63503}.Release|Win32.ActiveCfg = Release|Win32
+		{61601C2F-5EAD-4798-B777-C6891EE63503}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
