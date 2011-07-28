@@ -1,11 +1,9 @@
 This is gently lifted from
 
-http://tmhare.mvps.org/downloads.htm "Filter Graph Library"
+Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource
 
-To be made into its own project.
+Basically there seem to be no quality, general purpose, free open source directshow screen capture filters out there, so this is the first.
+
+Message me if interested in learning or using it, or feature requests :)
 
 See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
-
-Basically there are no real open source directshow screen capture filters out there, so this is the first.
-
-Message me if interested in learning or using it.

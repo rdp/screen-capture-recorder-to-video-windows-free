@@ -59,6 +59,7 @@ private:
     CCritSec m_cSharedState;
     IReferenceClock *m_pClock;
     int m_x, m_y, m_w, m_h;
+	boolean have_been_setup;
 
     REFERENCE_TIME m_rtLastTime;
 
