@@ -17,9 +17,9 @@ with DWORD keys:
   # unimplemented, but will if there is ever any request/demand for them:
   # monitor_number, fps, hwnd_to_use, show_mouse
   
-see incoming.reg (though NB that those values are in hex...)
+see incoming.reg (though NB that those values are in hex, so editing that file is a bit hard).  
 
-If none are set, it defaults to full screen.
+If none are set, it defaults to full screen.  If any value is set to 0, that means "not set" so it defaults to the default.
 
 For ease of configuration, there is a jruby script in easy_setup directory to help configure them.
 
