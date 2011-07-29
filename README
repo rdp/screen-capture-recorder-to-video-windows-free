@@ -1,13 +1,13 @@
-This is gently lifted from
+Basically there seem to be no quality, general purpose, free open source directshow screen capture filters out there, 
+so this pretends to be the first.
 
-Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource
+It is gently lifted from ("inspired by?")
+  Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource
+  so you'll probably want to install those before messing around in the code.
 
-Basically there seem to be no quality, general purpose, free open source directshow screen capture filters out there, so this is the first.
+Message me if interested in learning or using it, or with any feature requests :)
 
-Message me if interested in learning or using it, or feature requests :)
-
-See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
-
+To install, run regsvr32 on PushSource.dll
 
 To configure it's:
 
@@ -21,5 +21,6 @@ see incoming.reg (though NB that those values are in hex...)
 
 If none are set, it defaults to full screen.
 
+For ease of configuration, there is a jruby script in easy_setup directory to help configure them.
 
-To install, run regsvr32 on PushSource.dll
+See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture

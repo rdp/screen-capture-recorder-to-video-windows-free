@@ -53,22 +53,21 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 
 
 	// custom config...
+
+	// assume 0 means not set...
 	DWORD config_start_x = read_config_setting(TEXT("start_x"));
-	FILE *f = fopen("g:\\yo", "a");
-	fprintf(f, "got %d \n", config_start_x);
-	fclose(f);
-	if(config_start_x != -1) {
+	if(config_start_x > 0) {
 	  m_rScreen.left = config_start_x; // TODO no overflow, that's a bad value too...
 	}
 
 	// is there a better way to do this?
 	DWORD config_start_y = read_config_setting(TEXT("start_y"));
-	if(config_start_y != -1) {
+	if(config_start_y > 0) {
 	  m_rScreen.top = config_start_y;
 	}
 
 	DWORD config_width = read_config_setting(TEXT("width"));
-	if(config_width != -1) {
+	if(config_width > 0) {
 		DWORD desired = m_rScreen.left + config_width;
 		DWORD max_possible = m_rScreen.right;
 		if(desired < max_possible)
@@ -78,7 +77,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 	}
 
 	DWORD config_height = read_config_setting(TEXT("height"));
-	if(config_height != -1) {
+	if(config_height > 0) {
 		DWORD desired = m_rScreen.top + config_height;
 		DWORD max_possible = m_rScreen.bottom;
 		if(desired < max_possible)
@@ -87,6 +86,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
+	FILE *f = fopen("g:\\yo2", "a");
+	fprintf(f, "got %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
+	fclose(f);
 
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
