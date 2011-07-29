@@ -1,42 +1,30 @@
 #include <windows.h>
 #include <stdio.h>
-//#include <strsafe.h>
 
+// http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
 
-void ErrorExit(LPTSTR lpszFunction) 
-{ 
-    // Retrieve the system error message for the last-error code
+// =====================================================================================
+HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 
-    LPVOID lpMsgBuf;
-    LPVOID lpDisplayBuf;
-    DWORD dw = GetLastError(); 
+	// Given a value name and an hKey returns a DWORD from the registry.
+	// eg. RegGetDWord(hKey, TEXT("my dword"), &dwMyValue);
 
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPTSTR) &lpMsgBuf,
-        0, NULL );
+	LONG lResult;
+	DWORD dwDataSize = sizeof(DWORD);
+	DWORD dwType = 0;
 
-    // Display the error message and exit the process
+	// Check input parameters...
+	if (hKey == NULL || lpdwResult == NULL) return E_INVALIDARG;
 
-    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, 
-        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR)); 
-    snprintf ((LPTSTR)lpDisplayBuf, 
-        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-        TEXT("%s failed with error %d: %s"), 
-        lpszFunction, dw, lpMsgBuf); 
-    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK); 
+	// Get dword value from the registry...
+	lResult = RegQueryValueEx(hKey, szValueName, 0, &dwType, (LPBYTE) lpdwResult, &dwDataSize );
 
-    LocalFree(lpMsgBuf);
-    LocalFree(lpDisplayBuf);
-    ExitProcess(dw); 
+	// Check result and make sure the registry value is a DWORD(REG_DWORD)...
+	if (lResult != ERROR_SUCCESS) return HRESULT_FROM_WIN32(lResult);
+	else if (dwType != REG_DWORD) return DISP_E_TYPEMISMATCH;
+
+	return NOERROR;
 }
-
-
 int main(char** args) {
   
   HKEY hKey;
@@ -50,13 +38,18 @@ LONG i;
     {
         printf("ossc FAIL none %d ", i);
 //                wprintf(L"Format message failed with 0x %x\n", GetLastError()); // #define ERROR_FILE_NOT_FOUND             2L
-
-                 //ErrorExit(TEXT("Regeopn"));
-                
-                RegQueryValueEx(hKey, TEXT("top_left"), NULL, NULL,)
-
         return;
     } else {
+	DWORD dwVal;
+
+	HRESULT hr = RegGetDWord(hKey,  TEXT("top_left"), &dwVal);
+	if (FAILED(hr)) {
+    printf("failed1");
+  } else {
+    printf("value %d", dwVal);
+  }
+
+
       printf("ossc yes success %d", i);  
     }
   

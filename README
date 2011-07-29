@@ -7,3 +7,12 @@ Basically there seem to be no quality, general purpose, free open source directs
 Message me if interested in learning or using it, or feature requests :)
 
 See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
+
+
+To configure it's:
+
+HKEY_CURRENT_USER\Software\os_screen_capture
+with DWORD keys:
+  start_x, start_y, width, height, monitor_number, fps, hwnd_to_use
+  
+see incoming.reg (though NB that those values are in hex...)
