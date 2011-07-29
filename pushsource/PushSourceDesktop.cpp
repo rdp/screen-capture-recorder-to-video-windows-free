@@ -20,7 +20,7 @@
  *  
  *
  **********************************************/
-
+#define MIN(a,b)  ((a) < (b) ? (a) : (b))  
 
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
         : CSourceStream(NAME("Push Source Desktop"), phr, pFilter, L"Out"),
@@ -58,9 +58,36 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 	fprintf(f, "got %d \n", config_start_x);
 	fclose(f);
 	if(config_start_x != -1) {
-	  m_rScreen.left = config_start_x;
+	  m_rScreen.left = config_start_x; // TODO no overflow, that's a bad value too...
 	}
-		
+
+	// is there a better way to do this?
+	DWORD config_start_y = read_config_setting(TEXT("start_y"));
+	if(config_start_y != -1) {
+	  m_rScreen.top = config_start_y;
+	}
+
+	DWORD config_width = read_config_setting(TEXT("width"));
+	if(config_width != -1) {
+		DWORD desired = m_rScreen.left + config_width;
+		DWORD max_possible = m_rScreen.right;
+		if(desired < max_possible)
+			m_rScreen.right = desired;
+		else
+			m_rScreen.right = max_possible; // or should I throw an error?
+	}
+
+	DWORD config_height = read_config_setting(TEXT("height"));
+	if(config_height != -1) {
+		DWORD desired = m_rScreen.top + config_height;
+		DWORD max_possible = m_rScreen.bottom;
+		if(desired < max_possible)
+			m_rScreen.bottom = desired;
+		else
+			m_rScreen.bottom = max_possible;
+	}
+
+
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;

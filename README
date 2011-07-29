@@ -18,3 +18,8 @@ with DWORD keys:
   # monitor_number, fps, hwnd_to_use, show_mouse
   
 see incoming.reg (though NB that those values are in hex...)
+
+If none are set, it defaults to full screen.
+
+
+To install, run regsvr32 on PushSource.dll
