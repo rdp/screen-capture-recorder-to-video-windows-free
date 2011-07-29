@@ -39,19 +39,21 @@ void ErrorExit(LPTSTR lpszFunction)
 
 int main(char** args) {
   
-//  HKEY_LOCAL_MACHINE\SOFTWARE\os_screen_capture
-    HKEY hKey;
-    // Check that UK Phone Codes    is installed
-    LONG i;
+  HKEY hKey;
+LONG i;
+    
     i = RegOpenKeyEx(HKEY_CURRENT_USER,
-       "SOFTWARE\\SC",
-      0, KEY_READ, &hKey);
+       "SOFTWARE\\os_screen_capture",//\\top_left",
+    0, KEY_READ, &hKey);
+    
     if ( i != ERROR_SUCCESS)
     {
         printf("ossc FAIL none %d ", i);
 //                wprintf(L"Format message failed with 0x %x\n", GetLastError()); // #define ERROR_FILE_NOT_FOUND             2L
 
-                 ErrorExit(TEXT("Regeopn"));
+                 //ErrorExit(TEXT("Regeopn"));
+                
+                RegQueryValueEx(hKey, TEXT("top_left"), NULL, NULL,)
 
         return;
     } else {
