@@ -13,6 +13,8 @@ To configure it's:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
 with DWORD keys:
-  start_x, start_y, width, height, monitor_number, fps, hwnd_to_use
+  start_x, start_y, width, height
+  # unimplemented, but will if there is ever any request/demand for them:
+  # monitor_number, fps, hwnd_to_use, show_mouse
   
 see incoming.reg (though NB that those values are in hex...)

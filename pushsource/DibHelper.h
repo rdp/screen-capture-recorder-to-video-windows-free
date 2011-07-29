@@ -47,3 +47,5 @@ BOOL PaintDIB (HDC, LPRECT, HDIB, LPRECT, HPALETTE);
 int PalEntriesOnDevice (HDC hDC);
 WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
+
+DWORD read_config_setting(LPCTSTR szValueName);

@@ -21,6 +21,7 @@
  *
  **********************************************/
 
+
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
         : CSourceStream(NAME("Push Source Desktop"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
@@ -49,6 +50,17 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
     m_rScreen.bottom = GetDeviceCaps(hDC, VERTRES);
 
+
+
+	// custom config...
+	DWORD config_start_x = read_config_setting(TEXT("start_x"));
+	FILE *f = fopen("g:\\yo", "a");
+	fprintf(f, "got %d \n", config_start_x);
+	fclose(f);
+	if(config_start_x != -1) {
+	  m_rScreen.left = config_start_x;
+	}
+		
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;

@@ -25,32 +25,37 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 
 	return NOERROR;
 }
-int main(char** args) {
+
+DWORD read_config_setting(char *name) {
   
   HKEY hKey;
 LONG i;
     
     i = RegOpenKeyEx(HKEY_CURRENT_USER,
-       "SOFTWARE\\os_screen_capture",//\\top_left",
+       "SOFTWARE\\os_screen_capture",
     0, KEY_READ, &hKey);
     
     if ( i != ERROR_SUCCESS)
     {
-        printf("ossc FAIL none %d ", i);
 //                wprintf(L"Format message failed with 0x %x\n", GetLastError()); // #define ERROR_FILE_NOT_FOUND             2L
-        return;
+        return -1;
     } else {
+      
 	DWORD dwVal;
 
-	HRESULT hr = RegGetDWord(hKey,  TEXT("top_left"), &dwVal);
+	HRESULT hr = RegGetDWord(hKey,  TEXT(name), &dwVal);
+  RegCloseKey(hKey); // done with that
 	if (FAILED(hr)) {
-    printf("failed1"); // absent.
+    return -1;
   } else {
-    printf("value %d", dwVal);
+    return dwVal;
   }
+}
+ 
+}
 
 
-      printf("ossc yes success %d", i);  
-    }
-  
+int main(char** args) {
+  printf("read tl %d \n", read_config_setting("top_left"));
+  printf("read sx %d \n", read_config_setting("start_x"));
 }

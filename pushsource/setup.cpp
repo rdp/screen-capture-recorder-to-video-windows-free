@@ -195,6 +195,7 @@ STDAPI RegisterFilters( BOOL bRegister )
     return hr;
 }
 
+/* sniff, doesn't enumerate right yet...
 STDAPI DllRegisterServer()
 {
     return RegisterFilters(TRUE);
@@ -203,7 +204,18 @@ STDAPI DllRegisterServer()
 STDAPI DllUnregisterServer()
 {
     return RegisterFilters(FALSE);
+} */
+
+STDAPI DllRegisterServer()
+{
+    return AMovieDllRegisterServer2( TRUE );
 }
+
+STDAPI DllUnregisterServer()
+{
+    return AMovieDllRegisterServer2( FALSE );
+}
+
 
 //
 // DllEntryPoint
