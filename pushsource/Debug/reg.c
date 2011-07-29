@@ -44,7 +44,7 @@ LONG i;
 
 	HRESULT hr = RegGetDWord(hKey,  TEXT("top_left"), &dwVal);
 	if (FAILED(hr)) {
-    printf("failed1");
+    printf("failed1"); // absent.
   } else {
     printf("value %d", dwVal);
   }
