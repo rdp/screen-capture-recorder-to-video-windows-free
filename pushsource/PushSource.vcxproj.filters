@@ -18,16 +18,13 @@
     <ClCompile Include="DibHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PushSourceBitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PushSourceBitmapSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PushSourceDesktop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="setup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PushSourceDesktopAccessories.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
