@@ -29,3 +29,5 @@ I could also add "push bitmap" as a new additional filter, if ever desired.
 
 I could make it into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
 other products out there also do that and are free for private use, but I could if desired (ping me).
+
+blttest is originally from http://stereopsis.com/blttest and measure bitblt speed (which is hardware dependent, or so I'm told).

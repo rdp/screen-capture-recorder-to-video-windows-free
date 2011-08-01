@@ -7,10 +7,10 @@ require 'win32/registry'
       received
     end
     
-    screen_capture = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture"
+    screen_capture = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
 
     for type in ['height', 'width', 'start_x', 'start_y']
-      received = get_user_input('enter desired ' + type + ' (blank for reset to default)')
+      received = get_user_input('enter desired ' + type + ' (blank for reset to default)', screen_capture[type])
       p received
       if received == ''
         received = 0 # reset...
@@ -23,4 +23,4 @@ require 'win32/registry'
       screen_capture.write(type, Win32::Registry::REG_DWORD, received.to_i)
     end
     screen_capture.close
-p 'done setting them'
+    p 'done setting them'
