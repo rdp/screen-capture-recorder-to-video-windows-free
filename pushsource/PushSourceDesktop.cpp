@@ -21,9 +21,9 @@
  *
  **********************************************/
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  
-
+DWORD start;
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
-        : CSourceStream(NAME("Push Source Desktop"), phr, pFilter, L"Out"),
+        : CSourceStream(NAME("Push Source Desktop OS"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
@@ -42,7 +42,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     // support for overlay surfaces).
 
     // Get the device context of the main display, just to get some metricts for it...
-
+	start = GetTickCount();
     HDC hDC;
     hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
@@ -87,11 +87,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
-
-    FILE *f = fopen("g:\\yo2", "a");
-	fprintf(f, "got %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
-	fclose(f);
-
+	char log[250];
+	sprintf(log, "got2 %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
+	logToFile(log);
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
@@ -100,10 +98,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     DeleteDC(hDC);
 }
 
+
 CPushPinDesktop::~CPushPinDesktop()
 {   
+	// I don't think it ever gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
-	
 }
 
 
@@ -111,6 +110,12 @@ CPushPinDesktop::~CPushPinDesktop()
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
+	DWORD local_start = GetTickCount();
+    char log[250];
+	//sprintf(log, "start total frames %d total ms %d\n", m_iFrameNumber, GetTickCount() - start);
+	//logToFile(log);
+
+
 	//Sleep(500);
 	BYTE *pData;
     long cbData;
@@ -149,6 +154,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	// Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
+	double fps = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
+	sprintf(log, "end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);
+	logToFile(log);
 
     return S_OK;
 }

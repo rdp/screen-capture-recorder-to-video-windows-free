@@ -11,6 +11,14 @@
 
 #include "dibhelper.h"
 
+#include <stdio.h>
+
+void logToFile(char *log_this) {
+    FILE *f = fopen("g:\\yo2", "a"); // TODO ...
+	fprintf(f, log_this);
+	fclose(f);
+}
+
 
 HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
