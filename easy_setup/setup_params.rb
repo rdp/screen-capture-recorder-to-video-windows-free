@@ -11,6 +11,7 @@ require 'win32/registry'
 
     for type in ['height', 'width', 'start_x', 'start_y']
       received = get_user_input('enter desired ' + type + ' (blank for reset to default)', screen_capture[type])
+      raise 'canceled' unless received
       p received
       if received == ''
         received = 0 # reset...

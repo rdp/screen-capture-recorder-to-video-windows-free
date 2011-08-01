@@ -29,8 +29,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int kWidth  = 1680;
-const int kHeight = 1050;
+const int kWidth  = 640; // originally 640x480 I think
+const int kHeight = 480;
 const int kFramesBlt = 100;
 const int kFramesRev = 10;
 
@@ -75,7 +75,7 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			char *nl = report + sprintf(report, "BitBlt:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
-			sprintf(nl, "\r\nReverseBlt:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+			sprintf(nl, "\r\nReverseBlt (the one that matters):\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
 
 			HWND ec = ::GetDlgItem(hwnd, IDC_RESTEXT);
