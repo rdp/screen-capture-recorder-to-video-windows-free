@@ -104,24 +104,8 @@ const AMOVIESETUP_FILTER sudPushSourceDesktop =
 // being created. The class factory will call the static CreateInstance.
 // We provide a set of filters in this one DLL.
 
-CFactoryTemplate g_Templates[3] = 
+CFactoryTemplate g_Templates[1] = 
 {
-    { 
-      g_wszPushBitmap,                // Name
-      &CLSID_PushSourceBitmap,        // CLSID
-      CPushSourceBitmap::CreateInstance,  // Method to create an instance of MyComponent
-      NULL,                           // Initialization function
-      &sudPushSourceBitmap            // Set-up information (for filters)
-    },
-
-    { 
-      g_wszPushBitmapSet,             // Name
-      &CLSID_PushSourceBitmapSet,     // CLSID
-      CPushSourceBitmapSet::CreateInstance,  // Method to create an instance of MyComponent
-      NULL,                           // Initialization function
-      &sudPushSourceBitmapSet         // Set-up information (for filters)
-    },
-
     { 
       g_wszPushDesktop,               // Name
       &CLSID_PushSourceDesktop,       // CLSID
@@ -155,8 +139,8 @@ STDAPI RegisterFilters( BOOL bRegister )
   
     hr = CoInitialize(0);
     if(bRegister)
-    {
-        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"Virtual Desktop Cameo", achFileName, L"Both", L"InprocServer32");
+    { // THIS NAME CURRENTLY NOT YET USED...
+        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", achFileName, L"Both", L"InprocServer32");
     }
 
     if( SUCCEEDED(hr) )
@@ -173,7 +157,7 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.dwMerit = MERIT_DO_NOT_USE;
                 rf2.cPins = 1;
                 rf2.rgPins = &sudOutputPinDesktop;
-                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"Virtual Desktop Cameo", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
+                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
             }
             else
             {

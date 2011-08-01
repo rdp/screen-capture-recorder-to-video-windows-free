@@ -12,7 +12,7 @@
 #include "dibhelper.h"
 
 
-// http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
+// some from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
 
 // =====================================================================================
 HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {

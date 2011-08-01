@@ -24,3 +24,8 @@ If none are set, it defaults to full screen.  If any value is set to 0, that mea
 For ease of configuration, there is a jruby script in easy_setup directory to help configure them.
 
 See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
+
+I could also add "push bitmap" as a new additional filter, if ever desired.
+
+I could make it into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
+other products out there also do that and are free for private use, but I could if desired (ping me).
