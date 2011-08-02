@@ -11,7 +11,7 @@ require 'win32/registry'
 
     for type in ['height', 'width', 'start_x', 'start_y']
       previous_setting = screen_capture[type]
-      if ARGV.find('--just-display-current-settings')
+      if ARGV.index('--just-display-current-settings')
         puts "#{type}=#{previous_setting}"
         next
       end
