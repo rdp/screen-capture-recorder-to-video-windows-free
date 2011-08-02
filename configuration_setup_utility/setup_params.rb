@@ -10,7 +10,12 @@ require 'win32/registry'
     screen_capture = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
 
     for type in ['height', 'width', 'start_x', 'start_y']
-      received = get_user_input('enter desired ' + type + ' (blank for reset to default)', screen_capture[type])
+      previous_setting = screen_capture[type]
+      if ARGV.find('--just-display-current-settings')
+        puts "#{type}=#{previous_setting}"
+        next
+      end
+      received = get_user_input('enter desired ' + type + ' (blank for reset to default)', previous_setting)
       raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
       p received
       if received == ''
