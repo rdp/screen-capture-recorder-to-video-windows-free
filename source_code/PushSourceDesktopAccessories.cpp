@@ -257,6 +257,9 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
                 hr = E_INVALIDARG;
                 break;
         }
+      char log[250];
+	  sprintf(log, "bitcount %d\n", pvi->bmiHeader.biBitCount);
+	  logToFile(log);
     } 
 
     return hr;
