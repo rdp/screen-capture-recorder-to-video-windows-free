@@ -2,8 +2,8 @@ Basically there seem to be no quality, general purpose, free open source directs
 so this pretends to be the first.
 
 It is gently lifted from ("inspired by?")
-  Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource
-  so you'll probably want to install those before messing around in the code.
+  ...\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource
+  so you'll probably want to install the SDK before messing around in this code.
 
 Message me if interested in learning or using it, or with any feature requests :)
 
@@ -12,12 +12,13 @@ To install, run regsvr32 on PushSource.dll
 To configure it's:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
-with DWORD keys:
+with DWORD keys respected:
   start_x, start_y, width, height
   # unimplemented, but will if there is ever any request/demand for them:
   # monitor_number, fps, hwnd_to_use, show_mouse
   
-see incoming.reg (though NB that those values are in hex, so editing that file is a bit hard).  
+ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit hard).  
+See also the jruby setup script in configuration_setup_utility for one way to set them up.
 
 If none are set, it defaults to full screen.  If any value is set to 0, that means "not set" so it defaults to the default.
 
@@ -27,7 +28,8 @@ See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capt
 
 I could also add "push bitmap" as a new additional filter, if ever desired.
 
-I could make it into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
+I could make this into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
 other products out there also do that and are free for private use, but I could if desired (ping me).
+Basically you want a feature, ping me, you got it.
 
 blttest is originally from http://stereopsis.com/blttest and measure bitblt speed (which is hardware dependent, or so I'm told).
