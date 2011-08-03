@@ -1,0 +1,7 @@
+LIBRARY     vcam_vs_2010.ax
+EXPORTS
+            DllMain                 PRIVATE
+            DllGetClassObject       PRIVATE
+            DllCanUnloadNow         PRIVATE
+            DllRegisterServer       PRIVATE
+            DllUnregisterServer     PRIVATE
