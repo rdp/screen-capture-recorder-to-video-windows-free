@@ -17,7 +17,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
-        m_rtFrameLength(FPS_50), // Capture and display desktop "x" times per second...kind of...
+        m_rtFrameLength(FPS_20), // Capture and display desktop "x" times per second...kind of...
         m_nCurrentBitDepth(32)
 {
 
@@ -87,13 +87,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     DeleteDC(hDC);
 }
 
-
 CPushPinDesktop::~CPushPinDesktop()
 {   
 	// I don't think it ever gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
-
 
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
@@ -131,7 +129,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     m_iFrameNumber++;
 	// Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
-	//pSample->SetDis(TRUE);
+	// only discontinuous for the first...I think...
+	pSample->SetDiscontinuity(m_iFrameNumber == 1);
 
 	double fps = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
 	LocalOutput("end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);

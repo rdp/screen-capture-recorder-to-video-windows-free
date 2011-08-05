@@ -45,7 +45,6 @@ CUnknown * WINAPI CPushSourceDesktop::CreateInstance(IUnknown *pUnk, HRESULT *ph
 			*phr = S_OK;
 	}
     return pNewFilter;
-
 }
 
 
