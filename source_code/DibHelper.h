@@ -9,7 +9,7 @@
 
 #define HDIB HANDLE
 
-void logToFile(char *log_this);
+void LocalOutput(const char *str, ...);
 
 /* DIB macros */
 #define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))

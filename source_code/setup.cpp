@@ -139,7 +139,7 @@ STDAPI RegisterFilters( BOOL bRegister )
   
     hr = CoInitialize(0);
     if(bRegister)
-    { // THIS NAME CURRENTLY NOT YET USED...
+    { 
         hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", achFileName, L"Both", L"InprocServer32");
     }
 
@@ -179,25 +179,14 @@ STDAPI RegisterFilters( BOOL bRegister )
     return hr;
 }
 
-/* sniff, doesn't enumerate right yet...
 STDAPI DllRegisterServer()
 {
-    return RegisterFilters(TRUE);
+    return RegisterFilters(TRUE) && AMovieDllRegisterServer2( TRUE );
 }
 
 STDAPI DllUnregisterServer()
 {
-    return RegisterFilters(FALSE);
-} */
-
-STDAPI DllRegisterServer()
-{
-    return AMovieDllRegisterServer2( TRUE );
-}
-
-STDAPI DllUnregisterServer()
-{
-    return AMovieDllRegisterServer2( FALSE );
+    return RegisterFilters(FALSE) && AMovieDllRegisterServer2( FALSE );
 }
 
 

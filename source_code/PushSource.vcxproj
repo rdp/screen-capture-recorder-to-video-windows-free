@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DibHelper.cpp" />
+    <ClCompile Include="parent.cpp" />
     <ClCompile Include="PushSourceDesktop.cpp" />
     <ClCompile Include="PushSourceDesktopAccessories.cpp" />
     <ClCompile Include="setup.cpp" />

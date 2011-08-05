@@ -30,7 +30,7 @@ const REFERENCE_TIME rtDefaultFrameLength = FPS_10;
 #define g_wszPushDesktop    L"PushSource Desktop Filter"
 
 
-class CPushPinDesktop : public CSourceStream//, public IAMStreamConfig
+class CPushPinDesktop : public CSourceStream// ?? -->, public IAMStreamConfig
 {
 
      //////////////////////////////////////////////////////////////////////////

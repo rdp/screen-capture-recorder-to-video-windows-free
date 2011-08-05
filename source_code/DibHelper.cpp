@@ -13,10 +13,24 @@
 
 #include <stdio.h>
 
+
 void logToFile(char *log_this) {
     FILE *f = fopen("g:\\yo2", "a"); // TODO ...
 	fprintf(f, log_this);
 	fclose(f);
+}
+
+
+void LocalOutput(const char *str, ...)
+{
+  char buf[2048];
+  va_list ptr;
+  va_start(ptr,str);
+  vsprintf_s(buf,str,ptr);
+  OutputDebugStringA(buf);
+  OutputDebugStringA("\n");
+  // also works: OutputDebugString(L"yo ho2");
+  //logToFile(buf);
 }
 
 

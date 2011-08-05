@@ -1,12 +1,3 @@
-//------------------------------------------------------------------------------
-// File: PushSourceDesktop.cpp
-//
-// Desc: DirectShow sample code - In-memory push mode source filter
-//       Provides an image of the user's desktop as a continuously updating stream.
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
-
 #include <streams.h>
 
 #include "PushSource.h"
@@ -52,8 +43,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     m_rScreen.bottom = GetDeviceCaps(hDC, VERTRES);
 
 
-
-	// my custom config...
+	// my custom config settings...
 
 	// assume 0 means not set...negative ignore :)
 	DWORD config_start_x = read_config_setting(TEXT("start_x"));
@@ -87,9 +77,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
-	char log[250];
-	sprintf(log, "got2 %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
-	logToFile(log);
+	LocalOutput("got2 %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
@@ -111,12 +99,6 @@ CPushPinDesktop::~CPushPinDesktop()
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
 	DWORD local_start = GetTickCount();
-    char log[250];
-	//sprintf(log, "start total frames %d total ms %d\n", m_iFrameNumber, GetTickCount() - start);
-	//logToFile(log);
-
-
-	//Sleep(500);
 	BYTE *pData;
     long cbData;
 
@@ -140,139 +122,22 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     if (hDib)
         DeleteObject(hDib);
-
-	// Set the timestamps that will govern playback frame rate.
-	// If this file is getting written out as an AVI,
-	// then you'll also need to configure the AVI Mux filter to 
-	// set the Average Time Per Frame for the AVI Header.
-    // The current time is the sample's start.
-    REFERENCE_TIME rtStart = m_iFrameNumber * m_rtFrameLength;
-    REFERENCE_TIME rtStop  = rtStart + m_rtFrameLength;
-
+	/*
+	  CRefTime now;
+    m_pParent->StreamTime(now);
     pSample->SetTime(&rtStart, &rtStop);
-    m_iFrameNumber++;
+    m_iFrameNumber++;*/
 
+/*  
+    REFERENCE_TIME endThisFrame = now + avgFrameTime;
+    pms->SetTime((REFERENCE_TIME *) &now, &endThisFrame); TODO */
 	// Set TRUE on every sample for uncompressed frames
-    pSample->SetSyncPoint(TRUE);
+    //pms->SetSyncPoint(TRUE);
+	//pms->SetDis(TRUE);
+
 	double fps = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
-	sprintf(log, "end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);
-	logToFile(log);
+	LocalOutput("end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);
 
     return S_OK;
 }
 
-
-
-/**********************************************
- *
- *  CPushSourceDesktop Class
- *
- **********************************************/
-
-CPushSourceDesktop::CPushSourceDesktop(IUnknown *pUnk, HRESULT *phr)
-           : CSource(NAME("PushSourceDesktop"), pUnk, CLSID_PushSourceDesktop)
-{
-    // The pin magically adds itself to our pin array.
-    m_pPin = new CPushPinDesktop(phr, this);
-
-	if (phr)
-	{
-		if (m_pPin == NULL)
-			*phr = E_OUTOFMEMORY;
-		else
-			*phr = S_OK;
-	}  
-}
-
-
-CPushSourceDesktop::~CPushSourceDesktop()
-{
-    delete m_pPin;
-}
-
-
-CUnknown * WINAPI CPushSourceDesktop::CreateInstance(IUnknown *pUnk, HRESULT *phr)
-{
-    CPushSourceDesktop *pNewFilter = new CPushSourceDesktop(pUnk, phr );
-
-	if (phr)
-	{
-		if (pNewFilter == NULL) 
-			*phr = E_OUTOFMEMORY;
-		else
-			*phr = S_OK;
-	}
-    return pNewFilter;
-
-}
-
-
-HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
-{
-    *piCount = 5;
-    *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is a MS thing.
-    return S_OK;
-}
-/*
-HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
-{
-    *pmt = CreateMediaType(&m_mt); // CreateMediaType is MS
-    DECLARE_PTR(VIDEOINFOHEADER, pvi, (*pmt)->pbFormat);
-
-    pvi->bmiHeader.biCompression = BI_RGB;
-    pvi->bmiHeader.biBitCount    = GetDeviceCaps(m_hDeskDC, BITSPIXEL);
-    pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
-	ASSERT(m_w > 0);
-    pvi->bmiHeader.biWidth      = m_w;
-    pvi->bmiHeader.biHeight     = m_h;
-    pvi->bmiHeader.biPlanes     = 1;
-    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader);
-    pvi->bmiHeader.biClrImportant = 0;
-
-    SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
-    SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
-
-    (*pmt)->majortype = MEDIATYPE_Video;
-    (*pmt)->subtype = GetBitmapSubtype(&pvi->bmiHeader);
-    (*pmt)->formattype = FORMAT_VideoInfo;
-    (*pmt)->bTemporalCompression = FALSE;
-    (*pmt)->bFixedSizeSamples= FALSE;
-    (*pmt)->lSampleSize = pvi->bmiHeader.biSizeImage;
-    (*pmt)->cbFormat = sizeof(VIDEOINFOHEADER);
-    
-    DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
-    
-    pvscc->guid = FORMAT_VideoInfo;
-    pvscc->VideoStandard = AnalogVideo_None;
-
-	// I think most of these are ignored/deprecated
-    pvscc->InputSize.cx = 640;
-    pvscc->InputSize.cy = 480;
-    pvscc->MinCroppingSize.cx = 80;
-    pvscc->MinCroppingSize.cy = 60;
-    pvscc->MaxCroppingSize.cx = 640;
-    pvscc->MaxCroppingSize.cy = 480;
-    pvscc->CropGranularityX = 80;
-    pvscc->CropGranularityY = 60;
-    pvscc->CropAlignX = 0;
-    pvscc->CropAlignY = 0;
-
-    pvscc->MinOutputSize.cx = 80;
-    pvscc->MinOutputSize.cy = 60;
-    pvscc->MaxOutputSize.cx = 640;
-    pvscc->MaxOutputSize.cy = 480;
-    pvscc->OutputGranularityX = 0;
-    pvscc->OutputGranularityY = 0;
-    pvscc->StretchTapsX = 0;
-    pvscc->StretchTapsY = 0;
-    pvscc->ShrinkTapsX = 0;
-    pvscc->ShrinkTapsY = 0;
-    pvscc->MinFrameInterval = 200000;   //50 fps
-    pvscc->MaxFrameInterval = 50000000; // 0.2 fps
-    pvscc->MinBitsPerSecond = (80 * 60 * 3 * 8) / 5;
-    pvscc->MaxBitsPerSecond = 640 * 480 * 3 * 8 * 50;
-
-    return S_OK;
-}
-
-*/

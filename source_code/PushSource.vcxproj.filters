@@ -27,6 +27,9 @@
     <ClCompile Include="PushSourceDesktopAccessories.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="parent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="PushSource.def">
