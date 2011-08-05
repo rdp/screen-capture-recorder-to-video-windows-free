@@ -34,7 +34,7 @@ CPushSourceDesktop::~CPushSourceDesktop()
 
 CUnknown * WINAPI CPushSourceDesktop::CreateInstance(IUnknown *pUnk, HRESULT *phr)
 {
-	// do we ever get here?
+	// we do get here...
     CPushSourceDesktop *pNewFilter = new CPushSourceDesktop(pUnk, phr );
 
 	if (phr)

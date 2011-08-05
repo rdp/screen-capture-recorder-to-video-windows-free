@@ -4,7 +4,6 @@
 #include "PushGuids.h"
 #include "DibHelper.h"
 
-
 /**********************************************
  *
  *  CPushPinDesktop Class
@@ -21,6 +20,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
         m_rtFrameLength(FPS_50), // Capture and display desktop "x" times per second...kind of...
         m_nCurrentBitDepth(32)
 {
+
+	// TODO negotiate phase?
+
 	// The main point of this sample is to demonstrate how to take a DIB
 	// in host memory and insert it into a video stream. 
 
@@ -36,7 +38,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 	start = GetTickCount();
     HDC hDC;
     hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
-
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
     m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
@@ -122,18 +123,15 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     if (hDib)
         DeleteObject(hDib);
-	/*
-	  CRefTime now;
-    m_pParent->StreamTime(now);
-    pSample->SetTime(&rtStart, &rtStop);
-    m_iFrameNumber++;*/
 
-/*  
-    REFERENCE_TIME endThisFrame = now + avgFrameTime;
-    pms->SetTime((REFERENCE_TIME *) &now, &endThisFrame); TODO */
+	CRefTime now;
+    CSourceStream::m_pFilter->StreamTime(now);
+	REFERENCE_TIME endFrame = now + m_rtFrameLength;
+    pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
+    m_iFrameNumber++;
 	// Set TRUE on every sample for uncompressed frames
-    //pms->SetSyncPoint(TRUE);
-	//pms->SetDis(TRUE);
+    pSample->SetSyncPoint(TRUE);
+	//pSample->SetDis(TRUE);
 
 	double fps = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
 	LocalOutput("end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);
