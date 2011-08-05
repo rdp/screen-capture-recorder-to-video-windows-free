@@ -11,7 +11,19 @@
  *
  **********************************************/
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  
-DWORD start;
+double PCFreq = 0.0;
+__int64 CounterStart = 0;
+
+// call once...
+void WarmupCounter()
+{
+    LARGE_INTEGER li;
+	ASSERT(QueryPerformanceFrequency(&li));
+    PCFreq = double(li.QuadPart)/1000.0;
+}
+
+DWORD start; // for global stats
+
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
         : CSourceStream(NAME("Push Source Desktop OS"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
@@ -43,7 +55,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
     m_rScreen.bottom = GetDeviceCaps(hDC, VERTRES);
 
-
+	WarmupCounter();
 	// my custom config settings...
 
 	// assume 0 means not set...negative ignore :)
@@ -93,17 +105,34 @@ CPushPinDesktop::~CPushPinDesktop()
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
 
+// only call once...
+void StartCounter()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+    CounterStart = li.QuadPart;
+}
+
+double GetCounterSinceStart()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+	ASSERT(PCFreq);
+    return double(li.QuadPart-CounterStart)/PCFreq;
+}
+
+
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-	DWORD local_start = GetTickCount();
+	StartCounter();
 	BYTE *pData;
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
 
-    CAutoLock cAutoLockShared(&m_cSharedState);
+    CAutoLock cAutoLockShared(&m_cSharedState); // do we have any threading conflicts though?
 
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
@@ -129,11 +158,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     m_iFrameNumber++;
 	// Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
-	// only discontinuous for the first...I think...
+	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber == 1);
 
-	double fps = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
-	LocalOutput("end total frames %d %dms, total %dms %f fps\n", m_iFrameNumber, GetTickCount() - local_start, GetTickCount() - local_start, fps);
+	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
+	LocalOutput("end total frames %d %fms, total %dms %f fps\n", m_iFrameNumber, GetCounterSinceStart()/1000, GetTickCount() - start, fpsSinceBeginningOfTime);
 
     return S_OK;
 }

@@ -1,6 +1,3 @@
 See sensible-cinema/todo.upconvert file for the list...
 
 
-Also you "may" need to insert a sleep in your fillBuffer method, for the case of renderers that just request 
-
-It gets darker...oddly...like 239...win32/screenshot does *not* show this.  ffplay exhibits this even with playing a white picture. hmmm huh?
