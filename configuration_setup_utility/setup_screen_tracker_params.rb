@@ -17,6 +17,7 @@ class SetupScreenTrackerParams
   end
   
   def set_single_setting name, value
+    raise unless Settings.include?(name)
     raise unless value.is_a? Fixnum
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value.to_i)
   end
@@ -67,7 +68,7 @@ end
 if $0 == __FILE__
    
   if ARGV.detect{|a| ['-h', '--help'].include? a}
-    puts "syntax: [--just-display-current-settings] or #{SetupScreenTrackerParams::Settings.join(' ')}"
+    puts "syntax: [--just-display-current-settings] or #{SetupScreenTrackerParams::Settings.join(' ')} or nothing to be prompted for the various settings/values"
     exit 0
   end
   do_command_line
