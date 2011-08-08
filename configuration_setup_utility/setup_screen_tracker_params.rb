@@ -19,6 +19,7 @@ class SetupScreenTrackerParams
   def set_single_setting name, value
     raise unless Settings.include?(name)
     raise unless value.is_a? Fixnum
+    raise if value < 0
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value.to_i)
   end
   
