@@ -1,6 +1,7 @@
-Basically this aims to be a free, quality, general purpose, open source directshow screen capture filter.
-Its purpose is for screen capture.
+Basically this aims to be a free, quality, general purpose, open source directshow desktop screen source capture filter.
 I couldn't find any so made my own :)
+
+I.e. it allows you to "record" your desktop into your (directshow compatible) device.
 
 It is gently lifted from ("inspired by?")
   ...\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some others.
