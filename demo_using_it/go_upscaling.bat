@@ -1,4 +1,6 @@
-mplayer -geometry 50%x40% -sws 9 -ssf ls=75.0 -ssf cs=7.0 -vf hqdn3d=7:7:7:7,scale=1280:-10:0:0:3  upconvert_from_screen_me2.avs
+mplayer -nocache -geometry 50%x40% -sws 9 -ssf ls=75.0 -ssf cs=7.0 -vf hqdn3d=7:7:7:7,scale=2680:-10:0:0:3  upconvert_from_screen_me2.avs
+
+@rem  hqdn3d[=luma_spatial:chroma_spatial:luma_tmp:chroma_tmp]
 
 
 

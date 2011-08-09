@@ -3,11 +3,12 @@ I couldn't find any so made my own :)
 
 I.e. it allows you to "record" your desktop into your (directshow compatible) device.
 
-It is gently lifted from ("inspired by?")
-  ...\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some others.
-  so you'll probably want to install the SDK before messing around in this code.
+It is gently lifted from ("inspired by")
+  ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
+  so you'll probably want to install the SDK before messing around with this code.
 
-Message me if interested in using it, or with any feature requests :)
+Message me if interested in it, or with any feature requests :)
+It's free and open source.
 
 == installation ==
 
