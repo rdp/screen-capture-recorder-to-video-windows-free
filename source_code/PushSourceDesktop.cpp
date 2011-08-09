@@ -59,33 +59,34 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 
 	WarmupCounter();
 	// assume 0 means not set...negative ignore :)
-	DWORD config_start_x = read_config_setting(TEXT("start_x"));
+	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
+	int config_start_x = read_config_setting(TEXT("start_x"));
 	if(config_start_x != 0) {
-	  m_rScreen.left = config_start_x; // TODO no overflow, that's a bad value too...
+	  m_rScreen.left = config_start_x;
 	}
 
 	// is there a better way to do this?
-	DWORD config_start_y = read_config_setting(TEXT("start_y"));
+	int config_start_y = read_config_setting(TEXT("start_y"));
 	if(config_start_y != 0) {
 	  m_rScreen.top = config_start_y;
 	}
 
-	DWORD config_width = read_config_setting(TEXT("width"));
-	ASSERT(config_width >= 0);
+	int config_width = read_config_setting(TEXT("width"));
+	ASSERT(config_width >= 0); // negatives not allowed...
 	if(config_width > 0) {
-		DWORD desired = m_rScreen.left + config_width;
-		DWORD max_possible = m_rScreen.right;
+		int desired = m_rScreen.left + config_width; // using DWORD here makes the math wrong to allow for negative values [dual monitor...]
+		int max_possible = m_rScreen.right;
 		if(desired < max_possible)
 			m_rScreen.right = desired;
 		else
-			m_rScreen.right = max_possible; // or should I throw an error?
+			m_rScreen.right = max_possible;
 	}
 
-	DWORD config_height = read_config_setting(TEXT("height"));
+	int config_height = read_config_setting(TEXT("height"));
 	ASSERT(config_width >= 0);
 	if(config_height > 0) {
-		DWORD desired = m_rScreen.top + config_height;
-		DWORD max_possible = m_rScreen.bottom;
+		int desired = m_rScreen.top + config_height;
+		int max_possible = m_rScreen.bottom;
 		if(desired < max_possible)
 			m_rScreen.bottom = desired;
 		else

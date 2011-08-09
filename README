@@ -1,4 +1,5 @@
 Basically this aims to be a free, quality, general purpose, open source directshow screen capture filter.
+Its purpose is for screen capture.
 I couldn't find any so made my own :)
 
 It is gently lifted from ("inspired by?")
@@ -9,45 +10,50 @@ Message me if interested in using it, or with any feature requests :)
 
 == installation ==
 
-To install, run regsvr32 source_code/Release/PushSource.dll
+To install, run $ regsvr32 source_code\Release\PushDesktop.ax
   You'll need to run it as administrator if on vista/7.
-To uninstall, run regsvr32 /u source_code/Release/PushSource.dll
+  
+To uninstall it, run $ regsvr32 /u source_code\Release\PushDesktop.ax
+
+Ping me if you want this automated or can't get it to work.
 
 == configuration ==
-By default, it captures "full screen" of the main monitor.
 
-To configure it, adjust these registry settings:
+By default, it captures "full screen" of the main desktop monitor.
+
+To configure, adjust these registry settings:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
 with DWORD keys respected of:
   start_x, start_y, width, height
-  # unimplemented, but will if there is ever any request/demand for them:
+  # unimplemented, but will be if there is ever any request for them:
   # monitor_number, fps, hwnd_to_use, show_mouse
   
 ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit tedious).  
-Run also the jruby setup script in configuration_setup_utility for one way to set them up.
 
-If no registry settings are set, it defaults to full screen.  
-If any value is set to 0, that also means "not set" so it uses the defaults.
+The jruby setup script in configuration_setup_utility is another way to set them up.
+If any value registry value is set to 0, that means "not set" so it uses the default for that value.
 
-See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
-
-Basically its purpose is for screen capture.
 
 == trouble shooting ==
 
 it's too slow:
 turn off aero display manager (esp. if you have dual monitors, this may help).
-try switching from 16 to 32 bit (within BltTest there is  troubleshooting_benchmarker\BltTest\Release\BltTest.exe run it to see which is faster)
-  What you care about is the "reverse" speed.
+disabling/enabling "hardware acceleration" for your desktop might help, too.
+try switching from 16 to 32 bit 
+Within BltTest there is  troubleshooting_benchmarker\BltTest\Release\BltTest.exe file.
+Run it to benchmark your system and compare the various settings.
+  What you care about is the "reverse" timing speed in its output display.
+
+Other things ping me rogerdpack@gmail.com or mailing list: http://groups.google.com/group/sensible-cinema
 
 == Future work ==
-I can add feature upon demand.
-I could add a "push bitmap" as a new additional filter, if ever desired.
+
+I can add features upon demand.
 
 I could make this into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
 other products out there also do that and are free for private use, but I could if desired (ping me).
 Basically you want a feature, ping me, you got it.
 
-blttest is originally from http://stereopsis.com/blttest and measure bitblt speed 
+blttest is originally from http://stereopsis.com/blttest
 (which is quite hardware dependent, or so I'm told).
