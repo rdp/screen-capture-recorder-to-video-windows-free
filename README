@@ -7,12 +7,19 @@ It is gently lifted from ("inspired by?")
 
 Message me if interested in using it, or with any feature requests :)
 
-To install, run regsvr32 on Release/PushSource.dll
+== installation ==
 
-To configure where it captures, adjust registry settings:
+To install, run regsvr32 source_code/Release/PushSource.dll
+  You'll need to run it as administrator if on vista/7.
+To uninstall, run regsvr32 /u source_code/Release/PushSource.dll
+
+== configuration ==
+By default, it captures "full screen" of the main monitor.
+
+To configure it, adjust these registry settings:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
-with DWORD keys respected thus far of:
+with DWORD keys respected of:
   start_x, start_y, width, height
   # unimplemented, but will if there is ever any request/demand for them:
   # monitor_number, fps, hwnd_to_use, show_mouse
