@@ -1,10 +1,7 @@
 # from http://avisynth.org/mediawiki/Enhancing_dvd_videos
 
-Video = DirectShowSource("push2.GRF", fps=35, audio=False, framecount=1000000) # fps appears to be a "max" fps [?] does it drop otherwise? 60 -> 55...
+Video = DirectShowSource("push2.GRF", fps=35, audio=False, framecount=1000000) # fps appears to be a "max" fps
 Return Video
-
-
-
 
 # 
 # these are the size of your monitor that the output is displayed on.  Unless it lags too much, then try experimenting with smaller values
