@@ -19,7 +19,6 @@ class SetupScreenTrackerParams
   def set_single_setting name, value
     raise unless Settings.include?(name)
     raise unless value.is_a? Fixnum
-    raise if value < 0
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value.to_i)
   end
   
@@ -51,7 +50,7 @@ def do_command_line
       raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
     end
     if received == ''
-      received = 0 # 0 is interpreted as "use defaults" when read from the registry...
+      received = -1 # -1 is interpreted as "use defaults" when read from the registry, in the C code
     else
       received = received.to_i
     end

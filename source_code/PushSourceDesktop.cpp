@@ -55,22 +55,23 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
     m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
     m_rScreen.bottom = GetDeviceCaps(hDC, VERTRES);
 
-	WarmupCounter();
 	// my custom config settings...
 
+	WarmupCounter();
 	// assume 0 means not set...negative ignore :)
 	DWORD config_start_x = read_config_setting(TEXT("start_x"));
-	if(config_start_x > 0) {
+	if(config_start_x != 0) {
 	  m_rScreen.left = config_start_x; // TODO no overflow, that's a bad value too...
 	}
 
 	// is there a better way to do this?
 	DWORD config_start_y = read_config_setting(TEXT("start_y"));
-	if(config_start_y > 0) {
+	if(config_start_y != 0) {
 	  m_rScreen.top = config_start_y;
 	}
 
 	DWORD config_width = read_config_setting(TEXT("width"));
+	ASSERT(config_width >= 0);
 	if(config_width > 0) {
 		DWORD desired = m_rScreen.left + config_width;
 		DWORD max_possible = m_rScreen.right;
@@ -81,6 +82,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 	}
 
 	DWORD config_height = read_config_setting(TEXT("height"));
+	ASSERT(config_width >= 0);
 	if(config_height > 0) {
 		DWORD desired = m_rScreen.top + config_height;
 		DWORD max_possible = m_rScreen.bottom;
@@ -91,6 +93,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 	}
 
 	LocalOutput("got2 %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
+
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;

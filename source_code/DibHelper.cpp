@@ -115,14 +115,14 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 DWORD read_config_setting(LPCTSTR szValueName) {
   
   HKEY hKey;
-LONG i;
+  LONG i;
     
     i = RegOpenKeyEx(HKEY_CURRENT_USER,
        L"SOFTWARE\\os_screen_capture",  0, KEY_READ, &hKey);
     
     if ( i != ERROR_SUCCESS)
     {
-        return -1;
+        return 0; // zero means not set...
     } else {
       
 	DWORD dwVal;
@@ -130,10 +130,10 @@ LONG i;
 	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal);
     RegCloseKey(hKey); // done with that
 	if (FAILED(hr)) {
-    return -1;
-  } else {
-    return dwVal;
-  }
+      return 0;
+    } else {
+      return dwVal; // if "the setter" sets it to 0, that is also interpreted as not set...see README
+    }
 }
  
 }

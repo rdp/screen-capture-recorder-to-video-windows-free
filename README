@@ -27,7 +27,8 @@ with DWORD keys respected of:
 ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit tedious).  
 Run also the jruby setup script in configuration_setup_utility for one way to set them up.
 
-If no registry settings are set, it defaults to full screen.  If any value is set to 0, that means "not set" so it uses defaults.
+If no registry settings are set, it defaults to full screen.  
+If any value is set to 0, that also means "not set" so it uses the defaults.
 
 See also http://betterlogic.com/roger/2010/07/open-source-directshow-screen-capture
 
