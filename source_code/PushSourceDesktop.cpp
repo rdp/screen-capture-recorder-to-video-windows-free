@@ -105,7 +105,7 @@ CPushPinDesktop::~CPushPinDesktop()
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-	StartCounter();
+	__int64 startOneRound = StartCounter();
 	BYTE *pData;
     long cbData;
 
@@ -141,7 +141,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber == 1);
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
-	LocalOutput("end total frames %d %fms, total %dms %f fps\n", m_iFrameNumber, GetCounterSinceStart()/1000, GetTickCount() - start, fpsSinceBeginningOfTime);
+	double millisThisRound = GetCounterSinceStartMillis(startOneRound);
+	LocalOutput("end total frames %d %fms, total %dms %f fps (max fps %f)\n", m_iFrameNumber, millisThisRound, GetTickCount() - start, fpsSinceBeginningOfTime, 1.0/millisThisRound*1000);
 
     return S_OK;
 }

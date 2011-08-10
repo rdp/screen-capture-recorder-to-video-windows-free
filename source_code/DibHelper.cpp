@@ -35,9 +35,8 @@ void LocalOutput(const char *str, ...)
 }
 
 double PCFreq = 0.0;
-__int64 CounterStart = 0;
 
-// call once...
+// call only needed once...
 void WarmupCounter()
 {
     LARGE_INTEGER li;
@@ -45,20 +44,19 @@ void WarmupCounter()
     PCFreq = double(li.QuadPart)/1000.0;
 }
 
-// only call once...
-void StartCounter()
+__int64 StartCounter()
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
-    CounterStart = li.QuadPart;
+    return (__int64) li.QuadPart;
 }
 
-double GetCounterSinceStart()
+double GetCounterSinceStartMillis(__int64 sinceThisTime)
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
 	assert(PCFreq);
-    return double(li.QuadPart-CounterStart)/PCFreq;
+    return double(li.QuadPart-sinceThisTime)/PCFreq;
 }
 
 
@@ -101,9 +99,9 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
     hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
-
+	__int64 start = StartCounter();
     GetDIBits(hScrDC, hBitmap, 0, nHeight, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...as also create compatible bitmap...
-
+	LocalOutput("getdibits took %fms ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
     // clean up
     DeleteDC(hScrDC);
     DeleteDC(hMemDC);

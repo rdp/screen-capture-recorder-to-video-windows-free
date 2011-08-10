@@ -53,5 +53,5 @@ WORD SaveDIB (HDIB, LPSTR);
 DWORD read_config_setting(LPCTSTR szValueName);
 
 void WarmupCounter();
-void StartCounter();
-double GetCounterSinceStart();
+__int64 StartCounter();
+double GetCounterSinceStartMillis(__int64 start);
