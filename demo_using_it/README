@@ -1,2 +1,4 @@
 This uses mplayer with avisynth to 'capture' the desktop.
-A helper setup utility for matching an exact window can be found in the sensible cinema project.
+it "should" just work to do mplayer upconvert_from_screen_me2.avs or ffplay upconvert_from_screen_me2.avs (message me if it doesn't)
+
+more demos/uses/window setup utilities can be found within the sensible cinema project.
