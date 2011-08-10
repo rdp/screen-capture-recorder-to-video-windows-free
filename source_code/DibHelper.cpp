@@ -12,6 +12,7 @@
 #include "dibhelper.h"
 
 #include <stdio.h>
+#include <assert.h>
 
 
 void logToFile(char *log_this) {
@@ -31,6 +32,33 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA("\n");
   // also works: OutputDebugString(L"yo ho2");
   //logToFile(buf);
+}
+
+double PCFreq = 0.0;
+__int64 CounterStart = 0;
+
+// call once...
+void WarmupCounter()
+{
+    LARGE_INTEGER li;
+	assert(QueryPerformanceFrequency(&li));
+    PCFreq = double(li.QuadPart)/1000.0;
+}
+
+// only call once...
+void StartCounter()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+    CounterStart = li.QuadPart;
+}
+
+double GetCounterSinceStart()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+	assert(PCFreq);
+    return double(li.QuadPart-CounterStart)/PCFreq;
 }
 
 
@@ -73,6 +101,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
     hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
+
     GetDIBits(hScrDC, hBitmap, 0, nHeight, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...as also create compatible bitmap...
 
     // clean up

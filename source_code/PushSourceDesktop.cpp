@@ -11,16 +11,6 @@
  *
  **********************************************/
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  
-double PCFreq = 0.0;
-__int64 CounterStart = 0;
-
-// call once...
-void WarmupCounter()
-{
-    LARGE_INTEGER li;
-	ASSERT(QueryPerformanceFrequency(&li));
-    PCFreq = double(li.QuadPart)/1000.0;
-}
 
 DWORD start; // for global stats
 
@@ -109,21 +99,6 @@ CPushPinDesktop::~CPushPinDesktop()
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
 
-// only call once...
-void StartCounter()
-{
-    LARGE_INTEGER li;
-    QueryPerformanceCounter(&li);
-    CounterStart = li.QuadPart;
-}
-
-double GetCounterSinceStart()
-{
-    LARGE_INTEGER li;
-    QueryPerformanceCounter(&li);
-	ASSERT(PCFreq);
-    return double(li.QuadPart-CounterStart)/PCFreq;
-}
 
 
 // This is where we insert the DIB bits into the video stream.

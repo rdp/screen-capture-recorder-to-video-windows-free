@@ -51,3 +51,7 @@ WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
 
 DWORD read_config_setting(LPCTSTR szValueName);
+
+void WarmupCounter();
+void StartCounter();
+double GetCounterSinceStart();
