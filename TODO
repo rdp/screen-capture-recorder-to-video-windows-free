@@ -1,0 +1,8 @@
+ It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
+ VLC compatible'ify it..
+
+  threading the input [?] (a bit complicated because of the "only if it's changed" mantra)
+    more efficient by skipping an extra copy (we're already pretty fast though...)
+  memcpy? 
+    faster memcpy? loop?
+  ideal: dual-threaded, and when it comes by you say "ok, use this copy already prepared" LOL
