@@ -6,3 +6,8 @@
   memcpy? 
     faster memcpy? loop?
   ideal: dual-threaded, and when it comes by you say "ok, use this copy already prepared" LOL
+  
+    test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
+    can use hwnd.
+    
+    multi monitor [?]
