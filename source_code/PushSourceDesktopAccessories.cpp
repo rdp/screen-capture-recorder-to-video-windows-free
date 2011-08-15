@@ -20,7 +20,7 @@
 //
 HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt)
 {
-    CheckPointer(pmt,E_POINTER);
+    CheckPointer(pmt,E_POINTER); // we get here twice...
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
     if(iPosition < 0)
@@ -100,6 +100,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt)
     pvi->bmiHeader.biPlanes     = 1;
     pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader);
     pvi->bmiHeader.biClrImportant = 0;
+	pvi->AvgTimePerFrame = m_rtFrameLength; // hard set currently...
 
     SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
     SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
@@ -228,7 +229,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 //
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
-    CAutoLock cAutoLock(m_pFilter->pStateLock());
+    CAutoLock cAutoLock(m_pFilter->pStateLock()); // never get here VLC
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType);
@@ -263,4 +264,110 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
     return hr;
 
 } // SetMediaType
+
+#define DECLARE_PTR(type, ptr, expr) type* ptr = (type*)(expr);
+
+HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
+{
+    *piCount = 5;
+    *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is an MS thing.
+    return S_OK;
+}
+
+
+HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
+{
+    DECLARE_PTR(VIDEOINFOHEADER, pvi, m_mt.pbFormat); // get here quite a bit...
+    m_mt = *pmt;
+    IPin* pin; 
+    ConnectedTo(&pin);
+    if(pin)
+    {
+        IFilterGraph *pGraph = m_pParent->GetGraph();
+        pGraph->Reconnect(this);
+    }
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
+{
+    *ppmt = CreateMediaType(&m_mt);
+    return S_OK;
+}
+
+
+HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
+{
+	HRESULT hr = GetMediaType(iIndex, &m_mt); // setup m_mt ...
+    if(FAILED(hr))
+    {
+        return hr;
+    }
+
+	// TODO real values here...
+
+    *pmt = CreateMediaType(&m_mt);
+	if (*pmt == NULL) return E_OUTOFMEMORY;
+
+    DECLARE_PTR(VIDEOINFOHEADER, pvi, (*pmt)->pbFormat);
+
+    if (iIndex == 0) iIndex = 4; // have some size...
+
+
+	            pvi->bmiHeader.biCompression = BI_RGB;
+            pvi->bmiHeader.biBitCount    = 32;
+
+
+
+    pvi->bmiHeader.biCompression = BI_RGB;
+    pvi->bmiHeader.biBitCount    = 24;
+    pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
+    pvi->bmiHeader.biWidth      = 80 * iIndex;
+    pvi->bmiHeader.biHeight     = 60 * iIndex;
+    pvi->bmiHeader.biPlanes     = 1;
+    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader);
+    pvi->bmiHeader.biClrImportant = 0;
+
+    SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
+    SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
+
+    (*pmt)->majortype = MEDIATYPE_Video;
+    (*pmt)->subtype = MEDIASUBTYPE_RGB24;
+    (*pmt)->formattype = FORMAT_VideoInfo;
+    (*pmt)->bTemporalCompression = FALSE;
+    (*pmt)->bFixedSizeSamples= FALSE;
+    (*pmt)->lSampleSize = pvi->bmiHeader.biSizeImage;
+    (*pmt)->cbFormat = sizeof(VIDEOINFOHEADER);
+    
+    DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
+    
+    pvscc->guid = FORMAT_VideoInfo;
+    pvscc->VideoStandard = AnalogVideo_None;
+    pvscc->InputSize.cx = 640;
+    pvscc->InputSize.cy = 480;
+    pvscc->MinCroppingSize.cx = 80;
+    pvscc->MinCroppingSize.cy = 60;
+    pvscc->MaxCroppingSize.cx = 640;
+    pvscc->MaxCroppingSize.cy = 480;
+    pvscc->CropGranularityX = 80;
+    pvscc->CropGranularityY = 60;
+    pvscc->CropAlignX = 0;
+    pvscc->CropAlignY = 0;
+
+    pvscc->MinOutputSize.cx = 80;
+    pvscc->MinOutputSize.cy = 60;
+    pvscc->MaxOutputSize.cx = 640;
+    pvscc->MaxOutputSize.cy = 480;
+    pvscc->OutputGranularityX = 0;
+    pvscc->OutputGranularityY = 0;
+    pvscc->StretchTapsX = 0;
+    pvscc->StretchTapsY = 0;
+    pvscc->ShrinkTapsX = 0;
+    pvscc->ShrinkTapsY = 0;
+    pvscc->MinFrameInterval = 200000;   //50 fps
+    pvscc->MaxFrameInterval = 50000000; // 0.2 fps
+    pvscc->MinBitsPerSecond = (80 * 60 * 3 * 8) / 5;
+    pvscc->MaxBitsPerSecond = 640 * 480 * 3 * 8 * 50;
+	return S_OK;
+}
 

@@ -4,8 +4,8 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\mencoder\mplayer.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-nocache c:\dev\ruby\directshow-screen-capture-filter\demo_using_it\upconvert_from_screen_me2.avs</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> dshow:// :dshow-vdev="Virtual Desktop OS Cam" :dshow-adev=none  :dshow-caching=200</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

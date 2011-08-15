@@ -14,16 +14,15 @@
 
 DWORD start; // for global stats
 
-CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
+CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source Desktop OS"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
         m_rtFrameLength(FPS_20), // Capture and display desktop "x" times per second...kind of...
-        m_nCurrentBitDepth(32)
+        m_nCurrentBitDepth(32),
+		m_pParent(pFilter)
 {
-
-	// TODO negotiate phase?
 
 	// The main point of this sample is to demonstrate how to take a DIB
 	// in host memory and insert it into a video stream. 
@@ -147,3 +146,63 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     return S_OK;
 }
 
+
+HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)
+{   
+  // Standard OLE stuff
+    if(riid == _uuidof(IAMStreamConfig))
+        *ppv = (IAMStreamConfig*)this;
+    else if(riid == _uuidof(IKsPropertySet))
+        *ppv = (IKsPropertySet*)this;
+    else
+        return CSourceStream::QueryInterface(riid, ppv);
+
+    AddRef();
+    return S_OK;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// IKsPropertySet
+//////////////////////////////////////////////////////////////////////////
+
+
+HRESULT CPushPinDesktop::Set(REFGUID guidPropSet, DWORD dwID, void *pInstanceData, 
+                        DWORD cbInstanceData, void *pPropData, DWORD cbPropData)
+{// Set: Cannot set any properties.
+    return E_NOTIMPL;
+}
+
+// Get: Return the pin category (our only property). 
+HRESULT CPushPinDesktop::Get(
+    REFGUID guidPropSet,   // Which property set.
+    DWORD dwPropID,        // Which property in that set.
+    void *pInstanceData,   // Instance data (ignore).
+    DWORD cbInstanceData,  // Size of the instance data (ignore).
+    void *pPropData,       // Buffer to receive the property data.
+    DWORD cbPropData,      // Size of the buffer.
+    DWORD *pcbReturned     // Return the size of the property.
+)
+{
+    if (guidPropSet != AMPROPSETID_Pin)             return E_PROP_SET_UNSUPPORTED;
+    if (dwPropID != AMPROPERTY_PIN_CATEGORY)        return E_PROP_ID_UNSUPPORTED;
+    if (pPropData == NULL && pcbReturned == NULL)   return E_POINTER;
+    
+    if (pcbReturned) *pcbReturned = sizeof(GUID);
+    if (pPropData == NULL)          return S_OK; // Caller just wants to know the size. 
+    if (cbPropData < sizeof(GUID))  return E_UNEXPECTED;// The buffer is too small.
+        
+    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE;
+    return S_OK;
+}
+
+// QuerySupported: Query whether the pin supports the specified property.
+HRESULT CPushPinDesktop::QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport)
+{
+    if (guidPropSet != AMPROPSETID_Pin) return E_PROP_SET_UNSUPPORTED;
+    if (dwPropID != AMPROPERTY_PIN_CATEGORY) return E_PROP_ID_UNSUPPORTED;
+    // We support getting this property, but not setting it.
+    if (pTypeSupport) *pTypeSupport = KSPROPERTY_SUPPORT_GET; 
+    return S_OK;
+}

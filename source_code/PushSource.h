@@ -29,17 +29,31 @@ const REFERENCE_TIME rtDefaultFrameLength = FPS_10;
 #define g_wszPushBitmapSet  L"PushSource BitmapSet Filter"
 #define g_wszPushDesktop    L"PushSource Desktop Filter"
 
+class CPushPinDesktop;
 
-class CPushPinDesktop : public CSourceStream// ?? -->, public IAMStreamConfig
+class CPushSourceDesktop : public CSource
 {
 
-     //////////////////////////////////////////////////////////////////////////
-    //  IAMStreamConfig
+private:
+    // Constructor is private because you have to use CreateInstance
+    CPushSourceDesktop(IUnknown *pUnk, HRESULT *phr);
+    ~CPushSourceDesktop();
+
+    CPushPinDesktop *m_pPin;
+public:
     //////////////////////////////////////////////////////////////////////////
-    HRESULT STDMETHODCALLTYPE SetFormat(AM_MEDIA_TYPE *pmt);
-    HRESULT STDMETHODCALLTYPE GetFormat(AM_MEDIA_TYPE **ppmt);
-    HRESULT STDMETHODCALLTYPE GetNumberOfCapabilities(int *piCount, int *piSize);
-    HRESULT STDMETHODCALLTYPE GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC);
+    //  IUnknown
+    //////////////////////////////////////////////////////////////////////////
+    static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
+    STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
+
+    IFilterGraph *GetGraph() {return m_pGraph;}
+
+};
+
+
+class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKsPropertySet
+{
 
 protected:
 
@@ -60,10 +74,28 @@ protected:
     CMediaType m_MediaType;
     CCritSec m_cSharedState;            // Protects our internal state
     CImageDisplay m_Display;            // Figures out our media type for us
+	CPushSourceDesktop* m_pParent;
 
 public:
 
-    CPushPinDesktop(HRESULT *phr, CSource *pFilter);
+    //////////////////////////////////////////////////////////////////////////
+    //  IUnknown
+    //////////////////////////////////////////////////////////////////////////
+    STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
+    STDMETHODIMP_(ULONG) AddRef() { return GetOwner()->AddRef(); }                                                          \
+    STDMETHODIMP_(ULONG) Release() { return GetOwner()->Release(); }
+
+
+     //////////////////////////////////////////////////////////////////////////
+    //  IAMStreamConfig
+    //////////////////////////////////////////////////////////////////////////
+    HRESULT STDMETHODCALLTYPE SetFormat(AM_MEDIA_TYPE *pmt);
+    HRESULT STDMETHODCALLTYPE GetFormat(AM_MEDIA_TYPE **ppmt);
+    HRESULT STDMETHODCALLTYPE GetNumberOfCapabilities(int *piCount, int *piSize);
+    HRESULT STDMETHODCALLTYPE GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC);
+
+
+    CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter);
     ~CPushPinDesktop();
 
     // Override the version that offers exactly one media type
@@ -77,7 +109,7 @@ public:
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 
-    // Quality control
+    // IQualityControl
 	// Not implemented because we aren't going in real time.
 	// If the file-writing filter slows the graph down, we just do nothing, which means
 	// wait until we're unblocked. No frames are ever dropped.
@@ -86,24 +118,17 @@ public:
         return E_FAIL;
     }
 
+	
+    //////////////////////////////////////////////////////////////////////////
+    //  IKsPropertySet
+    //////////////////////////////////////////////////////////////////////////
+    HRESULT STDMETHODCALLTYPE Set(REFGUID guidPropSet, DWORD dwID, void *pInstanceData, DWORD cbInstanceData, void *pPropData, DWORD cbPropData);
+    HRESULT STDMETHODCALLTYPE Get(REFGUID guidPropSet, DWORD dwPropID, void *pInstanceData,DWORD cbInstanceData, void *pPropData, DWORD cbPropData, DWORD *pcbReturned);
+    HRESULT STDMETHODCALLTYPE QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
+
+
 };
 
 
-
-
-class CPushSourceDesktop : public CSource
-{
-
-private:
-    // Constructor is private because you have to use CreateInstance
-    CPushSourceDesktop(IUnknown *pUnk, HRESULT *phr);
-    ~CPushSourceDesktop();
-
-    CPushPinDesktop *m_pPin;
-
-public:
-    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);  
-
-};
 
 
