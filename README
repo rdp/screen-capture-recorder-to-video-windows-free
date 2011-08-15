@@ -1,11 +1,10 @@
-Basically this aims to be a free, quality, general purpose, open source directshow desktop screen source capture filter.
-I couldn't find any so made my own :)
-
+Basically this aims to be a free, general purpose, open source directshow desktop screen source capture filter.
 I.e. it allows you to "record" your desktop into your (directshow compatible) device.
+I couldn't find any open source made my own :)
 
 It is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
-  so you'll probably want to install the SDK before messing around with this code.
+  so you'll probably want to install the Windows SDK before messing around with the source code.
 
 Message me if interested in it, or with any feature requests :)
 It's free and open source.
@@ -53,8 +52,6 @@ Other things ping me rogerdpack@gmail.com or mailing list: http://groups.google.
 
 I can add features upon demand.
 
-I could make this into a real bonafide "directshow input capture" source (pseudo-camera) if desired, as well, though some
-other products out there also do that and are free for private use, but I could if desired (ping me).
 Basically you want a feature, ping me, you got it.
 
 blttest is originally from http://stereopsis.com/blttest

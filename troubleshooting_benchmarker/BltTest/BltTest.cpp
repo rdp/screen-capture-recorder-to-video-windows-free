@@ -73,11 +73,11 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			double toMB = double(kWidth * kHeight * 4) / 1024 / 1024;
 
-			char *nl = report + sprintf(report, "BitBlt:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
-				afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
-			sprintf(nl, "\r\nReverseBlt (the one that matters):\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+			char *nl = report + sprintf(report, "\r\nReverseBlt (the one that matters):\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
-
+			report + sprintf(nl, "BitBlt:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+				afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
+			
 			HWND ec = ::GetDlgItem(hwnd, IDC_RESTEXT);
 
 			if (ec)
