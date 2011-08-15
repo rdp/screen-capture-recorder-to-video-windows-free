@@ -73,8 +73,8 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			double toMB = double(kWidth * kHeight * 4) / 1024 / 1024;
 
-			char *nl = report + sprintf(report, "\r\nReverseBlt (the one that matters):\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
-				afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
+			char *nl = report + sprintf(report, "\r\nCapture from screen %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+				kWidth, kHeight, afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
 			report + sprintf(nl, "BitBlt:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
 			
@@ -241,6 +241,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
+	// make capture from window look like a chess board
+
+	HDC dc = (HDC)GetDC(hwnd);
+	HBITMAP oldbitmap = (HBITMAP)SelectObject((HDC)hdc, hBitmap);
+	::BitBlt(dc, 0, 0, kWidth, kHeight, (HDC)hdc, 0, 0, SRCCOPY);
+	SelectObject((HDC)hdc, oldbitmap);
+	DeleteDC(dc);
+	::GdiFlush();
+
 	// ------------------------------------------------------------------------------------------------
 	// main loop
 	// ------------------------------------------------------------------------------------------------
@@ -262,8 +271,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		LARGE_INTEGER s1, s2;
 		QueryPerformanceCounter(&s1);
 
-		// test bitblt
 		if (framecount < kFramesBlt) {
+		    // test bitblt "onto" the chess board.
 			HDC dc = (HDC)GetDC(hwnd);
 			HBITMAP oldbitmap = (HBITMAP)SelectObject((HDC)hdc, hBitmap);
 			::BitBlt(dc, 0, 0, kWidth, kHeight, (HDC)hdc, 0, 0, SRCCOPY);
