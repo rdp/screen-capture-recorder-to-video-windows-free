@@ -73,7 +73,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
-    hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
+    hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // BOO! for aero at least :P
     hMemDC = CreateCompatibleDC(hScrDC);
 
     // determine points of where to grab from it
@@ -100,7 +100,8 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
-    GetDIBits(hScrDC, hBitmap, 0, nHeight, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...as also create compatible bitmap...
+    GetDIBits(hScrDC, hBitmap, 0, nHeight, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
+	// lodo memcpy?
 	LocalOutput("getdibits took %fms ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
     // clean up
     DeleteDC(hScrDC);
