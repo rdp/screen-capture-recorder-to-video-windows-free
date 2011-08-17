@@ -1,4 +1,15 @@
+installer at all
+  add jruby
+log stats to the registry on exit... [jruby can read them]
+can use hwnd.
+  check stats
+  make it able to grab from a window, and work when dragged too...
+
+note this other program uses this
+
 == speedup ==
+
+  can I live with aero wasn't bitblt getting like 800fps *with* aero?
   threading the input [?] (a bit complicated because of the "only if it's changed" mantra)
     more efficient by skipping an extra copy (we're already pretty fast though...)
   memcpy? 
@@ -8,5 +19,8 @@
     
 == other ==
  It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
- can use hwnd.
- multi monitor [?]
+ shearing (?) compared to itself upscreened...
+ the "drag to select window" seter-zy-upperzy
+
+== propaganda ==
+  various :P [see audio file]
