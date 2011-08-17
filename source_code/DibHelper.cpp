@@ -14,13 +14,13 @@
 #include <stdio.h>
 #include <assert.h>
 
-
+/*
 void logToFile(char *log_this) {
-    FILE *f = fopen("g:\\yo2", "a"); // TODO ...
+    FILE *f = fopen("g:\\yo2", "a");
 	fprintf(f, log_this);
 	fclose(f);
 }
-
+*/
 
 void LocalOutput(const char *str, ...)
 {
@@ -58,6 +58,10 @@ double GetCounterSinceStartMillis(__int64 sinceThisTime)
 	assert(PCFreq);
     return double(li.QuadPart-sinceThisTime)/PCFreq;
 }
+// use like 
+// 	__int64 start = StartCounter();
+// ...
+// __int64 milis = GetCounterSinceStartMillis(start)
 
 
 HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)

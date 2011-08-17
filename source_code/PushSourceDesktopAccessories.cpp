@@ -18,7 +18,7 @@
 //      4    Return 8 bit palettised format
 //      >4   Invalid
 //
-HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt)
+HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE == CMediaType
 {
     CheckPointer(pmt,E_POINTER); // we get here twice...
     CAutoLock cAutoLock(m_pFilter->pStateLock());

@@ -140,7 +140,7 @@ STDAPI RegisterFilters( BOOL bRegister )
     hr = CoInitialize(0);
     if(bRegister)
     { 
-        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"VirtualDesktopOSCam", achFileName, L"Both", L"InprocServer32");
+        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", achFileName, L"Both", L"InprocServer32");
     }
 
     if( SUCCEEDED(hr) )
@@ -157,7 +157,7 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.dwMerit = MERIT_DO_NOT_USE;
                 rf2.cPins = 1;
                 rf2.rgPins = &sudOutputPinDesktop;
-                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"VirtualDesktopOSCam", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
+                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
             }
             else
             {
