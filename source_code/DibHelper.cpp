@@ -61,7 +61,7 @@ double GetCounterSinceStartMillis(__int64 sinceThisTime)
 // use like 
 // 	__int64 start = StartCounter();
 // ...
-// __int64 milis = GetCounterSinceStartMillis(start)
+// __int64 elapsed = GetCounterSinceStartMillis(start)
 
 
 HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
