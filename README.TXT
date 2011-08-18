@@ -1,17 +1,14 @@
-Basically this aims to be a free, general purpose, open source directshow desktop screen source capture filter.
-I.e. it allows you to "record" your desktop into your (directshow compatible) program or what not.
-I couldn't find any open source versions so made my own :)
-
-It is gently lifted from ("inspired by")
-  ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
-  so you'll probably want to install the Windows SDK before messing around with the source code.
-
-Message me if interested in it, or with any feature requests :)
+This device allows you to "record" your desktop, or stream it.
+Basically this aims to be a free, general purpose, 
+open source directshow desktop/screen source capture filter device.
+Use it with your (directshow compatible) program to capture or stream.
+I couldn't find any open source equivalent versions so made my own :)
 
 == Installation ==
 
 Download installer from 
-  https://github.com/rdp/open-source-directshow-screen-desktop-capture-source-filter/downloads
+
+  https://github.com/rdp/screen-capture-recorder-program/downloads
 
 == Usage ==
 
@@ -56,9 +53,15 @@ Other things ping me rogerdpack@gmail.com or mailing list: http://groups.google.
 
 == Future work ==
 
-I can add features upon demand.
+It is gently lifted from ("inspired by")
+  ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
+  so you'll probably want to install the Windows SDK before messing around with the source code.
+
+Message me if interested in it, or with any feature requests :)
+
+I can add features upon reasonable demand.
 
 Basically you want a feature, ping me, you got it.
 
-blttest is originally from http://stereopsis.com/blttest
-(which is quite hardware dependent, or so I'm told).
+the included blttest utility is originally from http://stereopsis.com/blttest
+(blttest is quite hardware dependent, or so I'm told).
