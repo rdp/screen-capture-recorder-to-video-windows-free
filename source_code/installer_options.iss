@@ -1,12 +1,12 @@
-#define AppVer "0.0.1"
-#define AppName "pushdesktop"
+#define AppVer "0.0.2"
+#define AppName "Screen Capture Recorder Device"
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /u PushDesktop.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
 [Files]
-Source: C:\dev\ruby\pushdesktop\source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: Release\PushDesktop.ax; DestDir: {app}
 Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
 [Setup]
 AppName={#AppName}
