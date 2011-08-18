@@ -1,28 +1,30 @@
 Basically this aims to be a free, general purpose, open source directshow desktop screen source capture filter.
-I.e. it allows you to "record" your desktop into your (directshow compatible) device.
-I couldn't find any open source made my own :)
+I.e. it allows you to "record" your desktop into your (directshow compatible) program or what not.
+I couldn't find any open source versions so made my own :)
 
 It is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
   so you'll probably want to install the Windows SDK before messing around with the source code.
 
 Message me if interested in it, or with any feature requests :)
-It's free and open source.
 
-== installation ==
+== Installation ==
 
-To install, run $ regsvr32 source_code\Release\PushDesktop.ax
-  You'll need to run it as administrator if on vista/7.
-  
-To uninstall it, run $ regsvr32 /u source_code\Release\PushDesktop.ax
+Download from https://github.com/rdp/open-source-directshow-screen-desktop-capture-source-filter/downloads
 
-Ping me if you want this automated or can't get it to work.
+== Usage ==
 
-== configuration ==
+Anything that can read from Directshow Capture Devices (ex: VLC) should be able to use it.
 
-By default, it captures "full screen" of the main desktop monitor.
+Let me know if you want an easier way of capturing the screen.
 
-To configure, adjust these registry settings:
+Another example thing that uses it is sensible cinema (uses it via ffmpeg/avisynth).
+
+== Configuration ==
+
+By default, it captures the "full screen" of the main desktop monitor.
+
+To configure it differently, adjust these registry settings before starting:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
 with DWORD keys respected of:
@@ -35,13 +37,12 @@ ex: see incoming.reg (though NB that those values are in hex, so editing that fi
 The jruby setup script in configuration_setup_utility is another way to set them up.
 If any value registry value is set to 0, that means "not set" so it uses the default for that value.
 
-
 == trouble shooting ==
 
 it's too slow:
-turn off aero display manager (esp. if you have dual monitors, this may help).
-disabling/enabling "hardware acceleration" for your desktop might help, too.
-try switching from 16 to 32 bit 
+  turn off aero display manager (esp. if you have dual monitors, this may help).
+  disabling/enabling "hardware acceleration" for your desktop might help, too.
+  try switching from 16 to 32 bit 
 Within BltTest there is  troubleshooting_benchmarker\BltTest\Release\BltTest.exe file.
 Run it to benchmark your system and compare the various settings.
   What you care about is the "reverse" timing speed in its output display.

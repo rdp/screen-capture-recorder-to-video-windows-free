@@ -1,8 +1,9 @@
 installer at all
   add jruby
+  bitblt test
 log stats to the registry on exit... [jruby can read them]
 can use hwnd.
-  check stats
+  re-check stats
   make it able to grab from a window, and work when dragged too...
 
 note this other program uses this
