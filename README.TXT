@@ -12,15 +12,17 @@ Download installer from
 
 == Usage ==
 
-Anything that can read from Directshow Capture Devices (ex: VLC) should be able to use it.
+Anything that can read from Directshow Capture Devices (ex: VLC) should be able to use it as input.
 
-Another example thing that uses it is sensible cinema (uses it via ffmpeg, avisynth also works).
-
+ffmpeg also can:
 $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder"
 
-(if you also had installed the video device from https://github.com/rdp/screen-capture-recorder-program )
+(in this example, assuming
+you also had installed the video device from https://github.com/rdp/screen-capture-recorder-program 
+which isn't necessary for < vista.)
 
-Let me know if you want an easier way of just capturing the screen.
+Let me know if you want an easier way made for just capturing the screen etc.
+Another program that leverages it is sensible cinema (uses it via ffmpeg, avisynth also works with it).
 
 == Configuration ==
 
@@ -41,7 +43,7 @@ If any value registry value is set to 0, that means "not set" so it uses the def
 
 == trouble shooting ==
 
-it's too slow:
+it's too slow!
   turn off aero display manager (esp. if you have dual monitors, this may help).
   disabling/enabling "hardware acceleration" for your desktop might help, too.
   try switching from 16 to 32 bit 
