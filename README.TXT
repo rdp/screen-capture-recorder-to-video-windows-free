@@ -10,15 +10,20 @@ Message me if interested in it, or with any feature requests :)
 
 == Installation ==
 
-Download from https://github.com/rdp/open-source-directshow-screen-desktop-capture-source-filter/downloads
+Download installer from 
+  https://github.com/rdp/open-source-directshow-screen-desktop-capture-source-filter/downloads
 
 == Usage ==
 
 Anything that can read from Directshow Capture Devices (ex: VLC) should be able to use it.
 
-Let me know if you want an easier way of capturing the screen.
+Another example thing that uses it is sensible cinema (uses it via ffmpeg, avisynth also works).
 
-Another example thing that uses it is sensible cinema (uses it via ffmpeg/avisynth).
+$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder"
+
+(if you also had installed the video device from https://github.com/rdp/screen-capture-recorder-program )
+
+Let me know if you want an easier way of just capturing the screen.
 
 == Configuration ==
 

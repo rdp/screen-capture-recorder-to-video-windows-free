@@ -118,7 +118,6 @@ CFactoryTemplate g_Templates[1] =
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);    
 
 
-
 #define CreateComObject(clsid, iid, var) CoCreateInstance( clsid, NULL, CLSCTX_INPROC_SERVER, iid, (void **)&var);
 
 STDAPI AMovieSetupRegisterServer( CLSID   clsServer, LPCWSTR szDescription, LPCWSTR szFileName, LPCWSTR szThreadingModel = L"Both", LPCWSTR szServerType     = L"InprocServer32" );
@@ -140,7 +139,7 @@ STDAPI RegisterFilters( BOOL bRegister )
     hr = CoInitialize(0);
     if(bRegister)
     { 
-        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", achFileName, L"Both", L"InprocServer32");
+        hr = AMovieSetupRegisterServer(CLSID_PushSourceDesktop, L"screen-capture-recorder", achFileName, L"Both", L"InprocServer32");
     }
 
     if( SUCCEEDED(hr) )
@@ -157,7 +156,7 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.dwMerit = MERIT_DO_NOT_USE;
                 rf2.cPins = 1;
                 rf2.rgPins = &sudOutputPinDesktop;
-                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"Virtual Desktop OS Cam", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
+                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"screen-capture-recorder", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
             }
             else
             {
