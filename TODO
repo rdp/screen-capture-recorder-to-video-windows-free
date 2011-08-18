@@ -6,8 +6,6 @@ can use hwnd.
   re-check stats
   make it able to grab from a window, and work when dragged too...
 
-note this other program uses this
-
 == speedup ==
 
   can I live with aero wasn't bitblt getting like 800fps *with* aero?
