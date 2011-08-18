@@ -1,10 +1,10 @@
 installer at all
-  add jruby
-  bitblt test
+  add jruby setup-zer
+  add bitblt test
 log stats to the registry on exit... [jruby can read them]
 can use hwnd.
-  re-check stats
-  make it able to grab from a window, and work when dragged too...
+  re-check stats when using versus not.
+  work when dragged too...
 
 == speedup ==
 
@@ -23,3 +23,19 @@ can use hwnd.
 
 == propaganda ==
   various :P [see audio file]
+  windows screen capture 110,000
+  window screen capture 135,000
+  screen capture directshow 590
+  screen capture vlc 5,400
+  screen capture device 1,300
+  
+  video screen capture 160K
+  record screen 300K
+  screen recorder 450K
+  screen capture 550K
+  screenshot capture 800K
+  
+  capture screen 1.8M
+  capture screenshots 1.6M
+  
+  screen-capture-recorder-program (program 450K)
