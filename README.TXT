@@ -14,21 +14,25 @@ Download installer from
 
 Anything that can read from Directshow Capture Devices (ex: VLC) should be able to use it as input.
 
-ffmpeg also can:
+VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
+
+ffmpeg also can use it:
+
 $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder"
 
 (in this example, assuming
-you also had installed the video device from https://github.com/rdp/screen-capture-recorder-program 
-which isn't necessary for < vista.)
+you also had installed the audio device from https://github.com/rdp/virtual-audio-capture-grabber-device
+which probably isn't necessary for < vista.)
 
 Let me know if you want an easier way made for just capturing the screen etc.
-Another program that leverages it is sensible cinema (uses it via ffmpeg, avisynth also works with it).
+Another program that leverages it internally is sensible cinema 
+(avisynth also works with it).
 
 == Configuration ==
 
 By default, it captures the "full screen" of the main desktop monitor.
 
-To configure it differently, adjust these registry settings before starting:
+To configure it differently, adjust these registry settings before starting a run with it:
 
 HKEY_CURRENT_USER\Software\os_screen_capture
 with DWORD keys respected of:
@@ -39,15 +43,16 @@ with DWORD keys respected of:
 ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit tedious).  
 
 The jruby setup script in configuration_setup_utility is another way to set them up.
+
 If any value registry value is set to 0, that means "not set" so it uses the default for that value.
 
-== trouble shooting ==
+== Trouble shooting ==
 
 it's too slow!
   turn off aero display manager (esp. if you have dual monitors, this may help).
   disabling/enabling "hardware acceleration" for your desktop might help, too.
   try switching from 16 to 32 bit 
-Within BltTest there is  troubleshooting_benchmarker\BltTest\Release\BltTest.exe file.
+Run the troubleshooting_benchmarker\BltTest\Release\BltTest.exe file.
 Run it to benchmark your system and compare the various settings.
   What you care about is the "reverse" timing speed in its output display.
 
