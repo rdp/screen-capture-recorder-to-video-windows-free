@@ -1,1 +1,3 @@
 0.0.2: better name, report "better" stats to the capture device.
+
+0.0.3: respects fps settings, in its own kludgey way.  Should work though, and not cause any slowdown if you can't keep up anyway :)

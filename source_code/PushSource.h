@@ -62,7 +62,8 @@ protected:
     CRefTime m_rtSampleTime;	        // The time stamp for each sample
 
     int m_iFrameNumber;
-    const REFERENCE_TIME m_rtFrameLength;
+    REFERENCE_TIME m_rtFrameLength;
+	REFERENCE_TIME previousFrameEndTime;
 
     RECT m_rScreen;                     // Rect containing entire screen coordinates
 
@@ -72,7 +73,7 @@ protected:
     int m_nCurrentBitDepth;             // Screen bit depth
 
     CMediaType m_MediaType;
-    CCritSec m_cSharedState;            // Protects our internal state
+    //CCritSec m_cSharedState;            // Protects our internal state
     CImageDisplay m_Display;            // Figures out our media type for us
 	CPushSourceDesktop* m_pParent;
 

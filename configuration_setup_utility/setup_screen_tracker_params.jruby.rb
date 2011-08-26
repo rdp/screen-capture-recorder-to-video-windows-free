@@ -10,7 +10,7 @@ def get_user_input(message, default = '', cancel_ok = false)
 end
 
 class SetupScreenTrackerParams
-  Settings = ['height', 'width', 'start_x', 'start_y']
+  Settings = ['height', 'width', 'start_x', 'start_y', 'fps']
  
   def initialize
     @screen_reg = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
@@ -24,7 +24,7 @@ class SetupScreenTrackerParams
   
   # can be nil if not set...
   def read_single_setting name
-    @screen_reg[name]
+    @screen_reg[name] rescue nil
   end
   
   def teardown
@@ -45,8 +45,9 @@ def do_command_line
     end
     received = ARGV.shift
     unless received
-      require 'java' # jruby only from here on out...
-      received = get_user_input('enter desired ' + type + ' (blank for reset to default)', previous_setting)
+      require 'java' # jruby only for getting user input...
+      previous_setting = '' if previous_setting == 0
+      received = get_user_input('enter desired ' + type + ' (blank to reset to default)', previous_setting)
       raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
     end
     if received == ''

@@ -15,14 +15,14 @@
 DWORD start; // for global stats
 
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source Desktop OS"), phr, pFilter, L"Out"),
+        : CSourceStream(NAME("Push Source"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
-        m_rtFrameLength(FPS_20), // Capture and display desktop "x" times per second...kind of...
         m_nCurrentBitDepth(32),
 		m_pParent(pFilter)
 {
+
 
 	// The main point of this sample is to demonstrate how to take a DIB
 	// in host memory and insert it into a video stream. 
@@ -82,7 +82,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
-	LocalOutput("got2 %d %d %d %d -> %d %d %d %d\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right);
 
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
@@ -90,6 +89,16 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
     // Release the device context
     DeleteDC(hDC);
+
+	int config_fps = read_config_setting(TEXT("fps"));
+	ASSERT(config_fps >= 0);
+	if(config_fps == 0) {
+	  config_fps = 30;
+	}
+	//	const REFERENCE_TIME FPS_20 = UNITS / 20;
+  	m_rtFrameLength = UNITS / config_fps; 
+	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_fps);
+
 }
 
 CPushPinDesktop::~CPushPinDesktop()
@@ -110,13 +119,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     CheckPointer(pSample, E_POINTER);
 
-    CAutoLock cAutoLockShared(&m_cSharedState); // do we have any threading conflicts though?
-
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
     cbData = pSample->GetSize();
 
-    // Check that we're still using video
+    // Make sure that we're still using video format
     ASSERT(m_mt.formattype == FORMAT_VideoInfo);
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
@@ -131,9 +138,17 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
+    // wait until we "should" send this frame out...TODO...more precise et al...
+	if(m_iFrameNumber > 0 && (now > 0)) { // accomodate for if there is no clock at all...
+		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
+		  Sleep(1);
+          CSourceStream::m_pFilter->StreamTime(now);
+		}
+	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
     m_iFrameNumber++;
+
 	// Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
 	// only set discontinuous for the first...I think...
@@ -141,8 +156,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
 	double millisThisRound = GetCounterSinceStartMillis(startOneRound);
-	LocalOutput("end total frames %d %fms, total %dms %f fps (max fps %f)\n", m_iFrameNumber, millisThisRound, GetTickCount() - start, fpsSinceBeginningOfTime, 1.0/millisThisRound*1000);
-
+	LocalOutput("end total frames %d %fms, total since beginning of time %f fps (theoretical max fps %f)\n", m_iFrameNumber, millisThisRound, 
+		fpsSinceBeginningOfTime, 1.0/millisThisRound*1000);
+	previousFrameEndTime = endFrame;
     return S_OK;
 }
 

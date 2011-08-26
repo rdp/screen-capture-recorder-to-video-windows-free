@@ -121,6 +121,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
 //
 // CheckMediaType
+// I think VLC calls this once per each enumerated media type that it likes (3 times)
+// just to "make sure" that it's a real valid option
 //
 // We will accept 8, 16, 24 or 32 bit video formats, in any
 // image size that gives room to bounce.
@@ -229,7 +231,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 //
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
-    CAutoLock cAutoLock(m_pFilter->pStateLock()); // never get here VLC
+    CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but maybe that's special? the other one 3 times? huh?
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType);
@@ -289,6 +291,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
     return S_OK;
 }
 
+// get current format?
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     *ppmt = CreateMediaType(&m_mt);

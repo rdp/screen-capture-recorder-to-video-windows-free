@@ -6,6 +6,10 @@ can use hwnd.
   re-check stats when using versus not.
   work when dragged too...
 
+mouse_draw.rb from SC
+
+it defaults to 24 bits [maybe wrong?]
+
 == speedup ==
 
   can I live with aero wasn't bitblt getting like 800fps *with* aero?
@@ -39,3 +43,10 @@ can use hwnd.
   capture screenshots 1.6M
   
   screen-capture-recorder-program (program 450K)
+  
+  
+notes:
+ 1024x1024:
+   15% one cpu used by the capture utility (0.013ms per capture)
+   good for now I guess (no transparency visible...)
+   12 fps <sigh>

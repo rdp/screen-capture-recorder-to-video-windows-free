@@ -6,6 +6,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments> dshow:// :dshow-vdev="Virtual Desktop OS Cam" :dshow-adev=none  :dshow-caching=200</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev=none  :dshow-caching=200</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>
