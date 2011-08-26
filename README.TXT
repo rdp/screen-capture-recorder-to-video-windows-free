@@ -36,13 +36,13 @@ To configure it differently, adjust these registry settings before starting a ru
 
 HKEY_CURRENT_USER\Software\os_screen_capture
 with DWORD keys respected of:
-  start_x, start_y, width, height
+  start_x, start_y, width, height, fps
   # unimplemented, but will be if there is ever any request for them:
-  # monitor_number, fps, hwnd_to_use, show_mouse
+  # monitor_number, hwnd_to_use, show_mouse
   
 ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit tedious).  
 
-The jruby setup script in configuration_setup_utility is another way to set them up.
+The jruby setup script provided in configuration_setup_utility is another way to set them up.
 
 If any value registry value is set to 0, that means "not set" so it uses the default for that value.
 
