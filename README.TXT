@@ -34,7 +34,7 @@ which probably isn't necessary for < vista.)
 
 Let me know if you want an easier way made for capturing the screen, specific window, etc.
 
-Another program that leverages it internally is sensible cinema.
+Another program that leverages it internally is sensible cinema (pins it to the location of a given HWND window even)
 
 Avisynth also works with it.
 
