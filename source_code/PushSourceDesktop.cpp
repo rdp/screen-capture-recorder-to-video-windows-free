@@ -90,14 +90,15 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // Release the device context
     DeleteDC(hDC);
 
-	int config_fps = read_config_setting(TEXT("fps"));
-	ASSERT(config_fps >= 0);
-	if(config_fps == 0) {
-	  config_fps = 30;
+	int config_max_fps = read_config_setting(TEXT("max_fps"));
+	ASSERT(config_max_fps >= 0);
+	if(config_max_fps == 0) {
+  	  //	const REFERENCE_TIME FPS_20 = UNITS / 20;
+	  config_max_fps = 30; // TODO this "off" by one frame, assuming it is used at all :P
 	}
-	//	const REFERENCE_TIME FPS_20 = UNITS / 20;
-  	m_rtFrameLength = UNITS / config_fps; 
-	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_fps);
+  	m_rtFrameLength = UNITS / config_max_fps; 
+	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
+		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 
 }
 
@@ -106,7 +107,6 @@ CPushPinDesktop::~CPushPinDesktop()
 	// I don't think it ever gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
-
 
 
 // This is where we insert the DIB bits into the video stream.

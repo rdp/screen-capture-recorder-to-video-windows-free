@@ -1,14 +1,19 @@
 installer at all
-  add jruby setup-zer
-  add bitblt test
-log stats to the registry on exit... [jruby can read them]
+  add bitblt executable
+log stats to the registry on exit... [+ jruby can read them]
 can use hwnd.
   re-check stats when using versus not.
-  work when dragged too...
+  work when dragged too...?
+  
+can "force only next frame" ness? might not need this...
 
 mouse_draw.rb from SC
 
 it defaults to 24 bits [maybe wrong?]
+
+do I need to have several "copies" of it installed, so you can capture while you view or what not?
+
+propaganda
 
 == speedup ==
 
