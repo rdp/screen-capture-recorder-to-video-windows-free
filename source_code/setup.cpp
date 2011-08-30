@@ -43,39 +43,6 @@ const AMOVIESETUP_PIN sudOutputPinBitmap =
     &sudOpPinTypes  // Pointer to media types.
 };
 
-const AMOVIESETUP_FILTER sudPushSourceBitmap =
-{
-    &CLSID_PushSourceBitmap,// Filter CLSID
-    g_wszPushBitmap,        // String name
-    MERIT_DO_NOT_USE,       // Filter merit
-    1,                      // Number pins
-    &sudOutputPinBitmap     // Pin details
-};
-
-
-const AMOVIESETUP_PIN sudOutputPinBitmapSet = 
-{
-    L"Output",      // Obsolete, not used.
-    FALSE,          // Is this pin rendered?
-    TRUE,           // Is it an output pin?
-    FALSE,          // Can the filter create zero instances?
-    FALSE,          // Does the filter create multiple instances?
-    &CLSID_NULL,    // Obsolete.
-    NULL,           // Obsolete.
-    1,              // Number of media types.
-    &sudOpPinTypes  // Pointer to media types.
-};
-
-const AMOVIESETUP_FILTER sudPushSourceBitmapSet =
-{
-    &CLSID_PushSourceBitmapSet,// Filter CLSID
-    g_wszPushBitmapSet,        // String name
-    MERIT_DO_NOT_USE,          // Filter merit
-    1,                         // Number pins
-    &sudOutputPinBitmapSet     // Pin details
-};
-
-
 const AMOVIESETUP_PIN sudOutputPinDesktop = 
 {
     L"Output",      // Obsolete, not used.

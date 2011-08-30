@@ -10,12 +10,12 @@
  *  
  *
  **********************************************/
-#define MIN(a,b)  ((a) < (b) ? (a) : (b))  
+#define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger!
 
 DWORD start; // for global stats
 
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source"), phr, pFilter, L"Out"),
+        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
@@ -35,10 +35,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // the end result is a screen capture video (GDI images only, with no
     // support for overlay surfaces).
 
-    // Get the device context of the main display, just to get some metricts for it...
+    // Get the device context of the main display, just to get some metrics for it...
 	start = GetTickCount();
     HDC hDC;
     hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
+
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
     m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
@@ -50,13 +51,13 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// assume 0 means not set...negative ignore :)
 	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
 	int config_start_x = read_config_setting(TEXT("start_x"));
-	if(config_start_x != 0) {
+	if(config_start_x != 0) { // negatives allowed...
 	  m_rScreen.left = config_start_x;
 	}
 
-	// is there a better way to do this?
+	// is there a better way to do this registry stuff?
 	int config_start_y = read_config_setting(TEXT("start_y"));
-	if(config_start_y != 0) {
+	if(config_start_y != 0) { 
 	  m_rScreen.top = config_start_y;
 	}
 
@@ -93,13 +94,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	int config_max_fps = read_config_setting(TEXT("max_fps"));
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
-  	  //	const REFERENCE_TIME FPS_20 = UNITS / 20;
-	  config_max_fps = 30; // TODO this "off" by one frame, assuming it is used at all :P
+  	  // was:	const REFERENCE_TIME FPS_20 = UNITS / 20;
+	  // TODO this "off" by one frame, assuming it is used at all :P
+	  config_max_fps = 60; // I assume they don't want more than that...
 	}
   	m_rtFrameLength = UNITS / config_max_fps; 
+
 	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
-
 }
 
 CPushPinDesktop::~CPushPinDesktop()
@@ -162,10 +164,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     return S_OK;
 }
 
-
 HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)
 {   
-  // Standard OLE stuff
+    // Standard OLE stuff, needed for capture source
     if(riid == _uuidof(IAMStreamConfig))
         *ppv = (IAMStreamConfig*)this;
     else if(riid == _uuidof(IKsPropertySet))
@@ -173,7 +174,7 @@ HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)
     else
         return CSourceStream::QueryInterface(riid, ppv);
 
-    AddRef();
+    AddRef(); // avoid interlocked decrement error... // I think
     return S_OK;
 }
 

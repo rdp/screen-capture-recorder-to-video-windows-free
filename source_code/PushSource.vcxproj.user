@@ -4,8 +4,8 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments> dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev=none  :dshow-caching=200</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-f dshow  -i video="screen-capture-recorder"</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

@@ -37,6 +37,7 @@ propaganda
   screen capture directshow 590
   screen capture vlc 5,400
   screen capture device 1,300
+  desktop capture 40K
   
   video screen capture 160K
   record screen 300K

@@ -22,11 +22,9 @@ const REFERENCE_TIME FPS_3  = UNITS / 3;
 const REFERENCE_TIME FPS_2  = UNITS / 2;
 const REFERENCE_TIME FPS_1  = UNITS / 1;
 
-const REFERENCE_TIME rtDefaultFrameLength = FPS_10;
+//const REFERENCE_TIME rtDefaultFrameLength = FPS_10; // default is 60 FPS now...
 
 // Filter name strings
-#define g_wszPushBitmap     L"PushSource Bitmap Filter"
-#define g_wszPushBitmapSet  L"PushSource BitmapSet Filter"
 #define g_wszPushDesktop    L"PushSource Desktop Filter"
 
 class CPushPinDesktop;
@@ -52,6 +50,7 @@ public:
 };
 
 
+// child
 class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKsPropertySet
 {
 
@@ -82,8 +81,8 @@ public:
     //////////////////////////////////////////////////////////////////////////
     //  IUnknown
     //////////////////////////////////////////////////////////////////////////
-    STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
-    STDMETHODIMP_(ULONG) AddRef() { return GetOwner()->AddRef(); }                                                          \
+    STDMETHODIMP QueryInterface(REFIID riid, void **ppv); // does an AddRef hmm...
+    STDMETHODIMP_(ULONG) AddRef() { return GetOwner()->AddRef(); } // gets called often
     STDMETHODIMP_(ULONG) Release() { return GetOwner()->Release(); }
 
 
@@ -94,7 +93,6 @@ public:
     HRESULT STDMETHODCALLTYPE GetFormat(AM_MEDIA_TYPE **ppmt);
     HRESULT STDMETHODCALLTYPE GetNumberOfCapabilities(int *piCount, int *piSize);
     HRESULT STDMETHODCALLTYPE GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC);
-
 
     CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter);
     ~CPushPinDesktop();

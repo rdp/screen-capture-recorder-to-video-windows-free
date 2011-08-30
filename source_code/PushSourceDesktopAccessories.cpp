@@ -20,7 +20,7 @@
 //
 HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE == CMediaType
 {
-    CheckPointer(pmt,E_POINTER); // we get here twice...
+    CheckPointer(pmt, E_POINTER); // we get here twice...
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
     if(iPosition < 0)
