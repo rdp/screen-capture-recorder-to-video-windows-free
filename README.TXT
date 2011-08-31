@@ -22,15 +22,15 @@ $ ffplay -f dshow -i video="screen-capture-recorder"
 
 or
 
-$ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 screen-capture.mp4
+$ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 -t 10 screen-capture.mp4 # -t 10 for 10 seconds recording
 
-or combine it with audio with ffmpeg:
+or combine it with audio (with ffmpeg):
 
 $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder"
 
 (assuming you also had also installed the audio device from 
 https://github.com/rdp/virtual-audio-capture-grabber-device
-which probably isn't necessary for < vista.)
+which probably isn't useful/needed for < vista, so your audio="..." setting would change.)
 
 Let me know if you want an easier way made for capturing the screen, specific window, etc.
 
