@@ -149,6 +149,7 @@ end
       File.expand_path(get_directory + '/' + get_file) if get_file # get_file implies they picked something...
     end
     
+    # this actually allows for non existing files [oopsy] LODO
     def self.new_previously_existing_file_selector_and_go title, use_this_dir = nil
       out = FileDialog.new(nil, title, FileDialog::LOAD) # LODO no self in here... ?
       out.set_title title
@@ -160,10 +161,10 @@ end
       Thread.new { sleep 2; out.to_front } # it gets hidden, unfortunately, so try and bring it again to the front...
       #out.remove_notify # allow our app to exit [?]
       got = out.go
+      raise 'must exist' unless File.exist? go
       raise 'cancelled choosing existing file' unless got # I think we always want to raise...
       got
     end
-    
     
   end
   
@@ -198,4 +199,28 @@ end
     received
   end
   
+  def self.show_in_explorer filename_or_path
+    p 'here1'
+    raise 'nonexist' unless File.exist?(filename_or_path)
+    p 'here2'
+ #   begin
+      p 'here3'
+        c = "explorer /e,/select,\"#{File.expand_path(filename_or_path).to_filename}\"" 
+        p c
+        p 'here4'
+        system c # command returns immediately...so system is ok
+#    rescue => why_does_this_happen_ignore_this_exception_it_probably_actually_succeeded
+#    end
+  end
+
+end
+
+class String
+ def to_filename
+  if File::ALT_SEPARATOR
+    self.gsub('/', File::ALT_SEPARATOR)
+  else
+    self
+  end
+ end
 end
