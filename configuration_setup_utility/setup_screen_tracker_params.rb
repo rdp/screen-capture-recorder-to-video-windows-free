@@ -5,6 +5,7 @@ require 'win32/registry'
 
 # returns blank if none set...
 def get_user_input(message, default = '', cancel_ok = false)
+  require 'java'
   received = javax.swing.JOptionPane.showInputDialog(message, default)
   received
 end

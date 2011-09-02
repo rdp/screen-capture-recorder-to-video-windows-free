@@ -1,17 +1,16 @@
 installer at all
   add bitblt executable
-log stats to the registry on exit... [+ jruby can read them]
+log stats to the registry on exit... [+ jruby can read them to display...]
 can use hwnd.
   re-check stats when using versus not.
   work when dragged too...?
   
 can "force only next frame" ness? might not need this...
+  skip_frame_if_same_as_previous option :P
 
 mouse_draw.rb from SC
 
 it defaults to 24 bits [maybe wrong?]
-
-do I need to have several "copies" of it installed, so you can capture while you view or what not?
 
 propaganda
 
@@ -26,6 +25,7 @@ propaganda
     test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
     
 == other ==
+ do I need to have several "copies" of it installed, so you can capture while you view or what not?
  It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
  shearing (?) compared to itself upscreened...
  the "drag to select window" seter-zy-upperzy
