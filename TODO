@@ -6,7 +6,7 @@ can use hwnd.
   work when dragged too...?
   
 can "force only next frame" ness? might not need this...
-  skip_frame_if_same_as_previous option :P
+  skip_frame_if_same_as_previous option :P yes
 
 mouse_draw.rb from SC
 
