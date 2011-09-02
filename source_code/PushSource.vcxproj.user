@@ -4,8 +4,8 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>G:\downloads\ffmpeg-dshow-params-3\ffmpeg.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-f dshow  -i video="screen-capture-recorder"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -f dshow -i video="screen-capture-recorder",list</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

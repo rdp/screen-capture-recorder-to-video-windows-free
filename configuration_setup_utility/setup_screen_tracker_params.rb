@@ -2,13 +2,7 @@
 # or jruby setup_params.rb to have it prompt you for values and set them (requires jruby).
 
 require 'win32/registry'
-
-# returns blank if none set...
-def get_user_input(message, default = '', cancel_ok = false)
-  require 'java'
-  received = javax.swing.JOptionPane.showInputDialog(message, default)
-  received
-end
+require 'swing_helpers'
 
 class SetupScreenTrackerParams
   Settings = ['height', 'width', 'start_x', 'start_y', 'max_fps']
@@ -35,7 +29,6 @@ class SetupScreenTrackerParams
   
 end
 
-
 def do_command_line
   setter = SetupScreenTrackerParams.new
   for type in SetupScreenTrackerParams::Settings
@@ -48,7 +41,7 @@ def do_command_line
     unless received
       require 'java' # jruby only for getting user input...
       previous_setting = '' if previous_setting == 0
-      received = get_user_input('enter desired ' + type + ' (blank to reset to default)', previous_setting)
+      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank to reset to default)', previous_setting)
       raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
     end
     if received == ''
