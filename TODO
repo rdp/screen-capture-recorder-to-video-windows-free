@@ -1,7 +1,5 @@
 log stats to the registry on exit... [+ jruby can read them to display...]
 
-bundle with ffmpeg
-
 can use hwnd.
   re-check stats when using versus not.
   work when dragged too...?
@@ -10,8 +8,6 @@ can "force only next frame" ness? might not need this...
   skip_frame_if_same_as_previous option :P yes
 
 mouse_draw.rb from SC
-
-it defaults to 24 bits [maybe wrong?]
 
 dropdowns for selecting an audio [?]
   and encoding
@@ -26,9 +22,11 @@ actually use it. playon competitor? LOL
   auto skype recorder :)
   can use the default record device in...XP
 
-can "record" not just play from desktop
+can "record" not just play from desktop or vice versa
 
 == speedup ==
+
+  it defaults to 24 bits [maybe wrongly?]
 
   can I live with aero wasn't bitblt getting like 800fps *with* aero?
   threading the input [?] (a bit complicated because of the "only if it's changed" mantra)
