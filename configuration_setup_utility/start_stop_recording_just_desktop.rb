@@ -1,4 +1,4 @@
-require 'swing_helpers'
+require 'jruby-swing-helpers/swing_helpers'
 
 include SwingHelpers
 

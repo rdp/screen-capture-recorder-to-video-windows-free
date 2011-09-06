@@ -1,0 +1,3 @@
+[submodule "configuration_setup_utility/jruby-swing-helpers"]
+	path = configuration_setup_utility/jruby-swing-helpers
+	url = https://rdp@github.com/rdp/jruby-swing-helpers.git

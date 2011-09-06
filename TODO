@@ -1,5 +1,4 @@
 installer at all
-  add bitblt executable
 log stats to the registry on exit... [+ jruby can read them to display...]
 can use hwnd.
   re-check stats when using versus not.

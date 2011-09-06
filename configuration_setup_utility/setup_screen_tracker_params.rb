@@ -2,7 +2,7 @@
 # or jruby setup_params.rb to have it prompt you for values and set them (requires jruby).
 
 require 'win32/registry'
-require 'swing_helpers'
+require 'jruby-swing-helpers/swing_helpers'
 
 class SetupScreenTrackerParams
   Settings = ['height', 'width', 'start_x', 'start_y', 'max_fps']

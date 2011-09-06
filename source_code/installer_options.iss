@@ -9,6 +9,8 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Source: Release\PushDesktop.ax; DestDir: {app}
 Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
 Source: ..\configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
+Source: ..\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
+
 [Setup]
 AppName={#AppName}
 AppVerName={#AppVer}
@@ -19,3 +21,4 @@ OutputBaseFilename=setup {#AppName} v{#AppVer}
 [Icons]
 Name: {group}\Uninstall; Filename: {uninstallexe}
 Name: {group}\configuration_setup_utility; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
+Name: {group}\benchmark your screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
