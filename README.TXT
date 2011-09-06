@@ -1,8 +1,10 @@
-This device allows one to "record" your desktop, or even stream it, with the help of VLC.
-Basically this aims to be a free, general purpose, open source directshow desktop/screen source capture filter device.
+This program allows one to "record" your desktop, or even stream it, with the help of VLC.
+Basically it includes a free, general purpose, open source directshow desktop/screen source capture filter.
 Use it with any (directshow compatible) program to capture or stream.
 
 I couldn't find any open source equivalent versions so made my own :)
+
+It also includes some helper "record your screenshot" utilities
 
 == Installation ==
 

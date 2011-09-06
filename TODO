@@ -1,5 +1,5 @@
-installer at all
 log stats to the registry on exit... [+ jruby can read them to display...]
+
 can use hwnd.
   re-check stats when using versus not.
   work when dragged too...?
@@ -11,7 +11,12 @@ mouse_draw.rb from SC
 
 it defaults to 24 bits [maybe wrong?]
 
-propaganda
+dropdowns for selecting an audio [?]
+  and encoding
+  maybe fps :P
+remember directory
+
+minimize to tray 
 
 == speedup ==
 
