@@ -26,9 +26,9 @@ or
 
 $ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 -t 10 screen-capture.mp4 # -t 10 for 10 seconds recording
 
-or combine it with audio (with ffmpeg):
+or combine it with recorded audio (with ffmpeg) if desired:
 
-$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder"
+$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback though...
 
 (assuming you also had also installed the audio device from 
 https://github.com/rdp/virtual-audio-capture-grabber-device
@@ -38,7 +38,7 @@ Let me know if you want an easier way made for capturing the screen, specific wi
 
 Another program that leverages it internally is sensible cinema (pins it to the location of a given HWND window even)
 
-Avisynth also works with it.
+Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your input source.
 
 == Configuration ==
 
