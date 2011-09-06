@@ -1,0 +1,1042 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on August 28, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>General Documentation</title>
+
+<meta name="description" content="General Documentation">
+<meta name="keywords" content="General Documentation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="SEC_Top"></a>
+<h1 class="settitle">General Documentation</h1>
+
+<a name="SEC_Contents"></a>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="toc-external-libraries" href="#external-libraries">1. external libraries</a>
+  <ul class="toc">
+    <li><a name="toc-OpenCORE-AMR" href="#OpenCORE-AMR">1.1 OpenCORE AMR</a></li>
+  </ul></li>
+  <li><a name="toc-Supported-File-Formats-and-Codecs" href="#Supported-File-Formats-and-Codecs">2. Supported File Formats and Codecs</a>
+  <ul class="toc">
+    <li><a name="toc-File-Formats" href="#File-Formats">2.1 File Formats</a></li>
+    <li><a name="toc-Image-Formats" href="#Image-Formats">2.2 Image Formats</a></li>
+    <li><a name="toc-Video-Codecs" href="#Video-Codecs">2.3 Video Codecs</a></li>
+    <li><a name="toc-Audio-Codecs" href="#Audio-Codecs">2.4 Audio Codecs</a></li>
+    <li><a name="toc-Subtitle-Formats" href="#Subtitle-Formats">2.5 Subtitle Formats</a></li>
+    <li><a name="toc-Network-Protocols" href="#Network-Protocols">2.6 Network Protocols</a></li>
+    <li><a name="toc-Input_002fOutput-Devices" href="#Input_002fOutput-Devices">2.7 Input/Output Devices</a></li>
+  </ul></li>
+  <li><a name="toc-Platform-Specific-information" href="#Platform-Specific-information">3. Platform Specific information</a>
+  <ul class="toc">
+    <li><a name="toc-DOS" href="#DOS">3.1 DOS</a></li>
+    <li><a name="toc-OS_002f2" href="#OS_002f2">3.2 OS/2</a></li>
+    <li><a name="toc-Unix_002dlike" href="#Unix_002dlike">3.3 Unix-like</a>
+    <ul class="toc">
+      <li><a name="toc-BSD" href="#BSD">3.3.1 BSD</a></li>
+      <li><a name="toc-_0028Open_0029Solaris" href="#g_t_0028Open_0029Solaris">3.3.2 (Open)Solaris</a></li>
+      <li><a name="toc-Darwin-_0028MacOS-X_002c-iPhone_0029" href="#Darwin-_0028MacOS-X_002c-iPhone_0029">3.3.3 Darwin (MacOS X, iPhone)</a></li>
+    </ul></li>
+    <li><a name="toc-Windows" href="#Windows">3.4 Windows</a>
+    <ul class="toc">
+      <li><a name="toc-Native-Windows-compilation" href="#Native-Windows-compilation">3.4.1 Native Windows compilation</a></li>
+      <li><a name="toc-Microsoft-Visual-C_002b_002b-compatibility" href="#Microsoft-Visual-C_002b_002b-compatibility">3.4.2 Microsoft Visual C++ compatibility</a>
+      <ul class="toc">
+        <li><a name="toc-Using-static-libraries" href="#Using-static-libraries">3.4.2.1 Using static libraries</a></li>
+        <li><a name="toc-Using-shared-libraries" href="#Using-shared-libraries">3.4.2.2 Using shared libraries</a></li>
+      </ul></li>
+      <li><a name="toc-Cross-compilation-for-Windows-with-Linux-1" href="#Cross-compilation-for-Windows-with-Linux-1">3.4.3 Cross compilation for Windows with Linux</a></li>
+      <li><a name="toc-Compilation-under-Cygwin" href="#Compilation-under-Cygwin">3.4.4 Compilation under Cygwin</a></li>
+      <li><a name="toc-Crosscompilation-for-Windows-under-Cygwin" href="#Crosscompilation-for-Windows-under-Cygwin">3.4.5 Crosscompilation for Windows under Cygwin</a></li>
+    </ul>
+</li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<hr size="1">
+<a name="external-libraries"></a>
+<h1 class="chapter"><a href="general.html#toc-external-libraries">1. external libraries</a></h1>
+
+<p>FFmpeg can be hooked up with a number of external libraries to add support
+for more formats. None of them are used by default, their use has to be
+explicitly requested by passing the appropriate flags to &lsquo;<tt>./configure</tt>&rsquo;.
+</p>
+<a name="OpenCORE-AMR"></a>
+<h2 class="section"><a href="general.html#toc-OpenCORE-AMR">1.1 OpenCORE AMR</a></h2>
+
+<p>FFmpeg can make use of the OpenCORE libraries for AMR-NB
+decoding/encoding and AMR-WB decoding.
+</p>
+<p>Go to <a href="http://sourceforge.net/projects/opencore-amr/">http://sourceforge.net/projects/opencore-amr/</a> and follow the instructions for
+installing the libraries. Then pass <code>--enable-libopencore-amrnb</code> and/or
+<code>--enable-libopencore-amrwb</code> to configure to enable the libraries.
+</p>
+<p>Note that OpenCORE is under the Apache License 2.0 (see
+<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a> for details), which is
+incompatible with the LGPL version 2.1 and GPL version 2. You have to
+upgrade FFmpeg&rsquo;s license to LGPL version 3 (or if you have enabled
+GPL components, GPL version 3) to use it.
+</p>
+
+<a name="Supported-File-Formats-and-Codecs"></a>
+<h1 class="chapter"><a href="general.html#toc-Supported-File-Formats-and-Codecs">2. Supported File Formats and Codecs</a></h1>
+
+<p>You can use the <code>-formats</code> and <code>-codecs</code> options to have an exhaustive list.
+</p>
+<a name="File-Formats"></a>
+<h2 class="section"><a href="general.html#toc-File-Formats">2.1 File Formats</a></h2>
+
+<p>FFmpeg supports the following file formats through the <code>libavformat</code>
+library:
+</p>
+<table>
+<tr><td width="40%">Name</td><td width="10%">Encoding</td><td width="10%">Decoding</td><td width="40%">Comments</td></tr>
+<tr><td width="40%">4xm</td><td width="10%"></td><td width="10%">X</td><td width="40%">4X Technologies format, used in some games.</td></tr>
+<tr><td width="40%">8088flex TMV</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Adobe Filmstrip</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Audio IFF (AIFF)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">American Laser Games MM</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used in games like Mad Dog McCree.</td></tr>
+<tr><td width="40%">3GPP AMR</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Apple HTTP Live Streaming</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ASF</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">AVI</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">AVISynth</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">AVS</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used by the Creature Shock game.</td></tr>
+<tr><td width="40%">Beam Software SIFF</td><td width="10%"></td><td width="10%">X</td><td width="40%">Audio and video format used in some games by Beam Software.</td></tr>
+<tr><td width="40%">Bethesda Softworks VID</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in some games from Bethesda Softworks.</td></tr>
+<tr><td width="40%">Bink</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used by many games.</td></tr>
+<tr><td width="40%">Bitmap Brothers JV</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Z and Z95 games.</td></tr>
+<tr><td width="40%">Brute Force &amp; Ignorance</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in the game Flash Traffic: City of Angels.</td></tr>
+<tr><td width="40%">BWF</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Interplay C93</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in the game Cyberia from Interplay.</td></tr>
+<tr><td width="40%">Delphine Software International CIN</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used by Delphine Software games.</td></tr>
+<tr><td width="40%">CD+G</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video format used by CD+G karaoke disks</td></tr>
+<tr><td width="40%">Core Audio Format</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Apple Core Audio Format</td></tr>
+<tr><td width="40%">CRC testing format</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">Creative Voice</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Created for the Sound Blaster Pro.</td></tr>
+<tr><td width="40%">CRYO APC</td><td width="10%"></td><td width="10%">X</td><td width="40%">Audio format used in some games by CRYO Interactive Entertainment.</td></tr>
+<tr><td width="40%">D-Cinema audio</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Deluxe Paint Animation</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">DFA</td><td width="10%"></td><td width="10%">X</td><td width="40%">This format is used in Chronomaster game</td></tr>
+<tr><td width="40%">DV video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">DXA</td><td width="10%"></td><td width="10%">X</td><td width="40%">This format is used in the non-Windows version of the Feeble Files
+         game and different game cutscenes repacked for use with ScummVM.</td></tr>
+<tr><td width="40%">Electronic Arts cdata</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Electronic Arts Multimedia</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in various EA games; files have extensions like WVE and UV2.</td></tr>
+<tr><td width="40%">FFM (FFserver live feed)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Flash (SWF)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Flash 9 (AVM2)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Only embedded audio is decoded.</td></tr>
+<tr><td width="40%">FLI/FLC/FLX animation</td><td width="10%"></td><td width="10%">X</td><td width="40%">.fli/.flc files</td></tr>
+<tr><td width="40%">Flash Video (FLV)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Macromedia Flash video files</td></tr>
+<tr><td width="40%">framecrc testing format</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">FunCom ISS</td><td width="10%"></td><td width="10%">X</td><td width="40%">Audio format used in various games from FunCom like The Longest Journey.</td></tr>
+<tr><td width="40%">GIF Animation</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">GXF</td><td width="10%">X</td><td width="10%">X</td><td width="40%">General eXchange Format SMPTE 360M, used by Thomson Grass Valley
+         playout servers.</td></tr>
+<tr><td width="40%">id Quake II CIN video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">id RoQ</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Used in Quake III, Jedi Knight 2, other computer games.</td></tr>
+<tr><td width="40%">IEC61937 encapsulation</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">IFF</td><td width="10%"></td><td width="10%">X</td><td width="40%">Interchange File Format</td></tr>
+<tr><td width="40%">Interplay MVE</td><td width="10%"></td><td width="10%">X</td><td width="40%">Format used in various Interplay computer games.</td></tr>
+<tr><td width="40%">IV8</td><td width="10%"></td><td width="10%">X</td><td width="40%">A format generated by IndigoVision 8000 video server.</td></tr>
+<tr><td width="40%">IVF (On2)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">A format used by libvpx</td></tr>
+<tr><td width="40%">LMLM4</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used by Linux Media Labs MPEG-4 PCI boards</td></tr>
+<tr><td width="40%">LOAS</td><td width="10%"></td><td width="10%">X</td><td width="40%">contains LATM multiplexed AAC audio</td></tr>
+<tr><td width="40%">LXF</td><td width="10%"></td><td width="10%">X</td><td width="40%">VR native stream format, used by Leitch/Harris&rsquo; video servers.</td></tr>
+<tr><td width="40%">Matroska</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Matroska audio</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">FFmpeg metadata</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Metadata in text format.</td></tr>
+<tr><td width="40%">MAXIS XA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sim City 3000; file extension .xa.</td></tr>
+<tr><td width="40%">MD Studio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Mobotix .mxg</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Monkey&rsquo;s Audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Motion Pixels MVI</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MOV/QuickTime/MP4</td><td width="10%">X</td><td width="10%">X</td><td width="40%">3GP, 3GP2, PSP, iPod variants supported</td></tr>
+<tr><td width="40%">MP2</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MP3</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-1 System</td><td width="10%">X</td><td width="10%">X</td><td width="40%">muxed audio and video, VCD format supported</td></tr>
+<tr><td width="40%">MPEG-PS (program stream)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">also known as <code>VOB</code> file, SVCD and DVD format supported</td></tr>
+<tr><td width="40%">MPEG-TS (transport stream)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">also known as DVB Transport Stream</td></tr>
+<tr><td width="40%">MPEG-4</td><td width="10%">X</td><td width="10%">X</td><td width="40%">MPEG-4 is a variant of QuickTime.</td></tr>
+<tr><td width="40%">MIME multipart JPEG</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">MSN TCP webcam</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used by MSN Messenger webcam streams.</td></tr>
+<tr><td width="40%">MTV</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Musepack</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Musepack SV8</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Material eXchange Format (MXF)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">SMPTE 377M, used by D-Cinema, broadcast industry.</td></tr>
+<tr><td width="40%">Material eXchange Format (MXF), D-10 Mapping</td><td width="10%">X</td><td width="10%">X</td><td width="40%">SMPTE 386M, D-10/IMX Mapping.</td></tr>
+<tr><td width="40%">NC camera feed</td><td width="10%"></td><td width="10%">X</td><td width="40%">NC (AVIP NC4600) camera streams</td></tr>
+<tr><td width="40%">NTT TwinVQ (VQF)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Nippon Telegraph and Telephone Corporation TwinVQ.</td></tr>
+<tr><td width="40%">Nullsoft Streaming Video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">NuppelVideo</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">NUT</td><td width="10%">X</td><td width="10%">X</td><td width="40%">NUT Open Container Format</td></tr>
+<tr><td width="40%">Ogg</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Playstation Portable PMP</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">TechnoTrend PVA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used by TechnoTrend DVB PCI boards.</td></tr>
+<tr><td width="40%">QCP</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw ADTS (AAC)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw AC-3</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw Chinese AVS video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw CRI ADX</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw Dirac</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw DNxHD</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw DTS</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw E-AC-3</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw FLAC</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw GSM</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw H.261</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw H.263</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw H.264</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw Ingenient MJPEG</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MJPEG</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MLP</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MPEG</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MPEG-1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MPEG-2</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw MPEG-4</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw NULL</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">raw video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw id RoQ</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">raw Shorten</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw TrueHD</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw VC-1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM A-law</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM mu-law</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 8 bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 16 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 16 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 24 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 24 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 32 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM signed 32 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 8 bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 16 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 16 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 24 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 24 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 32 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM unsigned 32 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM floating-point 32 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM floating-point 32 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM floating-point 64 bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">raw PCM floating-point 64 bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RDT</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">REDCODE R3D</td><td width="10%"></td><td width="10%">X</td><td width="40%">File format used by RED Digital cameras, contains JPEG 2000 frames and PCM audio.</td></tr>
+<tr><td width="40%">RealMedia</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Redirector</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Renderware TeXture Dictionary</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">RL2</td><td width="10%"></td><td width="10%">X</td><td width="40%">Audio and video format used in some games by Entertainment Software Partners.</td></tr>
+<tr><td width="40%">RPL/ARMovie</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Lego Mindstorms RSO</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RTMP</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Output is performed by publishing stream to RTMP server</td></tr>
+<tr><td width="40%">RTP</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RTSP</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">SAP</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">SDP</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Sega FILM/CPK</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in many Sega Saturn console games.</td></tr>
+<tr><td width="40%">Sierra SOL</td><td width="10%"></td><td width="10%">X</td><td width="40%">.sol files used in Sierra Online games.</td></tr>
+<tr><td width="40%">Sierra VMD</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sierra CD-ROM games.</td></tr>
+<tr><td width="40%">Smacker</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used by many games.</td></tr>
+<tr><td width="40%">Sony OpenMG (OMA)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Audio format used in Sony Sonic Stage and Sony Vegas.</td></tr>
+<tr><td width="40%">Sony PlayStation STR</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Sony Wave64 (W64)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">SoX native format</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">SUN AU format</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Text files</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">THP</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used on the Nintendo GameCube.</td></tr>
+<tr><td width="40%">Tiertex Limited SEQ</td><td width="10%"></td><td width="10%">X</td><td width="40%">Tiertex .seq files used in the DOS CD-ROM version of the game Flashback.</td></tr>
+<tr><td width="40%">True Audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">VC-1 test bitstream</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">WAV</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">WavPack</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">WebM</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Televison (WTV)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Wing Commander III movie</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used in Origin&rsquo;s Wing Commander III computer game.</td></tr>
+<tr><td width="40%">Westwood Studios audio</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used in Westwood Studios games.</td></tr>
+<tr><td width="40%">Westwood Studios VQA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Multimedia format used in Westwood Studios games.</td></tr>
+<tr><td width="40%">XMV</td><td width="10%"></td><td width="10%">X</td><td width="40%">Microsoft video container used in Xbox games.</td></tr>
+<tr><td width="40%">xWMA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Microsoft audio container used by XAudio 2.</td></tr>
+<tr><td width="40%">YUV4MPEG pipe</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Psygnosis YOP</td><td width="10%"></td><td width="10%">X</td></tr>
+</table>
+
+<p><code>X</code> means that encoding (resp. decoding) is supported.
+</p>
+<a name="Image-Formats"></a>
+<h2 class="section"><a href="general.html#toc-Image-Formats">2.2 Image Formats</a></h2>
+
+<p>FFmpeg can read and write images for each frame of a video sequence. The
+following image formats are supported:
+</p>
+<table>
+<tr><td width="40%">Name</td><td width="10%">Encoding</td><td width="10%">Decoding</td><td width="40%">Comments</td></tr>
+<tr><td width="40%">.Y.U.V</td><td width="10%">X</td><td width="10%">X</td><td width="40%">one raw file per component</td></tr>
+<tr><td width="40%">animated GIF</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Only uncompressed GIFs are generated.</td></tr>
+<tr><td width="40%">BMP</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Microsoft BMP image</td></tr>
+<tr><td width="40%">DPX</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Digital Picture Exchange</td></tr>
+<tr><td width="40%">JPEG</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Progressive JPEG is not supported.</td></tr>
+<tr><td width="40%">JPEG 2000</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">JPEG-LS</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">LJPEG</td><td width="10%">X</td><td width="10%"></td><td width="40%">Lossless JPEG</td></tr>
+<tr><td width="40%">PAM</td><td width="10%">X</td><td width="10%">X</td><td width="40%">PAM is a PNM extension with alpha support.</td></tr>
+<tr><td width="40%">PBM</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Portable BitMap image</td></tr>
+<tr><td width="40%">PCX</td><td width="10%">X</td><td width="10%">X</td><td width="40%">PC Paintbrush</td></tr>
+<tr><td width="40%">PGM</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Portable GrayMap image</td></tr>
+<tr><td width="40%">PGMYUV</td><td width="10%">X</td><td width="10%">X</td><td width="40%">PGM with U and V components in YUV 4:2:0</td></tr>
+<tr><td width="40%">PIC</td><td width="10%"></td><td width="10%">X</td><td width="40%">Pictor/PC Paint</td></tr>
+<tr><td width="40%">PNG</td><td width="10%">X</td><td width="10%">X</td><td width="40%">2/4 bpp not supported yet</td></tr>
+<tr><td width="40%">PPM</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Portable PixelMap image</td></tr>
+<tr><td width="40%">PTX</td><td width="10%"></td><td width="10%">X</td><td width="40%">V.Flash PTX format</td></tr>
+<tr><td width="40%">SGI</td><td width="10%">X</td><td width="10%">X</td><td width="40%">SGI RGB image format</td></tr>
+<tr><td width="40%">Sun Rasterfile</td><td width="10%"></td><td width="10%">X</td><td width="40%">Sun RAS image format</td></tr>
+<tr><td width="40%">TIFF</td><td width="10%">X</td><td width="10%">X</td><td width="40%">YUV, JPEG and some extension is not supported yet.</td></tr>
+<tr><td width="40%">Truevision Targa</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Targa (.TGA) image format</td></tr>
+</table>
+
+<p><code>X</code> means that encoding (resp. decoding) is supported.
+</p>
+<p><code>E</code> means that support is provided through an external library.
+</p>
+<a name="Video-Codecs"></a>
+<h2 class="section"><a href="general.html#toc-Video-Codecs">2.3 Video Codecs</a></h2>
+
+<table>
+<tr><td width="40%">Name</td><td width="10%">Encoding</td><td width="10%">Decoding</td><td width="40%">Comments</td></tr>
+<tr><td width="40%">4X Movie</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in certain computer games.</td></tr>
+<tr><td width="40%">8088flex TMV</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">8SVX exponential</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">8SVX fibonacci</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">A64 multicolor</td><td width="10%">X</td><td width="10%"></td><td width="40%">Creates video suitable to be played on a commodore 64 (multicolor mode).</td></tr>
+<tr><td width="40%">American Laser Games MM</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in games like Mad Dog McCree.</td></tr>
+<tr><td width="40%">AMV Video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Chinese MP3 players.</td></tr>
+<tr><td width="40%">ANSI/ASCII art</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Apple MJPEG-B</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Apple QuickDraw</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: qdrw</td></tr>
+<tr><td width="40%">Asus v1</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: ASV1</td></tr>
+<tr><td width="40%">Asus v2</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: ASV2</td></tr>
+<tr><td width="40%">ATI VCR1</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: VCR1</td></tr>
+<tr><td width="40%">ATI VCR2</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: VCR2</td></tr>
+<tr><td width="40%">Auravision Aura</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Auravision Aura 2</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Autodesk Animator Flic video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Autodesk RLE</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: AASC</td></tr>
+<tr><td width="40%">AVS (Audio Video Standard) video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video encoding used by the Creature Shock game.</td></tr>
+<tr><td width="40%">Beam Software VB</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Bethesda VID video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in some games from Bethesda Softworks.</td></tr>
+<tr><td width="40%">Bink Video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Bitmap Brothers JV video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Brute Force &amp; Ignorance</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in the game Flash Traffic: City of Angels.</td></tr>
+<tr><td width="40%">C93 video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in Cyberia game.</td></tr>
+<tr><td width="40%">CamStudio</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: CSCD</td></tr>
+<tr><td width="40%">CD+G</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video codec for CD+G karaoke disks</td></tr>
+<tr><td width="40%">Chinese AVS video</td><td width="10%">E</td><td width="10%">X</td><td width="40%">AVS1-P2, JiZhun profile, encoding through external library libxavs</td></tr>
+<tr><td width="40%">Delphine Software International CIN video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in Delphine Software International games.</td></tr>
+<tr><td width="40%">Cinepak</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Cirrus Logic AccuPak</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: CLJR</td></tr>
+<tr><td width="40%">Creative YUV (CYUV)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">DFA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in Chronomaster game.</td></tr>
+<tr><td width="40%">Dirac</td><td width="10%">E</td><td width="10%">E</td><td width="40%">supported through external libdirac/libschroedinger libraries</td></tr>
+<tr><td width="40%">Deluxe Paint Animation</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">DNxHD</td><td width="10%">X</td><td width="10%">X</td><td width="40%">aka SMPTE VC3</td></tr>
+<tr><td width="40%">Duck TrueMotion 1.0</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: DUCK</td></tr>
+<tr><td width="40%">Duck TrueMotion 2.0</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: TM20</td></tr>
+<tr><td width="40%">DV (Digital Video)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Feeble Files/ScummVM DXA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec originally used in Feeble Files game.</td></tr>
+<tr><td width="40%">Electronic Arts CMV video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in NHL 95 game.</td></tr>
+<tr><td width="40%">Electronic Arts Madcow video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Electronic Arts TGV video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Electronic Arts TGQ video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Electronic Arts TQI video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Escape 124</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">FFmpeg video codec #1</td><td width="10%">X</td><td width="10%">X</td><td width="40%">experimental lossless codec (fourcc: FFV1)</td></tr>
+<tr><td width="40%">Flash Screen Video v1</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: FSV1</td></tr>
+<tr><td width="40%">Flash Screen Video v2</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Flash Video (FLV)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Sorenson H.263 used in Flash</td></tr>
+<tr><td width="40%">Fraps</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">H.261</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">H.263 / H.263-1996</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">H.263+ / H.263-1998 / H.263 version 2</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libx264</td></tr>
+<tr><td width="40%">H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (VDPAU acceleration)</td><td width="10%">E</td><td width="10%">X</td></tr>
+<tr><td width="40%">HuffYUV</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">HuffYUV FFmpeg variant</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">IBM Ultimotion</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: ULTI</td></tr>
+<tr><td width="40%">id Cinematic video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Quake II.</td></tr>
+<tr><td width="40%">id RoQ video</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Used in Quake III, Jedi Knight 2, other computer games.</td></tr>
+<tr><td width="40%">IFF ILBM</td><td width="10%"></td><td width="10%">X</td><td width="40%">IFF interlaved bitmap</td></tr>
+<tr><td width="40%">IFF ByteRun1</td><td width="10%"></td><td width="10%">X</td><td width="40%">IFF run length encoded bitmap</td></tr>
+<tr><td width="40%">Intel H.263</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Intel Indeo 2</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Intel Indeo 3</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Intel Indeo 5</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Interplay C93</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in the game Cyberia from Interplay.</td></tr>
+<tr><td width="40%">Interplay MVE video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Interplay .MVE files.</td></tr>
+<tr><td width="40%">Karl Morton&rsquo;s video codec</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in Worms games.</td></tr>
+<tr><td width="40%">Kega Game Video (KGV1)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Kega emulator screen capture codec.</td></tr>
+<tr><td width="40%">Lagarith</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">LCL (LossLess Codec Library) MSZH</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">LCL (LossLess Codec Library) ZLIB</td><td width="10%">E</td><td width="10%">E</td></tr>
+<tr><td width="40%">LOCO</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">lossless MJPEG</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Microsoft RLE</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Microsoft Video 1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Mimic</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in MSN Messenger Webcam streams.</td></tr>
+<tr><td width="40%">Miro VideoXL</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: VIXL</td></tr>
+<tr><td width="40%">MJPEG (Motion JPEG)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Mobotix MxPEG video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Motion Pixels video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-1 video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-1/2 video XvMC (X-Video Motion Compensation)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-1/2 video (VDPAU acceleration)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-2 video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-4 part 2</td><td width="10%">X</td><td width="10%">X
+    &nbsp;libxvidcore can be used alternatively for encoding.</td></tr>
+<tr><td width="40%">MPEG-4 part 2 Microsoft variant version 1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-4 part 2 Microsoft variant version 2</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MPEG-4 part 2 Microsoft variant version 3</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Nintendo Gamecube THP video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">NuppelVideo/RTjpeg</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video encoding used in NuppelVideo files.</td></tr>
+<tr><td width="40%">On2 VP3</td><td width="10%"></td><td width="10%">X</td><td width="40%">still experimental</td></tr>
+<tr><td width="40%">On2 VP5</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: VP50</td></tr>
+<tr><td width="40%">On2 VP6</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: VP60,VP61,VP62</td></tr>
+<tr><td width="40%">VP8</td><td width="10%">E</td><td width="10%">X</td><td width="40%">fourcc: VP80, encoding supported through external library libvpx</td></tr>
+<tr><td width="40%">planar RGB</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: 8BPS</td></tr>
+<tr><td width="40%">Q-team QPEG</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourccs: QPEG, Q1.0, Q1.1</td></tr>
+<tr><td width="40%">QuickTime 8BPS video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">QuickTime Animation (RLE) video</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: &rsquo;rle &rsquo;</td></tr>
+<tr><td width="40%">QuickTime Graphics (SMC)</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: &rsquo;smc &rsquo;</td></tr>
+<tr><td width="40%">QuickTime video (RPZA)</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: rpza</td></tr>
+<tr><td width="40%">R10K AJA Kona 10-bit RGB Codec</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">R210 Quicktime Uncompressed RGB 10-bit</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Raw Video</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RealVideo 1.0</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RealVideo 2.0</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">RealVideo 3.0</td><td width="10%"></td><td width="10%">X</td><td width="40%">still far from ideal</td></tr>
+<tr><td width="40%">RealVideo 4.0</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Renderware TXD (TeXture Dictionary)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Texture dictionaries used by the Renderware Engine.</td></tr>
+<tr><td width="40%">RL2 video</td><td width="10%"></td><td width="10%">X</td><td width="40%">used in some games by Entertainment Software Partners</td></tr>
+<tr><td width="40%">Sierra VMD video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sierra VMD files.</td></tr>
+<tr><td width="40%">Smacker video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video encoding used in Smacker.</td></tr>
+<tr><td width="40%">SMPTE VC-1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Snow</td><td width="10%">X</td><td width="10%">X</td><td width="40%">experimental wavelet codec (fourcc: SNOW)</td></tr>
+<tr><td width="40%">Sony PlayStation MDEC (Motion DECoder)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Sorenson Vector Quantizer 1</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: SVQ1</td></tr>
+<tr><td width="40%">Sorenson Vector Quantizer 3</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: SVQ3</td></tr>
+<tr><td width="40%">Sunplus JPEG (SP5X)</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: SP5X</td></tr>
+<tr><td width="40%">TechSmith Screen Capture Codec</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: TSCC</td></tr>
+<tr><td width="40%">Theora</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libtheora</td></tr>
+<tr><td width="40%">Tiertex Limited SEQ video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in DOS CD-ROM FlashBack game.</td></tr>
+<tr><td width="40%">V210 Quicktime Uncompressed 4:2:2 10-bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">VMware Screen Codec / VMware Video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in videos captured by VMware.</td></tr>
+<tr><td width="40%">Westwood Studios VQA (Vector Quantized Animation) video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Image</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Video 7</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Video 8</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Video 9</td><td width="10%"></td><td width="10%">X</td><td width="40%">not completely working</td></tr>
+<tr><td width="40%">Wing Commander III / Xan</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Wing Commander III .MVE files.</td></tr>
+<tr><td width="40%">Wing Commander IV / Xan</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Wing Commander IV.</td></tr>
+<tr><td width="40%">Winnov WNV1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">WMV7</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">YAMAHA SMAF</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Psygnosis YOP Video</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ZLIB</td><td width="10%">X</td><td width="10%">X</td><td width="40%">part of LCL, encoder experimental</td></tr>
+<tr><td width="40%">Zip Motion Blocks Video</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Encoder works only in PAL8.</td></tr>
+</table>
+
+<p><code>X</code> means that encoding (resp. decoding) is supported.
+</p>
+<p><code>E</code> means that support is provided through an external library.
+</p>
+<a name="Audio-Codecs"></a>
+<h2 class="section"><a href="general.html#toc-Audio-Codecs">2.4 Audio Codecs</a></h2>
+
+<table>
+<tr><td width="40%">Name</td><td width="10%">Encoding</td><td width="10%">Decoding</td><td width="40%">Comments</td></tr>
+<tr><td width="40%">8SVX audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">AAC</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libfaac and libvo-aacenc</td></tr>
+<tr><td width="40%">AC-3</td><td width="10%">IX</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM 4X Movie</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM CDROM XA</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Creative Technology</td><td width="10%"></td><td width="10%">X</td><td width="40%">16 -&gt; 4, 8 -&gt; 4, 8 -&gt; 3, 8 -&gt; 2</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in various EA titles.</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts Maxis CDROM XS</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sim City 3000.</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts R1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts R2</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts R3</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Electronic Arts XAS</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM G.722</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM G.726</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA AMV</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in AMV files</td></tr>
+<tr><td width="40%">ADPCM IMA Electronic Arts EACS</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA Electronic Arts SEAD</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA Funcom</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA QuickTime</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA Loki SDL MJPEG</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA WAV</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM IMA Westwood</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM ISS IMA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in FunCom games.</td></tr>
+<tr><td width="40%">ADPCM IMA Duck DK3</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in some Sega Saturn console games.</td></tr>
+<tr><td width="40%">ADPCM IMA Duck DK4</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in some Sega Saturn console games.</td></tr>
+<tr><td width="40%">ADPCM Microsoft</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM MS IMA</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Nintendo Gamecube THP</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM QT IMA</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM SEGA CRI ADX</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Used in Sega Dreamcast games.</td></tr>
+<tr><td width="40%">ADPCM Shockwave Flash</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM SMJPEG IMA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in certain Loki game ports.</td></tr>
+<tr><td width="40%">ADPCM Sound Blaster Pro 2-bit</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Sound Blaster Pro 2.6-bit</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Sound Blaster Pro 4-bit</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">ADPCM Westwood Studios IMA</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Westwood Studios games like Command and Conquer.</td></tr>
+<tr><td width="40%">ADPCM Yamaha</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">AMR-NB</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libopencore-amrnb</td></tr>
+<tr><td width="40%">AMR-WB</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libvo-amrwbenc</td></tr>
+<tr><td width="40%">Apple lossless audio</td><td width="10%">X</td><td width="10%">X</td><td width="40%">QuickTime fourcc &rsquo;alac&rsquo;</td></tr>
+<tr><td width="40%">Atrac 1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Atrac 3</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Bink Audio</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Bink and Smacker files in many games.</td></tr>
+<tr><td width="40%">CELT (Opus)</td><td width="10%"></td><td width="10%">E</td><td width="40%">decoding supported through external library libcelt</td></tr>
+<tr><td width="40%">Delphine Software International CIN audio</td><td width="10%"></td><td width="10%">X</td><td width="40%">Codec used in Delphine Software International games.</td></tr>
+<tr><td width="40%">COOK</td><td width="10%"></td><td width="10%">X</td><td width="40%">All versions except 5.1 are supported.</td></tr>
+<tr><td width="40%">DCA (DTS Coherent Acoustics)</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">DPCM id RoQ</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Used in Quake III, Jedi Knight 2, other computer games.</td></tr>
+<tr><td width="40%">DPCM Interplay</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in various Interplay computer games.</td></tr>
+<tr><td width="40%">DPCM Sierra Online</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sierra Online game audio files.</td></tr>
+<tr><td width="40%">DPCM Sol</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">DPCM Xan</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Origin&rsquo;s Wing Commander IV AVI files.</td></tr>
+<tr><td width="40%">DSP Group TrueSpeech</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">DV audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Enhanced AC-3</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">FLAC (Free Lossless Audio Codec)</td><td width="10%">X</td><td width="10%">IX</td></tr>
+<tr><td width="40%">GSM</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libgsm</td></tr>
+<tr><td width="40%">GSM Microsoft variant</td><td width="10%">E</td><td width="10%">X</td><td width="40%">encoding supported through external library libgsm</td></tr>
+<tr><td width="40%">IMC (Intel Music Coder)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MACE (Macintosh Audio Compression/Expansion) 3:1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MACE (Macintosh Audio Compression/Expansion) 6:1</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">MLP (Meridian Lossless Packing)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in DVD-Audio discs.</td></tr>
+<tr><td width="40%">Monkey&rsquo;s Audio</td><td width="10%"></td><td width="10%">X</td><td width="40%">Only versions 3.97-3.99 are supported.</td></tr>
+<tr><td width="40%">MP1 (MPEG audio layer 1)</td><td width="10%"></td><td width="10%">IX</td></tr>
+<tr><td width="40%">MP2 (MPEG audio layer 2)</td><td width="10%">IX</td><td width="10%">IX</td></tr>
+<tr><td width="40%">MP3 (MPEG audio layer 3)</td><td width="10%">E</td><td width="10%">IX</td><td width="40%">encoding supported through external library LAME, ADU MP3 and MP3onMP4 also supported</td></tr>
+<tr><td width="40%">MPEG-4 Audio Lossless Coding (ALS)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Musepack SV7</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Musepack SV8</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Nellymoser Asao</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM A-law</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM mu-law</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM 16-bit little-endian planar</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM 32-bit floating point big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM 32-bit floating point little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM 64-bit floating point big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM 64-bit floating point little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM D-Cinema audio signed 24-bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 8-bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 16-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 16-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 24-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 24-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 32-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 32-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM signed 16/20/24-bit big-endian in MPEG-TS</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 8-bit</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 16-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 16-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 24-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 24-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 32-bit big-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM unsigned 32-bit little-endian</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">PCM Zork</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">QCELP / PureVoice</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">QDesign Music Codec 2</td><td width="10%"></td><td width="10%">X</td><td width="40%">There are still some distortions.</td></tr>
+<tr><td width="40%">RealAudio 1.0 (14.4K)</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Real 14400 bit/s codec</td></tr>
+<tr><td width="40%">RealAudio 2.0 (28.8K)</td><td width="10%"></td><td width="10%">X</td><td width="40%">Real 28800 bit/s codec</td></tr>
+<tr><td width="40%">RealAudio 3.0 (dnet)</td><td width="10%">IX</td><td width="10%">X</td><td width="40%">Real low bitrate AC-3 codec</td></tr>
+<tr><td width="40%">RealAudio SIPR / ACELP.NET</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Shorten</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Sierra VMD audio</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in Sierra VMD files.</td></tr>
+<tr><td width="40%">Smacker audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">SMPTE 302M AES3 audio</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Sonic</td><td width="10%">X</td><td width="10%">X</td><td width="40%">experimental codec</td></tr>
+<tr><td width="40%">Sonic lossless</td><td width="10%">X</td><td width="10%">X</td><td width="40%">experimental codec</td></tr>
+<tr><td width="40%">Speex</td><td width="10%"></td><td width="10%">E</td><td width="40%">supported through external library libspeex</td></tr>
+<tr><td width="40%">True Audio (TTA)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">TrueHD</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in HD-DVD and Blu-Ray discs.</td></tr>
+<tr><td width="40%">TwinVQ (VQF flavor)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Vorbis</td><td width="10%">E</td><td width="10%">X</td><td width="40%">A native but very primitive encoder exists.</td></tr>
+<tr><td width="40%">WavPack</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Westwood Audio (SND1)</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Audio 1</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Audio 2</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Audio Pro</td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">Windows Media Audio Voice</td><td width="10%"></td><td width="10%">X</td></tr>
+</table>
+
+<p><code>X</code> means that encoding (resp. decoding) is supported.
+</p>
+<p><code>E</code> means that support is provided through an external library.
+</p>
+<p><code>I</code> means that an integer-only version is available, too (ensures high
+performance on systems without hardware floating point support).
+</p>
+<a name="Subtitle-Formats"></a>
+<h2 class="section"><a href="general.html#toc-Subtitle-Formats">2.5 Subtitle Formats</a></h2>
+
+<table>
+<tr><td width="40%">Name</td><td width="10%">Muxing</td><td width="10%">Demuxing</td><td width="10%">Encoding</td><td width="10%">Decoding</td></tr>
+<tr><td width="40%">SSA/ASS</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">DVB</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">DVD</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">MicroDVD</td><td width="10%">X</td><td width="10%">X</td><td width="10%"></td><td width="10%"></td></tr>
+<tr><td width="40%">PGS</td><td width="10%"></td><td width="10%"></td><td width="10%"></td><td width="10%">X</td></tr>
+<tr><td width="40%">SubRip (SRT)</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">XSUB</td><td width="10%"></td><td width="10%"></td><td width="10%">X</td><td width="10%">X</td></tr>
+</table>
+
+<p><code>X</code> means that the feature is supported.
+</p>
+<a name="Network-Protocols"></a>
+<h2 class="section"><a href="general.html#toc-Network-Protocols">2.6 Network Protocols</a></h2>
+
+<table>
+<tr><td width="40%">Name</td><td width="10%">Support</td></tr>
+<tr><td width="40%">Apple HTTP Live Streaming</td><td width="10%">X</td></tr>
+<tr><td width="40%">file</td><td width="10%">X</td></tr>
+<tr><td width="40%">Gopher</td><td width="10%">X</td></tr>
+<tr><td width="40%">HTTP</td><td width="10%">X</td></tr>
+<tr><td width="40%">MMS</td><td width="10%">X</td></tr>
+<tr><td width="40%">pipe</td><td width="10%">X</td></tr>
+<tr><td width="40%">RTP</td><td width="10%">X</td></tr>
+<tr><td width="40%">TCP</td><td width="10%">X</td></tr>
+<tr><td width="40%">UDP</td><td width="10%">X</td></tr>
+</table>
+
+<p><code>X</code> means that the protocol is supported.
+</p>
+
+<a name="Input_002fOutput-Devices"></a>
+<h2 class="section"><a href="general.html#toc-Input_002fOutput-Devices">2.7 Input/Output Devices</a></h2>
+
+<table>
+<tr><td width="40%">Name</td><td width="10%">Input</td><td width="10%">Output</td></tr>
+<tr><td width="40%">ALSA</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">BKTR</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">DV1394</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">JACK</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">LIBDC1394</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">OSS</td><td width="10%">X</td><td width="10%">X</td></tr>
+<tr><td width="40%">Video4Linux</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">Video4Linux2</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">VfW capture</td><td width="10%">X</td><td width="10%"></td></tr>
+<tr><td width="40%">X11 grabbing</td><td width="10%">X</td><td width="10%"></td></tr>
+</table>
+
+<p><code>X</code> means that input/output is supported.
+</p>
+
+<a name="Platform-Specific-information"></a>
+<h1 class="chapter"><a href="general.html#toc-Platform-Specific-information">3. Platform Specific information</a></h1>
+
+<a name="DOS"></a>
+<h2 class="section"><a href="general.html#toc-DOS">3.1 DOS</a></h2>
+
+<p>Using a cross-compiler is preferred for various reasons.
+</p>
+<a name="OS_002f2"></a>
+<h2 class="section"><a href="general.html#toc-OS_002f2">3.2 OS/2</a></h2>
+
+<p>For information about compiling FFmpeg on OS/2 see
+<a href="http://www.edm2.com/index.php/FFmpeg">http://www.edm2.com/index.php/FFmpeg</a>.
+</p>
+<a name="Unix_002dlike"></a>
+<h2 class="section"><a href="general.html#toc-Unix_002dlike">3.3 Unix-like</a></h2>
+
+<p>Some parts of FFmpeg cannot be built with version 2.15 of the GNU
+assembler which is still provided by a few AMD64 distributions. To
+make sure your compiler really uses the required version of gas
+after a binutils upgrade, run:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">$(gcc -print-prog-name=as) --version
+</pre></td></tr></table>
+
+<p>If not, then you should install a different compiler that has no
+hard-coded path to gas. In the worst case pass <code>--disable-asm</code>
+to configure.
+</p>
+<a name="BSD"></a>
+<h3 class="subsection"><a href="general.html#toc-BSD">3.3.1 BSD</a></h3>
+
+<p>BSD make will not build FFmpeg, you need to install and use GNU Make
+(&lsquo;<tt>gmake</tt>&rsquo;).
+</p>
+<a name="g_t_0028Open_0029Solaris"></a>
+<h3 class="subsection"><a href="general.html#toc-_0028Open_0029Solaris">3.3.2 (Open)Solaris</a></h3>
+
+<p>GNU Make is required to build FFmpeg, so you have to invoke (&lsquo;<tt>gmake</tt>&rsquo;),
+standard Solaris Make will not work. When building with a non-c99 front-end
+(gcc, generic suncc) add either <code>--extra-libs=/usr/lib/values-xpg6.o</code>
+or <code>--extra-libs=/usr/lib/64/values-xpg6.o</code> to the configure options
+since the libc is not c99-compliant by default. The probes performed by
+configure may raise an exception leading to the death of configure itself
+due to a bug in the system shell. Simply invoke a different shell such as
+bash directly to work around this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bash ./configure
+</pre></td></tr></table>
+
+<a name="Darwin-_0028MacOS-X_002c-iPhone_0029"></a>
+<h3 class="subsection"><a href="general.html#toc-Darwin-_0028MacOS-X_002c-iPhone_0029">3.3.3 Darwin (MacOS X, iPhone)</a></h3>
+
+<p>MacOS X on PowerPC or ARM (iPhone) requires a preprocessor from
+<a href="http://github.com/yuvi/gas-preprocessor">http://github.com/yuvi/gas-preprocessor</a> to build the optimized
+assembler functions. Just download the Perl script and put it somewhere
+in your PATH, FFmpeg&rsquo;s configure will pick it up automatically.
+</p>
+<a name="Windows"></a>
+<h2 class="section"><a href="general.html#toc-Windows">3.4 Windows</a></h2>
+
+<p>To get help and instructions for building FFmpeg under Windows, check out
+the FFmpeg Windows Help Forum at
+<a href="http://ffmpeg.arrozcru.org/">http://ffmpeg.arrozcru.org/</a>.
+</p>
+<a name="Native-Windows-compilation"></a>
+<h3 class="subsection"><a href="general.html#toc-Native-Windows-compilation">3.4.1 Native Windows compilation</a></h3>
+
+<p>FFmpeg can be built to run natively on Windows using the MinGW tools. Install
+the latest versions of MSYS and MinGW from <a href="http://www.mingw.org/">http://www.mingw.org/</a>.
+You can find detailed installation instructions in the download
+section and the FAQ.
+</p>
+<p>FFmpeg does not build out-of-the-box with the packages the automated MinGW
+installer provides. It also requires coreutils to be installed and many other
+packages updated to the latest version. The minimum version for some packages
+are listed below:
+</p>
+<ul>
+<li> bash 3.1
+</li><li> msys-make 3.81-2 (note: not mingw32-make)
+</li><li> w32api 3.13
+</li><li> mingw-runtime 3.15
+</li></ul>
+
+<p>FFmpeg automatically passes <code>-fno-common</code> to the compiler to work around
+a GCC bug (see <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37216">http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37216</a>).
+</p>
+<p>Notes:
+</p>
+<ul>
+<li> Building natively using MSYS can be sped up by disabling implicit rules
+in the Makefile by calling <code>make -r</code> instead of plain <code>make</code>. This
+speed up is close to non-existent for normal one-off builds and is only
+noticeable when running make for a second time (for example in
+<code>make install</code>).
+
+</li><li> In order to compile FFplay, you must have the MinGW development library
+of <a href="http://www.libsdl.org/">SDL</a>.
+Edit the &lsquo;<tt>bin/sdl-config</tt>&rsquo; script so that it points to the correct prefix
+where SDL was installed. Verify that &lsquo;<tt>sdl-config</tt>&rsquo; can be launched from
+the MSYS command line.
+
+</li><li> By using <code>./configure --enable-shared</code> when configuring FFmpeg,
+you can build the FFmpeg libraries (e.g. libavutil, libavcodec,
+libavformat) as DLLs.
+
+</li></ul>
+
+<a name="Microsoft-Visual-C_002b_002b-compatibility"></a>
+<h3 class="subsection"><a href="general.html#toc-Microsoft-Visual-C_002b_002b-compatibility">3.4.2 Microsoft Visual C++ compatibility</a></h3>
+
+<p>As stated in the FAQ, FFmpeg will not compile under MSVC++. However, if you
+want to use the libav* libraries in your own applications, you can still
+compile those applications using MSVC++. But the libav* libraries you link
+to <em>must</em> be built with MinGW. However, you will not be able to debug
+inside the libav* libraries, since MSVC++ does not recognize the debug
+symbols generated by GCC.
+We strongly recommend you to move over from MSVC++ to MinGW tools.
+</p>
+<p>This description of how to use the FFmpeg libraries with MSVC++ is based on
+Microsoft Visual C++ 2005 Express Edition. If you have a different version,
+you might have to modify the procedures slightly.
+</p>
+<a name="Using-static-libraries"></a>
+<h4 class="subsubsection"><a href="general.html#toc-Using-static-libraries">3.4.2.1 Using static libraries</a></h4>
+
+<p>Assuming you have just built and installed FFmpeg in &lsquo;<tt>/usr/local</tt>&rsquo;.
+</p>
+<ol>
+<li> Create a new console application (&quot;File / New / Project&quot;) and then
+select &quot;Win32 Console Application&quot;. On the appropriate page of the
+Application Wizard, uncheck the &quot;Precompiled headers&quot; option.
+
+</li><li> Write the source code for your application, or, for testing, just
+copy the code from an existing sample application into the source file
+that MSVC++ has already created for you. For example, you can copy
+&lsquo;<tt>libavformat/output-example.c</tt>&rsquo; from the FFmpeg distribution.
+
+</li><li> Open the &quot;Project / Properties&quot; dialog box. In the &quot;Configuration&quot;
+combo box, select &quot;All Configurations&quot; so that the changes you make will
+affect both debug and release builds. In the tree view on the left hand
+side, select &quot;C/C++ / General&quot;, then edit the &quot;Additional Include
+Directories&quot; setting to contain the path where the FFmpeg includes were
+installed (i.e. &lsquo;<tt>c:\msys\1.0\local\include</tt>&rsquo;).
+Do not add MinGW&rsquo;s include directory here, or the include files will
+conflict with MSVC&rsquo;s.
+
+</li><li> Still in the &quot;Project / Properties&quot; dialog box, select
+&quot;Linker / General&quot; from the tree view and edit the
+&quot;Additional Library Directories&quot; setting to contain the &lsquo;<tt>lib</tt>&rsquo;
+directory where FFmpeg was installed (i.e. &lsquo;<tt>c:\msys\1.0\local\lib</tt>&rsquo;),
+the directory where MinGW libs are installed (i.e. &lsquo;<tt>c:\mingw\lib</tt>&rsquo;),
+and the directory where MinGW&rsquo;s GCC libs are installed
+(i.e. &lsquo;<tt>C:\mingw\lib\gcc\mingw32\4.2.1-sjlj</tt>&rsquo;). Then select
+&quot;Linker / Input&quot; from the tree view, and add the files &lsquo;<tt>libavformat.a</tt>&rsquo;,
+&lsquo;<tt>libavcodec.a</tt>&rsquo;, &lsquo;<tt>libavutil.a</tt>&rsquo;, &lsquo;<tt>libmingwex.a</tt>&rsquo;,
+&lsquo;<tt>libgcc.a</tt>&rsquo;, and any other libraries you used (i.e. &lsquo;<tt>libz.a</tt>&rsquo;)
+to the end of &quot;Additional Dependencies&quot;.
+
+</li><li> Now, select &quot;C/C++ / Code Generation&quot; from the tree view. Select
+&quot;Debug&quot; in the &quot;Configuration&quot; combo box. Make sure that &quot;Runtime
+Library&quot; is set to &quot;Multi-threaded Debug DLL&quot;. Then, select &quot;Release&quot; in
+the &quot;Configuration&quot; combo box and make sure that &quot;Runtime Library&quot; is
+set to &quot;Multi-threaded DLL&quot;.
+
+</li><li> Click &quot;OK&quot; to close the &quot;Project / Properties&quot; dialog box.
+
+</li><li> MSVC++ lacks some C99 header files that are fundamental for FFmpeg.
+Get msinttypes from <a href="http://code.google.com/p/msinttypes/downloads/list">http://code.google.com/p/msinttypes/downloads/list</a>
+and install it in MSVC++&rsquo;s include directory
+(i.e. &lsquo;<tt>C:\Program Files\Microsoft Visual Studio 8\VC\include</tt>&rsquo;).
+
+</li><li> MSVC++ also does not understand the <code>inline</code> keyword used by
+FFmpeg, so you must add this line before <code>#include</code>ing libav*:
+<table><tr><td>&nbsp;</td><td><pre class="example">#define inline _inline
+</pre></td></tr></table>
+
+</li><li> Build your application, everything should work.
+
+</li></ol>
+
+<a name="Using-shared-libraries"></a>
+<h4 class="subsubsection"><a href="general.html#toc-Using-shared-libraries">3.4.2.2 Using shared libraries</a></h4>
+
+<p>This is how to create DLL and LIB files that are compatible with MSVC++:
+</p>
+<ol>
+<li> Add a call to &lsquo;<tt>vcvars32.bat</tt>&rsquo; (which sets up the environment
+variables for the Visual C++ tools) as the first line of &lsquo;<tt>msys.bat</tt>&rsquo;.
+The standard location for &lsquo;<tt>vcvars32.bat</tt>&rsquo; is
+&lsquo;<tt>C:\Program Files\Microsoft Visual Studio 8\VC\bin\vcvars32.bat</tt>&rsquo;,
+and the standard location for &lsquo;<tt>msys.bat</tt>&rsquo; is &lsquo;<tt>C:\msys\1.0\msys.bat</tt>&rsquo;.
+If this corresponds to your setup, add the following line as the first line
+of &lsquo;<tt>msys.bat</tt>&rsquo;:
+
+<table><tr><td>&nbsp;</td><td><pre class="example">call &quot;C:\Program Files\Microsoft Visual Studio 8\VC\bin\vcvars32.bat&quot;
+</pre></td></tr></table>
+
+<p>Alternatively, you may start the &lsquo;<tt>Visual Studio 2005 Command Prompt</tt>&rsquo;,
+and run &lsquo;<tt>c:\msys\1.0\msys.bat</tt>&rsquo; from there.
+</p>
+</li><li> Within the MSYS shell, run <code>lib.exe</code>. If you get a help message
+from &lsquo;<tt>Microsoft (R) Library Manager</tt>&rsquo;, this means your environment
+variables are set up correctly, the &lsquo;<tt>Microsoft (R) Library Manager</tt>&rsquo;
+is on the path and will be used by FFmpeg to create
+MSVC++-compatible import libraries.
+
+</li><li> Build FFmpeg with
+
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure --enable-shared
+make
+make install
+</pre></td></tr></table>
+
+<p>Your install path (&lsquo;<tt>/usr/local/</tt>&rsquo; by default) should now have the
+necessary DLL and LIB files under the &lsquo;<tt>bin</tt>&rsquo; directory.
+</p>
+<p>Alternatively, build the libraries with a cross compiler, according to
+the instructions below in <a href="#Cross-compilation-for-Windows-with-Linux">Cross compilation for Windows with Linux</a>.
+</p>
+<p>To use those files with MSVC++, do the same as you would do with
+the static libraries, as described above. But in Step 4,
+you should only need to add the directory where the LIB files are installed
+(i.e. &lsquo;<tt>c:\msys\usr\local\bin</tt>&rsquo;). This is not a typo, the LIB files are
+installed in the &lsquo;<tt>bin</tt>&rsquo; directory. And instead of adding the static
+libraries (&lsquo;<tt>libxxx.a</tt>&rsquo; files) you should add the MSVC import libraries
+(&lsquo;<tt>avcodec.lib</tt>&rsquo;, &lsquo;<tt>avformat.lib</tt>&rsquo;, and
+&lsquo;<tt>avutil.lib</tt>&rsquo;). Note that you should not use the GCC import
+libraries (&lsquo;<tt>libxxx.dll.a</tt>&rsquo; files), as these will give you undefined
+reference errors. There should be no need for &lsquo;<tt>libmingwex.a</tt>&rsquo;,
+&lsquo;<tt>libgcc.a</tt>&rsquo;, and &lsquo;<tt>wsock32.lib</tt>&rsquo;, nor any other external library
+statically linked into the DLLs.
+</p>
+<p>FFmpeg headers do not declare global data for Windows DLLs through the usual
+dllexport/dllimport interface. Such data will be exported properly while
+building, but to use them in your MSVC++ code you will have to edit the
+appropriate headers and mark the data as dllimport. For example, in
+libavutil/pixdesc.h you should have:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];
+</pre></td></tr></table>
+
+<p>Note that using import libraries created by dlltool requires
+the linker optimization option to be set to
+&quot;References: Keep Unreferenced Data (<code>/OPT:NOREF</code>)&quot;, otherwise
+the resulting binaries will fail during runtime. This isn&rsquo;t
+required when using import libraries generated by lib.exe.
+This issue is reported upstream at
+<a href="http://sourceware.org/bugzilla/show_bug.cgi?id=12633">http://sourceware.org/bugzilla/show_bug.cgi?id=12633</a>.
+</p>
+<p>To create import libraries that work with the <code>/OPT:REF</code> option
+(which is enabled by default in Release mode), follow these steps:
+</p>
+<ol>
+<li> Open &lsquo;<tt>Visual Studio 2005 Command Prompt</tt>&rsquo;.
+
+<p>Alternatively, in a normal command line prompt, call &lsquo;<tt>vcvars32.bat</tt>&rsquo;
+which sets up the environment variables for the Visual C++ tools
+(the standard location for this file is
+&lsquo;<tt>C:\Program Files\Microsoft Visual Studio 8\VC\bin\vcvars32.bat</tt>&rsquo;).
+</p>
+</li><li> Enter the &lsquo;<tt>bin</tt>&rsquo; directory where the created LIB and DLL files
+are stored.
+
+</li><li> Generate new import libraries with &lsquo;<tt>lib.exe</tt>&rsquo;:
+
+<table><tr><td>&nbsp;</td><td><pre class="example">lib /machine:i386 /def:..\lib\avcodec-53.def  /out:avcodec.lib
+lib /machine:i386 /def:..\lib\avdevice-53.def /out:avdevice.lib
+lib /machine:i386 /def:..\lib\avfilter-2.def  /out:avfilter.lib
+lib /machine:i386 /def:..\lib\avformat-53.def /out:avformat.lib
+lib /machine:i386 /def:..\lib\avutil-51.def   /out:avutil.lib
+lib /machine:i386 /def:..\lib\swscale-2.def   /out:swscale.lib
+</pre></td></tr></table>
+
+</li></ol>
+
+<p><a name="Cross-compilation-for-Windows-with-Linux"></a>
+</p></li></ol>
+<a name="Cross-compilation-for-Windows-with-Linux-1"></a>
+<h3 class="subsection"><a href="general.html#toc-Cross-compilation-for-Windows-with-Linux-1">3.4.3 Cross compilation for Windows with Linux</a></h3>
+
+<p>You must use the MinGW cross compilation tools available at
+<a href="http://www.mingw.org/">http://www.mingw.org/</a>.
+</p>
+<p>Then configure FFmpeg with the following options:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">./configure --target-os=mingw32 --cross-prefix=i386-mingw32msvc-
+</pre></td></tr></table>
+<p>(you can change the cross-prefix according to the prefix chosen for the
+MinGW tools).
+</p>
+<p>Then you can easily test FFmpeg with <a href="http://www.winehq.com/">Wine</a>.
+</p>
+<a name="Compilation-under-Cygwin"></a>
+<h3 class="subsection"><a href="general.html#toc-Compilation-under-Cygwin">3.4.4 Compilation under Cygwin</a></h3>
+
+<p>Please use Cygwin 1.7.x as the obsolete 1.5.x Cygwin versions lack
+llrint() in its C library.
+</p>
+<p>Install your Cygwin with all the &quot;Base&quot; packages, plus the
+following &quot;Devel&quot; ones:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">binutils, gcc4-core, make, git, mingw-runtime, texi2html
+</pre></td></tr></table>
+
+<p>And the following &quot;Utils&quot; one:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">diffutils
+</pre></td></tr></table>
+
+<p>Then run
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure
+</pre></td></tr></table>
+
+<p>to make a static build.
+</p>
+<p>The current <code>gcc4-core</code> package is buggy and needs this flag to build
+shared libraries:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure --enable-shared --disable-static --extra-cflags=-fno-reorder-functions
+</pre></td></tr></table>
+
+<p>If you want to build FFmpeg with additional libraries, download Cygwin
+&quot;Devel&quot; packages for Ogg and Vorbis from any Cygwin packages repository:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">libogg-devel, libvorbis-devel
+</pre></td></tr></table>
+
+<p>These library packages are only available from
+<a href="http://sourceware.org/cygwinports/">Cygwin Ports</a>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">yasm, libSDL-devel, libdirac-devel, libfaac-devel, libgsm-devel,
+libmp3lame-devel, libschroedinger1.0-devel, speex-devel, libtheora-devel,
+libxvidcore-devel
+</pre></td></tr></table>
+
+<p>The recommendation for libnut and x264 is to build them from source by
+yourself, as they evolve too quickly for Cygwin Ports to be up to date.
+</p>
+<p>Cygwin 1.7.x has IPv6 support. You can add IPv6 to Cygwin 1.5.x by means
+of the <code>libgetaddrinfo-devel</code> package, available at Cygwin Ports.
+</p>
+<a name="Crosscompilation-for-Windows-under-Cygwin"></a>
+<h3 class="subsection"><a href="general.html#toc-Crosscompilation-for-Windows-under-Cygwin">3.4.5 Crosscompilation for Windows under Cygwin</a></h3>
+
+<p>With Cygwin you can create Windows binaries that do not need the cygwin1.dll.
+</p>
+<p>Just install your Cygwin as explained before, plus these additional
+&quot;Devel&quot; packages:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">gcc-mingw-core, mingw-runtime, mingw-zlib
+</pre></td></tr></table>
+
+<p>and add some special flags to your configure invocation.
+</p>
+<p>For a static build run
+</p><table><tr><td>&nbsp;</td><td><pre class="example">./configure --target-os=mingw32 --extra-cflags=-mno-cygwin --extra-libs=-mno-cygwin
+</pre></td></tr></table>
+
+<p>and for a build with shared libraries
+</p><table><tr><td>&nbsp;</td><td><pre class="example">./configure --target-os=mingw32 --enable-shared --disable-static --extra-cflags=-mno-cygwin --extra-libs=-mno-cygwin
+</pre></td></tr></table>
+
+<hr size="1">
+<p>
+ <font size="-1">
+  This document was generated by <em>Kyle Schwarz</em> on <em>August 28, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

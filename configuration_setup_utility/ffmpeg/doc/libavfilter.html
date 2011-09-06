@@ -1,0 +1,2828 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on August 28, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Libavfilter Documentation</title>
+
+<meta name="description" content="Libavfilter Documentation">
+<meta name="keywords" content="Libavfilter Documentation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="SEC_Top"></a>
+<h1 class="settitle">Libavfilter Documentation</h1>
+
+<a name="SEC_Contents"></a>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="toc-Introduction" href="#Introduction">1. Introduction</a></li>
+  <li><a name="toc-Tutorial" href="#Tutorial">2. Tutorial</a></li>
+  <li><a name="toc-graph2dot" href="#graph2dot">3. graph2dot</a></li>
+  <li><a name="toc-Filtergraph-description" href="#Filtergraph-description">4. Filtergraph description</a>
+  <ul class="toc">
+    <li><a name="toc-Filtergraph-syntax" href="#Filtergraph-syntax">4.1 Filtergraph syntax</a></li>
+  </ul></li>
+  <li><a name="toc-Audio-Filters" href="#Audio-Filters">5. Audio Filters</a>
+  <ul class="toc">
+    <li><a name="toc-aformat" href="#aformat">5.1 aformat</a></li>
+    <li><a name="toc-anull" href="#anull">5.2 anull</a></li>
+    <li><a name="toc-aresample" href="#aresample">5.3 aresample</a></li>
+    <li><a name="toc-ashowinfo" href="#ashowinfo">5.4 ashowinfo</a></li>
+  </ul></li>
+  <li><a name="toc-Audio-Sources" href="#Audio-Sources">6. Audio Sources</a>
+  <ul class="toc">
+    <li><a name="toc-abuffer" href="#abuffer">6.1 abuffer</a></li>
+    <li><a name="toc-amovie" href="#amovie">6.2 amovie</a></li>
+    <li><a name="toc-anullsrc" href="#anullsrc">6.3 anullsrc</a></li>
+  </ul></li>
+  <li><a name="toc-Audio-Sinks" href="#Audio-Sinks">7. Audio Sinks</a>
+  <ul class="toc">
+    <li><a name="toc-abuffersink" href="#abuffersink">7.1 abuffersink</a></li>
+    <li><a name="toc-anullsink" href="#anullsink">7.2 anullsink</a></li>
+  </ul></li>
+  <li><a name="toc-Video-Filters" href="#Video-Filters">8. Video Filters</a>
+  <ul class="toc">
+    <li><a name="toc-blackframe" href="#blackframe">8.1 blackframe</a></li>
+    <li><a name="toc-boxblur" href="#boxblur">8.2 boxblur</a></li>
+    <li><a name="toc-copy" href="#copy">8.3 copy</a></li>
+    <li><a name="toc-crop" href="#crop">8.4 crop</a></li>
+    <li><a name="toc-cropdetect" href="#cropdetect">8.5 cropdetect</a></li>
+    <li><a name="toc-delogo" href="#delogo">8.6 delogo</a></li>
+    <li><a name="toc-drawbox" href="#drawbox">8.7 drawbox</a></li>
+    <li><a name="toc-drawtext" href="#drawtext">8.8 drawtext</a></li>
+    <li><a name="toc-fade" href="#fade">8.9 fade</a></li>
+    <li><a name="toc-fieldorder" href="#fieldorder">8.10 fieldorder</a></li>
+    <li><a name="toc-fifo" href="#fifo">8.11 fifo</a></li>
+    <li><a name="toc-format" href="#format">8.12 format</a></li>
+    <li><a name="toc-frei0r-1" href="#frei0r-1">8.13 frei0r</a></li>
+    <li><a name="toc-gradfun" href="#gradfun">8.14 gradfun</a></li>
+    <li><a name="toc-hflip" href="#hflip">8.15 hflip</a></li>
+    <li><a name="toc-hqdn3d" href="#hqdn3d">8.16 hqdn3d</a></li>
+    <li><a name="toc-lut_002c-lutrgb_002c-lutyuv" href="#lut_002c-lutrgb_002c-lutyuv">8.17 lut, lutrgb, lutyuv</a></li>
+    <li><a name="toc-mp" href="#mp">8.18 mp</a></li>
+    <li><a name="toc-negate" href="#negate">8.19 negate</a></li>
+    <li><a name="toc-noformat" href="#noformat">8.20 noformat</a></li>
+    <li><a name="toc-null" href="#null">8.21 null</a></li>
+    <li><a name="toc-ocv" href="#ocv">8.22 ocv</a>
+    <ul class="toc">
+      <li><a name="toc-dilate-1" href="#dilate-1">8.22.1 dilate</a></li>
+      <li><a name="toc-erode" href="#erode">8.22.2 erode</a></li>
+      <li><a name="toc-smooth" href="#smooth">8.22.3 smooth</a></li>
+    </ul></li>
+    <li><a name="toc-overlay" href="#overlay">8.23 overlay</a></li>
+    <li><a name="toc-pad" href="#pad">8.24 pad</a></li>
+    <li><a name="toc-pixdesctest" href="#pixdesctest">8.25 pixdesctest</a></li>
+    <li><a name="toc-scale" href="#scale">8.26 scale</a></li>
+    <li><a name="toc-select" href="#select">8.27 select</a></li>
+    <li><a name="toc-setdar-1" href="#setdar-1">8.28 setdar</a></li>
+    <li><a name="toc-setpts" href="#setpts">8.29 setpts</a></li>
+    <li><a name="toc-setsar-1" href="#setsar-1">8.30 setsar</a></li>
+    <li><a name="toc-settb" href="#settb">8.31 settb</a></li>
+    <li><a name="toc-showinfo" href="#showinfo">8.32 showinfo</a></li>
+    <li><a name="toc-slicify" href="#slicify">8.33 slicify</a></li>
+    <li><a name="toc-split" href="#split">8.34 split</a></li>
+    <li><a name="toc-transpose" href="#transpose">8.35 transpose</a></li>
+    <li><a name="toc-unsharp" href="#unsharp">8.36 unsharp</a></li>
+    <li><a name="toc-vflip" href="#vflip">8.37 vflip</a></li>
+    <li><a name="toc-yadif" href="#yadif">8.38 yadif</a></li>
+  </ul></li>
+  <li><a name="toc-Video-Sources" href="#Video-Sources">9. Video Sources</a>
+  <ul class="toc">
+    <li><a name="toc-buffer" href="#buffer">9.1 buffer</a></li>
+    <li><a name="toc-color" href="#color">9.2 color</a></li>
+    <li><a name="toc-movie" href="#movie">9.3 movie</a></li>
+    <li><a name="toc-mptestsrc" href="#mptestsrc">9.4 mptestsrc</a></li>
+    <li><a name="toc-nullsrc" href="#nullsrc">9.5 nullsrc</a></li>
+    <li><a name="toc-frei0r_005fsrc" href="#frei0r_005fsrc">9.6 frei0r_src</a></li>
+    <li><a name="toc-rgbtestsrc_002c-testsrc" href="#rgbtestsrc_002c-testsrc">9.7 rgbtestsrc, testsrc</a></li>
+  </ul></li>
+  <li><a name="toc-Video-Sinks" href="#Video-Sinks">10. Video Sinks</a>
+  <ul class="toc">
+    <li><a name="toc-buffersink" href="#buffersink">10.1 buffersink</a></li>
+    <li><a name="toc-nullsink" href="#nullsink">10.2 nullsink</a></li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<hr size="1">
+<a name="Introduction"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Introduction">1. Introduction</a></h1>
+
+<p>Libavfilter is the filtering API of FFmpeg. It is the substitute of the
+now deprecated &rsquo;vhooks&rsquo; and started as a Google Summer of Code project.
+</p>
+<p>Integrating libavfilter into the main FFmpeg repository is a work in
+progress. If you wish to try the unfinished development code of
+libavfilter then check it out from the libavfilter repository into
+some directory of your choice by:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">   svn checkout svn://svn.ffmpeg.org/soc/libavfilter
+</pre></td></tr></table>
+
+<p>And then read the README file in the top directory to learn how to
+integrate it into ffmpeg and ffplay.
+</p>
+<p>But note that there may still be serious bugs in the code and its API
+and ABI should not be considered stable yet!
+</p>
+<a name="Tutorial"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Tutorial">2. Tutorial</a></h1>
+
+<p>In libavfilter, it is possible for filters to have multiple inputs and
+multiple outputs.
+To illustrate the sorts of things that are possible, we can
+use a complex filter graph. For example, the following one:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">input --&gt; split --&gt; fifo -----------------------&gt; overlay --&gt; output
+            |                                        ^
+            |                                        |
+            +------&gt; fifo --&gt; crop --&gt; vflip --------+
+</pre></td></tr></table>
+
+<p>splits the stream in two streams, sends one stream through the crop filter
+and the vflip filter before merging it back with the other stream by
+overlaying it on top. You can use the following command to achieve this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./ffmpeg -i in.avi -s 240x320 -vf &quot;[in] split [T1], fifo, [T2] overlay= 0:240 [out]; [T1] fifo, crop=0:0:-1:240, vflip [T2]
+</pre></td></tr></table>
+
+<p>where input_video.avi has a vertical resolution of 480 pixels. The
+result will be that in output the top half of the video is mirrored
+onto the bottom half.
+</p>
+<p>Video filters are loaded using the <var>-vf</var> option passed to
+ffmpeg or to ffplay. Filters in the same linear chain are separated by
+commas. In our example, <var>split, fifo, overlay</var> are in one linear
+chain, and <var>fifo, crop, vflip</var> are in another. The points where
+the linear chains join are labeled by names enclosed in square
+brackets. In our example, that is <var>[T1]</var> and <var>[T2]</var>. The magic
+labels <var>[in]</var> and <var>[out]</var> are the points where video is input
+and output.
+</p>
+<p>Some filters take in input a list of parameters: they are specified
+after the filter name and an equal sign, and are separated each other
+by a semicolon.
+</p>
+<p>There exist so-called <var>source filters</var> that do not have a video
+input, and we expect in the future some <var>sink filters</var> that will
+not have video output.
+</p>
+<a name="graph2dot"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-graph2dot">3. graph2dot</a></h1>
+
+<p>The &lsquo;<tt>graph2dot</tt>&rsquo; program included in the FFmpeg &lsquo;<tt>tools</tt>&rsquo;
+directory can be used to parse a filter graph description and issue a
+corresponding textual representation in the dot language.
+</p>
+<p>Invoke the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">graph2dot -h
+</pre></td></tr></table>
+
+<p>to see how to use &lsquo;<tt>graph2dot</tt>&rsquo;.
+</p>
+<p>You can then pass the dot description to the &lsquo;<tt>dot</tt>&rsquo; program (from
+the graphviz suite of programs) and obtain a graphical representation
+of the filter graph.
+</p>
+<p>For example the sequence of commands:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">echo <var>GRAPH_DESCRIPTION</var> | \
+tools/graph2dot -o graph.tmp &amp;&amp; \
+dot -Tpng graph.tmp -o graph.png &amp;&amp; \
+display graph.png
+</pre></td></tr></table>
+
+<p>can be used to create and display an image representing the graph
+described by the <var>GRAPH_DESCRIPTION</var> string.
+</p>
+<a name="Filtergraph-description"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Filtergraph-description">4. Filtergraph description</a></h1>
+
+<p>A filtergraph is a directed graph of connected filters. It can contain
+cycles, and there can be multiple links between a pair of
+filters. Each link has one input pad on one side connecting it to one
+filter from which it takes its input, and one output pad on the other
+side connecting it to the one filter accepting its output.
+</p>
+<p>Each filter in a filtergraph is an instance of a filter class
+registered in the application, which defines the features and the
+number of input and output pads of the filter.
+</p>
+<p>A filter with no input pads is called a &quot;source&quot;, a filter with no
+output pads is called a &quot;sink&quot;.
+</p>
+<a name="Filtergraph-syntax"></a>
+<h2 class="section"><a href="libavfilter.html#toc-Filtergraph-syntax">4.1 Filtergraph syntax</a></h2>
+
+<p>A filtergraph can be represented using a textual representation, which
+is recognized by the <code>-vf</code> and <code>-af</code> options of the ff*
+tools, and by the <code>avfilter_graph_parse()</code> function defined in
+&lsquo;<tt>libavfilter/avfiltergraph.h</tt>&rsquo;.
+</p>
+<p>A filterchain consists of a sequence of connected filters, each one
+connected to the previous one in the sequence. A filterchain is
+represented by a list of &quot;,&quot;-separated filter descriptions.
+</p>
+<p>A filtergraph consists of a sequence of filterchains. A sequence of
+filterchains is represented by a list of &quot;;&quot;-separated filterchain
+descriptions.
+</p>
+<p>A filter is represented by a string of the form:
+[<var>in_link_1</var>]...[<var>in_link_N</var>]<var>filter_name</var>=<var>arguments</var>[<var>out_link_1</var>]...[<var>out_link_M</var>]
+</p>
+<p><var>filter_name</var> is the name of the filter class of which the
+described filter is an instance of, and has to be the name of one of
+the filter classes registered in the program.
+The name of the filter class is optionally followed by a string
+&quot;=<var>arguments</var>&quot;.
+</p>
+<p><var>arguments</var> is a string which contains the parameters used to
+initialize the filter instance, and are described in the filter
+descriptions below.
+</p>
+<p>The list of arguments can be quoted using the character &quot;&rsquo;&quot; as initial
+and ending mark, and the character &rsquo;\&rsquo; for escaping the characters
+within the quoted text; otherwise the argument string is considered
+terminated when the next special character (belonging to the set
+&quot;[]=;,&quot;) is encountered.
+</p>
+<p>The name and arguments of the filter are optionally preceded and
+followed by a list of link labels.
+A link label allows to name a link and associate it to a filter output
+or input pad. The preceding labels <var>in_link_1</var>
+... <var>in_link_N</var>, are associated to the filter input pads,
+the following labels <var>out_link_1</var> ... <var>out_link_M</var>, are
+associated to the output pads.
+</p>
+<p>When two link labels with the same name are found in the
+filtergraph, a link between the corresponding input and output pad is
+created.
+</p>
+<p>If an output pad is not labelled, it is linked by default to the first
+unlabelled input pad of the next filter in the filterchain.
+For example in the filterchain:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">nullsrc, split[L1], [L2]overlay, nullsink
+</pre></td></tr></table>
+<p>the split filter instance has two output pads, and the overlay filter
+instance two input pads. The first output pad of split is labelled
+&quot;L1&quot;, the first input pad of overlay is labelled &quot;L2&quot;, and the second
+output pad of split is linked to the second input pad of overlay,
+which are both unlabelled.
+</p>
+<p>In a complete filterchain all the unlabelled filter input and output
+pads must be connected. A filtergraph is considered valid if all the
+filter input and output pads of all the filterchains are connected.
+</p>
+<p>Follows a BNF description for the filtergraph syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"><var>NAME</var>             ::= sequence of alphanumeric characters and '_'
+<var>LINKLABEL</var>        ::= &quot;[&quot; <var>NAME</var> &quot;]&quot;
+<var>LINKLABELS</var>       ::= <var>LINKLABEL</var> [<var>LINKLABELS</var>]
+<var>FILTER_ARGUMENTS</var> ::= sequence of chars (eventually quoted)
+<var>FILTER</var>           ::= [<var>LINKNAMES</var>] <var>NAME</var> [&quot;=&quot; <var>ARGUMENTS</var>] [<var>LINKNAMES</var>]
+<var>FILTERCHAIN</var>      ::= <var>FILTER</var> [,<var>FILTERCHAIN</var>]
+<var>FILTERGRAPH</var>      ::= <var>FILTERCHAIN</var> [;<var>FILTERGRAPH</var>]
+</pre></td></tr></table>
+
+
+<a name="Audio-Filters"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Audio-Filters">5. Audio Filters</a></h1>
+
+<p>When you configure your FFmpeg build, you can disable any of the
+existing filters using &ndash;disable-filters.
+The configure output will show the audio filters included in your
+build.
+</p>
+<p>Below is a description of the currently available audio filters.
+</p>
+<a name="aformat"></a>
+<h2 class="section"><a href="libavfilter.html#toc-aformat">5.1 aformat</a></h2>
+
+<p>Convert the input audio to one of the specified formats. The framework will
+negotiate the most appropriate format to minimize conversions.
+</p>
+<p>The filter accepts three lists of formats, separated by &quot;:&quot;, in the form:
+&quot;<var>sample_formats</var>:<var>channel_layouts</var>:<var>packing_formats</var>&quot;.
+</p>
+<p>Elements in each list are separated by &quot;,&quot; which has to be escaped in the
+filtergraph specification.
+</p>
+<p>The special parameter &quot;all&quot;, in place of a list of elements, signifies all
+supported formats.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">aformat=u8\\,s16:mono:packed
+
+aformat=s16:mono\\,stereo:all
+</pre></td></tr></table>
+
+<a name="anull"></a>
+<h2 class="section"><a href="libavfilter.html#toc-anull">5.2 anull</a></h2>
+
+<p>Pass the audio source unchanged to the output.
+</p>
+<a name="aresample"></a>
+<h2 class="section"><a href="libavfilter.html#toc-aresample">5.3 aresample</a></h2>
+
+<p>Resample the input audio to the specified sample rate.
+</p>
+<p>The filter accepts exactly one parameter, the output sample rate. If not
+specified then the filter will automatically convert between its input
+and output sample rates.
+</p>
+<p>For example, to resample the input audio to 44100Hz:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">aresample=44100
+</pre></td></tr></table>
+
+<a name="ashowinfo"></a>
+<h2 class="section"><a href="libavfilter.html#toc-ashowinfo">5.4 ashowinfo</a></h2>
+
+<p>Show a line containing various information for each input audio frame.
+The input audio is not modified.
+</p>
+<p>The shown line contains a sequence of key/value pairs of the form
+<var>key</var>:<var>value</var>.
+</p>
+<p>A description of each shown parameter follows:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>sequential number of the input frame, starting from 0
+</p>
+</dd>
+<dt> &lsquo;<samp>pts</samp>&rsquo;</dt>
+<dd><p>presentation TimeStamp of the input frame, expressed as a number of
+time base units. The time base unit depends on the filter input pad, and
+is usually 1/<var>sample_rate</var>.
+</p>
+</dd>
+<dt> &lsquo;<samp>pts_time</samp>&rsquo;</dt>
+<dd><p>presentation TimeStamp of the input frame, expressed as a number of
+seconds
+</p>
+</dd>
+<dt> &lsquo;<samp>pos</samp>&rsquo;</dt>
+<dd><p>position of the frame in the input stream, -1 if this information in
+unavailable and/or meanigless (for example in case of synthetic audio)
+</p>
+</dd>
+<dt> &lsquo;<samp>fmt</samp>&rsquo;</dt>
+<dd><p>sample format name
+</p>
+</dd>
+<dt> &lsquo;<samp>chlayout</samp>&rsquo;</dt>
+<dd><p>channel layout description
+</p>
+</dd>
+<dt> &lsquo;<samp>nb_samples</samp>&rsquo;</dt>
+<dd><p>number of samples (per each channel) contained in the filtered frame
+</p>
+</dd>
+<dt> &lsquo;<samp>rate</samp>&rsquo;</dt>
+<dd><p>sample rate for the audio frame
+</p>
+</dd>
+<dt> &lsquo;<samp>planar</samp>&rsquo;</dt>
+<dd><p>if the packing format is planar, 0 if packed
+</p>
+</dd>
+<dt> &lsquo;<samp>checksum</samp>&rsquo;</dt>
+<dd><p>Adler-32 checksum of all the planes of the input frame
+</p>
+</dd>
+<dt> &lsquo;<samp>plane_checksum</samp>&rsquo;</dt>
+<dd><p>Adler-32 checksum for each input frame plane, expressed in the form
+&quot;[<var>c0</var> <var>c1</var> <var>c2</var> <var>c3</var> <var>c4</var> <var>c5</var> <var>c6</var> <var>c7</var>]&quot;
+</p></dd>
+</dl>
+
+
+<a name="Audio-Sources"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Audio-Sources">6. Audio Sources</a></h1>
+
+<p>Below is a description of the currently available audio sources.
+</p>
+<a name="abuffer"></a>
+<h2 class="section"><a href="libavfilter.html#toc-abuffer">6.1 abuffer</a></h2>
+
+<p>Buffer audio frames, and make them available to the filter chain.
+</p>
+<p>This source is mainly intended for a programmatic use, in particular
+through the interface defined in &lsquo;<tt>libavfilter/asrc_abuffer.h</tt>&rsquo;.
+</p>
+<p>It accepts the following mandatory parameters:
+<var>sample_rate</var>:<var>sample_fmt</var>:<var>channel_layout</var>:<var>packing</var>
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>sample_rate</samp>&rsquo;</dt>
+<dd><p>The sample rate of the incoming audio buffers.
+</p>
+</dd>
+<dt> &lsquo;<samp>sample_fmt</samp>&rsquo;</dt>
+<dd><p>The sample format of the incoming audio buffers.
+Either a sample format name or its corresponging integer representation from
+the enum AVSampleFormat in &lsquo;<tt>libavutil/samplefmt.h</tt>&rsquo;
+</p>
+</dd>
+<dt> &lsquo;<samp>channel_layout</samp>&rsquo;</dt>
+<dd><p>The channel layout of the incoming audio buffers.
+Either a channel layout name from channel_layout_map in
+&lsquo;<tt>libavutil/audioconvert.c</tt>&rsquo; or its corresponding integer representation
+from the AV_CH_LAYOUT_* macros in &lsquo;<tt>libavutil/audioconvert.h</tt>&rsquo;
+</p>
+</dd>
+<dt> &lsquo;<samp>packing</samp>&rsquo;</dt>
+<dd><p>Either &quot;packed&quot; or &quot;planar&quot;, or their integer representation: 0 or 1
+respectively.
+</p>
+</dd>
+</dl>
+
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">abuffer=44100:s16:stereo:planar
+</pre></td></tr></table>
+
+<p>will instruct the source to accept planar 16bit signed stereo at 44100Hz.
+Since the sample format with name &quot;s16&quot; corresponds to the number
+1 and the &quot;stereo&quot; channel layout corresponds to the value 3, this is
+equivalent to:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">abuffer=44100:1:3:1
+</pre></td></tr></table>
+
+<a name="amovie"></a>
+<h2 class="section"><a href="libavfilter.html#toc-amovie">6.2 amovie</a></h2>
+
+<p>Read an audio stream from a movie container.
+</p>
+<p>It accepts the syntax: <var>movie_name</var>[:<var>options</var>] where
+<var>movie_name</var> is the name of the resource to read (not necessarily
+a file but also a device or a stream accessed through some protocol),
+and <var>options</var> is an optional sequence of <var>key</var>=<var>value</var>
+pairs, separated by &quot;:&quot;.
+</p>
+<p>The description of the accepted options follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>format_name, f</samp>&rsquo;</dt>
+<dd><p>Specify the format assumed for the movie to read, and can be either
+the name of a container or an input device. If not specified the
+format is guessed from <var>movie_name</var> or by probing.
+</p>
+</dd>
+<dt> &lsquo;<samp>seek_point, sp</samp>&rsquo;</dt>
+<dd><p>Specify the seek point in seconds, the frames will be output
+starting from this seek point, the parameter is evaluated with
+<code>av_strtod</code> so the numerical value may be suffixed by an IS
+postfix. Default value is &quot;0&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>stream_index, si</samp>&rsquo;</dt>
+<dd><p>Specify the index of the audio stream to read. If the value is -1,
+the best suited audio stream will be automatically selected. Default
+value is &quot;-1&quot;.
+</p>
+</dd>
+</dl>
+
+<a name="anullsrc"></a>
+<h2 class="section"><a href="libavfilter.html#toc-anullsrc">6.3 anullsrc</a></h2>
+
+<p>Null audio source, never return audio frames. It is mainly useful as a
+template and to be employed in analysis / debugging tools.
+</p>
+<p>It accepts as optional parameter a string of the form
+<var>sample_rate</var>:<var>channel_layout</var>.
+</p>
+<p><var>sample_rate</var> specify the sample rate, and defaults to 44100.
+</p>
+<p><var>channel_layout</var> specify the channel layout, and can be either an
+integer or a string representing a channel layout. The default value
+of <var>channel_layout</var> is 3, which corresponds to CH_LAYOUT_STEREO.
+</p>
+<p>Check the channel_layout_map definition in
+&lsquo;<tt>libavcodec/audioconvert.c</tt>&rsquo; for the mapping between strings and
+channel layout values.
+</p>
+<p>Follow some examples:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">#  set the sample rate to 48000 Hz and the channel layout to CH_LAYOUT_MONO.
+anullsrc=48000:4
+
+# same as
+anullsrc=48000:mono
+</pre></td></tr></table>
+
+
+<a name="Audio-Sinks"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Audio-Sinks">7. Audio Sinks</a></h1>
+
+<p>Below is a description of the currently available audio sinks.
+</p>
+<a name="abuffersink"></a>
+<h2 class="section"><a href="libavfilter.html#toc-abuffersink">7.1 abuffersink</a></h2>
+
+<p>Buffer audio frames, and make them available to the end of filter chain.
+</p>
+<p>This sink is mainly intended for programmatic use, in particular
+through the interface defined in &lsquo;<tt>libavfilter/asink_abuffer.h</tt>&rsquo;.
+</p>
+<p>It requires a pointer to a ABufferSinkContext structure, which defines the
+incoming buffers&rsquo; format, to be passed as the opaque parameter to
+<code>avfilter_init_filter</code> for initialization.
+</p>
+<a name="anullsink"></a>
+<h2 class="section"><a href="libavfilter.html#toc-anullsink">7.2 anullsink</a></h2>
+
+<p>Null audio sink, do absolutely nothing with the input audio. It is
+mainly useful as a template and to be employed in analysis / debugging
+tools.
+</p>
+
+<a name="Video-Filters"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Video-Filters">8. Video Filters</a></h1>
+
+<p>When you configure your FFmpeg build, you can disable any of the
+existing filters using &ndash;disable-filters.
+The configure output will show the video filters included in your
+build.
+</p>
+<p>Below is a description of the currently available video filters.
+</p>
+<a name="blackframe"></a>
+<h2 class="section"><a href="libavfilter.html#toc-blackframe">8.1 blackframe</a></h2>
+
+<p>Detect frames that are (almost) completely black. Can be useful to
+detect chapter transitions or commercials. Output lines consist of
+the frame number of the detected frame, the percentage of blackness,
+the position in the file if known or -1 and the timestamp in seconds.
+</p>
+<p>In order to display the output lines, you need to set the loglevel at
+least to the AV_LOG_INFO value.
+</p>
+<p>The filter accepts the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">blackframe[=<var>amount</var>:[<var>threshold</var>]]
+</pre></td></tr></table>
+
+<p><var>amount</var> is the percentage of the pixels that have to be below the
+threshold, and defaults to 98.
+</p>
+<p><var>threshold</var> is the threshold below which a pixel value is
+considered black, and defaults to 32.
+</p>
+<a name="boxblur"></a>
+<h2 class="section"><a href="libavfilter.html#toc-boxblur">8.2 boxblur</a></h2>
+
+<p>Apply boxblur algorithm to the input video.
+</p>
+<p>This filter accepts the parameters:
+<var>luma_power</var>:<var>luma_radius</var>:<var>chroma_radius</var>:<var>chroma_power</var>:<var>alpha_radius</var>:<var>alpha_power</var>
+</p>
+<p>Chroma and alpha parameters are optional, if not specified they default
+to the corresponding values set for <var>luma_radius</var> and
+<var>luma_power</var>.
+</p>
+<p><var>luma_radius</var>, <var>chroma_radius</var>, and <var>alpha_radius</var> represent
+the radius in pixels of the box used for blurring the corresponding
+input plane. They are expressions, and can contain the following
+constants:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>w, h</samp>&rsquo;</dt>
+<dd><p>the input width and heigth in pixels
+</p>
+</dd>
+<dt> &lsquo;<samp>cw, ch</samp>&rsquo;</dt>
+<dd><p>the input chroma image width and height in pixels
+</p>
+</dd>
+<dt> &lsquo;<samp>hsub, vsub</samp>&rsquo;</dt>
+<dd><p>horizontal and vertical chroma subsample values. For example for the
+pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
+</p></dd>
+</dl>
+
+<p>The radius must be a non-negative number, and must be not greater than
+the value of the expression <code>min(w,h)/2</code> for the luma and alpha planes,
+and of <code>min(cw,ch)/2</code> for the chroma planes.
+</p>
+<p><var>luma_power</var>, <var>chroma_power</var>, and <var>alpha_power</var> represent
+how many times the boxblur filter is applied to the corresponding
+plane.
+</p>
+<p>Some examples follow:
+</p>
+<ul>
+<li>
+Apply a boxblur filter with luma, chroma, and alpha radius
+set to 2:
+<table><tr><td>&nbsp;</td><td><pre class="example">boxblur=2:1
+</pre></td></tr></table>
+
+</li><li>
+Set luma radius to 2, alpha and chroma radius to 0
+<table><tr><td>&nbsp;</td><td><pre class="example">boxblur=2:1:0:0:0:0
+</pre></td></tr></table>
+
+</li><li>
+Set luma and chroma radius to a fraction of the video dimension
+<table><tr><td>&nbsp;</td><td><pre class="example">boxblur=min(h\,w)/10:1:min(cw\,ch)/10:1
+</pre></td></tr></table>
+
+</li></ul>
+
+<a name="copy"></a>
+<h2 class="section"><a href="libavfilter.html#toc-copy">8.3 copy</a></h2>
+
+<p>Copy the input source unchanged to the output. Mainly useful for
+testing purposes.
+</p>
+<a name="crop"></a>
+<h2 class="section"><a href="libavfilter.html#toc-crop">8.4 crop</a></h2>
+
+<p>Crop the input video to <var>out_w</var>:<var>out_h</var>:<var>x</var>:<var>y</var>.
+</p>
+<p>The parameters are expressions containing the following constants:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>E, PI, PHI</samp>&rsquo;</dt>
+<dd><p>the corresponding mathematical approximated values for e
+(euler number), pi (greek PI), PHI (golden ratio)
+</p>
+</dd>
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd><p>the computed values for <var>x</var> and <var>y</var>. They are evaluated for
+each new frame.
+</p>
+</dd>
+<dt> &lsquo;<samp>in_w, in_h</samp>&rsquo;</dt>
+<dd><p>the input width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>iw, ih</samp>&rsquo;</dt>
+<dd><p>same as <var>in_w</var> and <var>in_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>out_w, out_h</samp>&rsquo;</dt>
+<dd><p>the output (cropped) width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>ow, oh</samp>&rsquo;</dt>
+<dd><p>same as <var>out_w</var> and <var>out_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>a</samp>&rsquo;</dt>
+<dd><p>same as <var>iw</var> / <var>ih</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>sar</samp>&rsquo;</dt>
+<dd><p>input sample aspect ratio
+</p>
+</dd>
+<dt> &lsquo;<samp>dar</samp>&rsquo;</dt>
+<dd><p>input display aspect ratio, it is the same as (<var>iw</var> / <var>ih</var>) * <var>sar</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>hsub, vsub</samp>&rsquo;</dt>
+<dd><p>horizontal and vertical chroma subsample values. For example for the
+pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
+</p>
+</dd>
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>the number of input frame, starting from 0
+</p>
+</dd>
+<dt> &lsquo;<samp>pos</samp>&rsquo;</dt>
+<dd><p>the position in the file of the input frame, NAN if unknown
+</p>
+</dd>
+<dt> &lsquo;<samp>t</samp>&rsquo;</dt>
+<dd><p>timestamp expressed in seconds, NAN if the input timestamp is unknown
+</p>
+</dd>
+</dl>
+
+<p>The <var>out_w</var> and <var>out_h</var> parameters specify the expressions for
+the width and height of the output (cropped) video. They are
+evaluated just at the configuration of the filter.
+</p>
+<p>The default value of <var>out_w</var> is &quot;in_w&quot;, and the default value of
+<var>out_h</var> is &quot;in_h&quot;.
+</p>
+<p>The expression for <var>out_w</var> may depend on the value of <var>out_h</var>,
+and the expression for <var>out_h</var> may depend on <var>out_w</var>, but they
+cannot depend on <var>x</var> and <var>y</var>, as <var>x</var> and <var>y</var> are
+evaluated after <var>out_w</var> and <var>out_h</var>.
+</p>
+<p>The <var>x</var> and <var>y</var> parameters specify the expressions for the
+position of the top-left corner of the output (non-cropped) area. They
+are evaluated for each frame. If the evaluated value is not valid, it
+is approximated to the nearest valid value.
+</p>
+<p>The default value of <var>x</var> is &quot;(in_w-out_w)/2&quot;, and the default
+value for <var>y</var> is &quot;(in_h-out_h)/2&quot;, which set the cropped area at
+the center of the input image.
+</p>
+<p>The expression for <var>x</var> may depend on <var>y</var>, and the expression
+for <var>y</var> may depend on <var>x</var>.
+</p>
+<p>Follow some examples:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># crop the central input area with size 100x100
+crop=100:100
+
+# crop the central input area with size 2/3 of the input video
+&quot;crop=2/3*in_w:2/3*in_h&quot;
+
+# crop the input video central square
+crop=in_h
+
+# delimit the rectangle with the top-left corner placed at position
+# 100:100 and the right-bottom corner corresponding to the right-bottom
+# corner of the input image.
+crop=in_w-100:in_h-100:100:100
+
+# crop 10 pixels from the left and right borders, and 20 pixels from
+# the top and bottom borders
+&quot;crop=in_w-2*10:in_h-2*20&quot;
+
+# keep only the bottom right quarter of the input image
+&quot;crop=in_w/2:in_h/2:in_w/2:in_h/2&quot;
+
+# crop height for getting Greek harmony
+&quot;crop=in_w:1/PHI*in_w&quot;
+
+# trembling effect
+&quot;crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(n/10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(n/7)&quot;
+
+# erratic camera effect depending on timestamp
+&quot;crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(t*10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(t*13)&quot;
+
+# set x depending on the value of y
+&quot;crop=in_w/2:in_h/2:y:10+10*sin(n/10)&quot;
+</pre></td></tr></table>
+
+<a name="cropdetect"></a>
+<h2 class="section"><a href="libavfilter.html#toc-cropdetect">8.5 cropdetect</a></h2>
+
+<p>Auto-detect crop size.
+</p>
+<p>Calculate necessary cropping parameters and prints the recommended
+parameters through the logging system. The detected dimensions
+correspond to the non-black area of the input video.
+</p>
+<p>It accepts the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">cropdetect[=<var>limit</var>[:<var>round</var>[:<var>reset</var>]]]
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>limit</samp>&rsquo;</dt>
+<dd><p>Threshold, which can be optionally specified from nothing (0) to
+everything (255), defaults to 24.
+</p>
+</dd>
+<dt> &lsquo;<samp>round</samp>&rsquo;</dt>
+<dd><p>Value which the width/height should be divisible by, defaults to
+16. The offset is automatically adjusted to center the video. Use 2 to
+get only even dimensions (needed for 4:2:2 video). 16 is best when
+encoding to most video codecs.
+</p>
+</dd>
+<dt> &lsquo;<samp>reset</samp>&rsquo;</dt>
+<dd><p>Counter that determines after how many frames cropdetect will reset
+the previously detected largest video area and start over to detect
+the current optimal crop area. Defaults to 0.
+</p>
+<p>This can be useful when channel logos distort the video area. 0
+indicates never reset and return the largest area encountered during
+playback.
+</p></dd>
+</dl>
+
+<a name="delogo"></a>
+<h2 class="section"><a href="libavfilter.html#toc-delogo">8.6 delogo</a></h2>
+
+<p>Suppress a TV station logo by a simple interpolation of the surrounding
+pixels. Just set a rectangle covering the logo and watch it disappear
+(and sometimes something even uglier appear - your mileage may vary).
+</p>
+<p>The filter accepts parameters as a string of the form
+&quot;<var>x</var>:<var>y</var>:<var>w</var>:<var>h</var>:<var>band</var>&quot;, or as a list of
+<var>key</var>=<var>value</var> pairs, separated by &quot;:&quot;.
+</p>
+<p>The description of the accepted parameters follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd><p>Specify the top left corner coordinates of the logo. They must be
+specified.
+</p>
+</dd>
+<dt> &lsquo;<samp>w, h</samp>&rsquo;</dt>
+<dd><p>Specify the width and height of the logo to clear. They must be
+specified.
+</p>
+</dd>
+<dt> &lsquo;<samp>band, t</samp>&rsquo;</dt>
+<dd><p>Specify the thickness of the fuzzy edge of the rectangle (added to
+<var>w</var> and <var>h</var>). The default value is 4.
+</p>
+</dd>
+<dt> &lsquo;<samp>show</samp>&rsquo;</dt>
+<dd><p>When set to 1, a green rectangle is drawn on the screen to simplify
+finding the right <var>x</var>, <var>y</var>, <var>w</var>, <var>h</var> parameters, and
+<var>band</var> is set to 4. The default value is 0.
+</p>
+</dd>
+</dl>
+
+<p>Some examples follow.
+</p>
+<ul>
+<li>
+Set a rectangle covering the area with top left corner coordinates 0,0
+and size 100x77, setting a band of size 10:
+<table><tr><td>&nbsp;</td><td><pre class="example">delogo=0:0:100:77:10
+</pre></td></tr></table>
+
+</li><li>
+As the previous example, but use named options:
+<table><tr><td>&nbsp;</td><td><pre class="example">delogo=x=0:y=0:w=100:h=77:band=10
+</pre></td></tr></table>
+
+</li></ul>
+
+<a name="drawbox"></a>
+<h2 class="section"><a href="libavfilter.html#toc-drawbox">8.7 drawbox</a></h2>
+
+<p>Draw a colored box on the input image.
+</p>
+<p>It accepts the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">drawbox=<var>x</var>:<var>y</var>:<var>width</var>:<var>height</var>:<var>color</var>
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd><p>Specify the top left corner coordinates of the box. Default to 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>width, height</samp>&rsquo;</dt>
+<dd><p>Specify the width and height of the box, if 0 they are interpreted as
+the input width and height. Default to 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>color</samp>&rsquo;</dt>
+<dd><p>Specify the color of the box to write, it can be the name of a color
+(case insensitive match) or a 0xRRGGBB[AA] sequence.
+</p></dd>
+</dl>
+
+<p>Follow some examples:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># draw a black box around the edge of the input image
+drawbox
+
+# draw a box with color red and an opacity of 50%
+drawbox=10:20:200:60:red@0.5&quot;
+</pre></td></tr></table>
+
+<a name="drawtext"></a>
+<h2 class="section"><a href="libavfilter.html#toc-drawtext">8.8 drawtext</a></h2>
+
+<p>Draw text string or text from specified file on top of video using the
+libfreetype library.
+</p>
+<p>To enable compilation of this filter you need to configure FFmpeg with
+<code>--enable-libfreetype</code>.
+</p>
+<p>The filter also recognizes strftime() sequences in the provided text
+and expands them accordingly. Check the documentation of strftime().
+</p>
+<p>The filter accepts parameters as a list of <var>key</var>=<var>value</var> pairs,
+separated by &quot;:&quot;.
+</p>
+<p>The description of the accepted parameters follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>fontfile</samp>&rsquo;</dt>
+<dd><p>The font file to be used for drawing text. Path must be included.
+This parameter is mandatory.
+</p>
+</dd>
+<dt> &lsquo;<samp>text</samp>&rsquo;</dt>
+<dd><p>The text string to be drawn. The text must be a sequence of UTF-8
+encoded characters.
+This parameter is mandatory if no file is specified with the parameter
+<var>textfile</var>.
+</p>
+</dd>
+<dt> &lsquo;<samp>textfile</samp>&rsquo;</dt>
+<dd><p>A text file containing text to be drawn. The text must be a sequence
+of UTF-8 encoded characters.
+</p>
+<p>This parameter is mandatory if no text string is specified with the
+parameter <var>text</var>.
+</p>
+<p>If both text and textfile are specified, an error is thrown.
+</p>
+</dd>
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd><p>The offsets where text will be drawn within the video frame.
+Relative to the top/left border of the output image.
+</p>
+<p>The default value of <var>x</var> and <var>y</var> is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>fontsize</samp>&rsquo;</dt>
+<dd><p>The font size to be used for drawing text.
+The default value of <var>fontsize</var> is 16.
+</p>
+</dd>
+<dt> &lsquo;<samp>fontcolor</samp>&rsquo;</dt>
+<dd><p>The color to be used for drawing fonts.
+Either a string (e.g. &quot;red&quot;) or in 0xRRGGBB[AA] format
+(e.g. &quot;0xff000033&quot;), possibly followed by an alpha specifier.
+The default value of <var>fontcolor</var> is &quot;black&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>boxcolor</samp>&rsquo;</dt>
+<dd><p>The color to be used for drawing box around text.
+Either a string (e.g. &quot;yellow&quot;) or in 0xRRGGBB[AA] format
+(e.g. &quot;0xff00ff&quot;), possibly followed by an alpha specifier.
+The default value of <var>boxcolor</var> is &quot;white&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>box</samp>&rsquo;</dt>
+<dd><p>Used to draw a box around text using background color.
+Value should be either 1 (enable) or 0 (disable).
+The default value of <var>box</var> is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>shadowx, shadowy</samp>&rsquo;</dt>
+<dd><p>The x and y offsets for the text shadow position with respect to the
+position of the text. They can be either positive or negative
+values. Default value for both is &quot;0&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>shadowcolor</samp>&rsquo;</dt>
+<dd><p>The color to be used for drawing a shadow behind the drawn text.  It
+can be a color name (e.g. &quot;yellow&quot;) or a string in the 0xRRGGBB[AA]
+form (e.g. &quot;0xff00ff&quot;), possibly followed by an alpha specifier.
+The default value of <var>shadowcolor</var> is &quot;black&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>ft_load_flags</samp>&rsquo;</dt>
+<dd><p>Flags to be used for loading the fonts.
+</p>
+<p>The flags map the corresponding flags supported by libfreetype, and are
+a combination of the following values:
+</p><dl compact="compact">
+<dt> <var>default</var></dt>
+<dt> <var>no_scale</var></dt>
+<dt> <var>no_hinting</var></dt>
+<dt> <var>render</var></dt>
+<dt> <var>no_bitmap</var></dt>
+<dt> <var>vertical_layout</var></dt>
+<dt> <var>force_autohint</var></dt>
+<dt> <var>crop_bitmap</var></dt>
+<dt> <var>pedantic</var></dt>
+<dt> <var>ignore_global_advance_width</var></dt>
+<dt> <var>no_recurse</var></dt>
+<dt> <var>ignore_transform</var></dt>
+<dt> <var>monochrome</var></dt>
+<dt> <var>linear_design</var></dt>
+<dt> <var>no_autohint</var></dt>
+<dt> <var>end table</var></dt>
+</dl>
+
+<p>Default value is &quot;render&quot;.
+</p>
+<p>For more information consult the documentation for the FT_LOAD_*
+libfreetype flags.
+</p>
+</dd>
+<dt> &lsquo;<samp>tabsize</samp>&rsquo;</dt>
+<dd><p>The size in number of spaces to use for rendering the tab.
+Default value is 4.
+</p></dd>
+</dl>
+
+<p>For example the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">drawtext=&quot;fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf: text='Test Text'&quot;
+</pre></td></tr></table>
+
+<p>will draw &quot;Test Text&quot; with font FreeSerif, using the default values
+for the optional parameters.
+</p>
+<p>The command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">drawtext=&quot;fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf: text='Test Text':\
+          x=100: y=50: fontsize=24: fontcolor=yellow@0.2: box=1: boxcolor=red@0.2&quot;
+</pre></td></tr></table>
+
+<p>will draw &rsquo;Test Text&rsquo; with font FreeSerif of size 24 at position x=100
+and y=50 (counting from the top-left corner of the screen), text is
+yellow with a red box around it. Both the text and the box have an
+opacity of 20%.
+</p>
+<p>Note that the double quotes are not necessary if spaces are not used
+within the parameter list.
+</p>
+<p>For more information about libfreetype, check:
+<a href="http://www.freetype.org/">http://www.freetype.org/</a>.
+</p>
+<a name="fade"></a>
+<h2 class="section"><a href="libavfilter.html#toc-fade">8.9 fade</a></h2>
+
+<p>Apply fade-in/out effect to input video.
+</p>
+<p>It accepts the parameters:
+<var>type</var>:<var>start_frame</var>:<var>nb_frames</var>
+</p>
+<p><var>type</var> specifies if the effect type, can be either &quot;in&quot; for
+fade-in, or &quot;out&quot; for a fade-out effect.
+</p>
+<p><var>start_frame</var> specifies the number of the start frame for starting
+to apply the fade effect.
+</p>
+<p><var>nb_frames</var> specifies the number of frames for which the fade
+effect has to last. At the end of the fade-in effect the output video
+will have the same intensity as the input video, at the end of the
+fade-out transition the output video will be completely black.
+</p>
+<p>A few usage examples follow, usable too as test scenarios.
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># fade in first 30 frames of video
+fade=in:0:30
+
+# fade out last 45 frames of a 200-frame video
+fade=out:155:45
+
+# fade in first 25 frames and fade out last 25 frames of a 1000-frame video
+fade=in:0:25, fade=out:975:25
+
+# make first 5 frames black, then fade in from frame 5-24
+fade=in:5:20
+</pre></td></tr></table>
+
+<a name="fieldorder"></a>
+<h2 class="section"><a href="libavfilter.html#toc-fieldorder">8.10 fieldorder</a></h2>
+
+<p>Transform the field order of the input video.
+</p>
+<p>It accepts one parameter which specifies the required field order that
+the input interlaced video will be transformed to. The parameter can
+assume one of the following values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>0 or bff</samp>&rsquo;</dt>
+<dd><p>output bottom field first
+</p></dd>
+<dt> &lsquo;<samp>1 or tff</samp>&rsquo;</dt>
+<dd><p>output top field first
+</p></dd>
+</dl>
+
+<p>Default value is &quot;tff&quot;.
+</p>
+<p>Transformation is achieved by shifting the picture content up or down
+by one line, and filling the remaining line with appropriate picture content.
+This method is consistent with most broadcast field order converters.
+</p>
+<p>If the input video is not flagged as being interlaced, or it is already
+flagged as being of the required output field order then this filter does
+not alter the incoming video.
+</p>
+<p>This filter is very useful when converting to or from PAL DV material,
+which is bottom field first.
+</p>
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">./ffmpeg -i in.vob -vf &quot;fieldorder=bff&quot; out.dv
+</pre></td></tr></table>
+
+<a name="fifo"></a>
+<h2 class="section"><a href="libavfilter.html#toc-fifo">8.11 fifo</a></h2>
+
+<p>Buffer input images and send them when they are requested.
+</p>
+<p>This filter is mainly useful when auto-inserted by the libavfilter
+framework.
+</p>
+<p>The filter does not take parameters.
+</p>
+<a name="format"></a>
+<h2 class="section"><a href="libavfilter.html#toc-format">8.12 format</a></h2>
+
+<p>Convert the input video to one of the specified pixel formats.
+Libavfilter will try to pick one that is supported for the input to
+the next filter.
+</p>
+<p>The filter accepts a list of pixel format names, separated by &quot;:&quot;,
+for example &quot;yuv420p:monow:rgb24&quot;.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># convert the input video to the format &quot;yuv420p&quot;
+format=yuv420p
+
+# convert the input video to any of the formats in the list
+format=yuv420p:yuv444p:yuv410p
+</pre></td></tr></table>
+
+<p><a name="frei0r"></a>
+</p><a name="frei0r-1"></a>
+<h2 class="section"><a href="libavfilter.html#toc-frei0r-1">8.13 frei0r</a></h2>
+
+<p>Apply a frei0r effect to the input video.
+</p>
+<p>To enable compilation of this filter you need to install the frei0r
+header and configure FFmpeg with &ndash;enable-frei0r.
+</p>
+<p>The filter supports the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"><var>filter_name</var>[{:|=}<var>param1</var>:<var>param2</var>:...:<var>paramN</var>]
+</pre></td></tr></table>
+
+<p><var>filter_name</var> is the name to the frei0r effect to load. If the
+environment variable <code>FREI0R_PATH</code> is defined, the frei0r effect
+is searched in each one of the directories specified by the colon
+separated list in <code>FREIOR_PATH</code>, otherwise in the standard frei0r
+paths, which are in this order: &lsquo;<tt>HOME/.frei0r-1/lib/</tt>&rsquo;,
+&lsquo;<tt>/usr/local/lib/frei0r-1/</tt>&rsquo;, &lsquo;<tt>/usr/lib/frei0r-1/</tt>&rsquo;.
+</p>
+<p><var>param1</var>, <var>param2</var>, ... , <var>paramN</var> specify the parameters
+for the frei0r effect.
+</p>
+<p>A frei0r effect parameter can be a boolean (whose values are specified
+with &quot;y&quot; and &quot;n&quot;), a double, a color (specified by the syntax
+<var>R</var>/<var>G</var>/<var>B</var>, <var>R</var>, <var>G</var>, and <var>B</var> being float
+numbers from 0.0 to 1.0) or by an <code>av_parse_color()</code> color
+description), a position (specified by the syntax <var>X</var>/<var>Y</var>,
+<var>X</var> and <var>Y</var> being float numbers) and a string.
+</p>
+<p>The number and kind of parameters depend on the loaded effect. If an
+effect parameter is not specified the default value is set.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># apply the distort0r effect, set the first two double parameters
+frei0r=distort0r:0.5:0.01
+
+# apply the colordistance effect, takes a color as first parameter
+frei0r=colordistance:0.2/0.3/0.4
+frei0r=colordistance:violet
+frei0r=colordistance:0x112233
+
+# apply the perspective effect, specify the top left and top right
+# image positions
+frei0r=perspective:0.2/0.2:0.8/0.2
+</pre></td></tr></table>
+
+<p>For more information see:
+<a href="http://piksel.org/frei0r">http://piksel.org/frei0r</a>
+</p>
+<a name="gradfun"></a>
+<h2 class="section"><a href="libavfilter.html#toc-gradfun">8.14 gradfun</a></h2>
+
+<p>Fix the banding artifacts that are sometimes introduced into nearly flat
+regions by truncation to 8bit colordepth.
+Interpolate the gradients that should go where the bands are, and
+dither them.
+</p>
+<p>This filter is designed for playback only.  Do not use it prior to
+lossy compression, because compression tends to lose the dither and
+bring back the bands.
+</p>
+<p>The filter takes two optional parameters, separated by &rsquo;:&rsquo;:
+<var>strength</var>:<var>radius</var>
+</p>
+<p><var>strength</var> is the maximum amount by which the filter will change
+any one pixel. Also the threshold for detecting nearly flat
+regions. Acceptable values range from .51 to 255, default value is
+1.2, out-of-range values will be clipped to the valid range.
+</p>
+<p><var>radius</var> is the neighborhood to fit the gradient to. A larger
+radius makes for smoother gradients, but also prevents the filter from
+modifying the pixels near detailed regions. Acceptable values are
+8-32, default value is 16, out-of-range values will be clipped to the
+valid range.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># default parameters
+gradfun=1.2:16
+
+# omitting radius
+gradfun=1.2
+</pre></td></tr></table>
+
+<a name="hflip"></a>
+<h2 class="section"><a href="libavfilter.html#toc-hflip">8.15 hflip</a></h2>
+
+<p>Flip the input video horizontally.
+</p>
+<p>For example to horizontally flip the video in input with
+&lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i in.avi -vf &quot;hflip&quot; out.avi
+</pre></td></tr></table>
+
+<a name="hqdn3d"></a>
+<h2 class="section"><a href="libavfilter.html#toc-hqdn3d">8.16 hqdn3d</a></h2>
+
+<p>High precision/quality 3d denoise filter. This filter aims to reduce
+image noise producing smooth images and making still images really
+still. It should enhance compressibility.
+</p>
+<p>It accepts the following optional parameters:
+<var>luma_spatial</var>:<var>chroma_spatial</var>:<var>luma_tmp</var>:<var>chroma_tmp</var>
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>luma_spatial</samp>&rsquo;</dt>
+<dd><p>a non-negative float number which specifies spatial luma strength,
+defaults to 4.0
+</p>
+</dd>
+<dt> &lsquo;<samp>chroma_spatial</samp>&rsquo;</dt>
+<dd><p>a non-negative float number which specifies spatial chroma strength,
+defaults to 3.0*<var>luma_spatial</var>/4.0
+</p>
+</dd>
+<dt> &lsquo;<samp>luma_tmp</samp>&rsquo;</dt>
+<dd><p>a float number which specifies luma temporal strength, defaults to
+6.0*<var>luma_spatial</var>/4.0
+</p>
+</dd>
+<dt> &lsquo;<samp>chroma_tmp</samp>&rsquo;</dt>
+<dd><p>a float number which specifies chroma temporal strength, defaults to
+<var>luma_tmp</var>*<var>chroma_spatial</var>/<var>luma_spatial</var>
+</p></dd>
+</dl>
+
+<a name="lut_002c-lutrgb_002c-lutyuv"></a>
+<h2 class="section"><a href="libavfilter.html#toc-lut_002c-lutrgb_002c-lutyuv">8.17 lut, lutrgb, lutyuv</a></h2>
+
+<p>Compute a look-up table for binding each pixel component input value
+to an output value, and apply it to input video.
+</p>
+<p><var>lutyuv</var> applies a lookup table to a YUV input video, <var>lutrgb</var>
+to an RGB input video.
+</p>
+<p>These filters accept in input a &quot;:&quot;-separated list of options, which
+specify the expressions used for computing the lookup table for the
+corresponding pixel component values.
+</p>
+<p>The <var>lut</var> filter requires either YUV or RGB pixel formats in
+input, and accepts the options:
+</p><dl compact="compact">
+<dd><p><var>c0</var> (first  pixel component)
+<var>c1</var> (second pixel component)
+<var>c2</var> (third  pixel component)
+<var>c3</var> (fourth pixel component, corresponds to the alpha component)
+</p></dd>
+</dl>
+
+<p>The exact component associated to each option depends on the format in
+input.
+</p>
+<p>The <var>lutrgb</var> filter requires RGB pixel formats in input, and
+accepts the options:
+</p><dl compact="compact">
+<dd><p><var>r</var> (red component)
+<var>g</var> (green component)
+<var>b</var> (blue component)
+<var>a</var> (alpha component)
+</p></dd>
+</dl>
+
+<p>The <var>lutyuv</var> filter requires YUV pixel formats in input, and
+accepts the options:
+</p><dl compact="compact">
+<dd><p><var>y</var> (Y/luminance component)
+<var>u</var> (U/Cb component)
+<var>v</var> (V/Cr component)
+<var>a</var> (alpha component)
+</p></dd>
+</dl>
+
+<p>The expressions can contain the following constants and functions:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>E, PI, PHI</samp>&rsquo;</dt>
+<dd><p>the corresponding mathematical approximated values for e
+(euler number), pi (greek PI), PHI (golden ratio)
+</p>
+</dd>
+<dt> &lsquo;<samp>w, h</samp>&rsquo;</dt>
+<dd><p>the input width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>val</samp>&rsquo;</dt>
+<dd><p>input value for the pixel component
+</p>
+</dd>
+<dt> &lsquo;<samp>clipval</samp>&rsquo;</dt>
+<dd><p>the input value clipped in the <var>minval</var>-<var>maxval</var> range
+</p>
+</dd>
+<dt> &lsquo;<samp>maxval</samp>&rsquo;</dt>
+<dd><p>maximum value for the pixel component
+</p>
+</dd>
+<dt> &lsquo;<samp>minval</samp>&rsquo;</dt>
+<dd><p>minimum value for the pixel component
+</p>
+</dd>
+<dt> &lsquo;<samp>negval</samp>&rsquo;</dt>
+<dd><p>the negated value for the pixel component value clipped in the
+<var>minval</var>-<var>maxval</var> range , it corresponds to the expression
+&quot;maxval-clipval+minval&quot;
+</p>
+</dd>
+<dt> &lsquo;<samp>clip(val)</samp>&rsquo;</dt>
+<dd><p>the computed value in <var>val</var> clipped in the
+<var>minval</var>-<var>maxval</var> range
+</p>
+</dd>
+<dt> &lsquo;<samp>gammaval(gamma)</samp>&rsquo;</dt>
+<dd><p>the computed gamma correction value of the pixel component value
+clipped in the <var>minval</var>-<var>maxval</var> range, corresponds to the
+expression
+&quot;pow((clipval-minval)/(maxval-minval)\,<var>gamma</var>)*(maxval-minval)+minval&quot;
+</p>
+</dd>
+</dl>
+
+<p>All expressions default to &quot;val&quot;.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># negate input video
+lutrgb=&quot;r=maxval+minval-val:g=maxval+minval-val:b=maxval+minval-val&quot;
+lutyuv=&quot;y=maxval+minval-val:u=maxval+minval-val:v=maxval+minval-val&quot;
+
+# the above is the same as
+lutrgb=&quot;r=negval:g=negval:b=negval&quot;
+lutyuv=&quot;y=negval:u=negval:v=negval&quot;
+
+# negate luminance
+lutyuv=negval
+
+# remove chroma components, turns the video into a graytone image
+lutyuv=&quot;u=128:v=128&quot;
+
+# apply a luma burning effect
+lutyuv=&quot;y=2*val&quot;
+
+# remove green and blue components
+lutrgb=&quot;g=0:b=0&quot;
+
+# set a constant alpha channel value on input
+format=rgba,lutrgb=a=&quot;maxval-minval/2&quot;
+
+# correct luminance gamma by a 0.5 factor
+lutyuv=y=gammaval(0.5)
+</pre></td></tr></table>
+
+<a name="mp"></a>
+<h2 class="section"><a href="libavfilter.html#toc-mp">8.18 mp</a></h2>
+
+<p>Apply an MPlayer filter to the input video.
+</p>
+<p>This filter provides a wrapper around most of the filters of
+MPlayer/MEncoder.
+</p>
+<p>This wrapper is considered experimental. Some of the wrapped filters
+may not work properly and we may drop support for them, as they will
+be implemented natively into FFmpeg. Thus you should avoid
+depending on them when writing portable scripts.
+</p>
+<p>The filters accepts the parameters:
+<var>filter_name</var>[:=]<var>filter_params</var>
+</p>
+<p><var>filter_name</var> is the name of a supported MPlayer filter,
+<var>filter_params</var> is a string containing the parameters accepted by
+the named filter.
+</p>
+<p>The list of the currently supported filters follows:
+</p><dl compact="compact">
+<dt> <var>2xsai</var></dt>
+<dt> <var>decimate</var></dt>
+<dt> <var>denoise3d</var></dt>
+<dt> <var>detc</var></dt>
+<dt> <var>dint</var></dt>
+<dt> <var>divtc</var></dt>
+<dt> <var>down3dright</var></dt>
+<dt> <var>dsize</var></dt>
+<dt> <var>eq2</var></dt>
+<dt> <var>eq</var></dt>
+<dt> <var>field</var></dt>
+<dt> <var>fil</var></dt>
+<dt> <var>fixpts</var></dt>
+<dt> <var>framestep</var></dt>
+<dt> <var>fspp</var></dt>
+<dt> <var>geq</var></dt>
+<dt> <var>harddup</var></dt>
+<dt> <var>hqdn3d</var></dt>
+<dt> <var>hue</var></dt>
+<dt> <var>il</var></dt>
+<dt> <var>ilpack</var></dt>
+<dt> <var>ivtc</var></dt>
+<dt> <var>kerndeint</var></dt>
+<dt> <var>mcdeint</var></dt>
+<dt> <var>mirror</var></dt>
+<dt> <var>noise</var></dt>
+<dt> <var>ow</var></dt>
+<dt> <var>palette</var></dt>
+<dt> <var>perspective</var></dt>
+<dt> <var>phase</var></dt>
+<dt> <var>pp7</var></dt>
+<dt> <var>pullup</var></dt>
+<dt> <var>qp</var></dt>
+<dt> <var>rectangle</var></dt>
+<dt> <var>remove-logo</var></dt>
+<dt> <var>rotate</var></dt>
+<dt> <var>sab</var></dt>
+<dt> <var>screenshot</var></dt>
+<dt> <var>smartblur</var></dt>
+<dt> <var>softpulldown</var></dt>
+<dt> <var>softskip</var></dt>
+<dt> <var>spp</var></dt>
+<dt> <var>swapuv</var></dt>
+<dt> <var>telecine</var></dt>
+<dt> <var>tile</var></dt>
+<dt> <var>tinterlace</var></dt>
+<dt> <var>unsharp</var></dt>
+<dt> <var>uspp</var></dt>
+<dt> <var>yuvcsp</var></dt>
+<dt> <var>yvu9</var></dt>
+</dl>
+
+<p>The parameter syntax and behavior for the listed filters are the same
+of the corresponding MPlayer filters. For detailed instructions check
+the &quot;VIDEO FILTERS&quot; section in the MPlayer manual.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># remove a logo by interpolating the surrounding pixels
+mp=delogo=200:200:80:20:1
+
+# adjust gamma, brightness, contrast
+mp=eq2=1.0:2:0.5
+
+# tweak hue and saturation
+mp=hue=100:-10
+</pre></td></tr></table>
+
+<p>See also mplayer(1), <a href="http://www.mplayerhq.hu/">http://www.mplayerhq.hu/</a>.
+</p>
+<a name="negate"></a>
+<h2 class="section"><a href="libavfilter.html#toc-negate">8.19 negate</a></h2>
+
+<p>Negate input video.
+</p>
+<p>This filter accepts an integer in input, if non-zero it negates the
+alpha component (if available). The default value in input is 0.
+</p>
+<a name="noformat"></a>
+<h2 class="section"><a href="libavfilter.html#toc-noformat">8.20 noformat</a></h2>
+
+<p>Force libavfilter not to use any of the specified pixel formats for the
+input to the next filter.
+</p>
+<p>The filter accepts a list of pixel format names, separated by &quot;:&quot;,
+for example &quot;yuv420p:monow:rgb24&quot;.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># force libavfilter to use a format different from &quot;yuv420p&quot; for the
+# input to the vflip filter
+noformat=yuv420p,vflip
+
+# convert the input video to any of the formats not contained in the list
+noformat=yuv420p:yuv444p:yuv410p
+</pre></td></tr></table>
+
+<a name="null"></a>
+<h2 class="section"><a href="libavfilter.html#toc-null">8.21 null</a></h2>
+
+<p>Pass the video source unchanged to the output.
+</p>
+<a name="ocv"></a>
+<h2 class="section"><a href="libavfilter.html#toc-ocv">8.22 ocv</a></h2>
+
+<p>Apply video transform using libopencv.
+</p>
+<p>To enable this filter install libopencv library and headers and
+configure FFmpeg with &ndash;enable-libopencv.
+</p>
+<p>The filter takes the parameters: <var>filter_name</var>{:=}<var>filter_params</var>.
+</p>
+<p><var>filter_name</var> is the name of the libopencv filter to apply.
+</p>
+<p><var>filter_params</var> specifies the parameters to pass to the libopencv
+filter. If not specified the default values are assumed.
+</p>
+<p>Refer to the official libopencv documentation for more precise
+informations:
+<a href="http://opencv.willowgarage.com/documentation/c/image_filtering.html">http://opencv.willowgarage.com/documentation/c/image_filtering.html</a>
+</p>
+<p>Follows the list of supported libopencv filters.
+</p>
+<p><a name="dilate"></a>
+</p><a name="dilate-1"></a>
+<h3 class="subsection"><a href="libavfilter.html#toc-dilate-1">8.22.1 dilate</a></h3>
+
+<p>Dilate an image by using a specific structuring element.
+This filter corresponds to the libopencv function <code>cvDilate</code>.
+</p>
+<p>It accepts the parameters: <var>struct_el</var>:<var>nb_iterations</var>.
+</p>
+<p><var>struct_el</var> represents a structuring element, and has the syntax:
+<var>cols</var>x<var>rows</var>+<var>anchor_x</var>x<var>anchor_y</var>/<var>shape</var>
+</p>
+<p><var>cols</var> and <var>rows</var> represent the number of colums and rows of
+the structuring element, <var>anchor_x</var> and <var>anchor_y</var> the anchor
+point, and <var>shape</var> the shape for the structuring element, and
+can be one of the values &quot;rect&quot;, &quot;cross&quot;, &quot;ellipse&quot;, &quot;custom&quot;.
+</p>
+<p>If the value for <var>shape</var> is &quot;custom&quot;, it must be followed by a
+string of the form &quot;=<var>filename</var>&quot;. The file with name
+<var>filename</var> is assumed to represent a binary image, with each
+printable character corresponding to a bright pixel. When a custom
+<var>shape</var> is used, <var>cols</var> and <var>rows</var> are ignored, the number
+or columns and rows of the read file are assumed instead.
+</p>
+<p>The default value for <var>struct_el</var> is &quot;3x3+0x0/rect&quot;.
+</p>
+<p><var>nb_iterations</var> specifies the number of times the transform is
+applied to the image, and defaults to 1.
+</p>
+<p>Follow some example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># use the default values
+ocv=dilate
+
+# dilate using a structuring element with a 5x5 cross, iterate two times
+ocv=dilate=5x5+2x2/cross:2
+
+# read the shape from the file diamond.shape, iterate two times
+# the file diamond.shape may contain a pattern of characters like this:
+#   *
+#  ***
+# *****
+#  ***
+#   *
+# the specified cols and rows are ignored (but not the anchor point coordinates)
+ocv=0x0+2x2/custom=diamond.shape:2
+</pre></td></tr></table>
+
+<a name="erode"></a>
+<h3 class="subsection"><a href="libavfilter.html#toc-erode">8.22.2 erode</a></h3>
+
+<p>Erode an image by using a specific structuring element.
+This filter corresponds to the libopencv function <code>cvErode</code>.
+</p>
+<p>The filter accepts the parameters: <var>struct_el</var>:<var>nb_iterations</var>,
+with the same syntax and semantics as the <a href="#dilate">dilate</a> filter.
+</p>
+<a name="smooth"></a>
+<h3 class="subsection"><a href="libavfilter.html#toc-smooth">8.22.3 smooth</a></h3>
+
+<p>Smooth the input video.
+</p>
+<p>The filter takes the following parameters:
+<var>type</var>:<var>param1</var>:<var>param2</var>:<var>param3</var>:<var>param4</var>.
+</p>
+<p><var>type</var> is the type of smooth filter to apply, and can be one of
+the following values: &quot;blur&quot;, &quot;blur_no_scale&quot;, &quot;median&quot;, &quot;gaussian&quot;,
+&quot;bilateral&quot;. The default value is &quot;gaussian&quot;.
+</p>
+<p><var>param1</var>, <var>param2</var>, <var>param3</var>, and <var>param4</var> are
+parameters whose meanings depend on smooth type. <var>param1</var> and
+<var>param2</var> accept integer positive values or 0, <var>param3</var> and
+<var>param4</var> accept float values.
+</p>
+<p>The default value for <var>param1</var> is 3, the default value for the
+other parameters is 0.
+</p>
+<p>These parameters correspond to the parameters assigned to the
+libopencv function <code>cvSmooth</code>.
+</p>
+<a name="overlay"></a>
+<h2 class="section"><a href="libavfilter.html#toc-overlay">8.23 overlay</a></h2>
+
+<p>Overlay one video on top of another.
+</p>
+<p>It takes two inputs and one output, the first input is the &quot;main&quot;
+video on which the second input is overlayed.
+</p>
+<p>It accepts the parameters: <var>x</var>:<var>y</var>.
+</p>
+<p><var>x</var> is the x coordinate of the overlayed video on the main video,
+<var>y</var> is the y coordinate. The parameters are expressions containing
+the following parameters:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>main_w, main_h</samp>&rsquo;</dt>
+<dd><p>main input width and height
+</p>
+</dd>
+<dt> &lsquo;<samp>W, H</samp>&rsquo;</dt>
+<dd><p>same as <var>main_w</var> and <var>main_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>overlay_w, overlay_h</samp>&rsquo;</dt>
+<dd><p>overlay input width and height
+</p>
+</dd>
+<dt> &lsquo;<samp>w, h</samp>&rsquo;</dt>
+<dd><p>same as <var>overlay_w</var> and <var>overlay_h</var>
+</p></dd>
+</dl>
+
+<p>Be aware that frames are taken from each input video in timestamp
+order, hence, if their initial timestamps differ, it is a a good idea
+to pass the two inputs through a <var>setpts=PTS-STARTPTS</var> filter to
+have them begin in the same zero timestamp, as it does the example for
+the <var>movie</var> filter.
+</p>
+<p>Follow some examples:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># draw the overlay at 10 pixels from the bottom right
+# corner of the main video.
+overlay=main_w-overlay_w-10:main_h-overlay_h-10
+
+# insert a transparent PNG logo in the bottom left corner of the input
+movie=logo.png [logo];
+[in][logo] overlay=10:main_h-overlay_h-10 [out]
+
+# insert 2 different transparent PNG logos (second logo on bottom
+# right corner):
+movie=logo1.png [logo1];
+movie=logo2.png [logo2];
+[in][logo1]       overlay=10:H-h-10 [in+logo1];
+[in+logo1][logo2] overlay=W-w-10:H-h-10 [out]
+
+# add a transparent color layer on top of the main video,
+# WxH specifies the size of the main input to the overlay filter
+color=red.3:WxH [over]; [in][over] overlay [out]
+</pre></td></tr></table>
+
+<p>You can chain togheter more overlays but the efficiency of such
+approach is yet to be tested.
+</p>
+<a name="pad"></a>
+<h2 class="section"><a href="libavfilter.html#toc-pad">8.24 pad</a></h2>
+
+<p>Add paddings to the input image, and places the original input at the
+given coordinates <var>x</var>, <var>y</var>.
+</p>
+<p>It accepts the following parameters:
+<var>width</var>:<var>height</var>:<var>x</var>:<var>y</var>:<var>color</var>.
+</p>
+<p>The parameters <var>width</var>, <var>height</var>, <var>x</var>, and <var>y</var> are
+expressions containing the following constants:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>E, PI, PHI</samp>&rsquo;</dt>
+<dd><p>the corresponding mathematical approximated values for e
+(euler number), pi (greek PI), phi (golden ratio)
+</p>
+</dd>
+<dt> &lsquo;<samp>in_w, in_h</samp>&rsquo;</dt>
+<dd><p>the input video width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>iw, ih</samp>&rsquo;</dt>
+<dd><p>same as <var>in_w</var> and <var>in_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>out_w, out_h</samp>&rsquo;</dt>
+<dd><p>the output width and heigth, that is the size of the padded area as
+specified by the <var>width</var> and <var>height</var> expressions
+</p>
+</dd>
+<dt> &lsquo;<samp>ow, oh</samp>&rsquo;</dt>
+<dd><p>same as <var>out_w</var> and <var>out_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd><p>x and y offsets as specified by the <var>x</var> and <var>y</var>
+expressions, or NAN if not yet specified
+</p>
+</dd>
+<dt> &lsquo;<samp>a</samp>&rsquo;</dt>
+<dd><p>same as <var>iw</var> / <var>ih</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>sar</samp>&rsquo;</dt>
+<dd><p>input sample aspect ratio
+</p>
+</dd>
+<dt> &lsquo;<samp>dar</samp>&rsquo;</dt>
+<dd><p>input display aspect ratio, it is the same as (<var>iw</var> / <var>ih</var>) * <var>sar</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>hsub, vsub</samp>&rsquo;</dt>
+<dd><p>horizontal and vertical chroma subsample values. For example for the
+pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
+</p></dd>
+</dl>
+
+<p>Follows the description of the accepted parameters.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>width, height</samp>&rsquo;</dt>
+<dd>
+<p>Specify the size of the output image with the paddings added. If the
+value for <var>width</var> or <var>height</var> is 0, the corresponding input size
+is used for the output.
+</p>
+<p>The <var>width</var> expression can reference the value set by the
+<var>height</var> expression, and viceversa.
+</p>
+<p>The default value of <var>width</var> and <var>height</var> is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>x, y</samp>&rsquo;</dt>
+<dd>
+<p>Specify the offsets where to place the input image in the padded area
+with respect to the top/left border of the output image.
+</p>
+<p>The <var>x</var> expression can reference the value set by the <var>y</var>
+expression, and viceversa.
+</p>
+<p>The default value of <var>x</var> and <var>y</var> is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>color</samp>&rsquo;</dt>
+<dd>
+<p>Specify the color of the padded area, it can be the name of a color
+(case insensitive match) or a 0xRRGGBB[AA] sequence.
+</p>
+<p>The default value of <var>color</var> is &quot;black&quot;.
+</p>
+</dd>
+</dl>
+
+<p>Some examples follow:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># Add paddings with color &quot;violet&quot; to the input video. Output video
+# size is 640x480, the top-left corner of the input video is placed at
+# column 0, row 40.
+pad=640:480:0:40:violet
+
+# pad the input to get an output with dimensions increased bt 3/2,
+# and put the input video at the center of the padded area
+pad=&quot;3/2*iw:3/2*ih:(ow-iw)/2:(oh-ih)/2&quot;
+
+# pad the input to get a squared output with size equal to the maximum
+# value between the input width and height, and put the input video at
+# the center of the padded area
+pad=&quot;max(iw\,ih):ow:(ow-iw)/2:(oh-ih)/2&quot;
+
+# pad the input to get a final w/h ratio of 16:9
+pad=&quot;ih*16/9:ih:(ow-iw)/2:(oh-ih)/2&quot;
+
+# for anamorphic video, in order to set the output display aspect ratio,
+# it is necessary to use sar in the expression, according to the relation:
+# (ih * X / ih) * sar = output_dar
+# X = output_dar / sar
+pad=&quot;ih*16/9/sar:ih:(ow-iw)/2:(oh-ih)/2&quot;
+
+# double output size and put the input video in the bottom-right
+# corner of the output padded area
+pad=&quot;2*iw:2*ih:ow-iw:oh-ih&quot;
+</pre></td></tr></table>
+
+<a name="pixdesctest"></a>
+<h2 class="section"><a href="libavfilter.html#toc-pixdesctest">8.25 pixdesctest</a></h2>
+
+<p>Pixel format descriptor test filter, mainly useful for internal
+testing. The output video should be equal to the input video.
+</p>
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">format=monow, pixdesctest
+</pre></td></tr></table>
+
+<p>can be used to test the monowhite pixel format descriptor definition.
+</p>
+<a name="scale"></a>
+<h2 class="section"><a href="libavfilter.html#toc-scale">8.26 scale</a></h2>
+
+<p>Scale the input video to <var>width</var>:<var>height</var> and/or convert the image format.
+</p>
+<p>The parameters <var>width</var> and <var>height</var> are expressions containing
+the following constants:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>E, PI, PHI</samp>&rsquo;</dt>
+<dd><p>the corresponding mathematical approximated values for e
+(euler number), pi (greek PI), phi (golden ratio)
+</p>
+</dd>
+<dt> &lsquo;<samp>in_w, in_h</samp>&rsquo;</dt>
+<dd><p>the input width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>iw, ih</samp>&rsquo;</dt>
+<dd><p>same as <var>in_w</var> and <var>in_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>out_w, out_h</samp>&rsquo;</dt>
+<dd><p>the output (cropped) width and heigth
+</p>
+</dd>
+<dt> &lsquo;<samp>ow, oh</samp>&rsquo;</dt>
+<dd><p>same as <var>out_w</var> and <var>out_h</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>a</samp>&rsquo;</dt>
+<dd><p>same as <var>iw</var> / <var>ih</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>sar</samp>&rsquo;</dt>
+<dd><p>input sample aspect ratio
+</p>
+</dd>
+<dt> &lsquo;<samp>dar</samp>&rsquo;</dt>
+<dd><p>input display aspect ratio, it is the same as (<var>iw</var> / <var>ih</var>) * <var>sar</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>hsub, vsub</samp>&rsquo;</dt>
+<dd><p>horizontal and vertical chroma subsample values. For example for the
+pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
+</p></dd>
+</dl>
+
+<p>If the input image format is different from the format requested by
+the next filter, the scale filter will convert the input to the
+requested format.
+</p>
+<p>If the value for <var>width</var> or <var>height</var> is 0, the respective input
+size is used for the output.
+</p>
+<p>If the value for <var>width</var> or <var>height</var> is -1, the scale filter will
+use, for the respective output size, a value that maintains the aspect
+ratio of the input image.
+</p>
+<p>The default value of <var>width</var> and <var>height</var> is 0.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># scale the input video to a size of 200x100.
+scale=200:100
+
+# scale the input to 2x
+scale=2*iw:2*ih
+# the above is the same as
+scale=2*in_w:2*in_h
+
+# scale the input to half size
+scale=iw/2:ih/2
+
+# increase the width, and set the height to the same size
+scale=3/2*iw:ow
+
+# seek for Greek harmony
+scale=iw:1/PHI*iw
+scale=ih*PHI:ih
+
+# increase the height, and set the width to 3/2 of the height
+scale=3/2*oh:3/5*ih
+
+# increase the size, but make the size a multiple of the chroma
+scale=&quot;trunc(3/2*iw/hsub)*hsub:trunc(3/2*ih/vsub)*vsub&quot;
+
+# increase the width to a maximum of 500 pixels, keep the same input aspect ratio
+scale='min(500\, iw*3/2):-1'
+</pre></td></tr></table>
+
+<a name="select"></a>
+<h2 class="section"><a href="libavfilter.html#toc-select">8.27 select</a></h2>
+<p>Select frames to pass in output.
+</p>
+<p>It accepts in input an expression, which is evaluated for each input
+frame. If the expression is evaluated to a non-zero value, the frame
+is selected and passed to the output, otherwise it is discarded.
+</p>
+<p>The expression can contain the following constants:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>PI</samp>&rsquo;</dt>
+<dd><p>Greek PI
+</p>
+</dd>
+<dt> &lsquo;<samp>PHI</samp>&rsquo;</dt>
+<dd><p>golden ratio
+</p>
+</dd>
+<dt> &lsquo;<samp>E</samp>&rsquo;</dt>
+<dd><p>Euler number
+</p>
+</dd>
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>the sequential number of the filtered frame, starting from 0
+</p>
+</dd>
+<dt> &lsquo;<samp>selected_n</samp>&rsquo;</dt>
+<dd><p>the sequential number of the selected frame, starting from 0
+</p>
+</dd>
+<dt> &lsquo;<samp>prev_selected_n</samp>&rsquo;</dt>
+<dd><p>the sequential number of the last selected frame, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>TB</samp>&rsquo;</dt>
+<dd><p>timebase of the input timestamps
+</p>
+</dd>
+<dt> &lsquo;<samp>pts</samp>&rsquo;</dt>
+<dd><p>the PTS (Presentation TimeStamp) of the filtered video frame,
+expressed in <var>TB</var> units, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>t</samp>&rsquo;</dt>
+<dd><p>the PTS (Presentation TimeStamp) of the filtered video frame,
+expressed in seconds, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>prev_pts</samp>&rsquo;</dt>
+<dd><p>the PTS of the previously filtered video frame, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>prev_selected_pts</samp>&rsquo;</dt>
+<dd><p>the PTS of the last previously filtered video frame, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>prev_selected_t</samp>&rsquo;</dt>
+<dd><p>the PTS of the last previously selected video frame, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>start_pts</samp>&rsquo;</dt>
+<dd><p>the PTS of the first video frame in the video, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>start_t</samp>&rsquo;</dt>
+<dd><p>the time of the first video frame in the video, NAN if undefined
+</p>
+</dd>
+<dt> &lsquo;<samp>pict_type</samp>&rsquo;</dt>
+<dd><p>the picture type of the filtered frame, can assume one of the following
+values:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>PICT_TYPE_I</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_P</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_B</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_S</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_SI</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_SP</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>PICT_TYPE_BI</samp>&rsquo;</dt>
+</dl>
+
+</dd>
+<dt> &lsquo;<samp>interlace_type</samp>&rsquo;</dt>
+<dd><p>the frame interlace type, can assume one of the following values:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>INTERLACE_TYPE_P</samp>&rsquo;</dt>
+<dd><p>the frame is progressive (not interlaced)
+</p></dd>
+<dt> &lsquo;<samp>INTERLACE_TYPE_T</samp>&rsquo;</dt>
+<dd><p>the frame is top-field-first
+</p></dd>
+<dt> &lsquo;<samp>INTERLACE_TYPE_B</samp>&rsquo;</dt>
+<dd><p>the frame is bottom-field-first
+</p></dd>
+</dl>
+
+</dd>
+<dt> &lsquo;<samp>key</samp>&rsquo;</dt>
+<dd><p>1 if the filtered frame is a key-frame, 0 otherwise
+</p>
+</dd>
+<dt> &lsquo;<samp>pos</samp>&rsquo;</dt>
+<dd><p>the position in the file of the filtered frame, -1 if the information
+is not available (e.g. for synthetic video)
+</p></dd>
+</dl>
+
+<p>The default value of the select expression is &quot;1&quot;.
+</p>
+<p>Some examples follow:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># select all frames in input
+select
+
+# the above is the same as:
+select=1
+
+# skip all frames:
+select=0
+
+# select only I-frames
+select='eq(pict_type\,PICT_TYPE_I)'
+
+# select one frame every 100
+select='not(mod(n\,100))'
+
+# select only frames contained in the 10-20 time interval
+select='gte(t\,10)*lte(t\,20)'
+
+# select only I frames contained in the 10-20 time interval
+select='gte(t\,10)*lte(t\,20)*eq(pict_type\,PICT_TYPE_I)'
+
+# select frames with a minimum distance of 10 seconds
+select='isnan(prev_selected_t)+gte(t-prev_selected_t\,10)'
+</pre></td></tr></table>
+
+<p><a name="setdar"></a>
+</p><a name="setdar-1"></a>
+<h2 class="section"><a href="libavfilter.html#toc-setdar-1">8.28 setdar</a></h2>
+
+<p>Set the Display Aspect Ratio for the filter output video.
+</p>
+<p>This is done by changing the specified Sample (aka Pixel) Aspect
+Ratio, according to the following equation:
+<em>DAR = HORIZONTAL_RESOLUTION / VERTICAL_RESOLUTION * SAR</em>
+</p>
+<p>Keep in mind that this filter does not modify the pixel dimensions of
+the video frame. Also the display aspect ratio set by this filter may
+be changed by later filters in the filterchain, e.g. in case of
+scaling or if another &quot;setdar&quot; or a &quot;setsar&quot; filter is applied.
+</p>
+<p>The filter accepts a parameter string which represents the wanted
+display aspect ratio.
+The parameter can be a floating point number string, or an expression
+of the form <var>num</var>:<var>den</var>, where <var>num</var> and <var>den</var> are the
+numerator and denominator of the aspect ratio.
+If the parameter is not specified, it is assumed the value &quot;0:1&quot;.
+</p>
+<p>For example to change the display aspect ratio to 16:9, specify:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">setdar=16:9
+# the above is equivalent to
+setdar=1.77777
+</pre></td></tr></table>
+
+<p>See also the <a href="#setsar">setsar</a> filter documentation.
+</p>
+<a name="setpts"></a>
+<h2 class="section"><a href="libavfilter.html#toc-setpts">8.29 setpts</a></h2>
+
+<p>Change the PTS (presentation timestamp) of the input video frames.
+</p>
+<p>Accept in input an expression evaluated through the eval API, which
+can contain the following constants:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>PTS</samp>&rsquo;</dt>
+<dd><p>the presentation timestamp in input
+</p>
+</dd>
+<dt> &lsquo;<samp>PI</samp>&rsquo;</dt>
+<dd><p>Greek PI
+</p>
+</dd>
+<dt> &lsquo;<samp>PHI</samp>&rsquo;</dt>
+<dd><p>golden ratio
+</p>
+</dd>
+<dt> &lsquo;<samp>E</samp>&rsquo;</dt>
+<dd><p>Euler number
+</p>
+</dd>
+<dt> &lsquo;<samp>N</samp>&rsquo;</dt>
+<dd><p>the count of the input frame, starting from 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>STARTPTS</samp>&rsquo;</dt>
+<dd><p>the PTS of the first video frame
+</p>
+</dd>
+<dt> &lsquo;<samp>INTERLACED</samp>&rsquo;</dt>
+<dd><p>tell if the current frame is interlaced
+</p>
+</dd>
+<dt> &lsquo;<samp>POS</samp>&rsquo;</dt>
+<dd><p>original position in the file of the frame, or undefined if undefined
+for the current frame
+</p>
+</dd>
+<dt> &lsquo;<samp>PREV_INPTS</samp>&rsquo;</dt>
+<dd><p>previous input PTS
+</p>
+</dd>
+<dt> &lsquo;<samp>PREV_OUTPTS</samp>&rsquo;</dt>
+<dd><p>previous output PTS
+</p>
+</dd>
+</dl>
+
+<p>Some examples follow:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># start counting PTS from zero
+setpts=PTS-STARTPTS
+
+# fast motion
+setpts=0.5*PTS
+
+# slow motion
+setpts=2.0*PTS
+
+# fixed rate 25 fps
+setpts=N/(25*TB)
+
+# fixed rate 25 fps with some jitter
+setpts='1/(25*TB) * (N + 0.05 * sin(N*2*PI/25))'
+</pre></td></tr></table>
+
+<p><a name="setsar"></a>
+</p><a name="setsar-1"></a>
+<h2 class="section"><a href="libavfilter.html#toc-setsar-1">8.30 setsar</a></h2>
+
+<p>Set the Sample (aka Pixel) Aspect Ratio for the filter output video.
+</p>
+<p>Note that as a consequence of the application of this filter, the
+output display aspect ratio will change according to the following
+equation:
+<em>DAR = HORIZONTAL_RESOLUTION / VERTICAL_RESOLUTION * SAR</em>
+</p>
+<p>Keep in mind that the sample aspect ratio set by this filter may be
+changed by later filters in the filterchain, e.g. if another &quot;setsar&quot;
+or a &quot;setdar&quot; filter is applied.
+</p>
+<p>The filter accepts a parameter string which represents the wanted
+sample aspect ratio.
+The parameter can be a floating point number string, or an expression
+of the form <var>num</var>:<var>den</var>, where <var>num</var> and <var>den</var> are the
+numerator and denominator of the aspect ratio.
+If the parameter is not specified, it is assumed the value &quot;0:1&quot;.
+</p>
+<p>For example to change the sample aspect ratio to 10:11, specify:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">setsar=10:11
+</pre></td></tr></table>
+
+<a name="settb"></a>
+<h2 class="section"><a href="libavfilter.html#toc-settb">8.31 settb</a></h2>
+
+<p>Set the timebase to use for the output frames timestamps.
+It is mainly useful for testing timebase configuration.
+</p>
+<p>It accepts in input an arithmetic expression representing a rational.
+The expression can contain the constants &quot;PI&quot;, &quot;E&quot;, &quot;PHI&quot;, &quot;AVTB&quot; (the
+default timebase), and &quot;intb&quot; (the input timebase).
+</p>
+<p>The default value for the input is &quot;intb&quot;.
+</p>
+<p>Follow some examples.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"># set the timebase to 1/25
+settb=1/25
+
+# set the timebase to 1/10
+settb=0.1
+
+#set the timebase to 1001/1000
+settb=1+0.001
+
+#set the timebase to 2*intb
+settb=2*intb
+
+#set the default timebase value
+settb=AVTB
+</pre></td></tr></table>
+
+<a name="showinfo"></a>
+<h2 class="section"><a href="libavfilter.html#toc-showinfo">8.32 showinfo</a></h2>
+
+<p>Show a line containing various information for each input video frame.
+The input video is not modified.
+</p>
+<p>The shown line contains a sequence of key/value pairs of the form
+<var>key</var>:<var>value</var>.
+</p>
+<p>A description of each shown parameter follows:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>sequential number of the input frame, starting from 0
+</p>
+</dd>
+<dt> &lsquo;<samp>pts</samp>&rsquo;</dt>
+<dd><p>Presentation TimeStamp of the input frame, expressed as a number of
+time base units. The time base unit depends on the filter input pad.
+</p>
+</dd>
+<dt> &lsquo;<samp>pts_time</samp>&rsquo;</dt>
+<dd><p>Presentation TimeStamp of the input frame, expressed as a number of
+seconds
+</p>
+</dd>
+<dt> &lsquo;<samp>pos</samp>&rsquo;</dt>
+<dd><p>position of the frame in the input stream, -1 if this information in
+unavailable and/or meanigless (for example in case of synthetic video)
+</p>
+</dd>
+<dt> &lsquo;<samp>fmt</samp>&rsquo;</dt>
+<dd><p>pixel format name
+</p>
+</dd>
+<dt> &lsquo;<samp>sar</samp>&rsquo;</dt>
+<dd><p>sample aspect ratio of the input frame, expressed in the form
+<var>num</var>/<var>den</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>s</samp>&rsquo;</dt>
+<dd><p>size of the input frame, expressed in the form
+<var>width</var>x<var>height</var>
+</p>
+</dd>
+<dt> &lsquo;<samp>i</samp>&rsquo;</dt>
+<dd><p>interlaced mode (&quot;P&quot; for &quot;progressive&quot;, &quot;T&quot; for top field first, &quot;B&quot;
+for bottom field first)
+</p>
+</dd>
+<dt> &lsquo;<samp>iskey</samp>&rsquo;</dt>
+<dd><p>1 if the frame is a key frame, 0 otherwise
+</p>
+</dd>
+<dt> &lsquo;<samp>type</samp>&rsquo;</dt>
+<dd><p>picture type of the input frame (&quot;I&quot; for an I-frame, &quot;P&quot; for a
+P-frame, &quot;B&quot; for a B-frame, &quot;?&quot; for unknown type).
+Check also the documentation of the <code>AVPictureType</code> enum and of
+the <code>av_get_picture_type_char</code> function defined in
+&lsquo;<tt>libavutil/avutil.h</tt>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<samp>checksum</samp>&rsquo;</dt>
+<dd><p>Adler-32 checksum of all the planes of the input frame
+</p>
+</dd>
+<dt> &lsquo;<samp>plane_checksum</samp>&rsquo;</dt>
+<dd><p>Adler-32 checksum of each plane of the input frame, expressed in the form
+&quot;[<var>c0</var> <var>c1</var> <var>c2</var> <var>c3</var>]&quot;
+</p></dd>
+</dl>
+
+<a name="slicify"></a>
+<h2 class="section"><a href="libavfilter.html#toc-slicify">8.33 slicify</a></h2>
+
+<p>Pass the images of input video on to next video filter as multiple
+slices.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./ffmpeg -i in.avi -vf &quot;slicify=32&quot; out.avi
+</pre></td></tr></table>
+
+<p>The filter accepts the slice height as parameter. If the parameter is
+not specified it will use the default value of 16.
+</p>
+<p>Adding this in the beginning of filter chains should make filtering
+faster due to better use of the memory cache.
+</p>
+<a name="split"></a>
+<h2 class="section"><a href="libavfilter.html#toc-split">8.34 split</a></h2>
+
+<p>Pass on the input video to two outputs. Both outputs are identical to
+the input video.
+</p>
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[in] split [splitout1][splitout2];
+[splitout1] crop=100:100:0:0    [cropout];
+[splitout2] pad=200:200:100:100 [padout];
+</pre></td></tr></table>
+
+<p>will create two separate outputs from the same input, one cropped and
+one padded.
+</p>
+<a name="transpose"></a>
+<h2 class="section"><a href="libavfilter.html#toc-transpose">8.35 transpose</a></h2>
+
+<p>Transpose rows with columns in the input video and optionally flip it.
+</p>
+<p>It accepts a parameter representing an integer, which can assume the
+values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>Rotate by 90 degrees counterclockwise and vertically flip (default), that is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">L.R     L.l
+. . -&gt;  . .
+l.r     R.r
+</pre></td></tr></table>
+
+</dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>Rotate by 90 degrees clockwise, that is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">L.R     l.L
+. . -&gt;  . .
+l.r     r.R
+</pre></td></tr></table>
+
+</dd>
+<dt> &lsquo;<samp>2</samp>&rsquo;</dt>
+<dd><p>Rotate by 90 degrees counterclockwise, that is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">L.R     R.r
+. . -&gt;  . .
+l.r     L.l
+</pre></td></tr></table>
+
+</dd>
+<dt> &lsquo;<samp>3</samp>&rsquo;</dt>
+<dd><p>Rotate by 90 degrees clockwise and vertically flip, that is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">L.R     r.R
+. . -&gt;  . .
+l.r     l.L
+</pre></td></tr></table>
+</dd>
+</dl>
+
+<a name="unsharp"></a>
+<h2 class="section"><a href="libavfilter.html#toc-unsharp">8.36 unsharp</a></h2>
+
+<p>Sharpen or blur the input video.
+</p>
+<p>It accepts the following parameters:
+<var>luma_msize_x</var>:<var>luma_msize_y</var>:<var>luma_amount</var>:<var>chroma_msize_x</var>:<var>chroma_msize_y</var>:<var>chroma_amount</var>
+</p>
+<p>Negative values for the amount will blur the input video, while positive
+values will sharpen. All parameters are optional and default to the
+equivalent of the string &rsquo;5:5:1.0:5:5:0.0&rsquo;.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>luma_msize_x</samp>&rsquo;</dt>
+<dd><p>Set the luma matrix horizontal size. It can be an integer between 3
+and 13, default value is 5.
+</p>
+</dd>
+<dt> &lsquo;<samp>luma_msize_y</samp>&rsquo;</dt>
+<dd><p>Set the luma matrix vertical size. It can be an integer between 3
+and 13, default value is 5.
+</p>
+</dd>
+<dt> &lsquo;<samp>luma_amount</samp>&rsquo;</dt>
+<dd><p>Set the luma effect strength. It can be a float number between -2.0
+and 5.0, default value is 1.0.
+</p>
+</dd>
+<dt> &lsquo;<samp>chroma_msize_x</samp>&rsquo;</dt>
+<dd><p>Set the chroma matrix horizontal size. It can be an integer between 3
+and 13, default value is 5.
+</p>
+</dd>
+<dt> &lsquo;<samp>chroma_msize_y</samp>&rsquo;</dt>
+<dd><p>Set the chroma matrix vertical size. It can be an integer between 3
+and 13, default value is 5.
+</p>
+</dd>
+<dt> &lsquo;<samp>chroma_amount</samp>&rsquo;</dt>
+<dd><p>Set the chroma effect strength. It can be a float number between -2.0
+and 5.0, default value is 0.0.
+</p>
+</dd>
+</dl>
+
+<table><tr><td>&nbsp;</td><td><pre class="example"># Strong luma sharpen effect parameters
+unsharp=7:7:2.5
+
+# Strong blur of both luma and chroma parameters
+unsharp=7:7:-2:7:7:-2
+
+# Use the default values with <code>ffmpeg</code>
+./ffmpeg -i in.avi -vf &quot;unsharp&quot; out.mp4
+</pre></td></tr></table>
+
+<a name="vflip"></a>
+<h2 class="section"><a href="libavfilter.html#toc-vflip">8.37 vflip</a></h2>
+
+<p>Flip the input video vertically.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./ffmpeg -i in.avi -vf &quot;vflip&quot; out.avi
+</pre></td></tr></table>
+
+<a name="yadif"></a>
+<h2 class="section"><a href="libavfilter.html#toc-yadif">8.38 yadif</a></h2>
+
+<p>Deinterlace the input video (&quot;yadif&quot; means &quot;yet another deinterlacing
+filter&quot;).
+</p>
+<p>It accepts the optional parameters: <var>mode</var>:<var>parity</var>:<var>auto</var>.
+</p>
+<p><var>mode</var> specifies the interlacing mode to adopt, accepts one of the
+following values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>output 1 frame for each frame
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>output 1 frame for each field
+</p></dd>
+<dt> &lsquo;<samp>2</samp>&rsquo;</dt>
+<dd><p>like 0 but skips spatial interlacing check
+</p></dd>
+<dt> &lsquo;<samp>3</samp>&rsquo;</dt>
+<dd><p>like 1 but skips spatial interlacing check
+</p></dd>
+</dl>
+
+<p>Default value is 0.
+</p>
+<p><var>parity</var> specifies the picture field parity assumed for the input
+interlaced video, accepts one of the following values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>assume top field first
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>assume bottom field first
+</p></dd>
+<dt> &lsquo;<samp>-1</samp>&rsquo;</dt>
+<dd><p>enable automatic detection
+</p></dd>
+</dl>
+
+<p>Default value is -1.
+If interlacing is unknown or decoder does not export this information,
+top field first will be assumed.
+</p>
+<p><var>auto</var> specifies if deinterlacer should trust the interlaced flag
+and only deinterlace frames marked as interlaced
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>deinterlace all frames
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>only deinterlace frames marked as interlaced
+</p></dd>
+</dl>
+
+<p>Default value is 0.
+</p>
+
+<a name="Video-Sources"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Video-Sources">9. Video Sources</a></h1>
+
+<p>Below is a description of the currently available video sources.
+</p>
+<a name="buffer"></a>
+<h2 class="section"><a href="libavfilter.html#toc-buffer">9.1 buffer</a></h2>
+
+<p>Buffer video frames, and make them available to the filter chain.
+</p>
+<p>This source is mainly intended for a programmatic use, in particular
+through the interface defined in &lsquo;<tt>libavfilter/vsrc_buffer.h</tt>&rsquo;.
+</p>
+<p>It accepts the following parameters:
+<var>width</var>:<var>height</var>:<var>pix_fmt_string</var>:<var>timebase_num</var>:<var>timebase_den</var>:<var>sample_aspect_ratio_num</var>:<var>sample_aspect_ratio.den</var>:<var>scale_params</var>
+</p>
+<p>All the parameters but <var>scale_params</var> need to be explicitely
+defined.
+</p>
+<p>Follows the list of the accepted parameters.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>width, height</samp>&rsquo;</dt>
+<dd><p>Specify the width and height of the buffered video frames.
+</p>
+</dd>
+<dt> &lsquo;<samp>pix_fmt_string</samp>&rsquo;</dt>
+<dd><p>A string representing the pixel format of the buffered video frames.
+It may be a number corresponding to a pixel format, or a pixel format
+name.
+</p>
+</dd>
+<dt> &lsquo;<samp>timebase_num, timebase_den</samp>&rsquo;</dt>
+<dd><p>Specify numerator and denomitor of the timebase assumed by the
+timestamps of the buffered frames.
+</p>
+</dd>
+<dt> &lsquo;<samp>sample_aspect_ratio.num, sample_aspect_ratio.den</samp>&rsquo;</dt>
+<dd><p>Specify numerator and denominator of the sample aspect ratio assumed
+by the video frames.
+</p>
+</dd>
+<dt> &lsquo;<samp>scale_params</samp>&rsquo;</dt>
+<dd><p>Specify the optional parameters to be used for the scale filter which
+is automatically inserted when an input change is detected in the
+input size or format.
+</p></dd>
+</dl>
+
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">buffer=320:240:yuv410p:1:24:1:1
+</pre></td></tr></table>
+
+<p>will instruct the source to accept video frames with size 320x240 and
+with format &quot;yuv410p&quot;, assuming 1/24 as the timestamps timebase and
+square pixels (1:1 sample aspect ratio).
+Since the pixel format with name &quot;yuv410p&quot; corresponds to the number 6
+(check the enum PixelFormat definition in &lsquo;<tt>libavutil/pixfmt.h</tt>&rsquo;),
+this example corresponds to:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">buffer=320:240:6:1:24:1:1
+</pre></td></tr></table>
+
+<a name="color"></a>
+<h2 class="section"><a href="libavfilter.html#toc-color">9.2 color</a></h2>
+
+<p>Provide an uniformly colored input.
+</p>
+<p>It accepts the following parameters:
+<var>color</var>:<var>frame_size</var>:<var>frame_rate</var>
+</p>
+<p>Follows the description of the accepted parameters.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>color</samp>&rsquo;</dt>
+<dd><p>Specify the color of the source. It can be the name of a color (case
+insensitive match) or a 0xRRGGBB[AA] sequence, possibly followed by an
+alpha specifier. The default value is &quot;black&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>frame_size</samp>&rsquo;</dt>
+<dd><p>Specify the size of the sourced video, it may be a string of the form
+<var>width</var>x<var>heigth</var>, or the name of a size abbreviation. The
+default value is &quot;320x240&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>frame_rate</samp>&rsquo;</dt>
+<dd><p>Specify the frame rate of the sourced video, as the number of frames
+generated per second. It has to be a string in the format
+<var>frame_rate_num</var>/<var>frame_rate_den</var>, an integer number, a float
+number or a valid video frame rate abbreviation. The default value is
+&quot;25&quot;.
+</p>
+</dd>
+</dl>
+
+<p>For example the following graph description will generate a red source
+with an opacity of 0.2, with size &quot;qcif&quot; and a frame rate of 10
+frames per second, which will be overlayed over the source connected
+to the pad with identifier &quot;in&quot;.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&quot;color=red@0.2:qcif:10 [color]; [in][color] overlay [out]&quot;
+</pre></td></tr></table>
+
+<a name="movie"></a>
+<h2 class="section"><a href="libavfilter.html#toc-movie">9.3 movie</a></h2>
+
+<p>Read a video stream from a movie container.
+</p>
+<p>It accepts the syntax: <var>movie_name</var>[:<var>options</var>] where
+<var>movie_name</var> is the name of the resource to read (not necessarily
+a file but also a device or a stream accessed through some protocol),
+and <var>options</var> is an optional sequence of <var>key</var>=<var>value</var>
+pairs, separated by &quot;:&quot;.
+</p>
+<p>The description of the accepted options follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>format_name, f</samp>&rsquo;</dt>
+<dd><p>Specifies the format assumed for the movie to read, and can be either
+the name of a container or an input device. If not specified the
+format is guessed from <var>movie_name</var> or by probing.
+</p>
+</dd>
+<dt> &lsquo;<samp>seek_point, sp</samp>&rsquo;</dt>
+<dd><p>Specifies the seek point in seconds, the frames will be output
+starting from this seek point, the parameter is evaluated with
+<code>av_strtod</code> so the numerical value may be suffixed by an IS
+postfix. Default value is &quot;0&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>stream_index, si</samp>&rsquo;</dt>
+<dd><p>Specifies the index of the video stream to read. If the value is -1,
+the best suited video stream will be automatically selected. Default
+value is &quot;-1&quot;.
+</p>
+</dd>
+</dl>
+
+<p>This filter allows to overlay a second video on top of main input of
+a filtergraph as shown in this graph:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">input -----------&gt; deltapts0 --&gt; overlay --&gt; output
+                                    ^
+                                    |
+movie --&gt; scale--&gt; deltapts1 -------+
+</pre></td></tr></table>
+
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># skip 3.2 seconds from the start of the avi file in.avi, and overlay it
+# on top of the input labelled as &quot;in&quot;.
+movie=in.avi:seek_point=3.2, scale=180:-1, setpts=PTS-STARTPTS [movie];
+[in] setpts=PTS-STARTPTS, [movie] overlay=16:16 [out]
+
+# read from a video4linux2 device, and overlay it on top of the input
+# labelled as &quot;in&quot;
+movie=/dev/video0:f=video4linux2, scale=180:-1, setpts=PTS-STARTPTS [movie];
+[in] setpts=PTS-STARTPTS, [movie] overlay=16:16 [out]
+
+</pre></td></tr></table>
+
+<a name="mptestsrc"></a>
+<h2 class="section"><a href="libavfilter.html#toc-mptestsrc">9.4 mptestsrc</a></h2>
+
+<p>Generate various test patterns, as generated by the MPlayer test filter.
+</p>
+<p>The size of the generated video is fixed, and is 256x256.
+This source is useful in particular for testing encoding features.
+</p>
+<p>This source accepts an optional sequence of <var>key</var>=<var>value</var> pairs,
+separated by &quot;:&quot;. The description of the accepted options follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>rate, r</samp>&rsquo;</dt>
+<dd><p>Specify the frame rate of the sourced video, as the number of frames
+generated per second. It has to be a string in the format
+<var>frame_rate_num</var>/<var>frame_rate_den</var>, an integer number, a float
+number or a valid video frame rate abbreviation. The default value is
+&quot;25&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>duration, d</samp>&rsquo;</dt>
+<dd><p>Set the video duration of the sourced video. The accepted syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[-]HH[:MM[:SS[.m...]]]
+[-]S+[.m...]
+</pre></td></tr></table>
+<p>See also the function <code>av_parse_time()</code>.
+</p>
+<p>If not specified, or the expressed duration is negative, the video is
+supposed to be generated forever.
+</p>
+</dd>
+<dt> &lsquo;<samp>test, t</samp>&rsquo;</dt>
+<dd>
+<p>Set the number or the name of the test to perform. Supported tests are:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>dc_luma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>dc_chroma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>freq_luma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>freq_chroma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>amp_luma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>amp_chroma</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>cbp</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>mv</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>ring1</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>ring2</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>all</samp>&rsquo;</dt>
+</dl>
+
+<p>Default value is &quot;all&quot;, which will cycle through the list of all tests.
+</p></dd>
+</dl>
+
+<p>For example the following:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">testsrc=t=dc_luma
+</pre></td></tr></table>
+
+<p>will generate a &quot;dc_luma&quot; test pattern.
+</p>
+<a name="nullsrc"></a>
+<h2 class="section"><a href="libavfilter.html#toc-nullsrc">9.5 nullsrc</a></h2>
+
+<p>Null video source, never return images. It is mainly useful as a
+template and to be employed in analysis / debugging tools.
+</p>
+<p>It accepts as optional parameter a string of the form
+<var>width</var>:<var>height</var>:<var>timebase</var>.
+</p>
+<p><var>width</var> and <var>height</var> specify the size of the configured
+source. The default values of <var>width</var> and <var>height</var> are
+respectively 352 and 288 (corresponding to the CIF size format).
+</p>
+<p><var>timebase</var> specifies an arithmetic expression representing a
+timebase. The expression can contain the constants &quot;PI&quot;, &quot;E&quot;, &quot;PHI&quot;,
+&quot;AVTB&quot; (the default timebase), and defaults to the value &quot;AVTB&quot;.
+</p>
+<a name="frei0r_005fsrc"></a>
+<h2 class="section"><a href="libavfilter.html#toc-frei0r_005fsrc">9.6 frei0r_src</a></h2>
+
+<p>Provide a frei0r source.
+</p>
+<p>To enable compilation of this filter you need to install the frei0r
+header and configure FFmpeg with &ndash;enable-frei0r.
+</p>
+<p>The source supports the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"><var>size</var>:<var>rate</var>:<var>src_name</var>[{=|:}<var>param1</var>:<var>param2</var>:...:<var>paramN</var>]
+</pre></td></tr></table>
+
+<p><var>size</var> is the size of the video to generate, may be a string of the
+form <var>width</var>x<var>height</var> or a frame size abbreviation.
+<var>rate</var> is the rate of the video to generate, may be a string of
+the form <var>num</var>/<var>den</var> or a frame rate abbreviation.
+<var>src_name</var> is the name to the frei0r source to load. For more
+information regarding frei0r and how to set the parameters read the
+section <a href="#frei0r">frei0r</a> in the description of the video filters.
+</p>
+<p>Some examples follow:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># generate a frei0r partik0l source with size 200x200 and framerate 10
+# which is overlayed on the overlay filter main input
+frei0r_src=200x200:10:partik0l=1234 [overlay]; [in][overlay] overlay
+</pre></td></tr></table>
+
+<a name="rgbtestsrc_002c-testsrc"></a>
+<h2 class="section"><a href="libavfilter.html#toc-rgbtestsrc_002c-testsrc">9.7 rgbtestsrc, testsrc</a></h2>
+
+<p>The <code>rgbtestsrc</code> source generates an RGB test pattern useful for
+detecting RGB vs BGR issues. You should see a red, green and blue
+stripe from top to bottom.
+</p>
+<p>The <code>testsrc</code> source generates a test video pattern, showing a
+color pattern, a scrolling gradient and a timestamp. This is mainly
+intended for testing purposes.
+</p>
+<p>Both sources accept an optional sequence of <var>key</var>=<var>value</var> pairs,
+separated by &quot;:&quot;. The description of the accepted options follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>size, s</samp>&rsquo;</dt>
+<dd><p>Specify the size of the sourced video, it may be a string of the form
+<var>width</var>x<var>heigth</var>, or the name of a size abbreviation. The
+default value is &quot;320x240&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>rate, r</samp>&rsquo;</dt>
+<dd><p>Specify the frame rate of the sourced video, as the number of frames
+generated per second. It has to be a string in the format
+<var>frame_rate_num</var>/<var>frame_rate_den</var>, an integer number, a float
+number or a valid video frame rate abbreviation. The default value is
+&quot;25&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>sar</samp>&rsquo;</dt>
+<dd><p>Set the sample aspect ratio of the sourced video.
+</p>
+</dd>
+<dt> &lsquo;<samp>duration</samp>&rsquo;</dt>
+<dd><p>Set the video duration of the sourced video. The accepted syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[-]HH[:MM[:SS[.m...]]]
+[-]S+[.m...]
+</pre></td></tr></table>
+<p>See also the function <code>av_parse_time()</code>.
+</p>
+<p>If not specified, or the expressed duration is negative, the video is
+supposed to be generated forever.
+</p></dd>
+</dl>
+
+<p>For example the following:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">testsrc=duration=5.3:size=qcif:rate=10
+</pre></td></tr></table>
+
+<p>will generate a video with a duration of 5.3 seconds, with size
+176x144 and a framerate of 10 frames per second.
+</p>
+
+<a name="Video-Sinks"></a>
+<h1 class="chapter"><a href="libavfilter.html#toc-Video-Sinks">10. Video Sinks</a></h1>
+
+<p>Below is a description of the currently available video sinks.
+</p>
+<a name="buffersink"></a>
+<h2 class="section"><a href="libavfilter.html#toc-buffersink">10.1 buffersink</a></h2>
+
+<p>Buffer video frames, and make them available to the end of the filter
+graph.
+</p>
+<p>This sink is mainly intended for a programmatic use, in particular
+through the interface defined in &lsquo;<tt>libavfilter/vsink_buffer.h</tt>&rsquo;.
+</p>
+<p>It does not require a string parameter in input, but you need to
+specify a pointer to a list of supported pixel formats terminated by
+-1 in the opaque parameter provided to <code>avfilter_init_filter</code>
+when initializing this sink.
+</p>
+<a name="nullsink"></a>
+<h2 class="section"><a href="libavfilter.html#toc-nullsink">10.2 nullsink</a></h2>
+
+<p>Null video sink, do absolutely nothing with the input video. It is
+mainly useful as a template and to be employed in analysis / debugging
+tools.
+</p>
+
+
+<hr size="1">
+<p>
+ <font size="-1">
+  This document was generated by <em>Kyle Schwarz</em> on <em>August 28, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

@@ -1,0 +1,1456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on August 28, 2011 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>ffprobe Documentation</title>
+
+<meta name="description" content="ffprobe Documentation">
+<meta name="keywords" content="ffprobe Documentation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="SEC_Top"></a>
+<h1 class="settitle">ffprobe Documentation</h1>
+
+<a name="SEC_Contents"></a>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="toc-Synopsis" href="#Synopsis">1. Synopsis</a></li>
+  <li><a name="toc-Description" href="#Description">2. Description</a></li>
+  <li><a name="toc-Options-3" href="#Options-3">3. Options</a>
+  <ul class="toc">
+    <li><a name="toc-Generic-options" href="#Generic-options">3.1 Generic options</a></li>
+    <li><a name="toc-AVOptions" href="#AVOptions">3.2 AVOptions</a></li>
+    <li><a name="toc-Main-options" href="#Main-options">3.3 Main options</a></li>
+  </ul></li>
+  <li><a name="toc-Decoders" href="#Decoders">4. Decoders</a></li>
+  <li><a name="toc-Video-Decoders" href="#Video-Decoders">5. Video Decoders</a>
+  <ul class="toc">
+    <li><a name="toc-rawvideo" href="#rawvideo">5.1 rawvideo</a>
+    <ul class="toc">
+      <li><a name="toc-Options-2" href="#Options-2">5.1.1 Options</a></li>
+    </ul>
+</li>
+  </ul></li>
+  <li><a name="toc-Demuxers" href="#Demuxers">6. Demuxers</a>
+  <ul class="toc">
+    <li><a name="toc-image2" href="#image2">6.1 image2</a></li>
+    <li><a name="toc-applehttp" href="#applehttp">6.2 applehttp</a></li>
+  </ul></li>
+  <li><a name="toc-Protocols" href="#Protocols">7. Protocols</a>
+  <ul class="toc">
+    <li><a name="toc-applehttp-1" href="#applehttp-1">7.1 applehttp</a></li>
+    <li><a name="toc-concat" href="#concat">7.2 concat</a></li>
+    <li><a name="toc-file" href="#file">7.3 file</a></li>
+    <li><a name="toc-gopher" href="#gopher">7.4 gopher</a></li>
+    <li><a name="toc-http" href="#http">7.5 http</a></li>
+    <li><a name="toc-mmst" href="#mmst">7.6 mmst</a></li>
+    <li><a name="toc-mmsh" href="#mmsh">7.7 mmsh</a></li>
+    <li><a name="toc-md5" href="#md5">7.8 md5</a></li>
+    <li><a name="toc-pipe" href="#pipe">7.9 pipe</a></li>
+    <li><a name="toc-rtmp" href="#rtmp">7.10 rtmp</a></li>
+    <li><a name="toc-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte" href="#rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">7.11 rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></li>
+    <li><a name="toc-rtp" href="#rtp">7.12 rtp</a></li>
+    <li><a name="toc-rtsp" href="#rtsp">7.13 rtsp</a></li>
+    <li><a name="toc-sap" href="#sap">7.14 sap</a>
+    <ul class="toc">
+      <li><a name="toc-Muxer" href="#Muxer">7.14.1 Muxer</a></li>
+      <li><a name="toc-Demuxer" href="#Demuxer">7.14.2 Demuxer</a></li>
+    </ul></li>
+    <li><a name="toc-tcp" href="#tcp">7.15 tcp</a></li>
+    <li><a name="toc-udp" href="#udp">7.16 udp</a></li>
+  </ul></li>
+  <li><a name="toc-Input-Devices" href="#Input-Devices">8. Input Devices</a>
+  <ul class="toc">
+    <li><a name="toc-alsa" href="#alsa">8.1 alsa</a></li>
+    <li><a name="toc-bktr" href="#bktr">8.2 bktr</a></li>
+    <li><a name="toc-dv1394" href="#dv1394">8.3 dv1394</a></li>
+    <li><a name="toc-fbdev" href="#fbdev">8.4 fbdev</a></li>
+    <li><a name="toc-jack" href="#jack">8.5 jack</a></li>
+    <li><a name="toc-lavfi" href="#lavfi">8.6 lavfi</a>
+    <ul class="toc">
+      <li><a name="toc-Options-1" href="#Options-1">8.6.1 Options</a></li>
+      <li><a name="toc-Examples" href="#Examples">8.6.2 Examples</a></li>
+    </ul></li>
+    <li><a name="toc-libdc1394" href="#libdc1394">8.7 libdc1394</a></li>
+    <li><a name="toc-openal" href="#openal">8.8 openal</a>
+    <ul class="toc">
+      <li><a name="toc-Options" href="#Options">8.8.1 Options</a></li>
+      <li><a name="toc-Examples-1" href="#Examples-1">8.8.2 Examples</a></li>
+    </ul></li>
+    <li><a name="toc-oss" href="#oss">8.9 oss</a></li>
+    <li><a name="toc-sndio" href="#sndio">8.10 sndio</a></li>
+    <li><a name="toc-video4linux-and-video4linux2" href="#video4linux-and-video4linux2">8.11 video4linux and video4linux2</a></li>
+    <li><a name="toc-vfwcap" href="#vfwcap">8.12 vfwcap</a></li>
+    <li><a name="toc-x11grab" href="#x11grab">8.13 x11grab</a>
+    <ul class="toc">
+      <li><a name="toc-follow_005fmouse-AVOption" href="#follow_005fmouse-AVOption">8.13.1 <var>follow_mouse</var> AVOption</a></li>
+      <li><a name="toc-show_005fregion-AVOption" href="#show_005fregion-AVOption">8.13.2 <var>show_region</var> AVOption</a></li>
+    </ul>
+</li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<hr size="1">
+<a name="Synopsis"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Synopsis">1. Synopsis</a></h1>
+
+<p>The generic syntax is:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffprobe [options] [&lsquo;<tt>input_file</tt>&rsquo;]
+</pre></td></tr></table>
+
+<a name="Description"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Description">2. Description</a></h1>
+
+<p>ffprobe gathers information from multimedia streams and prints it in
+human- and machine-readable fashion.
+</p>
+<p>For example it can be used to check the format of the container used
+by a multimedia stream and the format and type of each media stream
+contained in it.
+</p>
+<p>If a filename is specified in input, ffprobe will try to open and
+probe the file content. If the file cannot be opened or recognized as
+a multimedia file, a positive exit code is returned.
+</p>
+<p>ffprobe may be employed both as a standalone application or in
+combination with a textual filter, which may perform more
+sophisticated processing, e.g. statistical processing or plotting.
+</p>
+<p>Options are used to list some of the formats supported by ffprobe or
+for specifying which information to display, and for setting how
+ffprobe will show it.
+</p>
+<p>ffprobe output is designed to be easily parsable by a textual filter,
+and consists of one or more sections of the form:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[SECTION]
+key1=val1
+...
+keyN=valN
+[/SECTION]
+</pre></td></tr></table>
+
+<p>Metadata tags stored in the container or in the streams are recognized
+and printed in the corresponding &quot;FORMAT&quot; or &quot;STREAM&quot; section, and
+are prefixed by the string &quot;TAG:&quot;.
+</p>
+
+<a name="Options-3"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Options-3">3. Options</a></h1>
+
+<p>All the numerical options, if not specified otherwise, accept in input
+a string representing a number, which may contain one of the
+International System number postfixes, for example &rsquo;K&rsquo;, &rsquo;M&rsquo;, &rsquo;G&rsquo;.
+If &rsquo;i&rsquo; is appended after the postfix, powers of 2 are used instead of
+powers of 10. The &rsquo;B&rsquo; postfix multiplies the value for 8, and can be
+appended after another postfix or used alone. This allows using for
+example &rsquo;KB&rsquo;, &rsquo;MiB&rsquo;, &rsquo;G&rsquo; and &rsquo;B&rsquo; as postfix.
+</p>
+<p>Options which do not take arguments are boolean options, and set the
+corresponding value to true. They can be set to false by prefixing
+with &quot;no&quot; the option name, for example using &quot;-nofoo&quot; in the
+commandline will set to false the boolean option with name &quot;foo&quot;.
+</p>
+<a name="Generic-options"></a>
+<h2 class="section"><a href="ffprobe.html#toc-Generic-options">3.1 Generic options</a></h2>
+
+<p>These options are shared amongst the ff* tools.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>-L</samp>&rsquo;</dt>
+<dd><p>Show license.
+</p>
+</dd>
+<dt> &lsquo;<samp>-h, -?, -help, --help</samp>&rsquo;</dt>
+<dd><p>Show help.
+</p>
+</dd>
+<dt> &lsquo;<samp>-version</samp>&rsquo;</dt>
+<dd><p>Show version.
+</p>
+</dd>
+<dt> &lsquo;<samp>-formats</samp>&rsquo;</dt>
+<dd><p>Show available formats.
+</p>
+<p>The fields preceding the format names have the following meanings:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>D</samp>&rsquo;</dt>
+<dd><p>Decoding available
+</p></dd>
+<dt> &lsquo;<samp>E</samp>&rsquo;</dt>
+<dd><p>Encoding available
+</p></dd>
+</dl>
+
+</dd>
+<dt> &lsquo;<samp>-codecs</samp>&rsquo;</dt>
+<dd><p>Show available codecs.
+</p>
+<p>The fields preceding the codec names have the following meanings:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>D</samp>&rsquo;</dt>
+<dd><p>Decoding available
+</p></dd>
+<dt> &lsquo;<samp>E</samp>&rsquo;</dt>
+<dd><p>Encoding available
+</p></dd>
+<dt> &lsquo;<samp>V/A/S</samp>&rsquo;</dt>
+<dd><p>Video/audio/subtitle codec
+</p></dd>
+<dt> &lsquo;<samp>S</samp>&rsquo;</dt>
+<dd><p>Codec supports slices
+</p></dd>
+<dt> &lsquo;<samp>D</samp>&rsquo;</dt>
+<dd><p>Codec supports direct rendering
+</p></dd>
+<dt> &lsquo;<samp>T</samp>&rsquo;</dt>
+<dd><p>Codec can handle input truncated at random locations instead of only at frame boundaries
+</p></dd>
+</dl>
+
+</dd>
+<dt> &lsquo;<samp>-bsfs</samp>&rsquo;</dt>
+<dd><p>Show available bitstream filters.
+</p>
+</dd>
+<dt> &lsquo;<samp>-protocols</samp>&rsquo;</dt>
+<dd><p>Show available protocols.
+</p>
+</dd>
+<dt> &lsquo;<samp>-filters</samp>&rsquo;</dt>
+<dd><p>Show available libavfilter filters.
+</p>
+</dd>
+<dt> &lsquo;<samp>-pix_fmts</samp>&rsquo;</dt>
+<dd><p>Show available pixel formats.
+</p>
+</dd>
+<dt> &lsquo;<samp>-loglevel <var>loglevel</var></samp>&rsquo;</dt>
+<dd><p>Set the logging level used by the library.
+<var>loglevel</var> is a number or a string containing one of the following values:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>quiet</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>panic</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>fatal</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>error</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>warning</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>info</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>verbose</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>debug</samp>&rsquo;</dt>
+</dl>
+
+<p>By default the program logs to stderr, if coloring is supported by the
+terminal, colors are used to mark errors and warnings. Log coloring
+can be disabled setting the environment variable
+<code>FFMPEG_FORCE_NOCOLOR</code> or <code>NO_COLOR</code>, or can be forced setting
+the environment variable <code>FFMPEG_FORCE_COLOR</code>.
+The use of the environment variable <code>NO_COLOR</code> is deprecated and
+will be dropped in a following FFmpeg version.
+</p>
+</dd>
+</dl>
+
+<a name="AVOptions"></a>
+<h2 class="section"><a href="ffprobe.html#toc-AVOptions">3.2 AVOptions</a></h2>
+
+<p>These options are provided directly by the libavformat, libavdevice and
+libavcodec libraries. To see the list of available AVOptions, use the
+&lsquo;<samp>-help</samp>&rsquo; option. They are separated into two categories:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>generic</samp>&rsquo;</dt>
+<dd><p>These options can be set for any container, codec or device. Generic options are
+listed under AVFormatContext options for containers/devices and under
+AVCodecContext options for codecs.
+</p></dd>
+<dt> &lsquo;<samp>private</samp>&rsquo;</dt>
+<dd><p>These options are specific to the given container, device or codec. Private
+options are listed under their corresponding containers/devices/codecs.
+</p></dd>
+</dl>
+
+<p>For example to write an ID3v2.3 header instead of a default ID3v2.4 to
+an MP3 file, use the &lsquo;<samp>id3v2_version</samp>&rsquo; private option of the MP3
+muxer:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i input.flac -id3v2_version 3 out.mp3
+</pre></td></tr></table>
+
+<p>You can precisely specify which stream(s) should the codec AVOption apply to by
+appending a stream specifier of the form
+&lsquo;<samp>[:<var>stream_type</var>][:<var>stream_index</var>]</samp>&rsquo; to the option name.
+<var>stream_type</var> is &rsquo;v&rsquo; for video, &rsquo;a&rsquo; for audio and &rsquo;s&rsquo; for subtitle streams.
+<var>stream_index</var> is a global stream index when <var>stream_type</var> isn&rsquo;t
+given, otherwise it counts streams of the given type only. As always, the index
+is zero-based. For example
+</p><table><tr><td>&nbsp;</td><td><pre class="example">-foo -- applies to all applicable streams
+-foo:v -- applies to all video streams
+-foo:a:2 -- applies to the third audio stream
+-foo:0 -- applies to the first stream
+</pre></td></tr></table>
+
+<p>Note -nooption syntax cannot be used for boolean AVOptions, use -option
+0/-option 1.
+</p>
+<p>Note2 old undocumented way of specifying per-stream AVOptions by prepending
+v/a/s to the options name is now obsolete and will be removed soon.
+</p>
+<a name="Main-options"></a>
+<h2 class="section"><a href="ffprobe.html#toc-Main-options">3.3 Main options</a></h2>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>-f <var>format</var></samp>&rsquo;</dt>
+<dd><p>Force format to use.
+</p>
+</dd>
+<dt> &lsquo;<samp>-unit</samp>&rsquo;</dt>
+<dd><p>Show the unit of the displayed values.
+</p>
+</dd>
+<dt> &lsquo;<samp>-prefix</samp>&rsquo;</dt>
+<dd><p>Use SI prefixes for the displayed values.
+Unless the &quot;-byte_binary_prefix&quot; option is used all the prefixes
+are decimal.
+</p>
+</dd>
+<dt> &lsquo;<samp>-byte_binary_prefix</samp>&rsquo;</dt>
+<dd><p>Force the use of binary prefixes for byte values.
+</p>
+</dd>
+<dt> &lsquo;<samp>-sexagesimal</samp>&rsquo;</dt>
+<dd><p>Use sexagesimal format HH:MM:SS.MICROSECONDS for time values.
+</p>
+</dd>
+<dt> &lsquo;<samp>-pretty</samp>&rsquo;</dt>
+<dd><p>Prettify the format of the displayed values, it corresponds to the
+options &quot;-unit -prefix -byte_binary_prefix -sexagesimal&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>-show_format</samp>&rsquo;</dt>
+<dd><p>Show information about the container format of the input multimedia
+stream.
+</p>
+<p>All the container format information is printed within a section with
+name &quot;FORMAT&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>-show_packets</samp>&rsquo;</dt>
+<dd><p>Show information about each packet contained in the input multimedia
+stream.
+</p>
+<p>The information for each single packet is printed within a dedicated
+section with name &quot;PACKET&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>-show_streams</samp>&rsquo;</dt>
+<dd><p>Show information about each media stream contained in the input
+multimedia stream.
+</p>
+<p>Each media stream information is printed within a dedicated section
+with name &quot;STREAM&quot;.
+</p>
+</dd>
+<dt> &lsquo;<samp>-i <var>input_file</var></samp>&rsquo;</dt>
+<dd><p>Read <var>input_file</var>.
+</p>
+</dd>
+</dl>
+
+<a name="Decoders"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Decoders">4. Decoders</a></h1>
+
+<p>Decoders are configured elements in FFmpeg which allow the decoding of
+multimedia streams.
+</p>
+<p>When you configure your FFmpeg build, all the supported native decoders
+are enabled by default. Decoders requiring an external library must be enabled
+manually via the corresponding <code>--enable-lib</code> option. You can list all
+available decoders using the configure option <code>--list-decoders</code>.
+</p>
+<p>You can disable all the decoders with the configure option
+<code>--disable-decoders</code> and selectively enable / disable single decoders
+with the options <code>--enable-decoder=<var>DECODER</var></code> /
+<code>--disable-decoder=<var>DECODER</var></code>.
+</p>
+<p>The option <code>-codecs</code> of the ff* tools will display the list of
+enabled decoders.
+</p>
+
+<a name="Video-Decoders"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Video-Decoders">5. Video Decoders</a></h1>
+
+<p>A description of some of the currently available video decoders
+follows.
+</p>
+<a name="rawvideo"></a>
+<h2 class="section"><a href="ffprobe.html#toc-rawvideo">5.1 rawvideo</a></h2>
+
+<p>Rawvideo decoder.
+</p>
+<p>This decoder decodes rawvideo streams.
+</p>
+<a name="Options-2"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Options-2">5.1.1 Options</a></h3>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>top <var>top_field_first</var></samp>&rsquo;</dt>
+<dd><p>Specify the assumed field type of the input video.
+</p><dl compact="compact">
+<dt> &lsquo;<samp>-1</samp>&rsquo;</dt>
+<dd><p>the video is assumed to be progressive (default)
+</p></dd>
+<dt> &lsquo;<samp>0</samp>&rsquo;</dt>
+<dd><p>bottom-field-first is assumed
+</p></dd>
+<dt> &lsquo;<samp>1</samp>&rsquo;</dt>
+<dd><p>top-field-first is assumed
+</p></dd>
+</dl>
+
+</dd>
+</dl>
+
+<a name="Demuxers"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Demuxers">6. Demuxers</a></h1>
+
+<p>Demuxers are configured elements in FFmpeg which allow to read the
+multimedia streams from a particular type of file.
+</p>
+<p>When you configure your FFmpeg build, all the supported demuxers
+are enabled by default. You can list all available ones using the
+configure option &quot;&ndash;list-demuxers&quot;.
+</p>
+<p>You can disable all the demuxers using the configure option
+&quot;&ndash;disable-demuxers&quot;, and selectively enable a single demuxer with
+the option &quot;&ndash;enable-demuxer=<var>DEMUXER</var>&quot;, or disable it
+with the option &quot;&ndash;disable-demuxer=<var>DEMUXER</var>&quot;.
+</p>
+<p>The option &quot;-formats&quot; of the ff* tools will display the list of
+enabled demuxers.
+</p>
+<p>The description of some of the currently available demuxers follows.
+</p>
+<a name="image2"></a>
+<h2 class="section"><a href="ffprobe.html#toc-image2">6.1 image2</a></h2>
+
+<p>Image file demuxer.
+</p>
+<p>This demuxer reads from a list of image files specified by a pattern.
+</p>
+<p>The pattern may contain the string &quot;%d&quot; or &quot;%0<var>N</var>d&quot;, which
+specifies the position of the characters representing a sequential
+number in each filename matched by the pattern. If the form
+&quot;%d0<var>N</var>d&quot; is used, the string representing the number in each
+filename is 0-padded and <var>N</var> is the total number of 0-padded
+digits representing the number. The literal character &rsquo;%&rsquo; can be
+specified in the pattern with the string &quot;%%&quot;.
+</p>
+<p>If the pattern contains &quot;%d&quot; or &quot;%0<var>N</var>d&quot;, the first filename of
+the file list specified by the pattern must contain a number
+inclusively contained between 0 and 4, all the following numbers must
+be sequential. This limitation may be hopefully fixed.
+</p>
+<p>The pattern may contain a suffix which is used to automatically
+determine the format of the images contained in the files.
+</p>
+<p>For example the pattern &quot;img-%03d.bmp&quot; will match a sequence of
+filenames of the form &lsquo;<tt>img-001.bmp</tt>&rsquo;, &lsquo;<tt>img-002.bmp</tt>&rsquo;, ...,
+&lsquo;<tt>img-010.bmp</tt>&rsquo;, etc.; the pattern &quot;i%%m%%g-%d.jpg&quot; will match a
+sequence of filenames of the form &lsquo;<tt>i%m%g-1.jpg</tt>&rsquo;,
+&lsquo;<tt>i%m%g-2.jpg</tt>&rsquo;, ..., &lsquo;<tt>i%m%g-10.jpg</tt>&rsquo;, etc.
+</p>
+<p>The size, the pixel format, and the format of each image must be the
+same for all the files in the sequence.
+</p>
+<p>The following example shows how to use &lsquo;<tt>ffmpeg</tt>&rsquo; for creating a
+video from the images in the file sequence &lsquo;<tt>img-001.jpeg</tt>&rsquo;,
+&lsquo;<tt>img-002.jpeg</tt>&rsquo;, ..., assuming an input framerate of 10 frames per
+second:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -r 10 -f image2 -i 'img-%03d.jpeg' out.avi
+</pre></td></tr></table>
+
+<p>Note that the pattern must not necessarily contain &quot;%d&quot; or
+&quot;%0<var>N</var>d&quot;, for example to convert a single image file
+&lsquo;<tt>img.jpeg</tt>&rsquo; you can employ the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f image2 -i img.jpeg img.png
+</pre></td></tr></table>
+
+<a name="applehttp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-applehttp">6.2 applehttp</a></h2>
+
+<p>Apple HTTP Live Streaming demuxer.
+</p>
+<p>This demuxer presents all AVStreams from all variant streams.
+The id field is set to the bitrate variant index number. By setting
+the discard flags on AVStreams (by pressing &rsquo;a&rsquo; or &rsquo;v&rsquo; in ffplay),
+the caller can decide which variant streams to actually receive.
+The total bitrate of the variant that the stream belongs to is
+available in a metadata key named &quot;variant_bitrate&quot;.
+</p>
+<a name="Protocols"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Protocols">7. Protocols</a></h1>
+
+<p>Protocols are configured elements in FFmpeg which allow to access
+resources which require the use of a particular protocol.
+</p>
+<p>When you configure your FFmpeg build, all the supported protocols are
+enabled by default. You can list all available ones using the
+configure option &quot;&ndash;list-protocols&quot;.
+</p>
+<p>You can disable all the protocols using the configure option
+&quot;&ndash;disable-protocols&quot;, and selectively enable a protocol using the
+option &quot;&ndash;enable-protocol=<var>PROTOCOL</var>&quot;, or you can disable a
+particular protocol using the option
+&quot;&ndash;disable-protocol=<var>PROTOCOL</var>&quot;.
+</p>
+<p>The option &quot;-protocols&quot; of the ff* tools will display the list of
+supported protocols.
+</p>
+<p>A description of the currently available protocols follows.
+</p>
+<a name="applehttp-1"></a>
+<h2 class="section"><a href="ffprobe.html#toc-applehttp-1">7.1 applehttp</a></h2>
+
+<p>Read Apple HTTP Live Streaming compliant segmented stream as
+a uniform one. The M3U8 playlists describing the segments can be
+remote HTTP resources or local files, accessed using the standard
+file protocol.
+HTTP is default, specific protocol can be declared by specifying
+&quot;+<var>proto</var>&quot; after the applehttp URI scheme name, where <var>proto</var>
+is either &quot;file&quot; or &quot;http&quot;.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">applehttp://host/path/to/remote/resource.m3u8
+applehttp+http://host/path/to/remote/resource.m3u8
+applehttp+file://path/to/local/resource.m3u8
+</pre></td></tr></table>
+
+<a name="concat"></a>
+<h2 class="section"><a href="ffprobe.html#toc-concat">7.2 concat</a></h2>
+
+<p>Physical concatenation protocol.
+</p>
+<p>Allow to read and seek from many resource in sequence as if they were
+a unique resource.
+</p>
+<p>A URL accepted by this protocol has the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">concat:<var>URL1</var>|<var>URL2</var>|...|<var>URLN</var>
+</pre></td></tr></table>
+
+<p>where <var>URL1</var>, <var>URL2</var>, ..., <var>URLN</var> are the urls of the
+resource to be concatenated, each one possibly specifying a distinct
+protocol.
+</p>
+<p>For example to read a sequence of files &lsquo;<tt>split1.mpeg</tt>&rsquo;,
+&lsquo;<tt>split2.mpeg</tt>&rsquo;, &lsquo;<tt>split3.mpeg</tt>&rsquo; with &lsquo;<tt>ffplay</tt>&rsquo; use the
+command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffplay concat:split1.mpeg\|split2.mpeg\|split3.mpeg
+</pre></td></tr></table>
+
+<p>Note that you may need to escape the character &quot;|&quot; which is special for
+many shells.
+</p>
+<a name="file"></a>
+<h2 class="section"><a href="ffprobe.html#toc-file">7.3 file</a></h2>
+
+<p>File access protocol.
+</p>
+<p>Allow to read from or read to a file.
+</p>
+<p>For example to read from a file &lsquo;<tt>input.mpeg</tt>&rsquo; with &lsquo;<tt>ffmpeg</tt>&rsquo;
+use the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i file:input.mpeg output.mpeg
+</pre></td></tr></table>
+
+<p>The ff* tools default to the file protocol, that is a resource
+specified with the name &quot;FILE.mpeg&quot; is interpreted as the URL
+&quot;file:FILE.mpeg&quot;.
+</p>
+<a name="gopher"></a>
+<h2 class="section"><a href="ffprobe.html#toc-gopher">7.4 gopher</a></h2>
+
+<p>Gopher protocol.
+</p>
+<a name="http"></a>
+<h2 class="section"><a href="ffprobe.html#toc-http">7.5 http</a></h2>
+
+<p>HTTP (Hyper Text Transfer Protocol).
+</p>
+<a name="mmst"></a>
+<h2 class="section"><a href="ffprobe.html#toc-mmst">7.6 mmst</a></h2>
+
+<p>MMS (Microsoft Media Server) protocol over TCP.
+</p>
+<a name="mmsh"></a>
+<h2 class="section"><a href="ffprobe.html#toc-mmsh">7.7 mmsh</a></h2>
+
+<p>MMS (Microsoft Media Server) protocol over HTTP.
+</p>
+<p>The required syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">mmsh://<var>server</var>[:<var>port</var>][/<var>app</var>][/<var>playpath</var>]
+</pre></td></tr></table>
+
+<a name="md5"></a>
+<h2 class="section"><a href="ffprobe.html#toc-md5">7.8 md5</a></h2>
+
+<p>MD5 output protocol.
+</p>
+<p>Computes the MD5 hash of the data to be written, and on close writes
+this to the designated output or stdout if none is specified. It can
+be used to test muxers without writing an actual file.
+</p>
+<p>Some examples follow.
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># Write the MD5 hash of the encoded AVI file to the file output.avi.md5.
+ffmpeg -i input.flv -f avi -y md5:output.avi.md5
+
+# Write the MD5 hash of the encoded AVI file to stdout.
+ffmpeg -i input.flv -f avi -y md5:
+</pre></td></tr></table>
+
+<p>Note that some formats (typically MOV) require the output protocol to
+be seekable, so they will fail with the MD5 output protocol.
+</p>
+<a name="pipe"></a>
+<h2 class="section"><a href="ffprobe.html#toc-pipe">7.9 pipe</a></h2>
+
+<p>UNIX pipe access protocol.
+</p>
+<p>Allow to read and write from UNIX pipes.
+</p>
+<p>The accepted syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">pipe:[<var>number</var>]
+</pre></td></tr></table>
+
+<p><var>number</var> is the number corresponding to the file descriptor of the
+pipe (e.g. 0 for stdin, 1 for stdout, 2 for stderr).  If <var>number</var>
+is not specified, by default the stdout file descriptor will be used
+for writing, stdin for reading.
+</p>
+<p>For example to read from stdin with &lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">cat test.wav | ffmpeg -i pipe:0
+# ...this is the same as...
+cat test.wav | ffmpeg -i pipe:
+</pre></td></tr></table>
+
+<p>For writing to stdout with &lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i test.wav -f avi pipe:1 | cat &gt; test.avi
+# ...this is the same as...
+ffmpeg -i test.wav -f avi pipe: | cat &gt; test.avi
+</pre></td></tr></table>
+
+<p>Note that some formats (typically MOV), require the output protocol to
+be seekable, so they will fail with the pipe output protocol.
+</p>
+<a name="rtmp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-rtmp">7.10 rtmp</a></h2>
+
+<p>Real-Time Messaging Protocol.
+</p>
+<p>The Real-Time Messaging Protocol (RTMP) is used for streaming multime‐
+dia content across a TCP/IP network.
+</p>
+<p>The required syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">rtmp://<var>server</var>[:<var>port</var>][/<var>app</var>][/<var>playpath</var>]
+</pre></td></tr></table>
+
+<p>The accepted parameters are:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>server</samp>&rsquo;</dt>
+<dd><p>The address of the RTMP server.
+</p>
+</dd>
+<dt> &lsquo;<samp>port</samp>&rsquo;</dt>
+<dd><p>The number of the TCP port to use (by default is 1935).
+</p>
+</dd>
+<dt> &lsquo;<samp>app</samp>&rsquo;</dt>
+<dd><p>It is the name of the application to access. It usually corresponds to
+the path where the application is installed on the RTMP server
+(e.g. &lsquo;<tt>/ondemand/</tt>&rsquo;, &lsquo;<tt>/flash/live/</tt>&rsquo;, etc.).
+</p>
+</dd>
+<dt> &lsquo;<samp>playpath</samp>&rsquo;</dt>
+<dd><p>It is the path or name of the resource to play with reference to the
+application specified in <var>app</var>, may be prefixed by &quot;mp4:&quot;.
+</p>
+</dd>
+</dl>
+
+<p>For example to read with &lsquo;<tt>ffplay</tt>&rsquo; a multimedia resource named
+&quot;sample&quot; from the application &quot;vod&quot; from an RTMP server &quot;myserver&quot;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffplay rtmp://myserver/vod/sample
+</pre></td></tr></table>
+
+<a name="rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte"></a>
+<h2 class="section"><a href="ffprobe.html#toc-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">7.11 rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></h2>
+
+<p>Real-Time Messaging Protocol and its variants supported through
+librtmp.
+</p>
+<p>Requires the presence of the librtmp headers and library during
+configuration. You need to explicitely configure the build with
+&quot;&ndash;enable-librtmp&quot;. If enabled this will replace the native RTMP
+protocol.
+</p>
+<p>This protocol provides most client functions and a few server
+functions needed to support RTMP, RTMP tunneled in HTTP (RTMPT),
+encrypted RTMP (RTMPE), RTMP over SSL/TLS (RTMPS) and tunneled
+variants of these encrypted types (RTMPTE, RTMPTS).
+</p>
+<p>The required syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"><var>rtmp_proto</var>://<var>server</var>[:<var>port</var>][/<var>app</var>][/<var>playpath</var>] <var>options</var>
+</pre></td></tr></table>
+
+<p>where <var>rtmp_proto</var> is one of the strings &quot;rtmp&quot;, &quot;rtmpt&quot;, &quot;rtmpe&quot;,
+&quot;rtmps&quot;, &quot;rtmpte&quot;, &quot;rtmpts&quot; corresponding to each RTMP variant, and
+<var>server</var>, <var>port</var>, <var>app</var> and <var>playpath</var> have the same
+meaning as specified for the RTMP native protocol.
+<var>options</var> contains a list of space-separated options of the form
+<var>key</var>=<var>val</var>.
+</p>
+<p>See the librtmp manual page (man 3 librtmp) for more information.
+</p>
+<p>For example, to stream a file in real-time to an RTMP server using
+&lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i myfile -f flv rtmp://myserver/live/mystream
+</pre></td></tr></table>
+
+<p>To play the same stream using &lsquo;<tt>ffplay</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffplay &quot;rtmp://myserver/live/mystream live=1&quot;
+</pre></td></tr></table>
+
+<a name="rtp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-rtp">7.12 rtp</a></h2>
+
+<p>Real-Time Protocol.
+</p>
+<a name="rtsp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-rtsp">7.13 rtsp</a></h2>
+
+<p>RTSP is not technically a protocol handler in libavformat, it is a demuxer
+and muxer. The demuxer supports both normal RTSP (with data transferred
+over RTP; this is used by e.g. Apple and Microsoft) and Real-RTSP (with
+data transferred over RDT).
+</p>
+<p>The muxer can be used to send a stream using RTSP ANNOUNCE to a server
+supporting it (currently Darwin Streaming Server and Mischa Spiegelmock&rsquo;s
+<a href="http://github.com/revmischa/rtsp-server">RTSP server</a>).
+</p>
+<p>The required syntax for a RTSP url is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">rtsp://<var>hostname</var>[:<var>port</var>]/<var>path</var>[?<var>options</var>]
+</pre></td></tr></table>
+
+<p><var>options</var> is a <code>&amp;</code>-separated list. The following options
+are supported:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>udp</samp>&rsquo;</dt>
+<dd><p>Use UDP as lower transport protocol.
+</p>
+</dd>
+<dt> &lsquo;<samp>tcp</samp>&rsquo;</dt>
+<dd><p>Use TCP (interleaving within the RTSP control channel) as lower
+transport protocol.
+</p>
+</dd>
+<dt> &lsquo;<samp>multicast</samp>&rsquo;</dt>
+<dd><p>Use UDP multicast as lower transport protocol.
+</p>
+</dd>
+<dt> &lsquo;<samp>http</samp>&rsquo;</dt>
+<dd><p>Use HTTP tunneling as lower transport protocol, which is useful for
+passing proxies.
+</p>
+</dd>
+<dt> &lsquo;<samp>filter_src</samp>&rsquo;</dt>
+<dd><p>Accept packets only from negotiated peer address and port.
+</p></dd>
+</dl>
+
+<p>Multiple lower transport protocols may be specified, in that case they are
+tried one at a time (if the setup of one fails, the next one is tried).
+For the muxer, only the <code>tcp</code> and <code>udp</code> options are supported.
+</p>
+<p>When receiving data over UDP, the demuxer tries to reorder received packets
+(since they may arrive out of order, or packets may get lost totally). In
+order for this to be enabled, a maximum delay must be specified in the
+<code>max_delay</code> field of AVFormatContext.
+</p>
+<p>When watching multi-bitrate Real-RTSP streams with &lsquo;<tt>ffplay</tt>&rsquo;, the
+streams to display can be chosen with <code>-vst</code> <var>n</var> and
+<code>-ast</code> <var>n</var> for video and audio respectively, and can be switched
+on the fly by pressing <code>v</code> and <code>a</code>.
+</p>
+<p>Example command lines:
+</p>
+<p>To watch a stream over UDP, with a max reordering delay of 0.5 seconds:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay -max_delay 500000 rtsp://server/video.mp4?udp
+</pre></td></tr></table>
+
+<p>To watch a stream tunneled over HTTP:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay rtsp://server/video.mp4?http
+</pre></td></tr></table>
+
+<p>To send a stream in realtime to a RTSP server, for others to watch:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i <var>input</var> -f rtsp -muxdelay 0.1 rtsp://server/live.sdp
+</pre></td></tr></table>
+
+<a name="sap"></a>
+<h2 class="section"><a href="ffprobe.html#toc-sap">7.14 sap</a></h2>
+
+<p>Session Announcement Protocol (RFC 2974). This is not technically a
+protocol handler in libavformat, it is a muxer and demuxer.
+It is used for signalling of RTP streams, by announcing the SDP for the
+streams regularly on a separate port.
+</p>
+<a name="Muxer"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Muxer">7.14.1 Muxer</a></h3>
+
+<p>The syntax for a SAP url given to the muxer is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">sap://<var>destination</var>[:<var>port</var>][?<var>options</var>]
+</pre></td></tr></table>
+
+<p>The RTP packets are sent to <var>destination</var> on port <var>port</var>,
+or to port 5004 if no port is specified.
+<var>options</var> is a <code>&amp;</code>-separated list. The following options
+are supported:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>announce_addr=<var>address</var></samp>&rsquo;</dt>
+<dd><p>Specify the destination IP address for sending the announcements to.
+If omitted, the announcements are sent to the commonly used SAP
+announcement multicast address 224.2.127.254 (sap.mcast.net), or
+ff0e::2:7ffe if <var>destination</var> is an IPv6 address.
+</p>
+</dd>
+<dt> &lsquo;<samp>announce_port=<var>port</var></samp>&rsquo;</dt>
+<dd><p>Specify the port to send the announcements on, defaults to
+9875 if not specified.
+</p>
+</dd>
+<dt> &lsquo;<samp>ttl=<var>ttl</var></samp>&rsquo;</dt>
+<dd><p>Specify the time to live value for the announcements and RTP packets,
+defaults to 255.
+</p>
+</dd>
+<dt> &lsquo;<samp>same_port=<var>0|1</var></samp>&rsquo;</dt>
+<dd><p>If set to 1, send all RTP streams on the same port pair. If zero (the
+default), all streams are sent on unique ports, with each stream on a
+port 2 numbers higher than the previous.
+VLC/Live555 requires this to be set to 1, to be able to receive the stream.
+The RTP stack in libavformat for receiving requires all streams to be sent
+on unique ports.
+</p></dd>
+</dl>
+
+<p>Example command lines follow.
+</p>
+<p>To broadcast a stream on the local subnet, for watching in VLC:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i <var>input</var> -f sap sap://224.0.0.255?same_port=1
+</pre></td></tr></table>
+
+<p>Similarly, for watching in ffplay:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i <var>input</var> -f sap sap://224.0.0.255
+</pre></td></tr></table>
+
+<p>And for watching in ffplay, over IPv6:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i <var>input</var> -f sap sap://[ff0e::1:2:3:4]
+</pre></td></tr></table>
+
+<a name="Demuxer"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Demuxer">7.14.2 Demuxer</a></h3>
+
+<p>The syntax for a SAP url given to the demuxer is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">sap://[<var>address</var>][:<var>port</var>]
+</pre></td></tr></table>
+
+<p><var>address</var> is the multicast address to listen for announcements on,
+if omitted, the default 224.2.127.254 (sap.mcast.net) is used. <var>port</var>
+is the port that is listened on, 9875 if omitted.
+</p>
+<p>The demuxers listens for announcements on the given address and port.
+Once an announcement is received, it tries to receive that particular stream.
+</p>
+<p>Example command lines follow.
+</p>
+<p>To play back the first stream announced on the normal SAP multicast address:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay sap://
+</pre></td></tr></table>
+
+<p>To play back the first stream announced on one the default IPv6 SAP multicast address:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay sap://[ff0e::2:7ffe]
+</pre></td></tr></table>
+
+<a name="tcp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-tcp">7.15 tcp</a></h2>
+
+<p>Trasmission Control Protocol.
+</p>
+<p>The required syntax for a TCP url is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">tcp://<var>hostname</var>:<var>port</var>[?<var>options</var>]
+</pre></td></tr></table>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>listen</samp>&rsquo;</dt>
+<dd><p>Listen for an incoming connection
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i <var>input</var> -f <var>format</var> tcp://<var>hostname</var>:<var>port</var>?listen
+ffplay tcp://<var>hostname</var>:<var>port</var>
+</pre></td></tr></table>
+
+</dd>
+</dl>
+
+<a name="udp"></a>
+<h2 class="section"><a href="ffprobe.html#toc-udp">7.16 udp</a></h2>
+
+<p>User Datagram Protocol.
+</p>
+<p>The required syntax for a UDP url is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">udp://<var>hostname</var>:<var>port</var>[?<var>options</var>]
+</pre></td></tr></table>
+
+<p><var>options</var> contains a list of &amp;-seperated options of the form <var>key</var>=<var>val</var>.
+Follow the list of supported options.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>buffer_size=<var>size</var></samp>&rsquo;</dt>
+<dd><p>set the UDP buffer size in bytes
+</p>
+</dd>
+<dt> &lsquo;<samp>localport=<var>port</var></samp>&rsquo;</dt>
+<dd><p>override the local UDP port to bind with
+</p>
+</dd>
+<dt> &lsquo;<samp>pkt_size=<var>size</var></samp>&rsquo;</dt>
+<dd><p>set the size in bytes of UDP packets
+</p>
+</dd>
+<dt> &lsquo;<samp>reuse=<var>1|0</var></samp>&rsquo;</dt>
+<dd><p>explicitly allow or disallow reusing UDP sockets
+</p>
+</dd>
+<dt> &lsquo;<samp>ttl=<var>ttl</var></samp>&rsquo;</dt>
+<dd><p>set the time to live value (for multicast only)
+</p>
+</dd>
+<dt> &lsquo;<samp>connect=<var>1|0</var></samp>&rsquo;</dt>
+<dd><p>Initialize the UDP socket with <code>connect()</code>. In this case, the
+destination address can&rsquo;t be changed with ff_udp_set_remote_url later.
+If the destination address isn&rsquo;t known at the start, this option can
+be specified in ff_udp_set_remote_url, too.
+This allows finding out the source address for the packets with getsockname,
+and makes writes return with AVERROR(ECONNREFUSED) if &quot;destination
+unreachable&quot; is received.
+For receiving, this gives the benefit of only receiving packets from
+the specified peer address/port.
+</p></dd>
+</dl>
+
+<p>Some usage examples of the udp protocol with &lsquo;<tt>ffmpeg</tt>&rsquo; follow.
+</p>
+<p>To stream over UDP to a remote endpoint:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i <var>input</var> -f <var>format</var> udp://<var>hostname</var>:<var>port</var>
+</pre></td></tr></table>
+
+<p>To stream in mpegts format over UDP using 188 sized UDP packets, using a large input buffer:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i <var>input</var> -f mpegts udp://<var>hostname</var>:<var>port</var>?pkt_size=188&amp;buffer_size=65535
+</pre></td></tr></table>
+
+<p>To receive over UDP from a remote endpoint:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i udp://[<var>multicast-address</var>]:<var>port</var>
+</pre></td></tr></table>
+
+<a name="Input-Devices"></a>
+<h1 class="chapter"><a href="ffprobe.html#toc-Input-Devices">8. Input Devices</a></h1>
+
+<p>Input devices are configured elements in FFmpeg which allow to access
+the data coming from a multimedia device attached to your system.
+</p>
+<p>When you configure your FFmpeg build, all the supported input devices
+are enabled by default. You can list all available ones using the
+configure option &quot;&ndash;list-indevs&quot;.
+</p>
+<p>You can disable all the input devices using the configure option
+&quot;&ndash;disable-indevs&quot;, and selectively enable an input device using the
+option &quot;&ndash;enable-indev=<var>INDEV</var>&quot;, or you can disable a particular
+input device using the option &quot;&ndash;disable-indev=<var>INDEV</var>&quot;.
+</p>
+<p>The option &quot;-formats&quot; of the ff* tools will display the list of
+supported input devices (amongst the demuxers).
+</p>
+<p>A description of the currently available input devices follows.
+</p>
+<a name="alsa"></a>
+<h2 class="section"><a href="ffprobe.html#toc-alsa">8.1 alsa</a></h2>
+
+<p>ALSA (Advanced Linux Sound Architecture) input device.
+</p>
+<p>To enable this input device during configuration you need libasound
+installed on your system.
+</p>
+<p>This device allows capturing from an ALSA device. The name of the
+device to capture has to be an ALSA card identifier.
+</p>
+<p>An ALSA identifier has the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">hw:<var>CARD</var>[,<var>DEV</var>[,<var>SUBDEV</var>]]
+</pre></td></tr></table>
+
+<p>where the <var>DEV</var> and <var>SUBDEV</var> components are optional.
+</p>
+<p>The three arguments (in order: <var>CARD</var>,<var>DEV</var>,<var>SUBDEV</var>)
+specify card number or identifier, device number and subdevice number
+(-1 means any).
+</p>
+<p>To see the list of cards currently recognized by your system check the
+files &lsquo;<tt>/proc/asound/cards</tt>&rsquo; and &lsquo;<tt>/proc/asound/devices</tt>&rsquo;.
+</p>
+<p>For example to capture with &lsquo;<tt>ffmpeg</tt>&rsquo; from an ALSA device with
+card id 0, you may run the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f alsa -i hw:0 alsaout.wav
+</pre></td></tr></table>
+
+<p>For more information see:
+<a href="http://www.alsa-project.org/alsa-doc/alsa-lib/pcm.html">http://www.alsa-project.org/alsa-doc/alsa-lib/pcm.html</a>
+</p>
+<a name="bktr"></a>
+<h2 class="section"><a href="ffprobe.html#toc-bktr">8.2 bktr</a></h2>
+
+<p>BSD video input device.
+</p>
+<a name="dv1394"></a>
+<h2 class="section"><a href="ffprobe.html#toc-dv1394">8.3 dv1394</a></h2>
+
+<p>Linux DV 1394 input device.
+</p>
+<a name="fbdev"></a>
+<h2 class="section"><a href="ffprobe.html#toc-fbdev">8.4 fbdev</a></h2>
+
+<p>Linux framebuffer input device.
+</p>
+<p>The Linux framebuffer is a graphic hardware-independent abstraction
+layer to show graphics on a computer monitor, typically on the
+console. It is accessed through a file device node, usually
+&lsquo;<tt>/dev/fb0</tt>&rsquo;.
+</p>
+<p>For more detailed information read the file
+Documentation/fb/framebuffer.txt included in the Linux source tree.
+</p>
+<p>To record from the framebuffer device &lsquo;<tt>/dev/fb0</tt>&rsquo; with
+&lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f fbdev -r 10 -i /dev/fb0 out.avi
+</pre></td></tr></table>
+
+<p>You can take a single screenshot image with the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f fbdev -vframes 1 -r 1 -i /dev/fb0 screenshot.jpeg
+</pre></td></tr></table>
+
+<p>See also <a href="http://linux-fbdev.sourceforge.net/">http://linux-fbdev.sourceforge.net/</a>, and fbset(1).
+</p>
+<a name="jack"></a>
+<h2 class="section"><a href="ffprobe.html#toc-jack">8.5 jack</a></h2>
+
+<p>JACK input device.
+</p>
+<p>To enable this input device during configuration you need libjack
+installed on your system.
+</p>
+<p>A JACK input device creates one or more JACK writable clients, one for
+each audio channel, with name <var>client_name</var>:input_<var>N</var>, where
+<var>client_name</var> is the name provided by the application, and <var>N</var>
+is a number which identifies the channel.
+Each writable client will send the acquired data to the FFmpeg input
+device.
+</p>
+<p>Once you have created one or more JACK readable clients, you need to
+connect them to one or more JACK writable clients.
+</p>
+<p>To connect or disconnect JACK clients you can use the
+&lsquo;<tt>jack_connect</tt>&rsquo; and &lsquo;<tt>jack_disconnect</tt>&rsquo; programs, or do it
+through a graphical interface, for example with &lsquo;<tt>qjackctl</tt>&rsquo;.
+</p>
+<p>To list the JACK clients and their properties you can invoke the command
+&lsquo;<tt>jack_lsp</tt>&rsquo;.
+</p>
+<p>Follows an example which shows how to capture a JACK readable client
+with &lsquo;<tt>ffmpeg</tt>&rsquo;.
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># Create a JACK writable client with name &quot;ffmpeg&quot;.
+$ ffmpeg -f jack -i ffmpeg -y out.wav
+
+# Start the sample jack_metro readable client.
+$ jack_metro -b 120 -d 0.2 -f 4000
+
+# List the current JACK clients.
+$ jack_lsp -c
+system:capture_1
+system:capture_2
+system:playback_1
+system:playback_2
+ffmpeg:input_1
+metro:120_bpm
+
+# Connect metro to the ffmpeg writable client.
+$ jack_connect metro:120_bpm ffmpeg:input_1
+</pre></td></tr></table>
+
+<p>For more information read:
+<a href="http://jackaudio.org/">http://jackaudio.org/</a>
+</p>
+<a name="lavfi"></a>
+<h2 class="section"><a href="ffprobe.html#toc-lavfi">8.6 lavfi</a></h2>
+
+<p>Libavfilter input virtual device.
+</p>
+<p>This input device reads data from the open output pads of a libavfilter
+filtergraph.
+</p>
+<p>For each filtergraph open output, the input device will create a
+corresponding stream which is mapped to the generated output. Currently
+only video data is supported. The filtergraph is specified through the
+option &lsquo;<samp>graph</samp>&rsquo;.
+</p>
+<p>To enable this input device, you need to configure your build with
+<code>--enable-libavfilter</code>.
+</p>
+<a name="Options-1"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Options-1">8.6.1 Options</a></h3>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>graph</samp>&rsquo;</dt>
+<dd><p>Specify the filtergraph to use as input. Each video open output must be
+labelled by a unique string of the form &quot;out<var>N</var>&quot;, where <var>N</var> is a
+number starting from 0 corresponding to the mapped input stream
+generated by the device.
+The first unlabelled output is automatically assigned to the &quot;out0&quot;
+label, but all the others need to be specified explicitely.
+</p>
+<p>If not specified defaults to the filename specified for the input
+device.
+</p></dd>
+</dl>
+
+<a name="Examples"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Examples">8.6.2 Examples</a></h3>
+
+<ul>
+<li>
+Create a color video stream and play it back with &lsquo;<tt>ffplay</tt>&rsquo;:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi -graph &quot;color=pink [out0]&quot; dummy
+</pre></td></tr></table>
+
+</li><li>
+As the previous example, but use filename for specifying the graph
+description, and omit the &quot;out0&quot; label:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi color=pink
+</pre></td></tr></table>
+
+</li><li>
+Create three different video test filtered sources and play them:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi -graph &quot;testsrc [out0]; testsrc,hflip [out1]; testsrc,negate [out2]&quot; test3
+</pre></td></tr></table>
+</li></ul>
+
+<a name="libdc1394"></a>
+<h2 class="section"><a href="ffprobe.html#toc-libdc1394">8.7 libdc1394</a></h2>
+
+<p>IIDC1394 input device, based on libdc1394 and libraw1394.
+</p>
+<a name="openal"></a>
+<h2 class="section"><a href="ffprobe.html#toc-openal">8.8 openal</a></h2>
+
+<p>The OpenAL input device provides audio capture on all systems with a
+working OpenAL 1.1 implementation.
+</p>
+<p>To enable this input device during configuration, you need OpenAL
+headers and libraries installed on your system, and need to configure
+FFmpeg with <code>--enable-openal</code>.
+</p>
+<p>OpenAL headers and libraries should be provided as part of your OpenAL
+implementation, or as an additional download (an SDK). Depending on your
+installation you may need to specify additional flags via the
+<code>--extra-cflags</code> and <code>--extra-ldflags</code> for allowing the build
+system to locate the OpenAL headers and libraries.
+</p>
+<p>An incomplete list of OpenAL implementations follows:
+</p>
+<dl compact="compact">
+<dt> <strong>Creative</strong></dt>
+<dd><p>The official Windows implementation, providing hardware acceleration
+with supported devices and software fallback.
+See <a href="http://openal.org/">http://openal.org/</a>.
+</p></dd>
+<dt> <strong>OpenAL Soft</strong></dt>
+<dd><p>Portable, open source (LGPL) software implementation. Includes
+backends for the most common sound APIs on the Windows, Linux,
+Solaris, and BSD operating systems.
+See <a href="http://kcat.strangesoft.net/openal.html">http://kcat.strangesoft.net/openal.html</a>.
+</p></dd>
+<dt> <strong>Apple</strong></dt>
+<dd><p>OpenAL is part of Core Audio, the official Mac OS X Audio interface.
+See <a href="http://developer.apple.com/technologies/mac/audio-and-video.html">http://developer.apple.com/technologies/mac/audio-and-video.html</a>
+</p></dd>
+</dl>
+
+<p>This device allows to capture from an audio input device handled
+through OpenAL.
+</p>
+<p>You need to specify the name of the device to capture in the provided
+filename. If the empty string is provided, the device will
+automatically select the default device. You can get the list of the
+supported devices by using the option <var>list_devices</var>.
+</p>
+<a name="Options"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Options">8.8.1 Options</a></h3>
+
+<dl compact="compact">
+<dt> &lsquo;<samp>channels</samp>&rsquo;</dt>
+<dd><p>Set the number of channels in the captured audio. Only the values
+&lsquo;<samp>1</samp>&rsquo; (monaural) and &lsquo;<samp>2</samp>&rsquo; (stereo) are currently supported.
+Defaults to &lsquo;<samp>2</samp>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<samp>sample_size</samp>&rsquo;</dt>
+<dd><p>Set the sample size (in bits) of the captured audio. Only the values
+&lsquo;<samp>8</samp>&rsquo; and &lsquo;<samp>16</samp>&rsquo; are currently supported. Defaults to
+&lsquo;<samp>16</samp>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<samp>sample_rate</samp>&rsquo;</dt>
+<dd><p>Set the sample rate (in Hz) of the captured audio.
+Defaults to &lsquo;<samp>44.1k</samp>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<samp>list_devices</samp>&rsquo;</dt>
+<dd><p>If set to &lsquo;<samp>true</samp>&rsquo;, print a list of devices and exit.
+Defaults to &lsquo;<samp>false</samp>&rsquo;.
+</p>
+</dd>
+</dl>
+
+<a name="Examples-1"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-Examples-1">8.8.2 Examples</a></h3>
+
+<p>Print the list of OpenAL supported devices and exit:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -list_devices true -f openal -i dummy out.ogg
+</pre></td></tr></table>
+
+<p>Capture from the OpenAL device &lsquo;<tt>DR-BT101 via PulseAudio</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -f openal -i 'DR-BT101 via PulseAudio' out.ogg
+</pre></td></tr></table>
+
+<p>Capture from the default device (note the empty string &rdquo; as filename):
+</p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -f openal -i '' out.ogg
+</pre></td></tr></table>
+
+<p>Capture from two devices simultaneously, writing to two different files,
+within the same &lsquo;<tt>ffmpeg</tt>&rsquo; command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -f openal -i 'DR-BT101 via PulseAudio' out1.ogg -f openal -i 'ALSA Default' out2.ogg
+</pre></td></tr></table>
+<p>Note: not all OpenAL implementations support multiple simultaneous capture -
+try the latest OpenAL Soft if the above does not work.
+</p>
+<a name="oss"></a>
+<h2 class="section"><a href="ffprobe.html#toc-oss">8.9 oss</a></h2>
+
+<p>Open Sound System input device.
+</p>
+<p>The filename to provide to the input device is the device node
+representing the OSS input device, and is usually set to
+&lsquo;<tt>/dev/dsp</tt>&rsquo;.
+</p>
+<p>For example to grab from &lsquo;<tt>/dev/dsp</tt>&rsquo; using &lsquo;<tt>ffmpeg</tt>&rsquo; use the
+command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f oss -i /dev/dsp /tmp/oss.wav
+</pre></td></tr></table>
+
+<p>For more information about OSS see:
+<a href="http://manuals.opensound.com/usersguide/dsp.html">http://manuals.opensound.com/usersguide/dsp.html</a>
+</p>
+<a name="sndio"></a>
+<h2 class="section"><a href="ffprobe.html#toc-sndio">8.10 sndio</a></h2>
+
+<p>sndio input device.
+</p>
+<p>To enable this input device during configuration you need libsndio
+installed on your system.
+</p>
+<p>The filename to provide to the input device is the device node
+representing the sndio input device, and is usually set to
+&lsquo;<tt>/dev/audio0</tt>&rsquo;.
+</p>
+<p>For example to grab from &lsquo;<tt>/dev/audio0</tt>&rsquo; using &lsquo;<tt>ffmpeg</tt>&rsquo; use the
+command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f sndio -i /dev/audio0 /tmp/oss.wav
+</pre></td></tr></table>
+
+<a name="video4linux-and-video4linux2"></a>
+<h2 class="section"><a href="ffprobe.html#toc-video4linux-and-video4linux2">8.11 video4linux and video4linux2</a></h2>
+
+<p>Video4Linux and Video4Linux2 input video devices.
+</p>
+<p>The name of the device to grab is a file device node, usually Linux
+systems tend to automatically create such nodes when the device
+(e.g. an USB webcam) is plugged into the system, and has a name of the
+kind &lsquo;<tt>/dev/video<var>N</var></tt>&rsquo;, where <var>N</var> is a number associated to
+the device.
+</p>
+<p>Video4Linux and Video4Linux2 devices only support a limited set of
+<var>width</var>x<var>height</var> sizes and framerates. You can check which are
+supported for example with the command &lsquo;<tt>dov4l</tt>&rsquo; for Video4Linux
+devices and the command &lsquo;<tt>v4l-info</tt>&rsquo; for Video4Linux2 devices.
+</p>
+<p>If the size for the device is set to 0x0, the input device will
+try to autodetect the size to use.
+Only for the video4linux2 device, if the frame rate is set to 0/0 the
+input device will use the frame rate value already set in the driver.
+</p>
+<p>Video4Linux support is deprecated since Linux 2.6.30, and will be
+dropped in later versions.
+</p>
+<p>Follow some usage examples of the video4linux devices with the ff*
+tools.
+</p><table><tr><td>&nbsp;</td><td><pre class="example"># Grab and show the input of a video4linux device, frame rate is set
+# to the default of 25/1.
+ffplay -s 320x240 -f video4linux /dev/video0
+
+# Grab and show the input of a video4linux2 device, autoadjust size.
+ffplay -f video4linux2 /dev/video0
+
+# Grab and record the input of a video4linux2 device, autoadjust size,
+# frame rate value defaults to 0/0 so it is read from the video4linux2
+# driver.
+ffmpeg -f video4linux2 -i /dev/video0 out.mpeg
+</pre></td></tr></table>
+
+<a name="vfwcap"></a>
+<h2 class="section"><a href="ffprobe.html#toc-vfwcap">8.12 vfwcap</a></h2>
+
+<p>VfW (Video for Windows) capture input device.
+</p>
+<p>The filename passed as input is the capture driver number, ranging from
+0 to 9. You may use &quot;list&quot; as filename to print a list of drivers. Any
+other filename will be interpreted as device number 0.
+</p>
+<a name="x11grab"></a>
+<h2 class="section"><a href="ffprobe.html#toc-x11grab">8.13 x11grab</a></h2>
+
+<p>X11 video input device.
+</p>
+<p>This device allows to capture a region of an X11 display.
+</p>
+<p>The filename passed as input has the syntax:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">[<var>hostname</var>]:<var>display_number</var>.<var>screen_number</var>[+<var>x_offset</var>,<var>y_offset</var>]
+</pre></td></tr></table>
+
+<p><var>hostname</var>:<var>display_number</var>.<var>screen_number</var> specifies the
+X11 display name of the screen to grab from. <var>hostname</var> can be
+ommitted, and defaults to &quot;localhost&quot;. The environment variable
+<code>DISPLAY</code> contains the default display name.
+</p>
+<p><var>x_offset</var> and <var>y_offset</var> specify the offsets of the grabbed
+area with respect to the top-left border of the X11 screen. They
+default to 0.
+</p>
+<p>Check the X11 documentation (e.g. man X) for more detailed information.
+</p>
+<p>Use the &lsquo;<tt>dpyinfo</tt>&rsquo; program for getting basic information about the
+properties of your X11 display (e.g. grep for &quot;name&quot; or &quot;dimensions&quot;).
+</p>
+<p>For example to grab from &lsquo;<tt>:0.0</tt>&rsquo; using &lsquo;<tt>ffmpeg</tt>&rsquo;:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f x11grab -r 25 -s cif -i :0.0 out.mpg
+
+# Grab at position 10,20.
+ffmpeg -f x11grab -r 25 -s cif -i :0.0+10,20 out.mpg
+</pre></td></tr></table>
+
+<a name="follow_005fmouse-AVOption"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-follow_005fmouse-AVOption">8.13.1 <var>follow_mouse</var> AVOption</a></h3>
+
+<p>The syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">-follow_mouse centered|<var>PIXELS</var>
+</pre></td></tr></table>
+
+<p>When it is specified with &quot;centered&quot;, the grabbing region follows the mouse
+pointer and keeps the pointer at the center of region; otherwise, the region
+follows only when the mouse pointer reaches within <var>PIXELS</var> (greater than
+zero) to the edge of region.
+</p>
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f x11grab -follow_mouse centered -r 25 -s cif -i :0.0 out.mpg
+
+# Follows only when the mouse pointer reaches within 100 pixels to edge
+ffmpeg -f x11grab -follow_mouse 100 -r 25 -s cif -i :0.0 out.mpg
+</pre></td></tr></table>
+
+<a name="show_005fregion-AVOption"></a>
+<h3 class="subsection"><a href="ffprobe.html#toc-show_005fregion-AVOption">8.13.2 <var>show_region</var> AVOption</a></h3>
+
+<p>The syntax is:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">-show_region 1
+</pre></td></tr></table>
+
+<p>If <var>show_region</var> AVOption is specified with <var>1</var>, then the grabbing
+region will be indicated on screen. With this option, it&rsquo;s easy to know what is
+being grabbed if only a portion of the screen is grabbed.
+</p>
+<p>For example:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f x11grab -show_region 1 -r 25 -s cif -i :0.0+10,20 out.mpg
+
+# With follow_mouse
+ffmpeg -f x11grab -follow_mouse centered -show_region 1  -r 25 -s cif -i :0.0 out.mpg
+</pre></td></tr></table>
+
+
+
+<hr size="1">
+<p>
+ <font size="-1">
+  This document was generated by <em>Kyle Schwarz</em> on <em>August 28, 2011</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
