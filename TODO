@@ -1,5 +1,7 @@
 log stats to the registry on exit... [+ jruby can read them to display...]
 
+bundle with ffmpeg
+
 can use hwnd.
   re-check stats when using versus not.
   work when dragged too...?
@@ -20,11 +22,11 @@ minimize to tray
 
 include the audio grabber too [?]
 
-
 actually use it. playon competitor? LOL
   auto skype recorder :)
   can use the default record device in...XP
-  ffmpeg to record? if it's much more efficient I guess...so maybe I should do the upconverter first so that I understand it better...
+
+can "record" not just play from desktop
 
 == speedup ==
 
