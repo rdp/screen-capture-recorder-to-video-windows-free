@@ -28,15 +28,17 @@ class MouseDraw
           p e, e.to_s, e.backtrace
         end
       end
-      p 'done setting'
+      p 'done setting them to match that window (its total size)'
       f.dispose
     }
     current_values = setter_getter.all_current_values
     f.set_size(current_values['width'] || 200, current_values['height'] || 200)
     f.set_location(current_values['start_x'] || 0, current_values['start_y'] || 0)
-  
-    f.undecorated = false # avoid exception on set_window_opacity [?] huh?
-    AWTUtilities.set_window_opacity(f, 0.5)
+    begin
+      AWTUtilities.set_window_opacity(f, 0.5)
+    rescue Exception => e
+      # jdk 7 <sigh> LODO
+    end
     f.show
   end
   

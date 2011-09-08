@@ -19,8 +19,8 @@ DefaultGroupName={#AppName}
 UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=setup {#AppName} v{#AppVer}
 [Icons]
-Name: {group}\Uninstall; Filename: {uninstallexe}
+Name: {group}\_record screen using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
 Name: {group}\configure by setting numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
 Name: {group}\benchmark your screen capture speeds; Filename: {app}\BltTest.exe; WorkingDir: {app}
-Name: {group}\record screen using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
-Name: {group}\configure by resizing a transparent window; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar mouse_draw.rb
+Name: {group}\configure by resizing a window; Filename: javaw; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar window_resize.rb
+Name: {group}\Uninstall; Filename: {uninstallexe}
