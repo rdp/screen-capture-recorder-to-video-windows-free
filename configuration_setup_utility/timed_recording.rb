@@ -1,35 +1,30 @@
-# use like ".mp3" "audio=xxx" "ffplay"
-# if desired
-
-require 'jruby-swing-helpers/swing_helpers'
 # bundled gems
 for dir in Dir[File.dirname(__FILE__) + "/vendor/*/lib"]
   $: << dir
 end
-require 'jruby-swing-helpers/drive_info'
 
-
-ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
+require 'jruby-swing-helpers/swing_helpers'
 include SwingHelpers
+require 'jruby-swing-helpers/drive_info'
+require 'setup_screen_tracker_params'
 
-device = ARGV[1] || "video=screen-capture-recorder -r 20" # -r 20 or it never stops... hmm...
-exe = ARGV[2] || "ffmpeg"
+# use vendored ffmpeg
+ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 
-if exe == "ffmpeg"
+old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 10
+device = "video=screen-capture-recorder -r #{old_fps}" # -r xxx or it never stops... hmm...
+exe = "ffmpeg"
 
-  file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
-  file += (ARGV[0] || ".mp4" ) unless file =~ /\./ # add extension for them...
-  if File.exist? file
-    got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
-    raise unless got == :yes
-    File.delete file
-  end
-  seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
-  seconds = "-t #{seconds}"
-  p "starting #{seconds} seconds now"
-else
-  raise unless exe == "ffplay"
+file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
+file += (ARGV[0] || ".mp4" ) unless file =~ /\./ # add the extension for them...
+if File.exist? file
+  got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
+  raise unless got == :yes
+  File.delete file
 end
+seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
+seconds = "-t #{seconds}"
+p "starting #{seconds} seconds now"
 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
@@ -37,8 +32,6 @@ end
 c = "#{exe} -f dshow -i #{device} #{seconds} #{'"' + file + '"' if file}"
 puts c
 system c
-if exe == "ffmpeg"
-  p 'revealing...'
-  SwingHelpers.show_in_explorer file
-  p 'done'
-end
+p 'revealing...'
+SwingHelpers.show_in_explorer file
+p 'done'

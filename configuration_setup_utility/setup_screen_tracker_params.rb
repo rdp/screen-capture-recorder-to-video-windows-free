@@ -8,6 +8,10 @@ class SetupScreenTrackerParams
   Settings = ['height', 'width', 'start_x', 'start_y', 'max_fps']
  
   def initialize
+    re_init
+  end
+  
+  def re_init
     @screen_reg = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
   end
   
@@ -24,8 +28,16 @@ class SetupScreenTrackerParams
   end
   
   def teardown
-    @screen_reg.close
+    @screen_reg.close # surely GC will do this for me right?
     @screen_reg = nil
+  end
+  
+  def all_current_values
+    out = {}
+    for name in Settings
+      out[name] = read_single_setting(name) # might be nil...
+    end
+    out
   end
   
 end
