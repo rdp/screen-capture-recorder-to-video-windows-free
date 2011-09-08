@@ -42,7 +42,7 @@ def do_command_line
     unless received
       require 'java' # jruby only for getting user input...
       previous_setting = '' if previous_setting == 0
-      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank to reset to default)', previous_setting)
+      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank to reset to default [full screen 30 fps primary monitor)', previous_setting)
       raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
     end
     if received == ''

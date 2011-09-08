@@ -11,11 +11,18 @@ dropdowns for selecting an audio [?]
   and encoding
   maybe fps :P
 
+audio: instructions "just use your mic" or "pipe a bit of your mic back through line in, and use line in/virtual-audio-capturer"
+  or allow it to have several channels for now...sure :P
+    and eventually umm...fix ffmpeg to allow for it?
+
 remember directory
 
-minimize to tray 
+minimize to tray
 
-include the audio grabber too [?]
+mouse drawing is the A+ wrong way LOL
+  window resize with button seems much better overall
+
+include the audio grabber too
 
 actually use it. playon competitor? LOL
   auto skype recorder :)
@@ -23,6 +30,11 @@ actually use it. playon competitor? LOL
 
 can "record" not just play from desktop or vice versa
   oh and stream LOL
+  
+gstreamer for streaming?
+
+compensate:
+  [libx264 @ 03BD9100] width or height not divisible by 2 (403x417)
 
 == speedup ==
 

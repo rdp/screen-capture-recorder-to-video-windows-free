@@ -12,13 +12,10 @@ require 'jruby-swing-helpers/drive_info'
 ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 include SwingHelpers
 
-device = ARGV[1] || "video=screen-capture-recorder -r 20"
+device = ARGV[1] || "video=screen-capture-recorder -r 20" # -r 20 or it never stops... hmm...
 exe = ARGV[2] || "ffmpeg"
 
 if exe == "ffmpeg"
-  seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
-  seconds = "-t #{seconds}"
-  p "doing #{seconds} seconds"
 
   file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
   file += (ARGV[0] || ".mp4" ) unless file =~ /\./ # add extension for them...
@@ -27,6 +24,9 @@ if exe == "ffmpeg"
     raise unless got == :yes
     File.delete file
   end
+  seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
+  seconds = "-t #{seconds}"
+  p "starting #{seconds} seconds now"
 else
   raise unless exe == "ffplay"
 end

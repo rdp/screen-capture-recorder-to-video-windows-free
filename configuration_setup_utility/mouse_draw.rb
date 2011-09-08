@@ -15,6 +15,7 @@ class MouseDraw
   f.add JButton.new('capture window')
   f.set_size(200,200)
 
+  f.undecorated = false # avoid exception on set_window_opacity [?] huh?
   AWTUtilities.set_window_opacity(f, 0.5)
   
   # wait till mouse goes down...
