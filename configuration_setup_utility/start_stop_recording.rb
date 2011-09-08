@@ -2,8 +2,10 @@
 # if desired
 
 require 'jruby-swing-helpers/swing_helpers'
-$: << File.dirname(__FILE__) + "/vendor/os-0.9.3/lib"
-$: << File.dirname(__FILE__) + "/vendor/rdp-ruby-wmi-0.3.1/lib"
+# bundled gems
+for dir in Dir[File.dirname(__FILE__) + "/vendor/*/lib"]
+  $: << dir
+end
 require 'jruby-swing-helpers/drive_info'
 
 
