@@ -12,9 +12,10 @@ class SetupScreenTrackerParams
   end
   
   def set_single_setting name, value
-    raise unless Settings.include?(name)
+    name = name.to_s # allow for symbols
+    raise "unknown name #{name}" unless Settings.include?(name)
     raise unless value.is_a? Fixnum
-    @screen_reg.write(name, Win32::Registry::REG_DWORD, value.to_i)
+    @screen_reg.write(name, Win32::Registry::REG_DWORD, value)
   end
   
   # can be nil if not set...

@@ -50,6 +50,7 @@ can "record" not just play from desktop or vice versa
   screen capture vlc 5,400
   screen capture device 1,300
   desktop capture 40K
+  desktop stream 18K
   
   video screen capture 160K
   record screen 300K
@@ -60,6 +61,7 @@ can "record" not just play from desktop or vice versa
   capture screen 1.8M
   capture screenshots 1.6M
   
+  sum:
   screen-capture-recorder-program (program 450K)
   
   
