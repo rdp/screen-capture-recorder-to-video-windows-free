@@ -2,16 +2,15 @@ log stats to the registry on exit... [+ jruby can read them to display...]
 
 can use hwnd.
   re-check stats when using versus not.
-  work when dragged too...?
+  does this work when thence dragged too...?
   
 can "force only next frame" ness? might not need this...
   skip_frame_if_same_as_previous option :P yes
 
-mouse_draw.rb from SC
-
 dropdowns for selecting an audio [?]
   and encoding
   maybe fps :P
+
 remember directory
 
 minimize to tray 
@@ -23,6 +22,7 @@ actually use it. playon competitor? LOL
   can use the default record device in...XP
 
 can "record" not just play from desktop or vice versa
+  oh and stream LOL
 
 == speedup ==
 
@@ -41,32 +41,3 @@ can "record" not just play from desktop or vice versa
  It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
  shearing (?) compared to itself upscreened...
  the "drag to select window" seter-zy-upperzy
-
-== propaganda ==
-  various :P [see audio file]
-  windows screen capture 110,000
-  window screen capture 135,000
-  screen capture directshow 590
-  screen capture vlc 5,400
-  screen capture device 1,300
-  desktop capture 40K
-  desktop stream 18K
-  
-  video screen capture 160K
-  record screen 300K
-  screen recorder 450K
-  screen capture 550K
-  screenshot capture 800K
-  
-  capture screen 1.8M
-  capture screenshots 1.6M
-  
-  sum:
-  screen-capture-recorder-program (program 450K)
-  
-  
-notes:
- 1024x1024:
-   15% one cpu used by the capture utility (0.013ms per capture)
-   good for now I guess (no transparency visible...)
-   12 fps <sigh>

@@ -1,0 +1,32 @@
+streaming:
+ wired might work better... :P
+
+
+== propaganda ==
+  various :P [see audio file]
+  windows screen capture 110,000
+  window screen capture 135,000
+  screen capture directshow 590
+  screen capture vlc 5,400
+  screen capture device 1,300
+  desktop capture 40K
+  desktop stream 18K
+  
+  video screen capture 160K
+  record screen 300K
+  screen recorder 450K
+  screen capture 550K
+  screenshot capture 800K
+  
+  capture screen 1.8M
+  capture screenshots 1.6M
+  
+  sum:
+  screen-capture-recorder-program (program 450K)
+  
+  
+notes:
+ 1024x1024:
+   15% one cpu used by the capture utility (0.013ms per capture)
+   good for now I guess (no transparency visible...)
+   12 fps <sigh>
