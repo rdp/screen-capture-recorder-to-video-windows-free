@@ -1,0 +1,80 @@
+pre.iplastic .Constant {
+   color: #6782D3;
+}
+pre.iplastic .Support {
+   font-weight: bold;
+   color: #3333FF;
+}
+pre.iplastic .EmbeddedSource {
+   background-color: #F9F9F9;
+   color: #000000;
+}
+pre.iplastic .Arguments {
+   font-style: italic;
+}
+pre.iplastic .TypeName {
+   font-weight: bold;
+}
+pre.iplastic .Identifier {
+   color: #9700CC;
+}
+pre.iplastic .Number {
+   color: #0066FF;
+}
+pre.iplastic .SectionName {
+   font-weight: bold;
+}
+pre.iplastic .Storage {
+   font-weight: bold;
+}
+pre.iplastic .line-numbers {
+   background-color: #BAD6FD;
+   color: #000000;
+}
+pre.iplastic {
+   background-color: #EEEEEE;
+   color: #000000;
+}
+pre.iplastic .FrameTitle {
+   font-weight: bold;
+   color: #000000;
+}
+pre.iplastic .TagName {
+   font-weight: bold;
+}
+pre.iplastic .Tag {
+   color: #0033CC;
+}
+pre.iplastic .Exception {
+   color: #990000;
+}
+pre.iplastic .XmlDeclaration {
+   color: #333333;
+}
+pre.iplastic .TrailingWhitespace {
+   background-color: #EEEEEE;
+}
+pre.iplastic .TagAttribute {
+   color: #3366CC;
+   font-style: italic;
+}
+pre.iplastic .Invalid {
+   background-color: #E7342D;
+   color: #FF0000;
+}
+pre.iplastic .Keyword {
+   color: #0000FF;
+}
+pre.iplastic .String {
+   color: #009933;
+}
+pre.iplastic .Comment {
+   color: #0066FF;
+   font-style: italic;
+}
+pre.iplastic .FunctionName {
+   color: #FF8000;
+}
+pre.iplastic .RegularExpression {
+   color: #FF0080;
+}

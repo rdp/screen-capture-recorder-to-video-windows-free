@@ -1,7 +1,13 @@
-require 'jruby-swing-helpers/swing_helpers'
 # use like ".mp3" "audio=xxx" "ffplay"
 # if desired
-ENV['PATH'] = 'ffmpeg\bin;' + ENV['PATH']
+
+require 'jruby-swing-helpers/swing_helpers'
+$: << File.dirname(__FILE__) + "/vendor/os-0.9.3/lib"
+$: << File.dirname(__FILE__) + "/vendor/rdp-ruby-wmi-0.3.1/lib"
+require 'jruby-swing-helpers/drive_info'
+
+
+ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 include SwingHelpers
 
 device = ARGV[1] || "video=screen-capture-recorder -r 20"
@@ -12,7 +18,7 @@ if exe == "ffmpeg"
   seconds = "-t #{seconds}"
   p "doing #{seconds} seconds"
 
-  file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', File.dirname(__FILE__)
+  file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
   file += (ARGV[0] || ".mp4" ) unless file =~ /\./ # add extension for them...
   if File.exist? file
     got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
@@ -28,7 +34,6 @@ end
 
 c = "#{exe} -f dshow -i #{device} #{seconds} #{'"' + file + '"' if file}"
 puts c
-p c
 system c
 if exe == "ffmpeg"
   p 'revealing...'

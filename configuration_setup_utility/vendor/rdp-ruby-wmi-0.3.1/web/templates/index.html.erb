@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<title><%= @title %></title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" type="text/css" href="css/toader.css"/>
+<link rel="stylesheet" type="text/css" href="css/lazy.css"/>
+</head>
+<body>
+
+<div id="header">
+		<div id="masthead">
+			<h1><%= @rubyforge_name %></h1>
+			<p><%= @tagline %></p>
+			<ul>
+				<li><a href="#"><strong>Home</strong></a></li>
+				<li><a href="doc/"><strong>Docs</strong></a></li>
+				<li><a href="<%=@download_url%>"><strong>Get</strong></a></li>
+				<!-- <li><a href="#"><strong>About</strong></a></li> -->
+			</ul>
+		</div>
+</div>
+
+<div id="main">
+	<div id="content">
+		<div class="article">
+      <h2>What is it?</h2>
+      <p><a href="<%= @url[1].lstrip %>">ruby-wmi</a> is an <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html">ActiveRecord</a> style interface for Microsoft's Windows
+      Management Instrumentation provider.
+      </p>
+      <p>Many of the methods in WMI::Base are borrowed directly, or with some
+      modification from <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html">ActiveRecord</a>.
+      </p>
+      <p>The major tool in this library is the #find method.  For more
+      information, see WMI::Base.
+      </p>
+
+      <p>There is also a WMI.subclasses method included for reflection.</p>
+		</div>
+    <div class="article">
+    <h2>How do I install it?</h2>
+      <ul>
+        <li>gem install ruby-wmi</li>
+      </ul>
+		</div>
+
+    <div class="article">
+      <h2>What does it look like?</h2>
+      <% @samples.each do |file, code| %>
+            <ul>
+            <li><%= file %>
+              <blockquote>
+                  <%= code %>
+              </blockquote>
+            </li>
+          </ul>
+          <% end %>
+		</div>
+
+</div>
+
+<!-- Footer -->
+
+	<div id="footer">
+
+    <ul>
+      <li>&copy; 2008 <%= @author %></li>
+      <li><a href="http://www.gorotron.com">CSS Template</a> by <a href="http://www.gorotron.com">gorotron</a>, modified by Gordon Thiesfeld.</li>
+    </ul>
+
+<<<<<<< HEAD
+  </div>
+=======
+  </div>
+>>>>>>> me/master

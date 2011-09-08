@@ -1,0 +1,188 @@
+pre.pastels_on_dark .CssPropertyColours {
+   color: #666633;
+}
+pre.pastels_on_dark .CssPropertyValue {
+   color: #9B2E4D;
+}
+pre.pastels_on_dark .HtmlDocinfoDtd {
+   font-style: italic;
+}
+pre.pastels_on_dark .Exceptions {
+   font-weight: bold;
+   color: #C82255;
+}
+pre.pastels_on_dark .ClassInheritance {
+   font-style: italic;
+}
+pre.pastels_on_dark .CssInvalidComma {
+   background-color: #FF0000;
+   color: #FFFFFF;
+}
+pre.pastels_on_dark .HtmlTag {
+   color: #858EF4;
+}
+pre.pastels_on_dark .Constants {
+   color: #6782D3;
+}
+pre.pastels_on_dark .Section {
+   font-style: italic;
+}
+pre.pastels_on_dark .PhpPhpdocs {
+   color: #777777;
+}
+pre.pastels_on_dark .Variables {
+   color: #C1C144;
+}
+pre.pastels_on_dark .RegularExpressions {
+   color: #666666;
+}
+pre.pastels_on_dark .Comments {
+   color: #555555;
+}
+pre.pastels_on_dark .line-numbers {
+   background-color: #73597E;
+   color: #FFFFFF;
+}
+pre.pastels_on_dark .PhpVariablesGlobals {
+   color: #B72E1D;
+}
+pre.pastels_on_dark .PhpConstantsCorePredefined {
+   font-weight: bold;
+   color: #DE8E20;
+}
+pre.pastels_on_dark .HtmlDoctype {
+   color: #888888;
+}
+pre.pastels_on_dark .HtmlDocinfoXml {
+   color: #68685B;
+}
+pre.pastels_on_dark .AttributeName {
+   color: #9B456F;
+}
+pre.pastels_on_dark .ClassName {
+   text-decoration: underline;
+}
+pre.pastels_on_dark .FunctionArgumentName {
+   font-weight: bold;
+}
+pre.pastels_on_dark .FunctionResult {
+   color: #0000FF;
+}
+pre.pastels_on_dark .TmlangdefKeys {
+   color: #7171F3;
+}
+pre.pastels_on_dark .CssSelectorsElements {
+   font-weight: bold;
+   color: #B8CD06;
+}
+pre.pastels_on_dark .CssSelectorsId {
+   color: #EC9E00;
+}
+pre.pastels_on_dark .ControlStructures {
+   font-weight: bold;
+   color: #6969FA;
+}
+pre.pastels_on_dark .Interpolation {
+   color: #C10006;
+}
+pre.pastels_on_dark .CommentsBlock {
+   color: #555555;
+}
+pre.pastels_on_dark .CssSelectorsPseudoclass {
+   color: #2E759C;
+}
+pre.pastels_on_dark .Operators {
+   color: #47B8D6;
+}
+pre.pastels_on_dark .TagName {
+   color: #858EF4;
+}
+pre.pastels_on_dark .EmbeddedCode {
+   text-decoration: underline;
+}
+pre.pastels_on_dark .PhpVariablesSaferGlobals {
+   color: #00FF00;
+}
+pre.pastels_on_dark .InvalidTrailingWhitespace {
+   background-color: #FFD0D0;
+}
+pre.pastels_on_dark .Functions {
+   color: #A1A1FF;
+}
+pre.pastels_on_dark .Keywords {
+   color: #A1A1FF;
+}
+pre.pastels_on_dark {
+   background-color: #211E1E;
+   color: #DADADA;
+}
+pre.pastels_on_dark .PhpKeywordsStorage {
+   color: #6969FA;
+}
+pre.pastels_on_dark .PhpIncludeRequire {
+   color: #C82255;
+}
+pre.pastels_on_dark .HtmlAttribute {
+   color: #9B456F;
+}
+pre.pastels_on_dark .AttributeWithValue {
+   color: #9B456F;
+}
+pre.pastels_on_dark .FunctionArgumentType {
+   color: #0000FF;
+}
+pre.pastels_on_dark .PreprocessorDirective {
+   font-weight: bold;
+}
+pre.pastels_on_dark .CssUnits {
+   color: #6969FA;
+}
+pre.pastels_on_dark .CssFontNames {
+   color: #666633;
+}
+pre.pastels_on_dark .CssSelectorsClassname {
+   color: #EDCA06;
+}
+pre.pastels_on_dark .PhpStringsSingleQuoted {
+   color: #BFA36D;
+}
+pre.pastels_on_dark .PhpConstantsStandardPredefined {
+   font-weight: bold;
+   color: #DE8E10;
+}
+pre.pastels_on_dark .HtmlServersideIncludes {
+   color: #909090;
+}
+pre.pastels_on_dark .CssPropertyKeyword {
+   color: #E1C96B;
+}
+pre.pastels_on_dark .LanguageConstants {
+   font-weight: bold;
+   color: #DE8E30;
+}
+pre.pastels_on_dark .CharacterConstants {
+   color: #AFA472;
+}
+pre.pastels_on_dark .Invalid {
+   font-weight: bold;
+   background-color: #FF0000;
+   color: #FFF9F9;
+}
+pre.pastels_on_dark .FunctionArgumentVariable {
+   font-style: italic;
+}
+pre.pastels_on_dark .Strings {
+   color: #AD9361;
+}
+pre.pastels_on_dark .PhpStringsDoubleQuoted {
+   color: #AD9361;
+}
+pre.pastels_on_dark .FunctionName {
+   font-weight: bold;
+}
+pre.pastels_on_dark .PreprocessorLine {
+   color: #2F006E;
+}
+pre.pastels_on_dark .Numbers {
+   color: #CCCCCC;
+}

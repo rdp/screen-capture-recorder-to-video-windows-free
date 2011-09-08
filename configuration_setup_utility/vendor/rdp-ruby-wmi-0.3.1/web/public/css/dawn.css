@@ -1,0 +1,121 @@
+pre.dawn .MetaSeparator {
+   font-weight: bold;
+   background-color: #DCDCDC;
+   color: #19356D;
+}
+pre.dawn .SupportVariable {
+   color: #234A97;
+}
+pre.dawn .Constant {
+   font-weight: bold;
+   color: #811F24;
+}
+pre.dawn .EmbeddedSource {
+   background-color: #829AC2;
+}
+pre.dawn .StringRegexpConstantCharacterEscape {
+   font-weight: bold;
+   color: #811F24;
+}
+pre.dawn .Support {
+   color: #691C97;
+}
+pre.dawn .MarkupList {
+   color: #693A17;
+}
+pre.dawn .Storage {
+   color: #A71D5D;
+   font-style: italic;
+}
+pre.dawn .line-numbers {
+   background-color: #7496CF;
+   color: #000000;
+}
+pre.dawn .StringConstant {
+   font-weight: bold;
+   color: #696969;
+}
+pre.dawn .MarkupUnderline {
+   text-decoration: underline;
+   color: #080808;
+}
+pre.dawn .MarkupHeading {
+   font-weight: bold;
+   color: #19356D;
+}
+pre.dawn .SupportConstant {
+   color: #B4371F;
+}
+pre.dawn .MarkupQuote {
+   background-color: #C5C5C5;
+   color: #0B6125;
+   font-style: italic;
+}
+pre.dawn .StringRegexpSpecial {
+   font-weight: bold;
+   color: #CF5628;
+}
+pre.dawn .InvalidIllegal {
+   background-color: #B52A1D;
+   color: #F8F8F8;
+   font-style: italic;
+}
+pre.dawn .MarkupDeleted {
+   color: #B52A1D;
+}
+pre.dawn .MarkupRaw {
+   background-color: #C5C5C5;
+   color: #234A97;
+}
+pre.dawn .SupportFunction {
+   color: #693A17;
+}
+pre.dawn .PunctuationSeparator {
+   color: #794938;
+}
+pre.dawn .StringRegexp {
+   color: #CF5628;
+}
+pre.dawn .StringEmbeddedSource {
+   background-color: #829AC2;
+   color: #080808;
+}
+pre.dawn .MarkupLink {
+   color: #234A97;
+   font-style: italic;
+}
+pre.dawn .MarkupBold {
+   font-weight: bold;
+   color: #080808;
+}
+pre.dawn .StringVariable {
+   color: #234A97;
+}
+pre.dawn .String {
+   color: #0B6125;
+}
+pre.dawn .Keyword {
+   color: #794938;
+}
+pre.dawn {
+   background-color: #F5F5F5;
+   color: #080808;
+}
+pre.dawn .MarkupItalic {
+   color: #080808;
+   font-style: italic;
+}
+pre.dawn .InvalidDeprecated {
+   font-weight: bold;
+   color: #B52A1D;
+}
+pre.dawn .Variable {
+   color: #234A97;
+}
+pre.dawn .Entity {
+   color: #BF4F24;
+}
+pre.dawn .Comment {
+   color: #5A525F;
+   font-style: italic;
+}

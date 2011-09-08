@@ -1,0 +1,121 @@
+pre.eiffel .EmbeddedSource {
+   background-color: #6597F6;
+}
+pre.eiffel .LibraryObject {
+   font-weight: bold;
+   color: #6D79DE;
+}
+pre.eiffel .Section {
+   font-style: italic;
+}
+pre.eiffel .FunctionArgumentAndResultTypes {
+   color: #70727E;
+}
+pre.eiffel .TypeName {
+   font-style: italic;
+}
+pre.eiffel .Number {
+   color: #CD0000;
+   font-style: italic;
+}
+pre.eiffel .MarkupList {
+   color: #B90690;
+}
+pre.eiffel .MarkupTagAttribute {
+   font-style: italic;
+}
+pre.eiffel .LibraryVariable {
+   font-weight: bold;
+   color: #21439C;
+}
+pre.eiffel .line-numbers {
+   background-color: #C3DCFF;
+   color: #000000;
+}
+pre.eiffel .FunctionParameter {
+   font-style: italic;
+}
+pre.eiffel .MarkupTag {
+   color: #1C02FF;
+}
+pre.eiffel {
+   background-color: #FFFFFF;
+   color: #000000;
+}
+pre.eiffel .MarkupHeading {
+   font-weight: bold;
+   color: #0C07FF;
+}
+pre.eiffel .JsOperator {
+   color: #687687;
+}
+pre.eiffel .InheritedClassName {
+   font-style: italic;
+}
+pre.eiffel .StringInterpolation {
+   color: #26B31A;
+}
+pre.eiffel .MarkupQuote {
+   color: #000000;
+   font-style: italic;
+}
+pre.eiffel .MarkupNameOfTag {
+   font-weight: bold;
+}
+pre.eiffel .InvalidTrailingWhitespace {
+   background-color: #FFD0D0;
+}
+pre.eiffel .LibraryConstant {
+   font-weight: bold;
+   color: #06960E;
+}
+pre.eiffel .MarkupXmlDeclaration {
+   color: #68685B;
+}
+pre.eiffel .PreprocessorDirective {
+   font-weight: bold;
+   color: #0C450D;
+}
+pre.eiffel .BuiltInConstant {
+   color: #585CF6;
+   font-style: italic;
+}
+pre.eiffel .MarkupDtd {
+   font-style: italic;
+}
+pre.eiffel .Invalid {
+   background-color: #990000;
+   color: #FFFFFF;
+}
+pre.eiffel .LibraryFunction {
+   font-weight: bold;
+   color: #3C4C72;
+}
+pre.eiffel .String {
+   color: #D80800;
+}
+pre.eiffel .UserDefinedConstant {
+   color: #C5060B;
+   font-style: italic;
+}
+pre.eiffel .Keyword {
+   font-weight: bold;
+   color: #0100B6;
+}
+pre.eiffel .MarkupDoctype {
+   color: #888888;
+}
+pre.eiffel .FunctionName {
+   font-weight: bold;
+   color: #0000A2;
+}
+pre.eiffel .PreprocessorLine {
+   color: #1A921C;
+}
+pre.eiffel .Variable {
+   color: #0206FF;
+   font-style: italic;
+}
+pre.eiffel .Comment {
+   color: #00B418;
+}

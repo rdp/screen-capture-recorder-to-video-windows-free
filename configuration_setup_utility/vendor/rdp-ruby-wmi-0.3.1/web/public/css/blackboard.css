@@ -1,0 +1,88 @@
+pre.blackboard .LatexSupport {
+   color: #FBDE2D;
+}
+pre.blackboard .OcamlInfixOperator {
+   color: #8DA6CE;
+}
+pre.blackboard .MetaFunctionCallPy {
+   color: #BECDE6;
+}
+pre.blackboard .Superclass {
+   color: #FF6400;
+   font-style: italic;
+}
+pre.blackboard .Constant {
+   color: #D8FA3C;
+}
+pre.blackboard {
+   background-color: #0C1021;
+   color: #F8F8F8;
+}
+pre.blackboard .OcamlFPConstant {
+   text-decoration: underline;
+}
+pre.blackboard .OcamlFPInfixOperator {
+   text-decoration: underline;
+}
+pre.blackboard .Support {
+   color: #8DA6CE;
+}
+pre.blackboard .OcamlOperator {
+   color: #F8F8F8;
+}
+pre.blackboard .Storage {
+   color: #FBDE2D;
+}
+pre.blackboard .line-numbers {
+   background-color: #253B76;
+   color: #FFFFFF;
+}
+pre.blackboard .StringInterpolation {
+   color: #FF6400;
+}
+pre.blackboard .InvalidIllegal {
+   background-color: #9D1E15;
+   color: #F8F8F8;
+}
+pre.blackboard .PlistUnquotedString {
+   color: #FFFFFF;
+}
+pre.blackboard .OcamlVariant {
+   color: #D5E0F3;
+}
+pre.blackboard .MetaTag {
+   color: #7F90AA;
+}
+pre.blackboard .LatexEnvironment {
+   background-color: #F7F7F8;
+}
+pre.blackboard .OcamlFPPrefixOperator {
+   text-decoration: underline;
+}
+pre.blackboard .OcamlPrefixOperator {
+   color: #8DA6CE;
+}
+pre.blackboard .EntityNameSection {
+   color: #FFFFFF;
+}
+pre.blackboard .String {
+   color: #61CE3C;
+}
+pre.blackboard .Keyword {
+   color: #FBDE2D;
+}
+pre.blackboard .LatexEnvironmentNested {
+   background-color: #7691F3;
+}
+pre.blackboard .InvalidDeprecated {
+   color: #AB2A1D;
+   font-style: italic;
+}
+pre.blackboard .Variable {
+}
+pre.blackboard .Entity {
+   color: #FF6400;
+}
+pre.blackboard .Comment {
+   color: #AEAEAE;
+}

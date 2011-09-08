@@ -1,0 +1,44 @@
+== 0.3.0 / 2008-04-30
+
+* 2 major enhancements
+  * added #all, #first, and #last methods as aliases for
+    #find(:all), #find(:first), and #find(:last)
+  * added #set_wmi_class_name method, similar to ActiveRecord's #set_table_name
+  
+    This allows you to create models with names you like.
+    
+    <code>
+      class Disk < WMI::Base
+        set_wmi_class_name "Win32_LogicalDisk"
+      end
+      
+      disks = Disk.all
+    </code>
+
+
+== 0.2.2 / 2008-01-11
+
+* 1 major enhancement
+  * supports privileges
+    <code>
+      events = WMI::Win32_NTLogEvent.find(
+        :all,
+        :privileges => [WMI::Privilege::Security],
+        :conditions => {:logfile => 'Security', :eventcode => '517'} )
+    </code>
+* minor enhancements
+    * added error handling for invalid queries and class name typos
+    * better documentation
+
+== 0.2.1 / 2007-07-19
+
+* minor enhancements
+  * fixed version numbers
+  * fixed sample code
+
+
+== 0.2.0 / 2007-07-19
+
+* 1 major enhancement
+  * Birthday!
+

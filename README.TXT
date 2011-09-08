@@ -59,16 +59,15 @@ If any value registry value is set to 0, that means "not set" so it uses the def
 == Trouble shooting ==
 
 it's too slow!
-  turn off aero display manager (esp. if you have dual monitors, this may help).
+  turn off aero display manager (esp. if you have dual monitors, this can help).
+    http://www.howtogeek.com/howto/windows-vista/disable-aero-on-windows-vista/
   disabling/enabling "hardware acceleration" for your desktop might help, too.
   try switching from 16 to 32 bit 
-Run the troubleshooting_benchmarker\BltTest\Release\BltTest.exe file (from github)
-Run it to benchmark your system and compare the various settings.
-  What you care about is the "reverse" timing speed in its output display.
+  Run the "benchmark your capture speed" utility to see how it affects it.
 
-Other feedback ping me rogerdpack@gmail.com or mailing list: http://groups.google.com/group/roger-projects
+Other feedback/problems/questions ping me rogerdpack@gmail.com or mailing list: http://groups.google.com/group/roger-projects
 
-== Future work ==
+== Code/Future work ==
 
 The code is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
@@ -78,5 +77,7 @@ I can add features upon reasonable demand.
 
 Basically you want a feature, ping me, you got it.
 
-the included blttest utility was originally from http://stereopsis.com/blttest
-(blttest is quite hardware dependent, or so I'm told).
+the included speed test utility was originally from http://stereopsis.com/blttest
+(bitblt is quite hardware dependent, or so I'm told).
+
+FFMpeg also included, see their site for licensing details/source ffmpeg.org
