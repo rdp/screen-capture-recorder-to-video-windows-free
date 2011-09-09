@@ -12,12 +12,16 @@ can include audio
   can do just audio
 
 can do "start", "stop" with audio + video
+  just audio
+    note it in the other project
 
 can use hwnd.
   re-check stats when using versus not.
   does this work when thence dragged too...?
 
 == maybe ==
+
+add README links (2)
 
 advertise "this includes a directshow device blah blah blah" betterlogic
 
