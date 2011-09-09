@@ -63,7 +63,14 @@ def do_command_line
       received = received.to_i
     end
     if received % 2 == 1 # it's odd
-      p "warning--odd numbers were given, but they are rejected from mplayer for some reason!"
+      warning= "warning--odd numbers were given, but they are rejected from mplayer for some reason!"
+      p warning
+      begin
+        require 'java'
+        require 'jruby-swing-helpers/swing_helpers'
+        SwingHelpers.show_blocking_message_dialog warning
+      rescue LoadError => e
+      end
     end
     setter.set_single_setting type, received
     puts "set #{type} => #{received} (0 means default)"

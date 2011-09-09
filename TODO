@@ -1,28 +1,48 @@
-log stats to the registry on exit... [+ jruby can read them to display...]
+== actually do ==
+
+dropdowns for selecting an audio [?]
+  find a good default encoding with high fps or the like
+  add encodings dropdown
+    options "encode with this, then really encode using that"
+  maybe fps :P
+
+include the audio grabber too
+
+can include audio
+  can do just audio
+
+can do "start", "stop" with audio + video
 
 can use hwnd.
   re-check stats when using versus not.
   does this work when thence dragged too...?
-  
+
+== maybe ==
+
+advertise "this includes a directshow device blah blah blah" betterlogic
+
+log stats to the registry on exit... [+ jruby can read them to display...]
+
 can "force only next frame" ness? might not need this...
   skip_frame_if_same_as_previous option :P yes
-
-dropdowns for selecting an audio [?]
-  and encoding
-  maybe fps :P
 
 audio: instructions "just use your mic" or "pipe a bit of your mic back through line in, and use line in/virtual-audio-capturer"
   or allow it to have several channels for now...sure :P
     and eventually umm...fix ffmpeg to allow for it?
 
 remember directory
+  use a cooler looking file selector
+  
+GradientTranslucentWindow
 
-minimize to tray
+auto-minimize to tray, stop on unminimize
+  tell CamStudio
 
-mouse drawing is the A+ wrong way LOL
-  window resize with button seems much better overall
+bring back the "window drawer" but work LOL
 
-include the audio grabber too
+can include two audio, separate tracks
+
+can do audio mixed
 
 actually use it. playon competitor? LOL
   auto skype recorder :)
@@ -32,9 +52,9 @@ can "record" not just play from desktop or vice versa
   oh and stream LOL
   
 gstreamer for streaming?
+  ruby?
 
-compensate:
-  [libx264 @ 03BD9100] width or height not divisible by 2 (403x417)
+warn them if they appear slow...
 
 == speedup ==
 
@@ -49,7 +69,14 @@ compensate:
     test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
     
 == other ==
+rename "like camstudio" or the like/propaganda
+
  do I need to have several "copies" of it installed, so you can capture while you view or what not?
  It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
  shearing (?) compared to itself upscreened...
  the "drag to select window" seter-zy-upperzy
+
+== never ==
+can i use camstudio's captions adder?
+  that one online one?
+

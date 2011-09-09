@@ -16,20 +16,20 @@ device = "video=screen-capture-recorder -r #{old_fps}" # -r xxx or it never stop
 exe = "ffmpeg"
 
 file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
-file += (ARGV[0] || ".mp4" ) unless file =~ /\./ # add the extension for them...
+file += (ARGV[0] || ".mp4" ) unless file =~ /\.mp4$/ # force extension on them...
 if File.exist? file
   got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
   raise unless got == :yes
   File.delete file
 end
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
-seconds = "-t #{seconds}"
-p "starting #{seconds} seconds now"
+
+SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) after you close this dialog..."
 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "#{exe} -f dshow -i #{device} #{seconds} #{'"' + file + '"' if file}"
+c = "#{exe} -f dshow -i #{device} -t #{seconds} #{'"' + file + '"' if file}"
 puts c
 system c
 p 'revealing...'
