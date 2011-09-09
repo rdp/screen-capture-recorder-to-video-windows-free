@@ -19,7 +19,16 @@ can use hwnd.
   re-check stats when using versus not.
   does this work when thence dragged too...?
 
+make sure we survive with high fps
+
 == maybe ==
+
+super spiffy "jruby.exe" installer, if that's faster at all
+  splash screen?
+
+can show mouse
+
+can follow mouse
 
 add README links (2)
 
