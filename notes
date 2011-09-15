@@ -4,7 +4,18 @@ streaming:
 9.0c XP installed fine..hmm...
 
 == propaganda ==
-  various :P [see audio file]
+
+
+
+  mehs:
+  screenshot capture 800K meh
+  screenshot screen capture 800K meh
+  capture software 450K meh
+  screen grab 450K meh
+  free screen 1.2M meh
+  capture screenshots 1.6M meh
+  capture software 450K meh
+
   windows screen capture 110,000
   window screen capture 135,000
   screen capture directshow 590
@@ -12,18 +23,40 @@ streaming:
   screen capture device 1,300
   desktop capture 40K
   desktop stream 18K
+  record desktop 90K
+
+  free screen capture 135K
+  record screen capture 135K
+  screencast 135K
+  capture streaming video 135K meh
+  windows screen capture 110K meh too low
+  screen capturing 110K
+  record streaming video 110K
+  free screen capture 135K
+  screen capture record 135K
+  software/program 135K
   
   video screen capture 160K
+  free recording software 165K
   record screen 300K
   screen recorder 450K
   screen capture 550K
-  screenshot capture 800K
+  screen recording 380K
+  record screen 300K
+  windows capture 240K
+  camstudio 240K  
+  
+  recorder screen 450K
+  record screen 300K
+  screen capture recorder 246K
   
   capture screen 1.8M
-  capture screenshots 1.6M
+  on screen capture 1.8M
+
+  free video screen capture recorder
   
   sum:
-  screen-capture-recorder-program (program 450K)
+  free-video-on-screen-capture-recorder
   
   
 notes:
@@ -41,12 +74,18 @@ utvideo is the "best" lossless they say...http://www.videohelp.com/tools/Ut_Vide
   or is that just for playback though?
   
 MSU lossless codec is abandoned and not developed nor supported anymore. It was never even close to realtime
+  except it appears to be hmm...
 Xvid with search options at 0, no B frames, and constant quality 1 or 2 is very fast, even with one core. You can specify it use just intra (I) frames, but it wouldn't be slow decoding with P-frames.
 imho, Fastest visually lossless codec is Cineform wavelet :) [not free]
    Cineform isn't in this test. It's not cheap, but it DOES let you capture 10 bit 4:2:2 1080p24 in real time to a single drive
 ArithYUV 
 YLC (YUY2 Lossless Codec version 0.25
 
+http://www.compression.ru/video/codec_comparison/lossless_codecs_2007_en.html
+  FFV1 max and fast seems like the next best "lossless" options.
+  
+TODO try out camstudio lossless too what size is it?
+  does it have a lossy option?  If so how does that compare to all other lossy options ffmpeg has? oh well LOL
 
 Lagarith clearly beats relatively fast codecs both by compression ratio and fps. http://compression.ru/video/codec_comparison/pdf/msu_lossless_codecs_comparison_2007_eng.pdf
 
@@ -55,10 +94,6 @@ Uncompressed did 24fps
 Aware Wavelet did 48fps
 
 CorePNG
-
-check camstudio?
-
-maybe ask the lagarith guy to port it?
 
 teeny window, 10 fps blacky:
   doDIBits 38% cpu

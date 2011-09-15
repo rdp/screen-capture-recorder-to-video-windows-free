@@ -24,18 +24,22 @@ can use hwnd.
 
 do we/should we re-encode after the capture?
   what's the second best for this after huffy?
-  check mjpeg, mpeg4
+  check mjpeg, mpeg4 video
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-it should set fps in source too
-then if necessary
-it should only advertise its screen bit depth [blacky] [?]
+it should only advertise its screen bit depth [blacky still slow...]
 then if necessary
 custom header + memcpy or straight memcpy if possible
   @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 == maybe ==
+
+ideas from camstudio
+  http://www.youtube.com/watch?v=KDiGO0clUY4
+  etc. etc.
+
+advertise pin right
 
 @ffmpeg: suggest tcmalloc (linux/windows?)
 
@@ -138,7 +142,10 @@ rename "like camstudio" or the like/propaganda
  shearing (?) compared to itself upscreened...
  the "drag to select window" seter-zy-upperzy
 
+ lagarith for encoding? bounties?
+
 == never ==
 can i use camstudio's captions adder?
   that one online one?
 
+screenshot tool: 3.3M
