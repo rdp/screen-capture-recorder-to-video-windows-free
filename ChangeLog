@@ -1,3 +1,8 @@
+0.2.0: 
+  Even better window drawer (now transparent with java 7)
+  slightly optimized screen capture (optimized to not use CPU currently, creates huges files though!)
+  it still uses too much cpu, but working on it.
+
 0.1.1: Better window drawer (kind of)
 
 0.1.0: has a friendlier script for recording screen, another option for setting it up

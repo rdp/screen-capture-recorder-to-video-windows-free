@@ -35,6 +35,8 @@ custom header + memcpy or straight memcpy if possible
 
 == maybe ==
 
+internally it can "stretch" or "downstretch" [except ffmpeg can just do that so...no big win there but hey :P]
+
 ideas from camstudio
   http://www.youtube.com/watch?v=KDiGO0clUY4
   etc. etc.

@@ -32,17 +32,15 @@ streaming:
   windows screen capture 110K meh too low
   screen capturing 110K
   record streaming video 110K
-  free screen capture 135K
   screen capture record 135K
   software/program 135K
   
   video screen capture 160K
-  free recording software 165K
+  free recording software 165K # software is just plain too tacky...
   record screen 300K
   screen recorder 450K
   screen capture 550K
   screen recording 380K
-  record screen 300K
   windows capture 240K
   camstudio 240K  
   
@@ -53,11 +51,11 @@ streaming:
   capture screen 1.8M
   on screen capture 1.8M
 
-  free video screen capture recorder
-  
   sum:
-  free-video-on-screen-capture-recorder
   
+  on-screen-capture-recorder-to-video-windows-free
+  
+    was screen capture recorder program
   
 notes:
  1024x1024:
