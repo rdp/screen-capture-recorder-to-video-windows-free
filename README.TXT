@@ -5,8 +5,6 @@ It also includes some helper "record your screen capture" and setup utilities.
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
 You can use this with any (directshow compatible) program to capture or stream, like VLC.
 
-I couldn't find any open source equivalents so created my own :)
-
 == Installation ==
 
 Download installer and run it, from 
@@ -75,6 +73,8 @@ Other feedback/problems/questions ping me rogerdpack@gmail.com or mailing list: 
 The code is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
   so you'll probably want to install the Windows SDK before messing around with the source code.
+
+I couldn't find any open source equivalents so created my own :)
 
 I can add features upon reasonable demand.
 
