@@ -74,8 +74,6 @@ The code is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
   so you'll probably want to install the Windows SDK before messing around with the source code.
 
-I couldn't find any open source equivalents so created my own :)
-
 I can add features upon reasonable demand.
 
 Basically you want a feature, ping me, you got it.
