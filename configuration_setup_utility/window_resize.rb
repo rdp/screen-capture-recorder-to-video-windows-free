@@ -37,6 +37,7 @@ class MouseDraw
     f.set_size(current_values['width'] || 200, current_values['height'] || 200)
     f.set_location(current_values['start_x'] || 0, current_values['start_y'] || 0)
     AWTUtilities.set_window_opacity(f, 0.5)
+	f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE); # instead of hang TODO save params too
     f.show
   end
   

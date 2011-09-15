@@ -59,3 +59,13 @@ CorePNG
 check camstudio?
 
 maybe ask the lagarith guy to port it?
+
+teeny window, 10 fps blacky:
+  doDIBits 38% cpu
+  memcpy 5%
+  
+ big window, 10 fps
+   ffmpeg main 20%
+   
+   61 % diBits
+   14 % memcpy

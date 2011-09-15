@@ -37,6 +37,8 @@ custom header + memcpy or straight memcpy if possible
 
 == maybe ==
 
+@ffmpeg: suggest tcmalloc (linux/windows?)
+
 it can "draw" all over the main monitor on the fly when recording.
 
 it can pause to control start time more precisely...
