@@ -82,7 +82,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
-
     // Save dimensions for later use in FillBuffer()
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
@@ -94,8 +93,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
   	  // was:	const REFERENCE_TIME FPS_20 = UNITS / 20;
-	  // TODO this "off" by one frame, assuming it is used at all :P
-	  config_max_fps = 60; // I assume they don't want more than that...
+	  // TODO my max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
+	  config_max_fps = 24; // can anybody want a higher default? huh?
 	}
   	m_rtFrameLength = UNITS / config_max_fps; 
 

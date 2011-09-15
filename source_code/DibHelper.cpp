@@ -22,8 +22,10 @@ void logToFile(char *log_this) {
 }
 */
 
+// my own debug output method...
 void LocalOutput(const char *str, ...)
 {
+#ifdef DEBUG  // hope this speeds things up...
   char buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -32,11 +34,12 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA("\n");
   // also works: OutputDebugString(L"yo ho2");
   //logToFile(buf);
+#endif
 }
 
 double PCFreq = 0.0;
 
-// call only needed once...
+// this call only needed once...
 void WarmupCounter()
 {
     LARGE_INTEGER li;
@@ -110,11 +113,11 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hBitmap);
 
-    // select old bitmap back into memory DC and get handle to
-    // bitmap of the screen
-    hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
-
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
+
+    // select old bitmap back into memory DC and get handle to
+    // bitmap of the capture
+    hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
 	doDIBits(hScrDC, hBitmap, nHeight, pData, pHeader);
 
