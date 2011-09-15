@@ -1,3 +1,6 @@
+0.2.1:
+  make it easier to re-register on failed etc.
+
 0.2.0: 
   Even better window drawer (now transparent with java 7)
   slightly optimized screen capture (optimized to not use CPU currently, creates huges files though!)

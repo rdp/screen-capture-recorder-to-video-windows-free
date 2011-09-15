@@ -1,8 +1,7 @@
-# to run this use c:\>ruby setup_params.rb 1024 800 ... (doesn't require jruby)
-# or jruby setup_params.rb to have it prompt you for values and set them (requires jruby).
+# to run this use c:\>ruby setup_params.rb ... (doesn't require jruby)
+# or jruby setup_params.rb to have it prompt you with GUI for values and set them.
 
 require 'win32/registry'
-require 'jruby-swing-helpers/swing_helpers'
 
 class SetupScreenTrackerParams
   Settings = ['height', 'width', 'start_x', 'start_y', 'max_fps']
@@ -11,6 +10,7 @@ class SetupScreenTrackerParams
     re_init
   end
   
+  # some apps need to reinit if they first got the registry on a different thread...I think so anyway...
   def re_init
     @screen_reg = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
   end
@@ -22,10 +22,12 @@ class SetupScreenTrackerParams
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value)
   end
   
-  # can be nil if not set...
+  # will return nil if not set in the registry...
   def read_single_setting name
+    raise "unknown name #{name}" unless Settings.include?(name)
     out = @screen_reg[name] rescue nil
-    out = nil if out == 0 # handle default
+    out = nil if out == 0 # handle having been set previously back to the default.
+    out
   end
   
   def teardown
@@ -46,6 +48,7 @@ end
 def do_command_line
   setter = SetupScreenTrackerParams.new
   for type in SetupScreenTrackerParams::Settings
+    p type
     previous_setting = setter.read_single_setting type
     if ARGV.index('--just-display-current-settings')
       puts "#{type}=#{previous_setting}"
@@ -54,7 +57,8 @@ def do_command_line
     received = ARGV.shift
     unless received
       require 'java' # jruby only for getting user input...
-      previous_setting = '' if previous_setting == 0
+      require 'jruby-swing-helpers/swing_helpers'
+      previous_setting ||= ''
       received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 24 fps, primary monitor]', previous_setting)
       raise 'canceledl...remaining settings have not been changed, but previous ones were' unless received # it should at least be the empty string...
     end
@@ -64,13 +68,13 @@ def do_command_line
       received = received.to_i
     end
     if received % 2 == 1 # it's odd
-      warning= "warning--odd numbers were given, but they are rejected from mplayer for some reason!"
+      warning= "warning--odd numbers were given, but they are rejected from mplayer for some reason, so be careful!"
       p warning
       begin
         require 'java'
         require 'jruby-swing-helpers/swing_helpers'
         SwingHelpers.show_blocking_message_dialog warning
-      rescue LoadError => e
+      rescue LoadError => allow_mri_for_setting_from_cli
       end
     end
     setter.set_single_setting type, received

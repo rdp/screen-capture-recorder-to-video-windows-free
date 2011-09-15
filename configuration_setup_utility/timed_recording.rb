@@ -8,6 +8,12 @@ include SwingHelpers
 require 'jruby-swing-helpers/drive_info'
 require 'setup_screen_tracker_params'
 
+if !File.exist?(ENV['windir'] + "\\system32\\msvcr100.dll")
+  SwingHelpers.show_blocking_message_dialog "warning--you don't appear to have the Microsoft visual studio 2010 runtime DLL's installed, please install them first and then run the \"re-register device\" command."
+  SwingHelpers.open_url_to_view_it_non_blocking "http://www.microsoft.com/download/en/details.aspx?id=5555"
+  exit 1
+end
+
 # use vendored ffmpeg
 ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 

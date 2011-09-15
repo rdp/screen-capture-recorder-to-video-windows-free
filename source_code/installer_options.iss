@@ -1,4 +1,4 @@
-#define AppVer "0.2.0"
+#define AppVer "0.2.1"
 #define AppName "Screen Capturer Recorder"
 
 [UninstallRun]
@@ -28,3 +28,4 @@ Name: {group}\benchmark your machines screen capture speed; Filename: {app}\BltT
 Name: {group}\configure capture settings by resizing a window; Filename: javaw; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar window_resize.rb
 Name: {group}\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
 Name: {group}\Uninstall; Filename: {uninstallexe}
+Name: {group}\re-register capture device; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax

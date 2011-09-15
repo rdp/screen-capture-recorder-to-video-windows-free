@@ -33,7 +33,11 @@ then if necessary
 custom header + memcpy or straight memcpy if possible
   @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
+new one "display current settings"
+
 == maybe ==
+
+detect slow aero, tell them how to fix it :)
 
 release "just the device" as an installable, or maybe just tell people they can use it/leverage it...
 
