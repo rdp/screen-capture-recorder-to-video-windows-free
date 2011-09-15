@@ -24,7 +24,7 @@ can use hwnd.
 
 do we/should we re-encode after the capture?
   what's the second best for this after huffy?
-  check mjpeg, mpeg4 video
+  check mjpeg, mpeg4 video, others mentioned
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
@@ -34,6 +34,8 @@ custom header + memcpy or straight memcpy if possible
   @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 == maybe ==
+
+release "just the device" as an installable, or maybe just tell people they can use it/leverage it...
 
 internally it can "stretch" or "downstretch" [except ffmpeg can just do that so...no big win there but hey :P]
 
@@ -85,8 +87,6 @@ can have some transparent overlays LOL
 
 @camstudio: the transparent fella is suh-weet.
 
-add README links (2)
-
 advertise "this includes a directshow device blah blah blah" betterlogic
 
 log stats to the registry on exit... [+ jruby can read them to display...]
@@ -101,8 +101,6 @@ audio: instructions "just use your mic" or "pipe a bit of your mic back through 
 remember directory
   use a cooler looking file selector
   
-GradientTranslucentWindow
-
 auto-minimize to tray, stop on unminimize
   tell CamStudio
 
