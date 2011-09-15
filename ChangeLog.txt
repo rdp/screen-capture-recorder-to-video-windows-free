@@ -2,6 +2,7 @@
   Even better window drawer (now transparent with java 7)
   slightly optimized screen capture (optimized to not use CPU currently, creates huges files though!)
   it still uses too much cpu, but working on it.
+  default to 24 fps (hmm)
 
 0.1.1: Better window drawer (kind of)
 
