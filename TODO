@@ -25,21 +25,34 @@ can use hwnd.
 do we/should we re-encode after the capture?
   what's the second best for this after huffy?
   check mjpeg, mpeg4
-  maybe there are slightly lossy ones?
+  maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
 it should set fps in source too
-
-it should only advertise its screen bit depth/memcpy [blacky] [?]
+then if necessary
+it should only advertise its screen bit depth [blacky] [?]
+then if necessary
+custom header + memcpy or straight memcpy if possible
 
 == maybe ==
 
+it can "draw" all over the main monitor on the fly when recording.
+
+it can pause to control start time more precisely...
+  or at least have some output so they can tell when it really begins
+
+it can have caption lists.
+
+it can "remaster" videos by recording over them [?] to add captions et al?
+  or maybe at least um...some way to add captions post fact...hmmm...
+
 it should display 30 pins, one for each fps  :P
   maybe some for 0.5 fps too?
-  convenient to save cpu in certain situations, slightly more cross program-zy
+  convenient to save cpu in certain situations, slightly more cross program-zy ease
   at least I think ffmpeg would use this, possibly vlc too?
 
 make so it can stream, too :P
+  plus just audio
 
 bounty lagarith ffmpeg [?]
   bounty windows codecs ffmpeg [?] libavcodec?
