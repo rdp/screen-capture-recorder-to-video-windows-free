@@ -18,6 +18,7 @@ DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=setup {#AppName} v{#AppVer}
+OutputDir=..\releases
 
 [Icons]
 Name: {group}\_record screen using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
