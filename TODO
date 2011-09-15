@@ -26,9 +26,20 @@ do we/should we re-encode after the capture?
   what's the second best for this after huffy?
   check mjpeg, mpeg4
   maybe there are slightly lossy ones?
-  x264 low compression or what not?
+  x264 low compression or what not? high speed x264?
+
+it should set fps in source too
+
+it should only advertise its screen bit depth/memcpy [blacky] [?]
 
 == maybe ==
+
+it should display 30 pins, one for each fps  :P
+  maybe some for 0.5 fps too?
+  convenient to save cpu in certain situations, slightly more cross program-zy
+  at least I think ffmpeg would use this, possibly vlc too?
+
+make so it can stream, too :P
 
 bounty lagarith ffmpeg [?]
   bounty windows codecs ffmpeg [?] libavcodec?
