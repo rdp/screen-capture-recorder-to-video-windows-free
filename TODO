@@ -22,16 +22,35 @@ can use hwnd.
   re-check stats when using versus not.
   does this work when thence dragged too...?
 
-make sure we survive with high fps
+do we/should we re-encode after the capture?
+  what's the second best for this after huffy?
+  check mjpeg, mpeg4
+  maybe there are slightly lossy ones?
+  x264 low compression or what not?
 
 == maybe ==
+
+bounty lagarith ffmpeg [?]
+  bounty windows codecs ffmpeg [?] libavcodec?
+
+offer them an option to "downsample" [through ffmpeg uh guess]
 
 super spiffy "jruby.exe" installer, if that's faster at all
   splash screen?
 
 can show mouse
 
+can show arbitrary mouse [transparent?]
+
 can follow mouse
+
+can make mouse yellow
+
+can make mouse yellow "sometimes"
+
+can have some transparent overlays LOL
+
+@camstudio: the transparent fella is suh-weet.
 
 add README links (2)
 

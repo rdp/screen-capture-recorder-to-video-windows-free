@@ -31,3 +31,29 @@ notes:
    15% one cpu used by the capture utility (0.013ms per capture)
    good for now I guess (no transparency visible...)
    12 fps <sigh>
+
+VBLE in my anime encoding .... the normal size for my huffyuv avi for the show was 5-6 gigs and with vble i got 4.4 gig
+  appears abandoned
+
+1680x1050 was 20 MB/s huffyuv
+
+utvideo is the "best" lossless they say...http://www.videohelp.com/tools/Ut_Video_Codec_Suite
+  or is that just for playback though?
+  
+MSU lossless codec is abandoned and not developed nor supported anymore. It was never even close to realtime
+Xvid with search options at 0, no B frames, and constant quality 1 or 2 is very fast, even with one core. You can specify it use just intra (I) frames, but it wouldn't be slow decoding with P-frames.
+imho, Fastest visually lossless codec is Cineform wavelet :) [not free]
+   Cineform isn't in this test. It's not cheap, but it DOES let you capture 10 bit 4:2:2 1080p24 in real time to a single drive
+ArithYUV 
+YLC (YUY2 Lossless Codec version 0.25
+
+
+Lagarith clearly beats relatively fast codecs both by compression ratio and fps. http://compression.ru/video/codec_comparison/pdf/msu_lossless_codecs_comparison_2007_eng.pdf
+
+HUFFYUV did 34fps
+Uncompressed did 24fps
+Aware Wavelet did 48fps
+
+CorePNG
+
+check camstudio?
