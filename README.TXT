@@ -7,9 +7,9 @@ You can use this with any (directshow compatible) program to capture or stream, 
 
 == Installation ==
 
-Download installer and run it, from 
+Download installer and run, from 
 
-  https://github.com/rdp/screen-capture-recorder-program/downloads
+ https://sourceforge.net/projects/screencapturer/files
 
 == Usage ==
 
