@@ -12,11 +12,9 @@ require 'setup_screen_tracker_params'
 ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 
 old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 10
-device = "video=screen-capture-recorder -r #{old_fps}" # -r xxx or it never stops... hmm...
-exe = "ffmpeg"
 
 file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
-file += (ARGV[0] || ".mp4" ) unless file =~ /\.mp4$/ # force extension on them...
+file += (ARGV[0] || ".avi" ) unless file =~ /\.avi$/ # force extension on them...
 if File.exist? file
   got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
   raise unless got == :yes
@@ -29,7 +27,7 @@ SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "#{exe} -f dshow -i #{device} -t #{seconds} #{'"' + file + '"' if file}"
+c = "ffmpeg -f dshow -i video=screen-capture-recorder -r #{old_fps} -t #{seconds} -vcodec huffyuv \"#{file}\""
 puts c
 system c
 p 'revealing...'

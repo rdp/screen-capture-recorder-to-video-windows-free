@@ -24,7 +24,8 @@ class SetupScreenTrackerParams
   
   # can be nil if not set...
   def read_single_setting name
-    @screen_reg[name] rescue nil
+    out = @screen_reg[name] rescue nil
+    out = nil if out == 0 # handle default
   end
   
   def teardown
