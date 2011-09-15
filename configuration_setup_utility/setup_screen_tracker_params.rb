@@ -55,8 +55,8 @@ def do_command_line
     unless received
       require 'java' # jruby only for getting user input...
       previous_setting = '' if previous_setting == 0
-      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank to reset to default [full screen 30 fps primary monitor)', previous_setting)
-      raise 'canceled...remaining settings have not been changed, but previous ones were' unless received
+      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 24 fps, primary monitor]', previous_setting)
+      raise 'canceledl...remaining settings have not been changed, but previous ones were' unless received # it should at least be the empty string...
     end
     if received == ''
       received = 0 # 0 is interpreted as "use defaults" when read from the registry, in the C code
