@@ -12,6 +12,7 @@ require 'setup_screen_tracker_params'
 ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 
 old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 10
+SetupScreenTrackerParams.new.set_single_setting "max_fps", old_fps # force default 10, for slow cpu's so they won't be eating cpu in their background process/thread
 
 file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
 file += (ARGV[0] || ".avi" ) unless file =~ /\.avi$/ # force extension on them...

@@ -70,11 +70,11 @@ void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
     BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY);
 }
 
-void doDIBits(HDC hScrDC, HBITMAP hBitmap, int nHeight, BYTE *pData, BITMAPINFO *pHeader) {
+void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
 	// taking me like 73% cpu ?
-    GetDIBits(hScrDC, hBitmap, 0, nHeight, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
+    GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
 	// lodo memcpy?
 	LocalOutput("getdibits took %fms ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
 }
@@ -92,7 +92,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
-    hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // BOO! for aero at least :P
+    hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // BOO! for aero speed-wise at least :P
     hMemDC = CreateCompatibleDC(hScrDC);
 
     // determine points of where to grab from it
@@ -117,6 +117,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
 	doDIBits(hScrDC, hBitmap, nHeight, pData, pHeader);
+
     // clean up
     DeleteDC(hScrDC);
     DeleteDC(hMemDC);
@@ -124,8 +125,6 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
     // return handle to the bitmap
     return hBitmap;
 }
-
-  
 
 
 

@@ -33,6 +33,7 @@ then if necessary
 it should only advertise its screen bit depth [blacky] [?]
 then if necessary
 custom header + memcpy or straight memcpy if possible
+  @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 == maybe ==
 
