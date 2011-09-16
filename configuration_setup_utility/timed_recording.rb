@@ -34,7 +34,7 @@ old_fps = SwingHelpers.get_user_input("desired capture speed (frames per second)
 
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
 
-SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will start after you click ok..."
+SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will start a bit after you click ok."
 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
