@@ -6,8 +6,6 @@ dropdowns for selecting an audio [?]
     options "encode with this, then really encode using that"
   maybe fps :P
 
-am I using the right start end timestamps [?] 
-
 include the audio grabber too
   or complain/warn if they "should" have installed it already :)
   
@@ -23,17 +21,18 @@ can use hwnd.
   does this work when thence dragged too...?
 
 do we/should we re-encode after the capture?
-  what's the second best for this after huffy?
+  what's the second best [available] for capture after huffyuv?
   check mjpeg, mpeg4 video, others mentioned
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-it should only advertise its screen bit depth [blacky still slow...]
-then if necessary
-custom header + memcpy or straight memcpy if possible
-  @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
+speedup:
+  it should only advertise its screen bit depth [?] [blacky still slow...]
+  then if necessary
+  custom header + memcpy or straight memcpy if possible
+    @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
-new one "display current settings"
+new icon "display current settings"
 
 easy streaming icon with VLC
 
@@ -45,24 +44,28 @@ release "just the device" as an installable, or maybe just tell people they can 
 
 internally it can "stretch" or "downstretch" [except ffmpeg can just do that so...no big win there but hey :P]
   could save a bit of cpu time if we could capture that way, or do it earlier rather than later.
+  just do naive sampling for now [?] maybe use some stretch function?
+    +- optimized stretching [my own naive local]
+    if they want non-naive then let them do that downstream
 
-way to ignore duplicates...
+a way to "ignore" duplicates...
   doing this earlier could save some other [memcpy's] and processing time...
 
 ideas from camstudio
   http://www.youtube.com/watch?v=KDiGO0clUY4
   etc. etc.
 
-advertise pin right
-
 @ffmpeg: suggest tcmalloc (linux/windows?)
 
-it can "draw" all over the main monitor on the fly when recording.
+it can "draw" all over the main monitor on the fly optionally when recording.
 
 it can pause to control start time more precisely...
   or at least have some output so they can tell when it really begins
+  little green arrow/indicator for when ffmpeg actually has started for sure maybe?
 
 it can have caption lists.
+
+it can "re-encode" to something friendlier [x264?]
 
 it can "remaster" videos by recording over them [?] to add captions et al?
   or maybe at least um...some way to add captions post fact...hmmm...
@@ -78,8 +81,6 @@ make so it can stream, too :P
 bounty lagarith ffmpeg [?]
   bounty windows codecs ffmpeg [?] libavcodec?
 
-offer them an option to "downsample" 1280 -> 640 or the like
-
 super spiffy "jruby.exe" installer, if that's faster at all
   splash screen?
 
@@ -93,14 +94,9 @@ can make mouse yellow
 
 can make mouse yellow "sometimes"
 
-can have some transparent overlays for captions LOL
-
 @camstudio: the transparent fella is suh-weet.
 
 log stats to the registry on exit... [+ jruby can read them to display...]
-
-can "force only next frame" ness? might not need this...
-  skip_frame_if_same_as_previous option :P yes
 
 audio: instructions "just use your mic" or "pipe a bit of your mic back through line in, and use line in/virtual-audio-capturer"
   or allow it to have several channels for now...sure :P
@@ -112,21 +108,13 @@ remember directory
 auto-minimize to tray, stop on unminimize
   tell CamStudio
 
-bring back the "window drawer" but work LOL
-
 can include two audio, separate tracks
 
 can do audio mixed
 
 actually use it. playon competitor? LOL
-  auto skype recorder :)
+  auto skype/google+ recorder :)
   can use the default record device in...XP
-
-can "record" not just play from desktop or vice versa
-  oh and stream LOL
-  
-gstreamer for streaming?
-  ruby?
 
 warn them if they appear slow...
 
@@ -141,16 +129,11 @@ warn them if they appear slow...
     faster memcpy? loop?
   ideal: dual-threaded, and when it comes by you say "ok, use this copy already prepared" LOL
     test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
-    
+
 == other ==
-rename "like camstudio" or the like/propaganda
+ rename "like camstudio" or the like/propaganda
 
- do I need to have several "copies" of it installed, so you can capture while you view or what not?
- It probably needs to send out input "only if it's changed" I'm thinkin..." for my purposes anyway...
  shearing (?) compared to itself upscreened...
- the "drag to select window" seter-zy-upperzy
-
- lagarith for encoding? bounties?
 
 == never ==
 can i use camstudio's captions adder?
