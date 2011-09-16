@@ -35,6 +35,8 @@ custom header + memcpy or straight memcpy if possible
 
 new one "display current settings"
 
+easy streaming icon with VLC
+
 == maybe ==
 
 detect slow aero, tell them how to fix it :)
