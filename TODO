@@ -42,6 +42,10 @@ detect slow aero, tell them how to fix it :)
 release "just the device" as an installable, or maybe just tell people they can use it/leverage it...
 
 internally it can "stretch" or "downstretch" [except ffmpeg can just do that so...no big win there but hey :P]
+  could save a bit of cpu time if we could capture that way, or do it earlier rather than later.
+
+way to ignore duplicates...
+  doing this earlier could save some other [memcpy's] and processing time...
 
 ideas from camstudio
   http://www.youtube.com/watch?v=KDiGO0clUY4
@@ -72,7 +76,7 @@ make so it can stream, too :P
 bounty lagarith ffmpeg [?]
   bounty windows codecs ffmpeg [?] libavcodec?
 
-offer them an option to "downsample" [through ffmpeg uh guess]
+offer them an option to "downsample" 1280 -> 640 or the like
 
 super spiffy "jruby.exe" installer, if that's faster at all
   splash screen?
@@ -87,11 +91,9 @@ can make mouse yellow
 
 can make mouse yellow "sometimes"
 
-can have some transparent overlays LOL
+can have some transparent overlays for captions LOL
 
 @camstudio: the transparent fella is suh-weet.
-
-advertise "this includes a directshow device blah blah blah" betterlogic
 
 log stats to the registry on exit... [+ jruby can read them to display...]
 
