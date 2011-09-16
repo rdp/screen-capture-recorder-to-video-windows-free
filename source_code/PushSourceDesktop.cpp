@@ -19,7 +19,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         m_FramesWritten(0),
         m_bZeroMemory(0),
         m_iFrameNumber(0),
-        m_nCurrentBitDepth(32),
+        //m_nCurrentBitDepth(32), // negotiated...
 		m_pParent(pFilter)
 {
 
@@ -82,7 +82,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 			m_rScreen.bottom = max_possible;
 	}
 
-    // Save dimensions for later use in FillBuffer()
+    // Save dimensions for later use in FillBuffer() et al
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 
@@ -96,6 +96,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  // TODO my max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
 	  config_max_fps = 24; // can anybody want a higher default? huh?
 	}
+	m_fFps = config_max_fps;
   	m_rtFrameLength = UNITS / config_max_fps; 
 
 	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 

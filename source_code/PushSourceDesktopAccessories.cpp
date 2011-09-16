@@ -18,7 +18,7 @@
 //      4    Return 8 bit palettised format
 //      >4   Invalid
 //
-HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE == CMediaType
+HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
 {
     CheckPointer(pmt, E_POINTER); // we get here twice...
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -113,6 +113,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
     pmt->SetSubtype(&SubTypeGUID);
     pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
+
 
     return NOERROR;
 
@@ -301,7 +302,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
 {
-	HRESULT hr = GetMediaType(iIndex, &m_mt); // ensure setup m_mt ...
+	HRESULT hr = GetMediaType(iIndex, &m_mt); // ensure setup/re-use m_mt ...
+	// some are indeed shared, apparently.
     if(FAILED(hr))
     {
         return hr;
@@ -309,6 +311,54 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 
     *pmt = CreateMediaType(&m_mt); // I think this does a copy, as well
 	if (*pmt == NULL) return E_OUTOFMEMORY;
+
+
+	
+    DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
+	
+    /*
+	  most are deprecated... yet still used? except inputsize, min/max frame interval, VideoStandard, guid [guid?]
+	*/
+
+    pvscc->VideoStandard = AnalogVideo_None;
+    pvscc->InputSize.cx = m_iImageWidth;
+	pvscc->InputSize.cy = m_iImageHeight;
+
+	pvscc->MinCroppingSize.cx = m_iImageWidth;
+    pvscc->MinCroppingSize.cy = m_iImageHeight;
+    pvscc->MaxCroppingSize.cx = m_iImageWidth;
+    pvscc->MaxCroppingSize.cy = m_iImageHeight;
+    pvscc->CropGranularityX = 1; // most of these values are all fake..
+    pvscc->CropGranularityY = 1;
+    pvscc->CropAlignX = 0;
+    pvscc->CropAlignY = 0;
+
+    pvscc->MinOutputSize.cx = m_iImageWidth;
+    pvscc->MinOutputSize.cy = m_iImageHeight;
+    pvscc->MaxOutputSize.cx = m_iImageWidth;
+    pvscc->MaxOutputSize.cy = m_iImageHeight;
+    pvscc->OutputGranularityX = 1;
+    pvscc->OutputGranularityY = 1;
+    pvscc->StretchTapsX = 0;
+    pvscc->StretchTapsY = 0;
+    pvscc->ShrinkTapsX = 0;
+    pvscc->ShrinkTapsY = 0;
+	
+
+	/* LODO can they request a frame interval? huh? it seems like they could somehow hmm...
+	// if they could then we should allow it here, too...should...
+    pvscc->MinFrameInterval = 200000;   //50 fps
+    pvscc->MaxFrameInterval = 50000000; // 0.2 fps
+	pvscc->MinBitsPerSecond = (80 * 60 * 3 * 8) / 5;
+    pvscc->MaxBitsPerSecond = 640 * 480 * 3 * 8 * 50;
+	*/
+
+	pvscc->MinFrameInterval = m_rtFrameLength;
+	pvscc->MaxFrameInterval = m_rtFrameLength;
+
+    pvscc->MinBitsPerSecond = m_iImageWidth*m_iImageHeight*8*m_fFps; // there is an 8 bit mode. somehow.
+    pvscc->MaxBitsPerSecond = m_iImageWidth*m_iImageHeight*32*m_fFps;
+
 	return hr;
 
 }
