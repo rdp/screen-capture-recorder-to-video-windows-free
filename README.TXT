@@ -68,7 +68,16 @@ it's too slow!
 
 Other feedback/problems/questions ping me rogerdpack@gmail.com or mailing list: http://groups.google.com/group/roger-projects
 
-== Code/Future work ==
+==  Redistribution ==
+
+You can use this/redistribute it with your own (screen capture) software if you wish by just redistributing the DLL 
+(PushDesktop.ax) with your app. That cuts the download size down to like 50K :)
+Also you don't have to download the full (20MB) package you can just download that one file from github 
+and then register it manually (regsvr32 PushDesktop.ax, may need administrator rights).
+Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
+in the same dir as your exe) for the dll to work/install, in case end users don't have it installed, in that case).
+
+== Code/Future work/Attributions ==
 
 The code is gently lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around.
