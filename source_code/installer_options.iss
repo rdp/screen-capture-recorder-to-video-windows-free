@@ -23,9 +23,10 @@ OutputDir=..\releases
 
 [Icons]
 Name: {group}\record screen using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
+Name: {group}\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\configure capture settings by setting numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
 Name: {group}\configure\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
 Name: {group}\configure\configure capture settings by resizing a window; Filename: javaw; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar window_resize.rb
-Name: {group}\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
+Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
 Name: {group}\Uninstall; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
