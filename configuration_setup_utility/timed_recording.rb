@@ -19,18 +19,22 @@ end
 # use vendored ffmpeg
 ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
 
-old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 24 # just use the normal default...which is maybe too high then? hmm...
-
-file = JFileChooser.new_nonexisting_filechooser_and_go 'select_file_to_write_to', DriveInfo.get_drive_with_most_space_with_slash
+file = JFileChooser.new_nonexisting_filechooser_and_go 'Select Filename for output file', DriveInfo.get_drive_with_most_space_with_slash
 file += (ARGV[0] || ".avi" ) unless file =~ /\.avi$/ # force extension on them...
 if File.exist? file
   got = JOptionPane.show_select_buttons_prompt "overwrite #{file}?", :yes => "yes", :no => "cancel"
   raise unless got == :yes
   File.delete file
 end
+
+#TODO tell them current size/settings
+
+old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 24 # just use the normal default...which is maybe too high then? hmm...
+old_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i
+
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
 
-SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) approx. 0.5s after you click ok..."
+SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will start after you click ok..."
 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
