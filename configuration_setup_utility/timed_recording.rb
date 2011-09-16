@@ -1,4 +1,6 @@
-# bundled gems
+puts 'loading...'
+
+# load bundled gems
 for dir in Dir[File.dirname(__FILE__) + "/vendor/*/lib"]
   $: << dir
 end
@@ -29,7 +31,7 @@ if File.exist? file
 end
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
 
-SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) after you close this dialog..."
+SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) approx. 0.5s after you click ok..."
 
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
@@ -37,6 +39,6 @@ SwingHelpers.show_blocking_message_dialog "starting the recording (#{seconds}s) 
 c = "ffmpeg -f dshow -i video=screen-capture-recorder -r #{old_fps} -t #{seconds} -vcodec huffyuv \"#{file}\""
 puts c
 system c
-p 'revealing...'
+p 'revealing file...'
 SwingHelpers.show_in_explorer file
 p 'done'

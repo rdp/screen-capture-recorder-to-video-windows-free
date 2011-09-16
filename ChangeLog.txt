@@ -1,3 +1,7 @@
+0.2.2:
+  make it respond more accurately to GetStreamCaps, for enumeration to work (ffmpeg better at least) and it appears to work better with gstreamer as well.
+  minor UI tweaks
+
 0.2.1:
   make it easier to re-register on failed etc.
 

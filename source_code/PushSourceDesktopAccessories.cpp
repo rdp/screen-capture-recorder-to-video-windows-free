@@ -317,7 +317,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
     DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
 	
     /*
-	  most are deprecated... yet still used? except inputsize, min/max frame interval, VideoStandard, guid [guid?]
+	  most are deprecated... yet some still used? odd
 	*/
 
     pvscc->VideoStandard = AnalogVideo_None;
@@ -328,7 +328,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
     pvscc->MinCroppingSize.cy = m_iImageHeight;
     pvscc->MaxCroppingSize.cx = m_iImageWidth;
     pvscc->MaxCroppingSize.cy = m_iImageHeight;
-    pvscc->CropGranularityX = 1; // most of these values are all fake..
+    pvscc->CropGranularityX = 1; // most of these values are fake..
     pvscc->CropGranularityY = 1;
     pvscc->CropAlignX = 0;
     pvscc->CropAlignY = 0;
