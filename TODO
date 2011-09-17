@@ -38,6 +38,10 @@ easy streaming icon with VLC
 
 == maybe ==
 
+split pins up so that, in essence, the incoming guy can select his fps on the fly.
+  if this is the only way, if this is "how" ffmpeg and VLC would use it to choose the right pin.
+  I assume other properties are unsettable, basically, or something?
+
 detect slow aero, tell them how to fix it :)
 
 release "just the device" as an installable, or maybe just tell people they can use it/leverage it...
