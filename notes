@@ -1,4 +1,4 @@
-streaming:
+streaming to TV:
  wired might work better... :P
 
 I just ran a quick test: a 90 second 720x480 23.976 fps MPEG video compressed in 7 seconds with Divx 
@@ -45,6 +45,11 @@ also should I do a TODO for "enable uPnP locally so you can give out real IP add
 red5 looks strong.
 
 http live streaming looks quite suh-weet...not sure how to actually upload the thing in realtime, though...scp I guess is the only way...
+
+ffmpeg can stream to rtp (and uh guess to ffserver to...)
+ If what you want is send the file little by little, so someone can connect to the stream after you start the stream, you can try this command
+  ffmpeg -i conference.mp3 -acodec copy -f rtp rtp://239.8.8.8:5000  -re
+  With -re you read the input at native frame rate, so you will be sending it as long as the file duration.
 
 == propaganda ==
 
