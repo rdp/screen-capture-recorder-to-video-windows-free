@@ -53,8 +53,19 @@ ffmpeg can stream to rtp (and uh guess to ffserver to...)
 
 gstreamer rtsp + DSS/linux got good reviews...hmm...https://www.ridgerun.com/developer/wiki/index.php/Using_GStreamer_with_Darwin_Streaming_Server_as_RTSP_server
 
-== propaganda ==
+make it like ustream?  is ustream free? 
 
+quicktime broadcaster supports isight, DV video, normal audio mic [!], camtwist which has a desktop capture...hmm... 
+
+  suggested ustream live codec/width: http://www.livestream.com/userguide/?title=Stream_With_Quicktime_Broadcaster#Suggested_Video_Settins
+
+This is non-trivial...
+you might be able to come up with some freaky way of doing things, like this gets video, that audio, this combines the two into rtsp [yikes].
+
+Also note that it seems from QT broadcaster that you just do keyframes every so often and...umm...lose realtime aspect
+but what are you going to do?
+
+== propaganda ==
 
 
   mehs:
