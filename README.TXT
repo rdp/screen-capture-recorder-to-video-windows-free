@@ -29,13 +29,15 @@ $ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 -t 10 screen-captur
 
 or combine it with recorded audio (with ffmpeg) if desired:
 
-$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback though...
+$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback be careful...
 
-(assuming you also had also installed the audio device from 
-https://github.com/rdp/virtual-audio-capture-grabber-device
-which probably isn't useful/needed for < vista, so your audio="..." setting would change.)
+The audio device name will vary.
 
-Another program that leverages it internally is sensible cinema's upconversion (pins it to the location of a given HWND window even).
+Also note that if you want broadcast/recording of "what you hear/waveout" in vista+
+then https://github.com/rdp/virtual-audio-capture-grabber-device
+may be of interest to you.
+
+Another program that leverages this internally is sensible cinema's upconversion (pins it to the location of a given HWND window even).
 
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your input source.
 
