@@ -67,6 +67,8 @@ you might be able to come up with some freaky way of doing things, like this get
 Also note that it seems from QT broadcaster that you just do keyframes every so often and...umm...lose realtime aspect
 but what are you going to do?
 
+encoding should probably "best" be done on the capture recorder side...
+
 == propaganda ==
 
 
