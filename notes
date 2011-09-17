@@ -51,6 +51,8 @@ ffmpeg can stream to rtp (and uh guess to ffserver to...)
   ffmpeg -i conference.mp3 -acodec copy -f rtp rtp://239.8.8.8:5000  -re
   With -re you read the input at native frame rate, so you will be sending it as long as the file duration.
 
+gstreamer rtsp + DSS/linux got good reviews...hmm...https://www.ridgerun.com/developer/wiki/index.php/Using_GStreamer_with_Darwin_Streaming_Server_as_RTSP_server
+
 == propaganda ==
 
 
