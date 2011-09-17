@@ -38,6 +38,8 @@ easy streaming icon with VLC
 
 == maybe ==
 
+slider for audio/video quality
+
 split pins up so that, in essence, the incoming guy can select his fps on the fly.
   if this is the only way, if this is "how" ffmpeg and VLC would use it to choose the right pin.
   I assume other properties are unsettable, basically, or something?
