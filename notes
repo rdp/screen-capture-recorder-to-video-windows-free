@@ -35,11 +35,16 @@ http://forum.videolan.org/viewtopic.php?f=4&t=60947
 
 vp8?
 
-shoutcast, icecast, or streamcast prolly or darwin?
+shoutcast, icecast, or streamcast or darwin?
 
 sopcast
+  is out
 
 also should I do a TODO for "enable uPnP locally so you can give out real IP addresses?" for local streaming?
+
+red5 looks strong.
+
+http live streaming looks quite suh-weet...not sure how to actually upload the thing in realtime, though...scp I guess is the only way...
 
 == propaganda ==
 
