@@ -4,8 +4,8 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>G:\downloads\ffmpeg-dshow-params-3\ffmpeg.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>G:\downloads\ffmpeg-dshow-params-4\ffmpeg.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments> -f dshow -i video="screen-capture-recorder",list</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -list_options true -f dshow -i video=screen-capture-device</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

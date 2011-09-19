@@ -147,12 +147,12 @@ STDAPI RegisterFilters( BOOL bRegister )
 
 STDAPI DllRegisterServer()
 {
-    return RegisterFilters(TRUE) && AMovieDllRegisterServer2( TRUE );
+    return RegisterFilters(TRUE); // && AMovieDllRegisterServer2( TRUE );
 }
 
 STDAPI DllUnregisterServer()
 {
-    return RegisterFilters(FALSE) && AMovieDllRegisterServer2( FALSE );
+    return RegisterFilters(FALSE); // && AMovieDllRegisterServer2( FALSE );
 }
 
 

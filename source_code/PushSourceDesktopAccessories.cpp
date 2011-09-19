@@ -45,7 +45,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			iPosition = 2;
 			break;
 		case 16:
-			iPosition = 2;//1;// 3; fails in ffmpeg <sigh>. //2 -> 24 bit
+			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
 			//iPosition = 1; // 32 bit
 			break;
 		case 15:
@@ -55,8 +55,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			iPosition = 5;
 			break;
 		case 32:
-			iPosition = 1;
-			break; // not needed I guess :P
+			iPosition = 2; // 32 -> 24 bit, figure since I'm already doing a conversion, might as well lose a few unused bits...
+			break; 
 		default: // our high quality, but really should never get here...
 			iPosition = 1;
 			break;
