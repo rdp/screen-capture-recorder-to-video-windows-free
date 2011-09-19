@@ -1,5 +1,9 @@
 == actually do ==
 
+installer for just the device, for easier human consumption
+  only when device changes
+  different folder
+
 dropdowns for selecting an audio [?]
   find a good default encoding with high fps or the like
   add encodings dropdown
@@ -37,13 +41,14 @@ new icon "display current settings"
 easy streamer with VLC [?] ffmpeg?
   check for local firewall...
   uPnP ?
-  looks like VLC for now until ffmpeg has qtcapture et al
+  looks like VLC for now until ffmpeg has qtcapture et al...
+  hmm mac is somewhat of an enigma...
 
 more detailed instructions on "how to capture audio" for XP
 
 bounty audio mixer ffmpeg, offer to help :P
 
-qtcapture audio bounty VLC:P
+qtcapture audio bounty VLC :P
 
 a "test via snapshot" method
 
@@ -92,7 +97,7 @@ it can pause to control start time more precisely...
 
 it can have caption lists.
 
-it can "re-encode" to something friendlier [x264?]
+it can "post-re-encode" to something friendlier [x264?]
 
 it can "remaster" videos by recording over them [?] to add captions et al?
   or maybe at least um...some way to add captions post fact...hmmm...
@@ -103,7 +108,7 @@ it should display 30 pins, one for each fps  :P
   at least I think ffmpeg would use this, possibly vlc too?
 
 make so it can stream, too :P
-  plus just audio
+  plus just audio streaming even...
 
 bounty lagarith ffmpeg [?]
   bounty windows codecs ffmpeg [?] libavcodec?
@@ -139,7 +144,7 @@ can include two audio, separate tracks
 
 can do audio mixed
 
-actually use it. playon competitor? LOL
+actually use it. playon competitor?
   auto skype/google+ recorder :)
   can use the default record device in...XP
 
@@ -158,12 +163,10 @@ warn them if they appear slow...
     test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
 
 == other ==
+
  rename "like camstudio" or the like/propaganda
 
  shearing (?) compared to itself upscreened...
 
 == never ==
 can i use camstudio's captions adder?
-  that one online one?
-
-screenshot tool: 3.3M
