@@ -69,11 +69,14 @@ protected:
 
     int m_iImageHeight;                 // The current image height
     int m_iImageWidth;                  // And current image width
-    int m_nCurrentBitDepth;             // Screen bit depth
+    int m_nCurrentBitDepth;             // capture requested bit depth
 
     CMediaType m_MediaType;
     CImageDisplay m_Display;            // Figures out our media type for us
 	CPushSourceDesktop* m_pParent;
+
+	int m_iScreenBitRate;
+	HDC hScrDc;
 
 	//CCritSec m_cSharedState;            // Protects our internal state
     //int m_iRepeatTime;                  // Time in msec between frames

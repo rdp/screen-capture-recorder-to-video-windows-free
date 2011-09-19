@@ -20,14 +20,14 @@
 //
 HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
 {
-    CheckPointer(pmt, E_POINTER); // we get here twice...
+    CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
     if(iPosition < 0)
         return E_INVALIDARG;
 
     // Have we run off the end of types?
-    if(iPosition > 4)
+    if(iPosition > 5)
         return VFW_S_NO_MORE_ITEMS;
 
     VIDEOINFO *pvi = (VIDEOINFO *) pmt->AllocFormatBuffer(sizeof(VIDEOINFO));
@@ -37,9 +37,35 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     // Initialize the VideoInfo structure before configuring its members
     ZeroMemory(pvi, sizeof(VIDEOINFO));
 
+	if(iPosition == 0) {
+		// pass it our "preferred" which is unchanged pixel format
+		switch(m_iScreenBitRate)
+		{
+		case 24:
+			iPosition = 2;
+			break;
+		case 16:
+			iPosition = 2;//1;// 3; fails in ffmpeg <sigh>. //2 -> 24 bit
+			//iPosition = 1; // 32 bit
+			break;
+		case 15:
+			iPosition = 4;
+			break;
+		case 8:
+			iPosition = 5;
+			break;
+		case 32:
+			iPosition = 1;
+			break; // not needed I guess :P
+		default: // our high quality, but really should never get here...
+			iPosition = 1;
+			break;
+		}
+	}
+
     switch(iPosition)
     {
-        case 0:
+        case 1:
         {    
             // Return our highest quality 32bit format
 
@@ -51,14 +77,14 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             break;
         }
 
-        case 1:
+        case 2:
         {   // Return our 24bit format
             pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 24;
             break;
         }
 
-        case 2:
+        case 3:
         {       
             // 16 bit per pixel RGB565
 
@@ -71,7 +97,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             break;
         }
 
-        case 3:
+        case 4:
         {   // 16 bits per pixel RGB555
 
             // Place the RGB masks as the first 3 doublewords in the palette area
@@ -83,7 +109,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             break;
         }
 
-        case 4:
+        case 5:
         {   // 8 bit palettised
 
             pvi->bmiHeader.biCompression = BI_RGB;
@@ -272,7 +298,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
 {
-    *piCount = 5;
+    *piCount = 6;
     *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is an MS thing.
     return S_OK;
 }
@@ -309,7 +335,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
         return hr;
     }
 
-    *pmt = CreateMediaType(&m_mt); // I think this does a copy, as well
+    *pmt = CreateMediaType(&m_mt); // windows metho, I think this does a copy, as well
 	if (*pmt == NULL) return E_OUTOFMEMORY;
 
 
@@ -356,8 +382,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 	pvscc->MinFrameInterval = m_rtFrameLength;
 	pvscc->MaxFrameInterval = m_rtFrameLength;
 
-    pvscc->MinBitsPerSecond = m_iImageWidth*m_iImageHeight*8*m_fFps; // there is an 8 bit mode. somehow.
-    pvscc->MaxBitsPerSecond = m_iImageWidth*m_iImageHeight*32*m_fFps;
+    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*m_fFps; // if in 8 bit mode. somehow.
+    pvscc->MaxBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*32*m_fFps;
 
 	return hr;
 

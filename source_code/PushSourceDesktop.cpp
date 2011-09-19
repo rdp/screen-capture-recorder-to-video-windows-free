@@ -14,6 +14,32 @@
 
 DWORD start; // for global stats
 
+
+
+
+int GetTrueScreenDepth(HDC hDC) {
+int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
+
+if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
+  HDC DeskDC = GetDC(NULL);
+  HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
+  ReleaseDC(NULL, DeskDC);
+
+  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP);
+
+  if (hOldBMP != NULL) {
+    SetPixelV(hDC, 0, 0, 0x000400);
+    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
+    SelectObject(hDC, hOldBMP);
+  }
+
+  DeleteObject(hBMP);
+}
+
+return RetDepth;
+}
+
+
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
@@ -36,13 +62,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
     // Get the device context of the main display, just to get some metrics for it...
 	start = GetTickCount();
-    HDC hDC;
-    hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
-
+    hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // SLOW for aero desktop ...
+	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
-    m_rScreen.right  = GetDeviceCaps(hDC, HORZRES);
-    m_rScreen.bottom = GetDeviceCaps(hDC, VERTRES);
+    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES);
+    m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
+
+	m_iScreenBitRate = GetTrueScreenDepth(hScrDc);// no 15/16 diff here -> GetDeviceCaps(hScrDc, BITSPIXEL); // http://us.generation-nt.com/answer/get-desktop-format-help-26384242.html
 
 	// my custom config settings...
 
@@ -86,9 +113,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 
-    // Release the device context
-    DeleteDC(hDC);
-
 	int config_max_fps = read_config_setting(TEXT("max_fps"));
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
@@ -105,6 +129,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
+	
+    // Release the device context
+    DeleteDC(hScrDc);
+
 	// I don't think it ever gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
@@ -132,15 +160,26 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// Copy the DIB bits over into our filter's output buffer.
     // Since sample size may be larger than the image size, bound the copy size.
     int nSize = min(pVih->bmiHeader.biSizeImage, (DWORD) cbData);
-    HDIB hDib = CopyScreenToBitmap(&m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
+    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
 
     if (hDib)
         DeleteObject(hDib);
 
+
+
+	FILTER_STATE myState;
+	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
+	bool fullyStarted =  myState == State_Running;
+
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
+
+	
+
     // wait until we "should" send this frame out...TODO...more precise et al...
-	if(m_iFrameNumber > 0 && (now > 0)) { // accomodate for if there is no clock at all...
+
+
+	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
@@ -148,7 +187,12 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
-    m_iFrameNumber++;
+
+	// for some reason the timings are messed up initially, as there's no start time.
+	// race condition?
+	// so don't count them unless they seem valid...
+	if(fullyStarted)
+      m_iFrameNumber++;
 
 	// Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
@@ -159,6 +203,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	double millisThisRound = GetCounterSinceStartMillis(startOneRound);
 	LocalOutput("end total frames %d %fms, total since beginning of time %f fps (theoretical max fps %f)\n", m_iFrameNumber, millisThisRound, 
 		fpsSinceBeginningOfTime, 1.0/millisThisRound*1000);
+
 	previousFrameEndTime = endFrame;
     return S_OK;
 }

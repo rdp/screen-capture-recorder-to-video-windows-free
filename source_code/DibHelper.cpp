@@ -16,16 +16,15 @@
 
 /*
 void logToFile(char *log_this) {
-    FILE *f = fopen("g:\\yo2", "a");
+    FILE *f = fopen("d:\\yo2", "a");
 	fprintf(f, log_this);
 	fclose(f);
-}
-*/
+}*/
 
-// my own debug output method...
+// my very own debug output method...
 void LocalOutput(const char *str, ...)
 {
-#ifdef DEBUG  // hope this speeds things up...
+#ifdef _DEBUG  // avoid in release mode...
   char buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -34,6 +33,7 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA("\n");
   // also works: OutputDebugString(L"yo ho2");
   //logToFile(buf);
+  //logToFile("\n");
 #endif
 }
 
@@ -69,22 +69,23 @@ double GetCounterSinceStartMillis(__int64 sinceThisTime)
 
 // split out for profiling purposes, though does clarify the code a bit..
 void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
-	  // bitblt screen DC to memory DC
-    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY);
+	// bitblt screen DC to memory DC
+    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
 }
 
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
 	// taking me like 73% cpu ?
+	// I think cxImage uses this same call...
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
 	// lodo memcpy?
 	LocalOutput("getdibits took %fms ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
 }
 
-HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
+HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
-    HDC         hScrDC, hMemDC;         // screen DC and memory DC
+    HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hBitmap, hOldBitmap;    // handles to deice-dependent bitmaps
     int         nX, nY, nX2, nY2;       // coordinates of rectangle to grab
     int         nWidth, nHeight;        // DIB width and height
@@ -95,7 +96,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
-    hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // BOO! for aero speed-wise at least :P
+    //hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); 
     hMemDC = CreateCompatibleDC(hScrDC);
 
     // determine points of where to grab from it
@@ -122,7 +123,6 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 	doDIBits(hScrDC, hBitmap, nHeight, pData, pHeader);
 
     // clean up
-    DeleteDC(hScrDC);
     DeleteDC(hMemDC);
 
     // return handle to the bitmap
