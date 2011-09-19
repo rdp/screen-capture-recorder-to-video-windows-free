@@ -14,17 +14,17 @@
 #include <stdio.h>
 #include <assert.h>
 
-/*
+
 void logToFile(char *log_this) {
-    FILE *f = fopen("d:\\yo2", "a");
+    FILE *f = fopen("G:\\yo2", "a");
 	fprintf(f, log_this);
 	fclose(f);
-}*/
+}
 
 // my very own debug output method...
 void LocalOutput(const char *str, ...)
 {
-#ifdef _DEBUG  // avoid in release mode...
+//#ifdef _DEBUG  // avoid in release mode...
   char buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -32,19 +32,21 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA(buf);
   OutputDebugStringA("\n");
   // also works: OutputDebugString(L"yo ho2");
-  //logToFile(buf);
-  //logToFile("\n");
-#endif
+  logToFile(buf);
+  logToFile("\n");
+//#endif
 }
 
-double PCFreq = 0.0;
+long double PCFreqMillis = 0.0;
 
 // this call only needed once...
+// who knows if this is useful or not, speed-wise...
 void WarmupCounter()
 {
     LARGE_INTEGER li;
-	assert(QueryPerformanceFrequency(&li));
-    PCFreq = double(li.QuadPart)/1000.0;
+	BOOL ret = QueryPerformanceFrequency(&li);
+	assert(ret != 0); // only gets run in debug mode LODO
+    PCFreqMillis = (long double(li.QuadPart))/1000.0;
 }
 
 __int64 StartCounter()
@@ -54,36 +56,60 @@ __int64 StartCounter()
     return (__int64) li.QuadPart;
 }
 
-double GetCounterSinceStartMillis(__int64 sinceThisTime)
+long double GetCounterSinceStartMillis(__int64 sinceThisTime)
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
-	assert(PCFreq);
-    return double(li.QuadPart-sinceThisTime)/PCFreq;
-}
+	assert(PCFreq!= 0.0);
+    return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
+} // LODO do I really need long double here? no really.
 // use like 
 // 	__int64 start = StartCounter();
 // ...
-// __int64 elapsed = GetCounterSinceStartMillis(start)
+// long double elapsed = GetCounterSinceStartMillis(start)
+// printf("took %.020Lf ms", elapsed);
+// or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
 
 
 // split out for profiling purposes, though does clarify the code a bit..
 void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	// bitblt screen DC to memory DC
+	__int64 start = StartCounter();
     BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
+	long double elapsed = GetCounterSinceStartMillis(start);
+
+	LocalOutput("bitblt took %.020Lf ms", elapsed);
 }
 
+#include <malloc.h>
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
+
 	// taking me like 73% cpu ?
 	// I think cxImage uses this same call...
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
-	
-
 	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...
+	LocalOutput("getdibits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
 
-	LocalOutput("getdibits took %fms ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
+	/*
+	  without aero:
+      bitblt took 2.10171999999999980000 ms (with aero:  53.8527600000ms)
+      getdibits took 2.435400ms
+      memcpy took 2.01952000000000000000 # hmm...
+
+	*/
+
+	/*
+	int size = pHeader->bmiHeader.biSizeImage; // bytes
+	BYTE *local = (BYTE *) malloc(size);
+	start = StartCounter();	
+	memcpy(local, pData, size);
+
+	
+	__int64 now = StartCounter(); 
+	LocalOutput("memcpy took %.020Lf ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
+	free(local);*/
 }
 
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)

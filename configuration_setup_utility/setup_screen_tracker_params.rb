@@ -20,6 +20,8 @@ class SetupScreenTrackerParams
     raise "unknown name #{name}" unless Settings.include?(name)
     raise unless value.is_a? Fixnum
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value)
+    set_value = read_single_setting name
+    raise 'unable to set' unless set_value == value
   end
   
   # will return nil if not set in the registry...
@@ -81,7 +83,7 @@ def do_command_line
     puts "set #{type} => #{received} (0 means default)"
   end
   setter.teardown
-  p 'done setting them all'
+  p 'done setting them all' unless ARGV.index('--just-display-current-settings')
 end
 
 
@@ -92,4 +94,9 @@ if $0 == __FILE__
     exit 0
   end
   do_command_line
+  if ARGV.index('--just-display-current-settings')
+    p 'hit enter to continue' # pause :P
+    STDIN.getc
+  end
+
 end

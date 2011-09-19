@@ -46,10 +46,12 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			break;
 		case 16:
 			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
-			//iPosition = 1; // 32 bit
+			//iPosition = 1; // 32 bit slower!
+			//32 -> 24: getdibits took 2.251000ms
+			//32 -> 32: getdibits took 2.916480ms
 			break;
 		case 15:
-			iPosition = 4;
+			iPosition = 2;//4; // odd case, but fear of crashing ffmpeg remains in my heart...
 			break;
 		case 8:
 			iPosition = 5;

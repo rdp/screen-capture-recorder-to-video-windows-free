@@ -57,4 +57,4 @@ DWORD read_config_setting(LPCTSTR szValueName);
 
 void WarmupCounter();
 __int64 StartCounter();
-double GetCounterSinceStartMillis(__int64 start);
+long double GetCounterSinceStartMillis(__int64 start);

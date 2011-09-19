@@ -12,9 +12,7 @@
  **********************************************/
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger!
 
-DWORD start; // for global stats
-
-
+DWORD globalStart;
 
 
 int GetTrueScreenDepth(HDC hDC) {
@@ -61,7 +59,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // support for overlay surfaces).
 
     // Get the device context of the main display, just to get some metrics for it...
-	start = GetTickCount();
+	globalStart = GetTickCount();
     hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // SLOW for aero desktop ...
 	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
@@ -113,7 +111,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 
-	int config_max_fps = read_config_setting(TEXT("max_fps"));
+	int config_max_fps = read_config_setting(TEXT("max_fps")); // TODO allow floats!
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
   	  // was:	const REFERENCE_TIME FPS_20 = UNITS / 20;
@@ -175,9 +173,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     CSourceStream::m_pFilter->StreamTime(now);
 
 	
+	long double millisThisRound = GetCounterSinceStartMillis(startOneRound);
 
     // wait until we "should" send this frame out...TODO...more precise et al...
-
 
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
@@ -199,10 +197,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber == 1);
 
-	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - start)*1000;
-	double millisThisRound = GetCounterSinceStartMillis(startOneRound);
-	LocalOutput("end total frames %d %fms, total since beginning of time %f fps (theoretical max fps %f)\n", m_iFrameNumber, millisThisRound, 
-		fpsSinceBeginningOfTime, 1.0/millisThisRound*1000);
+	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
+	LocalOutput("end total frames %d %.020Lfms, total since beginning of time %f fps (theoretical max fps %f)", m_iFrameNumber, millisThisRound, 
+		fpsSinceBeginningOfTime, 1.0*1000/millisThisRound);
 
 	previousFrameEndTime = endFrame;
     return S_OK;

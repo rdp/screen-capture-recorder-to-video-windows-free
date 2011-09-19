@@ -1,4 +1,5 @@
 require 'jruby-swing-helpers/mouse'
+require 'jruby-swing-helpers/swing_helpers'
 require 'setup_screen_tracker_params'
 require 'java'
 
@@ -30,14 +31,14 @@ class MouseDraw
           p e, e.to_s, e.backtrace
         end
       end
-      SwingHelpers.show_blocking_message_dialog 'done setting them to match that window (its total size)'
+      SwingHelpers.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
       f.dispose
     }
     current_values = setter_getter.all_current_values
     f.set_size(current_values['width'] || 200, current_values['height'] || 200)
     f.set_location(current_values['start_x'] || 0, current_values['start_y'] || 0)
-    AWTUtilities.set_window_opacity(f, 0.5)
-	f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE); # instead of hang TODO save params too
+    AWTUtilities.set_window_opacity(f, 0.6)
+  	f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE) # instead of hang when they click the "X" [LODO warn?]
     f.show
   end
   
