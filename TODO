@@ -4,6 +4,13 @@ installer for just the device, for easier human consumption
   only when device changes
   different folder
 
+easy streamer with VLC [?] ffmpeg?
+  check for local firewall...
+  looks like VLC for now until ffmpeg has qtcapture et al...
+    hmm mac is somewhat of an enigma...
+  uPnP ?
+  can use ping/connection tester?
+
 dropdowns for selecting an audio [?]
   find a good default encoding with high fps or the like
   add encodings dropdown
@@ -31,18 +38,13 @@ do we/should we re-encode after the capture?
   x264 low compression or what not? high speed x264?
 
 speedup:
-  it should only advertise its screen bit depth [?] [blacky still slow...]
-  then if necessary
-  custom header + memcpy or straight memcpy if possible
-    @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
+  it should only advertise its screen bit depth 
+    [blacky check if memcpy needed...]
+
+@audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 new icon "display current settings"
 
-easy streamer with VLC [?] ffmpeg?
-  check for local firewall...
-  uPnP ?
-  looks like VLC for now until ffmpeg has qtcapture et al...
-  hmm mac is somewhat of an enigma...
 
 more detailed instructions on "how to capture audio" for XP
 
@@ -52,9 +54,7 @@ qtcapture audio bounty VLC :P
 
 a "test via snapshot" method
 
-after window it should say what stats were set to.
-
-there's a bug in released version windower
+try out red5 :P
 
 == maybe ==
 
