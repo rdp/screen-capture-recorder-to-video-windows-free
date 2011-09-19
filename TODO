@@ -34,11 +34,29 @@ speedup:
 
 new icon "display current settings"
 
-easy streamer with VLC [?]
+easy streamer with VLC [?] ffmpeg?
+  check for local firewall...
+  uPnP ?
+  looks like VLC for now until ffmpeg has qtcapture et al
+
+more detailed instructions on "how to capture audio" for XP
+
+bounty audio mixer ffmpeg, offer to help :P
+
+qtcapture audio bounty VLC:P
 
 a "test via snapshot" method
 
+after window it should say what stats were set to.
+
+there's a bug in released version windower
+
 == maybe ==
+
+ps3ms integration [with XBMC to test it [?]]
+  tell them to use ffmpeg :P
+  tell them they can become a playon.tv competitor!
+  tell them to support wii browsing/playback :P
 
 slider for audio/video quality
 
@@ -55,6 +73,7 @@ internally it can "stretch" or "downstretch" [except ffmpeg can just do that so.
   just do naive sampling for now [?] maybe use some stretch function?
     +- optimized stretching [my own naive local]
     if they want non-naive then let them do that downstream
+  "high quality scaling"
 
 a way to "ignore" duplicates...
   doing this earlier could save some other [memcpy's] and processing time...
