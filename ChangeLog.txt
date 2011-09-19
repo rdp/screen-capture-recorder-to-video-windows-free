@@ -1,3 +1,7 @@
+0.2.4: 09-19-11:
+  attempt to not register as IAMStreamSource
+  small speedup by preferring 24 bps as the default over 32
+
 0.2.3: 9-16-11:
   allow to change fps with dialog
 
