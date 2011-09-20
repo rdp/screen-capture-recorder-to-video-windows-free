@@ -27,7 +27,7 @@ end total frames 23 12.05036000000000000000ms, total since beginning of time 10.
   TODO check :P
 
 == broadcast  ==
- strema to TV: wired might work better... :P
+ streaming anything to TV: wired might work better... :P
 
 I just ran a quick test: a 90 second 720x480 23.976 fps MPEG video compressed in 7 seconds with Divx 
 at its fastest settings. Xvid took 17 seconds. HuffYUV took 9 seconds. 
@@ -35,6 +35,7 @@ PicVideo MJPEG (v 2.0) 7 seconds. This was on a Q6600 CPU.
 
 maybe I should bounty camstudio codec compressor too?
 
+"Hence DNXHD, libx264, MPEG 1/2, libxvid are good choices for multithreading." hmm...
 
 x264 speeds:
 All the encoding settings were tested on a 720x448 @30000/1001 fps video sample, the target bitrate was 900kbps, and the machine was an AMD-64 3400+ at 2400 MHz in 64 bits mode. Each encoding setting features the measured encoding speed (in frames per second) and the PSNR loss (in dB) compared to the "very high quality" setting. Please understand that depending on your source, your machine type and development advancements, you may get very different results.
@@ -44,16 +45,13 @@ Very high quality	subq=6:partitions=all:8x8dct:me=umh:frameref=5:bframes=3:b_pyr
 High quality	subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b	13fps	-0.89dB
 Fast	subq=4:bframes=2:b_pyramid:weight_b	17fps	-1.48dB
 
-maybe should bounty fraps encoder
+maybe should bounty an ffmpeg fraps encoder
 
 The most balanced and flexible codec is FFV1: relatively good speed and high compression for various presets."
 
-flv?
-
 MPEG-2 and Windows Media are great for real time recording even on slow computers.
-webm?
 
-1) wmv9 cant beat even xvid clearly on 1cd backup bitrates, so it has no chance against a good h.264 implementation, like x264 or ateme
+1) wmv9 cant beat even xvid clearly on 1cd backup bitrates, so it [xvid] has no chance against a good h.264 implementation, like x264 or ateme
   wmv9 has poorer quality I guess...might be fast still, but...hmm...
 
 x264 plugin for video over shoutcast also shows that h264 is better in streaming quality
@@ -63,16 +61,16 @@ http://forum.videolan.org/viewtopic.php?f=4&t=60947
 
 there may be no mencoder rtsp [?]
 
-vp8?
+vp8/webm?
 
 shoutcast, icecast, or streamcast or darwin?
+  red5 looks strong.
 
 sopcast
   is out
 
 also should I do a TODO for "enable uPnP locally so you can give out real IP addresses?" for local streaming?
 
-red5 looks strong.
 
 http live streaming looks quite suh-weet...not sure how to actually upload the thing in realtime, though...scp I guess is the only way...
 
