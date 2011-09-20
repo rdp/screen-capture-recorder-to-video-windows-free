@@ -13,7 +13,7 @@ Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
 Source: ..\ChangeLog.txt; DestDir: {app}
 Source: ..\configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: ..\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
-Source: ..\vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs
+Source: ..\vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs; MinVersion: 0,6.0.6000
 
 [Setup]
 AppName={#AppName}
