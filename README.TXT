@@ -67,22 +67,46 @@ If any value registry value is set to 0, that means "not set" so it uses the def
 == Trouble shooting/Feedback/Questions ==
 
 it's too slow!
-  turn off aero display manager (esp. if you have dual monitors, this can help).
+  Run the "benchmark your capture speed" utility to see how slow it is.
+  A few things that can help: if you're on vista+
+    turn off aero display manager (esp. if you have dual monitors, this can help).
     http://www.howtogeek.com/howto/windows-vista/disable-aero-on-windows-vista/
-  disabling/enabling "hardware acceleration" for your desktop might help, too.
-  try switching from 16 to 32 bit 
-  Run the "benchmark your capture speed" utility to see how it affects it.
+  disabling or enabling "hardware acceleration" for the desktop might help, too.
+  try switching from 32 to 16 bit.  It's a tidge faster to capture (90fps compared to 80fps on my box)
+  It captures much more quickly if aero is turned off (as 
+  in with aero, capturing a 650x976 window takes 50ms, without aero, 
+  3ms).  The rest of a single screenshot capture takes about 7ms (sum 
+  10ms without aero), so you can see the relative cost it adds [!]
+  If you have dual core, then theoretically capturing with aero on will 
+  just cause the capture thread to probably eat "an entire core" if you are trying to capture at 
+  20 fps or higher.  So it may be worth it, if you have the extra cpu, to not care.
+
+Note that if your output is, say, going to be 10 fps "used" in the end.
+Ex: ffmpeg -f dshow -i video=video-capture-recorder yo.mp4 -r 10 # output file is only 10 fps
+
+Then to save cpu, the "good" directshow applications have their own "source fps" parameter,
+that they pass on to this filter.
+ex: vlc.exe dshow:// ... :dshow-fps=1.5
+vlc then passes this in to SetFormat after negotiation, and the device accepts it.
+
+Some "bad" directshow applications don't pass this in.
+So there may be a case where it is wasting cpu somehow, by capturing too many or the like.
+So for those programs, you'll want to set the force_max_fps parameter, which will limit its
+capture frequency.  It may be the only way to pull in some rogue applications (ffmpeg <cough>).
+
+Setting force_max_fps to greater than 30 also allows you to get fps greater than 30.  It "enables" them,
+by giving it a higher max default.  I didn't think people would normally care/want them so there you have.
 
 Other feedback/problems/questions ping me rogerdpack@gmail.com or mailing list: http://groups.google.com/group/roger-projects
 
 ==  Redistribution ==
 
-You can use this/redistribute it with your own (screen capture) software if you wish by just redistributing the DLL 
-(PushDesktop.ax) with your app. That cuts the download size down to like 50K :)
-Also you don't have to download the full (20MB) package you can just download that one file from github 
-and then register it manually (regsvr32 PushDesktop.ax, may need administrator rights).
+You can use this/redistribute it with your own software if you wish by redistributing the DLL 
+(PushDesktop.ax) alongside with your app.
+You'd have to register it manually (regsvr32 PushDesktop.ax, may need administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
 in the same dir as your exe) for the dll to work/install, in case end users don't have it installed, in that case).
+Or you may be able to recompile it to work around that, etc.
 
 == Code/Future work/Attributions ==
 

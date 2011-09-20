@@ -41,7 +41,7 @@ return RetDepth;
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Out"),
         m_FramesWritten(0),
-        m_bZeroMemory(0),
+       // m_bZeroMemory(0),
         m_iFrameNumber(0),
         //m_nCurrentBitDepth(32), // negotiated...
 		m_pParent(pFilter)
@@ -111,12 +111,12 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 
-	int config_max_fps = read_config_setting(TEXT("max_fps")); // TODO allow floats!
+	int config_max_fps = read_config_setting(TEXT("force_max_fps")); // TODO allow floats!
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
-  	  // was:	const REFERENCE_TIME FPS_20 = UNITS / 20;
-	  // TODO my max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
-	  config_max_fps = 24; // can anybody want a higher default? huh?
+	  // TODO my force_max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
+	  config_max_fps = 30; // set a high default so that the "caller" application knows that we can serve 'em up fast if desired...of course, if they just never set it then we'll probably be flooding them but who's problem is that, eh?
+	  // LODO only do this on some special pin or something [?] this way seems ok...
 	}
 	m_fFps = config_max_fps;
   	m_rtFrameLength = UNITS / config_max_fps; 

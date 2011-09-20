@@ -4,7 +4,7 @@
 require 'win32/registry'
 
 class SetupScreenTrackerParams
-  Settings = ['height', 'width', 'start_x', 'start_y', 'max_fps']
+  Settings = ['height', 'width', 'start_x', 'start_y', 'force_max_fps']
  
   def initialize
     re_init

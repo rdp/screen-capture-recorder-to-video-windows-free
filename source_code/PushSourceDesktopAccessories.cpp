@@ -46,7 +46,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			break;
 		case 16:
 			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
-			//iPosition = 1; // 32 bit slower!
+			//iPosition = 1; // 32 bit 
 			//32 -> 24: getdibits took 2.251000ms
 			//32 -> 32: getdibits took 2.916480ms
 			break;
@@ -141,7 +141,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
     pmt->SetSubtype(&SubTypeGUID);
     pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
-
 
     return NOERROR;
 
@@ -256,11 +255,11 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 //
 // SetMediaType
 //
-// Called when a media type is agreed between filters
+// Called when a media type is agreed between filters (i.e. they call GetMediaType till they find one they like, then they call SetMediaType, I believe).
 //
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
-    CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but maybe that's special? the other one 3 times? huh?
+    CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but I think maybe they have to call this to see if the type is "really" available or something.
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType);
@@ -289,7 +288,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
                 hr = E_INVALIDARG;
                 break;
         }
-		LocalOutput("bitcount %d\n", pvi->bmiHeader.biBitCount);
+		LocalOutput("bitcount requested: %d\n", pvi->bmiHeader.biBitCount);
     } 
 
     return hr;
@@ -308,7 +307,19 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount,
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
-    DECLARE_PTR(VIDEOINFOHEADER, pvi, m_mt.pbFormat); // get here quite a bit...
+	// I "think" that they are supposed to call this...
+	// maybe...after initialization?
+	// http://msdn.microsoft.com/en-us/library/aa928940.aspx
+	// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
+	if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} ?  same?
+		return E_FAIL;
+	
+	// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx meh
+
+	VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
+	
+	m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they want LOL
+	// we ignore other things like cropping requests LODO
     m_mt = *pmt;
     IPin* pin; 
     ConnectedTo(&pin);
@@ -337,7 +348,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
         return hr;
     }
 
-    *pmt = CreateMediaType(&m_mt); // windows metho, I think this does a copy, as well
+    *pmt = CreateMediaType(&m_mt); // windows method, I think this does a type copy
 	if (*pmt == NULL) return E_OUTOFMEMORY;
 
 
@@ -381,10 +392,10 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
     pvscc->MaxBitsPerSecond = 640 * 480 * 3 * 8 * 50;
 	*/
 
-	pvscc->MinFrameInterval = m_rtFrameLength;
-	pvscc->MaxFrameInterval = m_rtFrameLength;
+	pvscc->MinFrameInterval = m_rtFrameLength; // large default is a small min frame interval
+	pvscc->MaxFrameInterval = 50000000; // 0.2 fps
 
-    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*m_fFps; // if in 8 bit mode. somehow.
+    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*m_fFps; // if in 8 bit mode. I guess.
     pvscc->MaxBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*32*m_fFps;
 
 	return hr;

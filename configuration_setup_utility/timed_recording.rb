@@ -27,9 +27,10 @@ if File.exist? file
   File.delete file
 end
 
-#TODO tell them current size/settings
+#TODO tell them current size/settings here
 
-old_fps = SetupScreenTrackerParams.new.read_single_setting("max_fps") || 24 # just use the normal default...which is maybe too high then? hmm...
+old_fps = SetupScreenTrackerParams.new.read_single_setting("force_max_fps") || 24 # our own local default...hmm...
+SetupScreenTrackerParams.new.set_single_setting("force_max_fps", old_fps) # until ffmpeg cleans up their act...
 old_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i
 
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)

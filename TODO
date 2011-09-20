@@ -23,6 +23,8 @@ include the audio grabber too
 can include audio
   can do just audio
 
+add a "start infinte mirror" helper app :P
+
 can do "start", "stop" with audio + video
   just audio
     note it in the other project
@@ -55,6 +57,9 @@ qtcapture audio bounty VLC :P
 a "test via snapshot" method
 
 try out red5 :P
+
+double check if ffmpeg is painfully not capturing or not...hmm...
+  also tell them to call SetFormat, if they don't...
 
 == maybe ==
 

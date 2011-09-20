@@ -9,6 +9,7 @@
 
 #include <strsafe.h>
 
+/*
 // UNITS = 10 ^ 7  
 // UNITS / 30 = 30 fps;
 // UNITS / 20 = 20 fps, etc
@@ -21,8 +22,7 @@ const REFERENCE_TIME FPS_4  = UNITS / 4;
 const REFERENCE_TIME FPS_3  = UNITS / 3;
 const REFERENCE_TIME FPS_2  = UNITS / 2;
 const REFERENCE_TIME FPS_1  = UNITS / 1;
-
-//const REFERENCE_TIME rtDefaultFrameLength = FPS_10; // default is 60 FPS now...
+*/
 
 // Filter name strings
 #define g_wszPushDesktop    L"PushSource Desktop Filter"
@@ -57,8 +57,8 @@ class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKs
 protected:
 
     int m_FramesWritten;				// To track where we are in the file
-    BOOL m_bZeroMemory;                 // Do we need to clear the buffer?
-    CRefTime m_rtSampleTime;	        // The time stamp for each sample
+    //BOOL m_bZeroMemory;                 // Do we need to clear the buffer?
+    //CRefTime m_rtSampleTime;	        // The time stamp for each sample
 
     int m_iFrameNumber;
     REFERENCE_TIME m_rtFrameLength;

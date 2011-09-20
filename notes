@@ -1,5 +1,33 @@
-streaming to TV:
- wired might work better... :P
+
+== 16 vs 32 bits ==
+
+both going to 24bit:
+
+32->24:
+bitblt took 2.42955999999999990000 ms
+getdibits took 2.576960ms
+end total frames 26 12.56808000000000000000ms, total since beginning of time 10.288880 fps (theoretical max fps 79.566648)
+
+16->24:
+bitblt took 1.26440000000000000000 ms
+getdibits took 3.574480ms
+end total frames 17 11.00020000000000000000ms, total since beginning of time 10.480888 fps (theoretical max fps 90.907438)
+
+16->32:
+bitblt took 1.31244000000000010000 ms
+getdibits took 2.995200ms
+end total frames 21 10.52176000000000000000ms, total since beginning of time 10.437376 fps (theoretical max fps 95.041134) 
+
+32->32
+bitblt took 2.25976000000000000000 ms
+getdibits took 2.714160ms
+end total frames 23 12.05036000000000000000ms, total since beginning of time 10.379061 fps (theoretical max fps 82.985073) # barely faster than ->32 hmm...but about the same, and possibly better downstream...
+
+# so unfortunately -> 32 bit is a tidge faster, but does it result in...slower encoding downstream, or...large final output files?
+  TODO check :P
+
+== broadcast  ==
+ strema to TV: wired might work better... :P
 
 I just ran a quick test: a 90 second 720x480 23.976 fps MPEG video compressed in 7 seconds with Divx 
 at its fastest settings. Xvid took 17 seconds. HuffYUV took 9 seconds. 

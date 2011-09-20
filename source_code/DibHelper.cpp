@@ -16,7 +16,8 @@
 
 
 void logToFile(char *log_this) {
-    FILE *f = fopen("G:\\yo2", "a");
+    FILE *f;
+	fopen_s(&f, "c:\\temp\\yo2", "a");
 	fprintf(f, log_this);
 	fclose(f);
 }
@@ -24,7 +25,7 @@ void logToFile(char *log_this) {
 // my very own debug output method...
 void LocalOutput(const char *str, ...)
 {
-//#ifdef _DEBUG  // avoid in release mode...
+#ifdef _DEBUG  // avoid in release mode...
   char buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -34,7 +35,7 @@ void LocalOutput(const char *str, ...)
   // also works: OutputDebugString(L"yo ho2");
   logToFile(buf);
   logToFile("\n");
-//#endif
+#endif
 }
 
 long double PCFreqMillis = 0.0;
@@ -60,7 +61,7 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime)
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
-	assert(PCFreq!= 0.0);
+	assert(PCFreqMillis != 0.0); // make sure it's been initialized...
     return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
 } // LODO do I really need long double here? no really.
 // use like 
