@@ -3,14 +3,17 @@
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.020.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.020.ax
 [Files]
 Source: Release\PushDesktop.ax; DestDir: {app}
 Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
 Source: ..\ChangeLog.txt; DestDir: {app}
 Source: ..\configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: ..\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
+Source: ..\vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs
 
 [Setup]
 AppName={#AppName}

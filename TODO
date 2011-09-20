@@ -1,8 +1,13 @@
 == actually do ==
 
-installer for just the device, for easier human consumption
-  only when device changes
-  different folder
+vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
+at home
+
+try 16 -> various bits at home
+
+send a "failing" 16-bit-ter to ramiro
+
+check ffmpeg to see if it calls setFormat :P
 
 easy streamer with VLC [?] ffmpeg?
   check for local firewall...
