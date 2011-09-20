@@ -318,8 +318,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 	VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
-	m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they want LOL
-	// we ignore other things like cropping requests LODO
+	m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
+	// we ignore other things like cropping requests LODO if somebody ever cares about it...
     m_mt = *pmt;
     IPin* pin; 
     ConnectedTo(&pin);
