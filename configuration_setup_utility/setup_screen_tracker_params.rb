@@ -53,7 +53,7 @@ def do_command_line
   for type in SetupScreenTrackerParams::Settings
     p type
     previous_setting = setter.read_single_setting type
-    if ARGV.index('--just-display-current-settings')
+    if ARGV.index('--just-display-current-settings') || ARGV.index('--just')
       puts "#{type}=#{previous_setting}"
       next
     end
@@ -70,8 +70,8 @@ def do_command_line
     else
       received = received.to_i
     end
-    if received % 2 == 1 # it's odd
-      warning= "warning--odd numbers were given, but they are rejected from mplayer for some reason, so be careful!"
+    if (received % 2 == 1) && ['height', 'width'].include?(type)
+      warning= "warning--odd numbers were chosen, but they are rejected by mplayer for some reason, so be careful!"
       p warning
       begin
         require 'java'
