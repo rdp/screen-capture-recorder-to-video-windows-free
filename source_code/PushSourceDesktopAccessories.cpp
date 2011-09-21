@@ -223,10 +223,10 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
     pProperties->cBuffers = 1;
-    pProperties->cbBuffer = pvi->bmiHeader.biSizeImage*2+100; // hope we don't have to worry about any other tables here...
+    pProperties->cbBuffer = pvi->bmiHeader.biSizeImage*2+100; // hope we don't have to worry about any other tables here...TODO this is probably too high...
 	// adding the *2 allows for the DIB/BMP header (I think).
-	// and avoids this crash: vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
-	// I have no idea what the right values are because just adding 100 didn't seem to cut it for large images... 
+	// and avoids this crash [XP, VLC 1.1.11]: vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
+	// I have no idea what the right values are but *2 works for sure :P 
 	//
 	// pProperties->cbPrefix = 100; // no sure what a prefix is...
     // Ask the allocator to reserve us some sample memory. NOTE: the function

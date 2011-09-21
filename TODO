@@ -53,7 +53,8 @@ do we/should we re-encode after the capture?
 
 speedup:
   it should only advertise its screen bit depth 
-    [blacky check if memcpy needed...]
+    [blacky check if memcpy would be useful...]
+    check on compression sizes
 
 @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
@@ -65,6 +66,8 @@ try out red5 :P
 
 double check if ffmpeg is painfully not capturing or not...hmm...
   also tell them to call SetFormat, if they don't...
+
+fine tune the DIB extra header size...yikes
 
 == maybe ==
 

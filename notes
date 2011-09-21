@@ -81,7 +81,10 @@ firefox looks great off scren
 
 can't tell with aero+captureblt+specific hwnd, it probably doesn't work so well though, only with desktop hwnd.
 
-so I guess maybe painwindow is my only hope for visual c off screen?
+so I guess maybe paintwindow is my only hope for visual c off screen?
+
+trap mouse?
+own windowing system? hmm...that actually might could work...just window over their whole HWND size, in case they overlap the default too :P
 
 == 16 vs 32 bits ==
 
