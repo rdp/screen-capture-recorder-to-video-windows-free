@@ -74,6 +74,11 @@ simple first pass: edit guts of VNCServer, it can track an HWND.
     a canvas...hmm...that's always behind...then you could follow z-order...
       a popup menus you could still display, via...PrintWindow and bitblt.
 
+without aero, it has any overlaying window, and cuts off right at the desktop edge.
+with aero, hwnd of visual studio just reveals tree
+
+
+
 == 16 vs 32 bits ==
 
 both going to 24bit:
