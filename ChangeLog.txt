@@ -1,3 +1,9 @@
+0.2.5: 9-21-11:
+  fix bug so that VLC will accept it for capture (I consider it VLC's bug, but hey, that's just me :P)
+    ok so part my bug, part theirs
+  minor aesthetics.
+  bundle the audio device driver for vista+ participants
+
 0.2.4: 09-19-11:
   attempt to not register as IAMStreamSource
   small speedup by preferring 24 bps as the default over 32

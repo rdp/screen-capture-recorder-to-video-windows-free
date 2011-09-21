@@ -1,8 +1,5 @@
 == actually do ==
 
-vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
-at home
-
 nextsprocket my citrix competitor LOL, no good.
  though shared virtualbox boxes might work just as well...
  on online.net
@@ -11,10 +8,6 @@ nextsprocket my citrix competitor LOL, no good.
 try 16 -> various bits at home
 
 send a "failing" 16-bit-ter to ramiro
-
-check ffmpeg to see if it calls setFormat :P
-
-check crashing ogv at home
 
 easy streamer with VLC [?] ffmpeg?
   check for local firewall...
@@ -51,11 +44,6 @@ do we/should we re-encode after the capture?
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-speedup:
-  it should only advertise its screen bit depth 
-    [blacky check if memcpy would be useful...]
-    check on compression sizes
-
 @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 bounty audio mixer ffmpeg, offer to help :P
@@ -67,9 +55,10 @@ try out red5 :P
 double check if ffmpeg is painfully not capturing or not...hmm...
   also tell them to call SetFormat, if they don't...
 
-fine tune the DIB extra header size...yikes
-
 == maybe ==
+
+  [blacky check if memcpy would be useful...]
+    check on compression sizes
 
 integrate with a mirror display driver, and somehow...have a codec that just describes diffs, I guess? That's the VNC codec in a pinch LOL.
 
@@ -166,6 +155,22 @@ actually use it. playon competitor?
   can use the default record device in...XP
 
 warn them if they appear slow...
+
+
+complain that this appears to cache?
+$ ffplay  -f dshow  -i video="screen-capture-recorder"
+ffplay version N-32726-ga254452, Copyright (c) 2003-2011 the FFmpeg developers
+  built on Sep 19 2011 19:49:13 with gcc 4.6.1
+  configuration: --enable-gpl --enable-version3 --enable-runtime-cpudetect --enable-avisynth --enable-bzlib --enable-frei0r --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libfreetype --enable-libgsm --enable-libmp3lame --enable-libopenjpeg --enable-librtmp --enable-libschroedinger --enable-libspeex --enable-libtheora --enable-libvo-aacenc --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxavs --enable-libxvid --enable-zlib
+  libavutil    51. 16. 1 / 51. 16. 1
+  libavcodec   53. 16. 0 / 53. 16. 0
+  libavformat  53. 12. 0 / 53. 12. 0
+  libavdevice  53.  4. 0 / 53.  4. 0
+  libavfilter   2. 43. 2 /  2. 43. 2
+  libswscale    2.  1. 0 /  2.  1. 0
+  libpostproc  51.  2. 0 / 51.  2. 0
+[dshow @ 03546320] Estimating duration from bitrate, this may be inaccurate
+
 
 == speedup ==
 
