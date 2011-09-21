@@ -4,148 +4,6 @@
 #include "PushGuids.h"
 #include "DibHelper.h"
 
-//
-// GetMediaType
-//
-// Prefer 5 formats - 8, 16 (*2), 24 or 32 bits per pixel
-//
-// Prefered types should be ordered by quality, with zero as highest quality.
-// Therefore, iPosition =
-//      0    Return a 32bit mediatype
-//      1    Return a 24bit mediatype
-//      2    Return 16bit RGB565
-//      3    Return a 16bit mediatype (rgb555)
-//      4    Return 8 bit palettised format
-//      >4   Invalid
-//
-HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
-{
-    CheckPointer(pmt, E_POINTER);
-    CAutoLock cAutoLock(m_pFilter->pStateLock());
-
-    if(iPosition < 0)
-        return E_INVALIDARG;
-
-    // Have we run off the end of types?
-    if(iPosition > 5)
-        return VFW_S_NO_MORE_ITEMS;
-
-    VIDEOINFO *pvi = (VIDEOINFO *) pmt->AllocFormatBuffer(sizeof(VIDEOINFO));
-    if(NULL == pvi)
-        return(E_OUTOFMEMORY);
-
-    // Initialize the VideoInfo structure before configuring its members
-    ZeroMemory(pvi, sizeof(VIDEOINFO));
-
-	if(iPosition == 0) {
-		// pass it our "preferred" which is unchanged pixel format
-		switch(m_iScreenBitRate)
-		{
-		case 24:
-			iPosition = 2;
-			break;
-		case 16:
-			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
-			//iPosition = 1; // 32 bit possibly better...
-			//32 -> 24: getdibits took 2.251000ms
-			//32 -> 32: getdibits took 2.916480ms
-			break;
-		case 15:
-			iPosition = 2;//4; // odd case, but fear of crashing ffmpeg remains in my heart...
-			break;
-		case 8:
-			iPosition = 5;
-			break;
-		case 32:
-			iPosition = 2; // 32 -> 24 bit, figure since I'm already doing a conversion, might as well lose a few unused bits...
-			break; 
-		default: // our high quality, but really should never get here...
-			iPosition = 1;
-			break;
-		}
-	}
-
-    switch(iPosition)
-    {
-        case 1:
-        {    
-            // Return our highest quality 32bit format
-
-            // Since we use RGB888 (the default for 32 bit), there is
-            // no reason to use BI_BITFIELDS to specify the RGB
-            // masks. Also, not everything supports BI_BITFIELDS
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 32;
-            break;
-        }
-
-        case 2:
-        {   // Return our 24bit format
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 24;
-            break;
-        }
-
-        case 3:
-        {       
-            // 16 bit per pixel RGB565
-
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
-
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
-
-        case 4:
-        {   // 16 bits per pixel RGB555
-
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
-
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
-
-        case 5:
-        {   // 8 bit palettised
-
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 8;
-            pvi->bmiHeader.biClrUsed     = iPALETTE_COLORS;
-            break;
-        }
-    }
-
-    // Adjust the parameters common to all formats
-    pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
-    pvi->bmiHeader.biWidth      = m_iImageWidth;
-    pvi->bmiHeader.biHeight     = m_iImageHeight;
-    pvi->bmiHeader.biPlanes     = 1;
-    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader);
-    pvi->bmiHeader.biClrImportant = 0;
-	pvi->AvgTimePerFrame = m_rtFrameLength; // hard set currently...
-
-    SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
-    SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
-
-    pmt->SetType(&MEDIATYPE_Video);
-    pmt->SetFormatType(&FORMAT_VideoInfo);
-    pmt->SetTemporalCompression(FALSE);
-
-    // Work out the GUID for the subtype from the header info.
-    const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
-    pmt->SetSubtype(&SubTypeGUID);
-    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
-
-    return NOERROR;
-
-} // GetMediaType
-
 
 //
 // CheckMediaType
@@ -222,13 +80,77 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     HRESULT hr = NOERROR;
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
-    pProperties->cBuffers = 1;
-    pProperties->cbBuffer = pvi->bmiHeader.biSizeImage*2+100; // hope we don't have to worry about any other tables here...TODO this is probably too high...
-	// adding the *2 allows for the DIB/BMP header (I think).
-	// and avoids this crash [XP, VLC 1.1.11]: vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
-	// I have no idea what the right values are but *2 works for sure :P 
-	//
+	BITMAPINFOHEADER header = pvi->bmiHeader;
+	ASSERT(header.biPlanes == 1); // sanity check
+	ASSERT(header.biCompression == 0); // meaning "none"
+	int dwBytesPerLine = ((header.biWidth*header.biBitCount)+32)*4/32; // copy-pasted, round up is +1
+	// biSize is the header size...
+	int dwFullBitMapSize = 14 + header.biSize+(header.biClrUsed*sizeof(RGBQUAD))+(dwBytesPerLine*header.biHeight);// the full size, copy-pasted
+
+	//pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small [?] // *2+100
+    pProperties->cbBuffer = dwFullBitMapSize;// 470 compared to 400
+    pProperties->cBuffers = 1; // 2 doesn't seem to help...
+	// avoids this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
+	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
+	
+	int bytesPerLine;
+
+bytesPerLine = header.biWidth * (header.biBitCount/8);
+/* round up to a dword boundary */
+if (bytesPerLine & 0x0003) 
+   {
+   bytesPerLine |= 0x0003;
+   ++bytesPerLine;
+   }
+
+ // bytesPerLine+= 32;// mine own arbitrary adding...huh?
+
+pProperties->cbBuffer = 14 + header.biSize + (long)bytesPerLine*header.biHeight;
+	LocalOutput("setting bitmap size %d", pProperties->cbBuffer ); 
+
+
+/* meanwhile, from somewhere on the web...
+
+
+10x10 24 bit
+"header length"
+14
+"info length"
+40
+"data length"
+320
+"total"
+374
+
+;Initialize BITMAPINFOHEADER
+bi\biSize=SizeOf(BITMAPINFOHEADER)
+bi\biWidth=dwWidth ;fill in width from parameter
+bi\biHeight=dwHeight ;fill in height from parameter
+bi\biPlanes=1 ;must be 1
+bi\biBitCount=wBitCount ;bits per pixel from parameter
+bi\biCompression=#BI_RGB ;none
+bi\biSizeImage=0 ;0's here mean "default"
+bi\biXPelsPerMeter=0
+bi\biYPelsPerMeter=0
+bi\biClrUsed=0
+bi\biClrImportant=0
+
+;Now determine the size of the color table
+If wBitCount != 24 ;no color table for 24-bit or 32, default size otherwise
+  bi\biClrUsed=1 << wBitCount ;standard size table (2, 16, 256 or 0) assume ok...
+EndIf
+
+;Calculate size of memory block required to store the DIB.
+;This block should be big enough to hold the BITMAPINFOHEADER,
+;the color table and the bits.
+dwBytesPerLine=((dwWidth*wBitCount)+31)/32*4
+dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the full size
+
+*/
+
+
 	// pProperties->cbPrefix = 100; // no sure what a prefix is...
+
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the
     // memory that we requested, so we must check we got whatever we wanted.
