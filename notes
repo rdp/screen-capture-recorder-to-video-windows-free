@@ -1,4 +1,73 @@
 
+== citrix ==
+
+ Win32::Screenshot::BitmapMaker.desktop_window;
+irb(main):004:0* 3
+=> 3
+irb(main):005:0> hwnd
+=> 65552
+<ure_area(hwnd, 0,0,2000,2000) {|w,h, bmp| File.binwrite('dw.bmp', bmp); 33}
+
+resulted in one that just included the desktop (with transparent edges), however, grabbing a specific window hwnd works a champ...hmm...
+  no cheating this one, the easiest way is to...turn on aero and just capture the output of windows, that's it...
+  no need to move them off-screen even, for now.
+  
+  so basically each connection needs some meta...
+  java headless with jvlc... [huffyuv?]
+  capture clicks, send them through (relay)
+  position specified "can be relative to some root parent window"
+    include the title bar.
+    positions can be set to change.
+    size can change...can ffmpeg send through changing sized frames? huh?
+      no size changes for now
+        miniaturify?
+        have local ability to resize that causes resync somehow?
+    maybe a "VNC, just track this one window, k?"
+      
+  
+  it needs a "has" changed in the background...
+  
+  For Vista and newer, GetPixel() might be the right way, but I'm still on XP.
+http://www.gamedev.net/topic/327506-forcing-a-hidden-window-to-paint-to-an-arbitrary-dc WM_PAINT
+http://stackoverflow.com/questions/242570/copying-content-from-a-hidden-or-clipped-window-in-xp
+
+PrintWindow might still suck...: http://social.msdn.microsoft.com/forums/en-US/winforms/thread/d9a188ae-3503-4c31-aa00-6e7195b5384a (also has a good description of it...)
+
+a fake WDDM looks hard: http://www.osronline.com/showthread.cfm?link=209292
+
+zoneos seems to not have an open source virtual display driver <sniff>.
+
+http://www.codeproject.com/KB/system/driverdev6asp.aspx seems to have an OSS virtual display driver...hmm...
+  it's XPDM.
+  
+maybe a sum of aero-less BitBlt on the main window, plus a call to PrintWindow?
+
+I don't care about the WM_PAINT extra call annoyance/bug: http://social.msdn.microsoft.com/Forums/en/vcgeneral/thread/0a86bf38-8c28-4b07-a8ab-6c8c97932477
+
+  metavnc looks good but...includes all windows? multi-server-client maybe?
+  
+"temporary servers" for menu popups, I guess is the only way...or maybe...can just draw them over the top and that's good enough?
+  so I guess...my real question is...how does using PrintWindow work, does it include sub-windows and menu popups et al?
+    TODO does it work with visual studio, +- popups?
+    if so then I might be good...
+      that way makes more sense, anyway
+    else XPDM?
+
+or possibly hook DX with aero...nah...
+
+I think I can just use parent processes...
+
+how would this work with linux?
+
+homebrew with ffmpeg or re-factory TightVNC.
+
+or maybe just bring "your desired" fella to the foreground, take his picture, then revert...hmm...that could cause some clicking ambiguity though...
+
+security can just use windows security [?]
+  authenticate, then runas /abc [yes!]
+
+some day:
+
 == 16 vs 32 bits ==
 
 both going to 24bit:

@@ -16,6 +16,7 @@ DWORD globalStart;
 
 
 int GetTrueScreenDepth(HDC hDC) {
+
 int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5

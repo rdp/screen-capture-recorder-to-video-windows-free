@@ -9,6 +9,8 @@ send a "failing" 16-bit-ter to ramiro
 
 check ffmpeg to see if it calls setFormat :P
 
+check crashing ogv at home
+
 easy streamer with VLC [?] ffmpeg?
   check for local firewall...
   looks like VLC for now until ffmpeg has qtcapture et al...
@@ -50,14 +52,7 @@ speedup:
 
 @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
-new icon "display current settings"
-
-
-more detailed instructions on "how to capture audio" for XP
-
 bounty audio mixer ffmpeg, offer to help :P
-
-qtcapture audio bounty VLC :P
 
 a "test via snapshot" method
 
@@ -67,6 +62,10 @@ double check if ffmpeg is painfully not capturing or not...hmm...
   also tell them to call SetFormat, if they don't...
 
 == maybe ==
+
+integrate with a mirror display driver, and somehow...have a codec that just describes diffs, I guess? That's the VNC codec in a pinch LOL.
+
+a "wait until this bit is flipped to start" option :P
 
 ps3ms integration [with XBMC to test it [?]]
   tell them to use ffmpeg :P
