@@ -82,15 +82,9 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 	BITMAPINFOHEADER header = pvi->bmiHeader;
 	ASSERT(header.biPlanes == 1); // sanity check
-	ASSERT(header.biCompression == 0); // meaning "none"
-	int dwBytesPerLine = ((header.biWidth*header.biBitCount)+32)*4/32; // copy-pasted, round up is +1
-	// biSize is the header size...
-	int dwFullBitMapSize = 14 + header.biSize+(header.biClrUsed*sizeof(RGBQUAD))+(dwBytesPerLine*header.biHeight);// the full size, copy-pasted
-
-	//pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small [?] // *2+100
-    pProperties->cbBuffer = dwFullBitMapSize;// 470 compared to 400
-    pProperties->cBuffers = 1; // 2 doesn't seem to help...
-	// avoids this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
+	ASSERT(header.biCompression == 0); // meaning "none" sanity check
+	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. As in *way* too small.
+	// now we try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
 	
 	int bytesPerLine;
@@ -103,14 +97,13 @@ if (bytesPerLine & 0x0003)
    ++bytesPerLine;
    }
 
- // bytesPerLine+= 32;// mine own arbitrary adding...huh?
-
-pProperties->cbBuffer = 14 + header.biSize + (long)bytesPerLine*header.biHeight;
-	LocalOutput("setting bitmap size %d", pProperties->cbBuffer ); 
+ ASSERT(header.biHeight > 0);
+ // NB that we add in space for the closing "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we will *never* need it, maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debut it LOL.
+pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+    pProperties->cBuffers = 1; // 2 doesn't seem to help...
 
 
 /* meanwhile, from somewhere on the web...
-
 
 10x10 24 bit
 "header length"
@@ -120,7 +113,7 @@ pProperties->cbBuffer = 14 + header.biSize + (long)bytesPerLine*header.biHeight;
 "data length"
 320
 "total"
-374
+374 (but that didn't include a pixel array, which you may want to...)
 
 ;Initialize BITMAPINFOHEADER
 bi\biSize=SizeOf(BITMAPINFOHEADER)
@@ -144,12 +137,12 @@ EndIf
 ;This block should be big enough to hold the BITMAPINFOHEADER,
 ;the color table and the bits.
 dwBytesPerLine=((dwWidth*wBitCount)+31)/32*4
-dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the full size
+dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the full size, might be wrong see above
 
 */
 
 
-	// pProperties->cbPrefix = 100; // no sure what a prefix is...
+	// pProperties->cbPrefix = 100; // no sure what a prefix is...didn't help anyway :P
 
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the

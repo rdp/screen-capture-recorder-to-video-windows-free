@@ -3,7 +3,7 @@ require 'jruby-swing-helpers/swing_helpers'
 require 'setup_screen_tracker_params'
 require 'java'
 
-class MouseDraw
+class WindowResize
   
   def self.go
     java_import 'javax.swing.JFrame'
@@ -21,23 +21,33 @@ class MouseDraw
       setter_getter.re_init
       got = {:start_x => f.get_location.x, :start_y => f.get_location.y, :width => f.get_size.width, :height => f.get_size.height}
       for key, setting in got
-        if setting %2 == 1 and [:width, :height].include?(key)
+	    factor = 2
+        if setting % factor != 0 and [:width, :height].include?(key)
           SwingHelpers.show_blocking_message_dialog "warning #{key} is an odd number, which won't record for mplayer/ffmpeg\nso rounding it up for you..."
-          setting = setting + 1
+          setting = (setting/factor*factor) + factor # round up phew!
+		  got[key] = setting # for the english output at the end
         end
-        begin
-          setter_getter.set_single_setting key, setting
-        rescue Exception => e
-          p e, e.to_s, e.backtrace
-        end
+        setter_getter.set_single_setting key, setting
       end
       SwingHelpers.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
       f.dispose
     }
     current_values = setter_getter.all_current_values
-    f.set_size(current_values['width'] || 200, current_values['height'] || 200)
+	width = current_values['width'] || 200
+	height = current_values['height'] || 200
+	min_val = 35
+	if(width < min_val) 
+	  SwingHelpers.show_blocking_message_dialog 'previous width too small, using default size '+ min_val.to_s
+	  width = min_val
+	 end
+	 if height < min_val
+	  SwingHelpers.show_blocking_message_dialog 'previous height too small, using default size ' + min_val.to_s
+	  height = min_val
+	 end
+	 
+    f.set_size(width, height)
     f.set_location(current_values['start_x'] || 0, current_values['start_y'] || 0)
-    AWTUtilities.set_window_opacity(f, 0.6)
+    AWTUtilities.set_window_opacity(f, 0.7)
   	f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE) # instead of hang when they click the "X" [LODO warn?]
     f.show
   end
@@ -45,5 +55,5 @@ class MouseDraw
 end
 
 if $0 == __FILE__
-  MouseDraw.go
+  WindowResize.go
 end
