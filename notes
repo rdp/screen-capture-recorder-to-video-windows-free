@@ -1,4 +1,3 @@
-
 == citrix ==
 
  Win32::Screenshot::BitmapMaker.desktop_window;
@@ -66,7 +65,14 @@ or maybe just bring "your desired" fella to the foreground, take his picture, th
 security can just use windows security [?]
   authenticate, then runas /abc [yes!]
 
-some day:
+simple first pass: edit guts of VNCServer, it can track an HWND.
+  it can resize.
+  child windows get repositioned to be on top of that fella :P
+    child windows are bitblt'ed over the top of the parent...hmm...
+      possibly z-order eventually :P
+  non mirror mode so that diffs work at all...
+    a canvas...hmm...that's always behind...then you could follow z-order...
+      a popup menus you could still display, via...PrintWindow and bitblt.
 
 == 16 vs 32 bits ==
 
