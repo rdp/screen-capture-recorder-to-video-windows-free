@@ -3,6 +3,11 @@
 vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
 at home
 
+nextsprocket my citrix competitor LOL, no good.
+ though shared virtualbox boxes might work just as well...
+ on online.net
+    I don't know if I could ever compete. bad idea.
+
 try 16 -> various bits at home
 
 send a "failing" 16-bit-ter to ramiro
