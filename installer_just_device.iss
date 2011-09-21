@@ -6,9 +6,9 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 [Files]
-Source: Release\PushDesktop.ax; DestDir: {app}
-Source: ..\ChangeLog.txt; DestDir: {app}
-Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
+Source: source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: ChangeLog.txt; DestDir: {app}
+Source: README.TXT; DestDir: {app}; Flags: isreadme
 
 [Setup]
 AppName={#AppName}
@@ -17,7 +17,7 @@ DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=setup {#AppName} v{#AppVer}
-OutputDir=..\releases
+OutputDir=releases
 
 [Icons]
 Name: {group}\Readme; Filename: {app}\README.TXT

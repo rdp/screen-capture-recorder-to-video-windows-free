@@ -8,12 +8,12 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.02
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.020.ax
 [Files]
-Source: Release\PushDesktop.ax; DestDir: {app}
-Source: ..\README.TXT; DestDir: {app}; Flags: isreadme
-Source: ..\ChangeLog.txt; DestDir: {app}
-Source: ..\configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
-Source: ..\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
-Source: ..\vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs; MinVersion: 0,6.0.6000
+Source: source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: README.TXT; DestDir: {app}; Flags: isreadme
+Source: ChangeLog.txt; DestDir: {app}
+Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
+Source: troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
+Source: vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs; MinVersion: 0,6.0.6000
 
 [Setup]
 AppName={#AppName}
@@ -22,7 +22,7 @@ DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=setup {#AppName} v{#AppVer}
-OutputDir=..\releases
+OutputDir=releases
 
 [Icons]
 Name: {group}\record screen using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
