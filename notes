@@ -77,7 +77,11 @@ simple first pass: edit guts of VNCServer, it can track an HWND.
 without aero, it has any overlaying window, and cuts off right at the desktop edge.
 with aero, hwnd of visual studio just reveals tree
 
+firefox looks great off scren
 
+can't tell with aero+captureblt+specific hwnd, it probably doesn't work so well though, only with desktop hwnd.
+
+so I guess maybe painwindow is my only hope for visual c off screen?
 
 == 16 vs 32 bits ==
 
