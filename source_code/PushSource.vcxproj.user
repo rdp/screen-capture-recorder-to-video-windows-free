@@ -4,9 +4,9 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>D:\Program Files\VideoLAN\VLC\vlc.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments> dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev=none  :dshow-caching=200</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe</LocalDebuggerCommand>

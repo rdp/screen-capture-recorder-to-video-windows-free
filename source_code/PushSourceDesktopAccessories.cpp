@@ -46,7 +46,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			break;
 		case 16:
 			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
-			//iPosition = 1; // 32 bit 
+			//iPosition = 1; // 32 bit possibly better...
 			//32 -> 24: getdibits took 2.251000ms
 			//32 -> 32: getdibits took 2.916480ms
 			break;
@@ -223,10 +223,12 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
     pProperties->cBuffers = 1;
-    pProperties->cbBuffer = pvi->bmiHeader.biSizeImage;
-
-    ASSERT(pProperties->cbBuffer);
-
+    pProperties->cbBuffer = pvi->bmiHeader.biSizeImage*2+100; // hope we don't have to worry about any other tables here...
+	// adding the *2 allows for the DIB/BMP header (I think).
+	// and avoids this crash: vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
+	// I have no idea what the right values are because just adding 100 didn't seem to cut it for large images... 
+	//
+	// pProperties->cbPrefix = 100; // no sure what a prefix is...
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the
     // memory that we requested, so we must check we got whatever we wanted.
@@ -243,10 +245,6 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
         return E_FAIL;
     }
 
-    // Make sure that we have only 1 buffer (we erase the ball in the
-    // old buffer to save having to zero a 200k+ buffer every time
-    // we draw a frame)
-    ASSERT(Actual.cBuffers == 1);
     return NOERROR;
 
 } // DecideBufferSize

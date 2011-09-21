@@ -18,10 +18,11 @@ class SetupScreenTrackerParams
   def set_single_setting name, value
     name = name.to_s # allow for symbols
     raise "unknown name #{name}" unless Settings.include?(name)
-    raise unless value.is_a? Fixnum
+    raise unless value.is_a? Fixnum # pass in 0 if you want to reset anything...
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value)
     set_value = read_single_setting name
-    raise 'unable to set' unless set_value == value
+	set_value ||= 0 # this is a bit kludgey...
+    raise 'unable to set?' + name + 'remainder set as ' + set_value.to_s unless set_value == value
   end
   
   # will return nil if not set in the registry...
@@ -56,12 +57,12 @@ def do_command_line
       puts "#{type}=#{previous_setting}"
       next
     end
-    received = ARGV.shift
+    received = given_from_command_line = ARGV.shift
     unless received
       require 'java' # jruby only for getting user input...
       require 'jruby-swing-helpers/swing_helpers'
       previous_setting ||= ''
-      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 24 fps, primary monitor]', previous_setting)
+      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting)
       raise 'canceledl...remaining settings have not been changed, but previous ones were' unless received # it should at least be the empty string...
     end
     if received == ''
