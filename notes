@@ -1,3 +1,16 @@
+== camtwist windows ==
+
+Yes, you would have to do that since image dimensions are negotiated when the graph is built. There is something called dynamic reconnection that might be of interest to you (msdn.microsoft.com/en-us/library/dd388737(v=vs.85).aspx). It allows for re-negotiation without rebuilding, but the filters in the graph need to support it AFAIR. – Ralf Jul 1 at 4:39
+Maybe just AVS and re-connect?
+  can I arbitrarily grab from any Webcam this way? easily?
+
+this could be a sweet way to present though :P
+  but a bit forky...
+
+http://ffmpegsource.googlecode.com/svn/trunk/doc/ffms2-avisynth.html
+  maybe an ffmpeg source can accept dshow input? It should be able to...
+  
+
 == citrix ==
 
  Win32::Screenshot::BitmapMaker.desktop_window;
