@@ -5,6 +5,10 @@ nextsprocket my citrix competitor LOL, no good.
  on online.net
     I don't know if I could ever compete. bad idea.
 
+C# demo see if it works
+
+failing gstreamer backtrace
+
 try 16 -> various bits at home
 
 send a "failing" 16-bit-ter to ramiro
@@ -28,7 +32,6 @@ include the audio grabber too
 can include audio
   can do just audio
 
-add a "start infinte mirror" helper app :P
 
 can do "start", "stop" with audio + video
   just audio
@@ -47,13 +50,13 @@ do we/should we re-encode after the capture?
 @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 bounty audio mixer ffmpeg, offer to help :P
+  
+bounty ffserver windows [?]
 
 a "test via snapshot" method
+  add a "start infinite mirror" helper app :P
 
 try out red5 :P
-
-double check if ffmpeg is painfully not capturing or not...hmm...
-  also tell them to call SetFormat, if they don't...
 
 == maybe ==
 

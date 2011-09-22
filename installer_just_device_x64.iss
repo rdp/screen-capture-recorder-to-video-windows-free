@@ -11,6 +11,7 @@ Source: ChangeLog.txt; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 
 [Setup]
+ArchitecturesAllowed=x64
 AppName={#AppName}
 AppVerName={#AppVer}
 DefaultDirName={pf}\{#AppName}
