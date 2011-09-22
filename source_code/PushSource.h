@@ -29,7 +29,8 @@ const REFERENCE_TIME FPS_1  = UNITS / 1;
 
 class CPushPinDesktop;
 
-class CPushSourceDesktop : public CSource
+// parent
+class CPushSourceDesktop : public CSource, public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist.
 {
 
 private:
@@ -40,11 +41,19 @@ private:
     CPushPinDesktop *m_pPin;
 public:
     //////////////////////////////////////////////////////////////////////////
-    //  IUnknown
+    //  IUnknown, except we had no IUnknown [?]
     //////////////////////////////////////////////////////////////////////////
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
+	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh?
+	ULONG STDMETHODCALLTYPE Release() { return CBaseFilter::Release(); };
+	
+	////// 
+	// IAMFilterMiscFlags, in case it helps anybody else know we're a source config
+	//////
+	ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
 
+	// our own.
     IFilterGraph *GetGraph() {return m_pGraph;}
 
 };
