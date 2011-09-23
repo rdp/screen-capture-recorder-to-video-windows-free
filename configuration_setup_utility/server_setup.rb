@@ -22,41 +22,43 @@ a.close
 
 popup = SwingHelpers.show_non_blocking_message_dialog 'starting server...'
 
-Thread.new {
-# -vvv dshow://  :dshow-vdev=none  :dshow-adev=virtual-audio-capturer --sout  "#transcode{acodec=vorb,ab=128}:standard{access=http,mux=ogg,dst=127.0.0.1:8083}"
-  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=vorb,ab=128}:standard{access=http,mux=ogg,dst=127.0.0.1:#{port}}" !
+vlc_thread = Thread.new {
+  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=mpeg,dst=:#{port}/go.mp3}" ! # --qt-start-minimized  
+
   print c
   system c
 }
 
 sleep 1
 popup.close
-SwingHelpers.show_blocking_message_dialog 'now let\'s test if I can read from the stream from the local computer to itself...'
-
 
 def play_sound_and_capture_and_playback ip_addr_to_listen_on, port
 
-  out = Dir.tmpdir + 'out.mp3'
+  out = Dir.tmpdir + 'out.wav'
   require 'fileutils'
   FileUtils.touch out # writable?
 
   p = PlayAudio.new 'alerts.wav' # 5s long
   p.start
 
-  system("ffmpeg.exe -t 5 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\"") # takes 5s to complete...
-
+  c ="ffmpeg.exe -t 1 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\""
+  print c
+  system c # takes 5s...yipes LODO report how cruddy it is LOL.
   p.stop
 
-  SwingHelpers.show_blocking_message_dialog 'now I will play back what I recorded from that stream. You\'ll tell me if you hear anything in just a second:'
+  SwingHelpers.show_blocking_message_dialog 'now I will play back what I recorded from that stream. You\'ll tell me if you hear anything...'
   p = PlayAudio.new out
   p.start
   sleep 4
   p.stop
   got = JOptionPane.show_select_buttons_prompt "did you hear anything?", :yes => "yes", :no => "no"
+  # maybe playaudio doesn't release its hold?
+  # File.delete out
   got
 end
 
-got = play_sound_and_capture_and_playback 'localhost', port
+SwingHelpers.show_blocking_message_dialog 'now let\'s test if I can read from the stream locally...you\'ll hear some blips, which you should ignore, as they are put on the stream, broadcast, then received locally and saved to a file.'
+got = play_sound_and_capture_and_playback '127.0.0.1', port
 if got == :yes
  p 'yes'
 else

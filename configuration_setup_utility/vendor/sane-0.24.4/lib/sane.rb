@@ -4,7 +4,7 @@
 # require 'rubygems' if RUBY_VERSION < '1.9' # for the other requires
 
 require 'os'
-#require 'andand'
+#require 'andand' # hmm...
 for file in Dir[File.dirname(__FILE__) + '/sane/*.rb'].sort do
    require file
 end
