@@ -5,7 +5,7 @@
 
 /**********************************************
  *
- *  CPushSourceDesktop Class
+ *  CPushSourceDesktop Class Parent
  *
  **********************************************/
 
@@ -13,6 +13,7 @@ CPushSourceDesktop::CPushSourceDesktop(IUnknown *pUnk, HRESULT *phr)
            : CSource(NAME("PushSourceDesktop Parent"), pUnk, CLSID_PushSourceDesktop)
 {
     // The pin magically adds itself to our pin array.
+	// except its not an array since we just have one [?]
     m_pPin = new CPushPinDesktop(phr, this);
 
 	if (phr)
@@ -35,7 +36,7 @@ CPushSourceDesktop::~CPushSourceDesktop() // parent destructor
 
 CUnknown * WINAPI CPushSourceDesktop::CreateInstance(IUnknown *pUnk, HRESULT *phr)
 {
-	// we get here...
+	// the first entry point
     CPushSourceDesktop *pNewFilter = new CPushSourceDesktop(pUnk, phr);
 
 	if (phr)

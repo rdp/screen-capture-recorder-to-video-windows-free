@@ -6,7 +6,7 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 [Files]
-Source: source_code\x64\Release\PushDesktop.ax; DestDir: {app}
+Source: source_code\x64\releasex64\PushDesktop.dll; DestDir: {app}
 Source: ChangeLog.txt; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 

@@ -8,7 +8,7 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.02
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.020.ax
 [Files]
-Source: source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: source_code\Win32\Release\PushDesktop.ax; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs

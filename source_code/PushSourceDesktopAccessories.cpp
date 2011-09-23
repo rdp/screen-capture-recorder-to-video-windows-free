@@ -222,17 +222,17 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
 
 	// "they" are supposed to call this...
-	// maybe...after negotiation
-	// to provide some format details [?]
-	// LODO fail if already streaming...
-	// http://msdn.microsoft.com/en-us/library/aa928940.aspx
+	// maybe...after negotiation of type
+	// to provide some format details like fps
+	// NULL means reset
+	// LODO should fail if w'ere already streaming...
 	if(pmt != NULL)
 	{
 		// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
-		if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} ?  same...
+		if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} same...
 			return E_FAIL;
 	
-		// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx meh
+		// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx I guess [meh]
 
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
@@ -240,7 +240,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		// we ignore other things like cropping requests LODO if somebody ever cares about it...
 		m_mt = *pmt;
 	} else {
-		// they called it to reset us [?]
+		// they called it to reset us
 	}
     IPin* pin; 
     ConnectedTo(&pin);

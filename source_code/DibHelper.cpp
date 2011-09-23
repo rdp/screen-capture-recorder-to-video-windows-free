@@ -17,7 +17,7 @@
 
 void logToFile(char *log_this) {
     FILE *f;
-	fopen_s(&f, "c:\\temp\\yo2", "a");
+	fopen_s(&f, "c:\\temp\\yo2", "a"); // fails if using it in flash player...
 	fprintf(f, log_this);
 	fclose(f);
 }
@@ -37,6 +37,22 @@ void LocalOutput(const char *str, ...)
   //logToFile("\n");
 #endif
 }
+
+void LocalOutput(const wchar_t *str, ...) 
+{
+#ifdef _DEBUG  // avoid in release mode...
+  wchar_t buf[2048];
+  va_list ptr;
+  va_start(ptr,str);
+  vswprintf_s(buf,str,ptr);
+  OutputDebugString(buf);
+  OutputDebugString(L"\n");
+  // also works: OutputDebugString(L"yo ho2");
+  //logToFile(buf); 
+  //logToFile("\n");
+#endif
+}
+
 
 long double PCFreqMillis = 0.0;
 
@@ -186,7 +202,7 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 	return NOERROR;
 }
 
-DWORD read_config_setting(LPCTSTR szValueName) {
+ DWORD read_config_setting(LPCTSTR szValueName) {
   
   HKEY hKey;
   LONG i;
@@ -199,17 +215,39 @@ DWORD read_config_setting(LPCTSTR szValueName) {
         return 0; // zero means not set...
     } else {
       
-	DWORD dwVal;
+		DWORD dwVal;
 
-	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal);
-    RegCloseKey(hKey); // done with that
-	if (FAILED(hr)) {
-      return 0;
-    } else {
-      return dwVal; // if "the setter" sets it to 0, that is also interpreted as not set...see README
+		HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
+		RegCloseKey(hKey); // done with that
+		if (FAILED(hr)) {
+		  return 0;
+		} else {
+		  return dwVal; // if "the setter" sets it to 0, that is also interpreted as not set...see README
+		}
     }
-}
  
 }
 
+HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
+	
+  HKEY hKey;
+  LONG i;
+    
+       DWORD dwDisp = 0;
+       LPDWORD lpdwDisp = &dwDisp;
 
+
+    i = RegCreateKeyEx(HKEY_CURRENT_USER,
+       L"SOFTWARE\\os_screen_capture", 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, lpdwDisp); // fails from flash player...
+    
+    if (i == ERROR_SUCCESS)
+    {
+		// fails from flash player...
+		i = RegSetKeyValue(hKey, NULL, szValueName, REG_SZ, szToThis, wcslen(szToThis)*2+1); // ?
+    } else {
+       // failed to set...
+	}
+	RegCloseKey(hKey); 
+	return i;
+
+}

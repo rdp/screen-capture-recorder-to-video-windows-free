@@ -46,8 +46,8 @@ public:
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
 
-	// ?? compiler error?
-	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh? IUnknown_AddRef((IUnknown*)This); AddRef nondelegating?
+	// ?? compiler error that these be required here?
+	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh? IUnknown_AddRef((IUnknown*)This); AddRef nondelegating? huh?
 	ULONG STDMETHODCALLTYPE Release() { return CBaseFilter::Release(); };
 	
 	////// 

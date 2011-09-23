@@ -10,6 +10,7 @@
 #define HDIB HANDLE
 
 void LocalOutput(const char *str, ...);
+void LocalOutput(const wchar_t *str, ...);
 
 
 /* DIB macros */
@@ -52,6 +53,7 @@ WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
 
 DWORD read_config_setting(LPCTSTR szValueName);
+HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis );
 
 void WarmupCounter();
 __int64 StartCounter();
