@@ -32,6 +32,8 @@ include the audio grabber too
 can include audio
   can do just audio
 
+ffmpeg subtitles
+
 
 can do "start", "stop" with audio + video
   just audio

@@ -1,9 +1,6 @@
 puts 'loading...'
 
-# load bundled gems
-for dir in Dir[File.dirname(__FILE__) + "/vendor/*/lib"]
-  $: << dir
-end
+require 'add_vendored_gems'
 
 require 'jruby-swing-helpers/swing_helpers'
 include SwingHelpers
