@@ -133,9 +133,7 @@ bounty lagarith ffmpeg [?]
 super spiffy "jruby.exe" installer, if that's faster at all
   splash screen?
 
-can show mouse
-
-can show arbitrary mouse [transparent?]
+can show arbitrary mouse [transparent?] circle?
 
 can follow mouse
 
