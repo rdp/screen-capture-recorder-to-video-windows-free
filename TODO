@@ -58,7 +58,13 @@ a "test via snapshot" method
 
 try out red5 :P
 
+for the failure:
+
+http://stackoverflow.com/questions/2598660/directshow-csourcestream-filter-fails-to-unload-properly
+
 == maybe ==
+
+
 
   [blacky check if memcpy would be useful...]
     check on compression sizes

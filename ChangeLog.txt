@@ -1,3 +1,7 @@
+== 0.3.0 ==
+ 9-23-11
+ allow SetFormat to accept NULL so that it won't crash flash player. Added an interface, too, but it's un-used I doubt.
+
 0.2.5: 9-21-11:
   fix bug so that VLC will accept it for capture (I consider it VLC's bug, but hey, that's just me :P)
     ok so part my bug, part theirs

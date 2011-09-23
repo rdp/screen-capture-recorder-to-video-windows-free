@@ -29,9 +29,8 @@ end
 
 #TODO tell them current size/settings here
 
-old_fps = SetupScreenTrackerParams.new.read_single_setting("force_max_fps") || 24 # our own local default...hmm...
-SetupScreenTrackerParams.new.set_single_setting("force_max_fps", old_fps) # until ffmpeg cleans up their act...
-old_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i
+old_fps = SetupScreenTrackerParams.new.read_single_setting("force_max_fps") || 30 # our own local default...hmm...
+new_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i
 
 seconds = SwingHelpers.get_user_input("Seconds to record for?", 60)
 
@@ -40,7 +39,7 @@ SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will star
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "ffmpeg -f dshow -i video=screen-capture-recorder -r #{old_fps} -t #{seconds} -vcodec huffyuv \"#{file}\""
+c = "ffmpeg -f dshow -i video=screen-capture-recorder -r #{new_fps} -t #{seconds} -vcodec huffyuv \"#{file}\""
 puts c
 system c
 p 'revealing file...'
