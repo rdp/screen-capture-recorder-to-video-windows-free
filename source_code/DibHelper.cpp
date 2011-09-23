@@ -179,6 +179,8 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 }
 
 void AddMouse(HDC hMemDC) {
+		__int64 start = StartCounter();
+
 	POINT p;
 	GetCursorPos(&p); // x, y
 	// TODO just incorporate all the junk from camstudio [?]
@@ -201,6 +203,7 @@ void AddMouse(HDC hMemDC) {
 		}
 	}
 	DrawIcon(hMemDC, p.x, p.y, hcur);
+	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start));
 
 }
 //#include <afxwin.h> //fails
