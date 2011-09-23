@@ -20,7 +20,7 @@ int GetTrueScreenDepth(HDC hDC) {
 int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
-  HDC DeskDC = GetDC(NULL);
+  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
   HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
   ReleaseDC(NULL, DeskDC);
 

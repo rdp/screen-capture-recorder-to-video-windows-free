@@ -64,7 +64,9 @@ http://stackoverflow.com/questions/2598660/directshow-csourcestream-filter-fails
 
 == maybe ==
 
+check if VLC has a more efficient SelectObject
 
+Another way is to directly manipulate the desktop bitmap in the Video Memory if enough memory is available as provided by DirectDraw.  http://www.codeproject.com/KB/cs/DesktopCaptureWithMouse.aspx hmm
 
   [blacky check if memcpy would be useful...]
     check on compression sizes

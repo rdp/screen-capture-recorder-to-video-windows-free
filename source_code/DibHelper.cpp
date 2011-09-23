@@ -92,7 +92,8 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime)
 void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	// bitblt screen DC to memory DC
 	__int64 start = StartCounter();
-    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
+	// CAPTUREBLT does not seem to give a mouse...
+    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY |CAPTUREBLT); //CAPTUREBLT for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
 	long double elapsed = GetCounterSinceStartMillis(start);
 
 	LocalOutput("bitblt took %.020Lf ms", elapsed);
@@ -128,7 +129,7 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 	LocalOutput("memcpy took %.020Lf ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
 	free(local);*/
 }
-
+void AddMouse(HDC hMemDC);
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
     HDC         hMemDC;         // screen DC and memory DC
@@ -162,6 +163,8 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
+	AddMouse(hMemDC);
+
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture
     hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
@@ -175,6 +178,75 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     return hBitmap;
 }
 
+void AddMouse(HDC hMemDC) {
+	POINT p;
+	GetCursorPos(&p); // x, y
+	// TODO just incorporate all the junk from camstudio [?]
+	//HCURSOR hcur = ::GetCursor(); // LODO cache maybe [?]
+	CURSORINFO globalCursor;
+	globalCursor.cbSize = sizeof(CURSORINFO);
+	::GetCursorInfo(&globalCursor);
+	HCURSOR hcur = globalCursor.hCursor;
+	ICONINFO iconinfo;
+	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
+	if(ret) {
+		p.x -= iconinfo.xHotspot; // align it right, I guess...
+		p.y -= iconinfo.yHotspot;
+		// avoid some leak or other
+		if (iconinfo.hbmMask) {
+			::DeleteObject(iconinfo.hbmMask);
+		}
+		if (iconinfo.hbmColor) {
+			::DeleteObject(iconinfo.hbmColor);
+		}
+	}
+	DrawIcon(hMemDC, p.x, p.y, hcur);
+
+}
+//#include <afxwin.h> //fails
+/*
+bool AddCursor(CDC* pDC) 
+{
+	CPoint ptCursor;
+	VERIFY(::GetCursorPos(&ptCursor));
+	ptCursor.x -= _zoomFrame.left;
+	ptCursor.y -= _zoomFrame.top;
+	double zoom = m_rectView.Width()/(double)_zoomFrame.Width(); // TODO: need access to zoom in this class badly
+	ptCursor.x *= zoom;
+	ptCursor.y *= zoom;
+
+	// TODO: This shift left and up is kind of bogus.
+	// The values are half the width and height of the higlight area.
+	InsertHighLight(pDC, ptCursor);
+
+	// Draw the Cursor
+	HCURSOR hcur = m_cCursor.Cursor();
+	ICONINFO iconinfo;
+	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
+	if (ret) {
+		ptCursor.x -= iconinfo.xHotspot;
+		ptCursor.y -= iconinfo.yHotspot;
+
+		// need to delete the hbmMask and hbmColor bitmaps
+		// otherwise the program will crash after a while
+		// after running out of resource
+		// TODO: can we cache it and don't use GetIconInfo every frame?
+		// We make several shots per second it will save us some resources if cursor is not changed
+		if (iconinfo.hbmMask) {
+			::DeleteObject(iconinfo.hbmMask);
+		}
+		if (iconinfo.hbmColor) {
+			::DeleteObject(iconinfo.hbmColor);
+		}
+	}
+	// TODO: Rewrite to handle better
+	// HDC hScreenDC = ::GetDC(NULL);
+	// HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
+	// ::DrawIconEx( hMemDC, ptCursor.x, ptCursor.y, hcur, 0, 0, 0, NULL, DI_NORMAL);
+	pDC->DrawIcon(ptCursor.x, ptCursor.y, hcur);
+	return true;
+}
+*/
 
 
 // some from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html

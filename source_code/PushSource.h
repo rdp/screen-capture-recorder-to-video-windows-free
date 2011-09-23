@@ -55,7 +55,7 @@ public:
 	//////
 	ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
 
-	// our own.
+	// our own method
     IFilterGraph *GetGraph() {return m_pGraph;}
 
 	/*
