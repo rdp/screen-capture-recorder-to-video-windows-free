@@ -58,5 +58,4 @@ HRESULT CPushSourceDesktop::QueryInterface(REFIID riid, void **ppv)
         return CSource::QueryInterface(riid, ppv);
 	}
 
-	//AddRef(); // this line didn't seem to help...
 }

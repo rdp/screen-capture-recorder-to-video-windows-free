@@ -33,8 +33,8 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA(buf);
   OutputDebugStringA("\n");
   // also works: OutputDebugString(L"yo ho2");
-  logToFile(buf);
-  logToFile("\n");
+  //logToFile(buf);
+  //logToFile("\n");
 #endif
 }
 

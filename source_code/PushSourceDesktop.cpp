@@ -181,8 +181,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 } // GetMediaType
 
 
+// default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Out"),
+        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
        // m_bZeroMemory(0),
         m_iFrameNumber(0),
@@ -394,7 +395,7 @@ HRESULT CPushPinDesktop::Get(
     if (pPropData == NULL)          return S_OK; // Caller just wants to know the size. 
     if (cbPropData < sizeof(GUID))  return E_UNEXPECTED;// The buffer is too small.
         
-    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE;
+    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE; // PIN_CATEGORY_PREVIEW ?
     return S_OK;
 }
 

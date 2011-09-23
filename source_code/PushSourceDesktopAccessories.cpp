@@ -220,20 +220,28 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount,
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
-	// I "think" that they are supposed to call this...
-	// maybe...after initialization?
-	// http://msdn.microsoft.com/en-us/library/aa928940.aspx
-	// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
-	if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} ?  same?
-		return E_FAIL;
-	
-	// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx meh
 
-	VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
+	// "they" are supposed to call this...
+	// maybe...after negotiation
+	// to provide some format details [?]
+	// LODO fail if already streaming...
+	// http://msdn.microsoft.com/en-us/library/aa928940.aspx
+	if(pmt != NULL)
+	{
+		// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
+		if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} ?  same...
+			return E_FAIL;
 	
-	m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
-	// we ignore other things like cropping requests LODO if somebody ever cares about it...
-    m_mt = *pmt;
+		// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx meh
+
+		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
+	
+		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
+		// we ignore other things like cropping requests LODO if somebody ever cares about it...
+		m_mt = *pmt;
+	} else {
+		// they called it to reset us [?]
+	}
     IPin* pin; 
     ConnectedTo(&pin);
     if(pin)
@@ -247,7 +255,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 // get current format?
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
-    *ppmt = CreateMediaType(&m_mt);
+    *ppmt = CreateMediaType(&m_mt); // windows method, also does copy
     return S_OK;
 }
 
@@ -261,7 +269,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
         return hr;
     }
 
-    *pmt = CreateMediaType(&m_mt); // windows method, I think this does a type copy
+    *pmt = CreateMediaType(&m_mt); // windows method, also does a copy
 	if (*pmt == NULL) return E_OUTOFMEMORY;
 
 

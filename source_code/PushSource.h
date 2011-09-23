@@ -30,7 +30,7 @@ const REFERENCE_TIME FPS_1  = UNITS / 1;
 class CPushPinDesktop;
 
 // parent
-class CPushSourceDesktop : public CSource, public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist.
+class CPushSourceDesktop : public CSource, public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist which is IUnknown
 {
 
 private:
@@ -45,7 +45,9 @@ public:
     //////////////////////////////////////////////////////////////////////////
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
-	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh?
+
+	// ?? compiler error?
+	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh? IUnknown_AddRef((IUnknown*)This); AddRef nondelegating?
 	ULONG STDMETHODCALLTYPE Release() { return CBaseFilter::Release(); };
 	
 	////// 
@@ -55,6 +57,17 @@ public:
 
 	// our own.
     IFilterGraph *GetGraph() {return m_pGraph;}
+
+	/*
+	// iBaseFilter
+	 HRESULT STDMETHODCALLTYPE FindPin( 
+            /* [string][in] */ /*LPCWSTR Id,*/
+            /* [annotation][out] */ 
+			/*
+            __out  IPin **ppPin)  {
+				int a = 3;
+				return S_OK;
+	 }*/
 
 };
 
