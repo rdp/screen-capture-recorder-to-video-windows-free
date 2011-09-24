@@ -11,26 +11,35 @@ failing gstreamer backtrace
 
 try 16 -> various bits at home
 
-send a "failing" 16-bit-ter to ramiro
 
-easy streamer with VLC [?] ffmpeg?
-  check for local firewall...
+send a "failing" 16-bit-ter to ramiro
+  try 16 bit without DI_BITS
+  hmm...
+
+check memory debug logs for ffmpeg
+
+easy streamer setter-upper with VLC [?] ffmpeg?
+  ask if you want to beep after it's done...
+  @VLC doesn't play itself
+   huh? figure out?
+  ping instructions
   looks like VLC for now until ffmpeg has qtcapture et al...
     hmm mac is somewhat of an enigma...
   uPnP ?
-  can use ping/connection tester?
+    never
 
-dropdowns for selecting an audio [?]
-  find a good default encoding with high fps or the like
+  find a good default encoding with high video fps or the like
+    qtrle
+      16 bit?
   add encodings dropdown
     options "encode with this, then really encode using that"
-  maybe fps :P
 
 include the audio grabber too
   or complain/warn if they "should" have installed it already :)
   
-can include audio
+dropdowns for selecting an audio side by side the video
   can do just audio
+  @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 ffmpeg subtitles
 
@@ -49,7 +58,6 @@ do we/should we re-encode after the capture?
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-@audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 bounty audio mixer ffmpeg, offer to help :P
   
@@ -60,11 +68,10 @@ a "test via snapshot" method
 
 try out red5 :P
 
-for the failure:
-
-http://stackoverflow.com/questions/2598660/directshow-csourcestream-filter-fails-to-unload-properly
-
 == maybe ==
+
+bounty camstudio encoding codec ffmpeg
+  gzip
 
 check if VLC has a more efficient SelectObject
 
