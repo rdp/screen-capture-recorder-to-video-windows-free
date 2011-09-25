@@ -71,7 +71,7 @@ def do_command_line
       received = received.to_i
     end
     if (received % 2 == 1) && ['height', 'width'].include?(type)
-      warning= "warning--odd numbers were chosen, but they are rejected by mplayer for some reason, so be careful!"
+      warning= "warning--odd numbers were chosen, but videos with odd number width/height are rejected by mplayer for some reason, so be careful [setting it anyway]!"
       p warning
       begin
         require 'java'
