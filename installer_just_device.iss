@@ -1,4 +1,4 @@
-#define AppVer "0.2.4.1"
+#define AppVer "0.3.0"
 #define AppName "Screen Capturer Recorder Device Only"
 
 [UninstallRun]
@@ -6,7 +6,7 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 [Files]
-Source: source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: source_code\Win32\Release\PushDesktop.ax; DestDir: {app}
 Source: ChangeLog.txt; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 

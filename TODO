@@ -1,41 +1,48 @@
 == actually do ==
 
-vlc -vvv -I dummy --dummy-quiet dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}"
-at home
-
 nextsprocket my citrix competitor LOL, no good.
  though shared virtualbox boxes might work just as well...
  on online.net
     I don't know if I could ever compete. bad idea.
 
+C# demo see if it works
+
+failing gstreamer backtrace
+
 try 16 -> various bits at home
 
+
 send a "failing" 16-bit-ter to ramiro
+  try 16 bit without DI_BITS
+  hmm...
 
-check ffmpeg to see if it calls setFormat :P
+check memory debug logs for ffmpeg
 
-check crashing ogv at home
-
-easy streamer with VLC [?] ffmpeg?
-  check for local firewall...
+easy streamer setter-upper with VLC [?] ffmpeg?
+  ask if you want to beep after it's done...
+  @VLC doesn't play itself
+   huh? figure out?
+  ping instructions
   looks like VLC for now until ffmpeg has qtcapture et al...
     hmm mac is somewhat of an enigma...
   uPnP ?
-  can use ping/connection tester?
+    never
 
-dropdowns for selecting an audio [?]
-  find a good default encoding with high fps or the like
+  find a good default encoding with high video fps or the like
+    qtrle
+      16 bit?
   add encodings dropdown
     options "encode with this, then really encode using that"
-  maybe fps :P
 
 include the audio grabber too
   or complain/warn if they "should" have installed it already :)
   
-can include audio
+dropdowns for selecting an audio side by side the video
   can do just audio
+  @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
-add a "start infinte mirror" helper app :P
+ffmpeg subtitles
+
 
 can do "start", "stop" with audio + video
   just audio
@@ -51,25 +58,27 @@ do we/should we re-encode after the capture?
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-speedup:
-  it should only advertise its screen bit depth 
-    [blacky check if memcpy would be useful...]
-    check on compression sizes
-
-@audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
 bounty audio mixer ffmpeg, offer to help :P
+  
+bounty ffserver windows [?]
 
 a "test via snapshot" method
+  add a "start infinite mirror" helper app :P
 
 try out red5 :P
 
-double check if ffmpeg is painfully not capturing or not...hmm...
-  also tell them to call SetFormat, if they don't...
-
-fine tune the DIB extra header size...yikes
-
 == maybe ==
+
+bounty camstudio encoding codec ffmpeg
+  gzip
+
+check if VLC has a more efficient SelectObject
+
+Another way is to directly manipulate the desktop bitmap in the Video Memory if enough memory is available as provided by DirectDraw.  http://www.codeproject.com/KB/cs/DesktopCaptureWithMouse.aspx hmm
+
+  [blacky check if memcpy would be useful...]
+    check on compression sizes
 
 integrate with a mirror display driver, and somehow...have a codec that just describes diffs, I guess? That's the VNC codec in a pinch LOL.
 
@@ -133,9 +142,7 @@ bounty lagarith ffmpeg [?]
 super spiffy "jruby.exe" installer, if that's faster at all
   splash screen?
 
-can show mouse
-
-can show arbitrary mouse [transparent?]
+can show arbitrary mouse [transparent?] circle?
 
 can follow mouse
 
@@ -166,6 +173,22 @@ actually use it. playon competitor?
   can use the default record device in...XP
 
 warn them if they appear slow...
+
+
+complain that this appears to cache?
+$ ffplay  -f dshow  -i video="screen-capture-recorder"
+ffplay version N-32726-ga254452, Copyright (c) 2003-2011 the FFmpeg developers
+  built on Sep 19 2011 19:49:13 with gcc 4.6.1
+  configuration: --enable-gpl --enable-version3 --enable-runtime-cpudetect --enable-avisynth --enable-bzlib --enable-frei0r --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libfreetype --enable-libgsm --enable-libmp3lame --enable-libopenjpeg --enable-librtmp --enable-libschroedinger --enable-libspeex --enable-libtheora --enable-libvo-aacenc --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxavs --enable-libxvid --enable-zlib
+  libavutil    51. 16. 1 / 51. 16. 1
+  libavcodec   53. 16. 0 / 53. 16. 0
+  libavformat  53. 12. 0 / 53. 12. 0
+  libavdevice  53.  4. 0 / 53.  4. 0
+  libavfilter   2. 43. 2 /  2. 43. 2
+  libswscale    2.  1. 0 /  2.  1. 0
+  libpostproc  51.  2. 0 / 51.  2. 0
+[dshow @ 03546320] Estimating duration from bitrate, this may be inaccurate
+
 
 == speedup ==
 

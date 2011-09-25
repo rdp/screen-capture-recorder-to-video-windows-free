@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
-	Name="PushSource"
+	Version="9.00"
+	Name="pushsource"
 	ProjectGUID="{39469123-3EB7-45F3-A15B-3854DFD2C2EB}"
 	RootNamespace="PushSource"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -43,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\BaseClasses\"
+				AdditionalIncludeDirectories="G:\Program Files\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\baseclasses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PUSHSOURCE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,12 +65,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\BaseClasses\Debug\strmbasd.lib winmm.lib msvcrtd.lib"
+				AdditionalDependencies="strmbasd.lib winmm.lib msvcrtd.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="G:\Program Files\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow_64\baseclasses\Debug"
 				IgnoreAllDefaultLibraries="true"
 				ModuleDefinitionFile="PushSource.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -89,9 +93,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -149,6 +150,8 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -168,9 +171,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -352,19 +352,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\parent.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PushSource.def"
 				>
 			</File>
 			<File
-				RelativePath=".\PushSourceBitmap.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PushSourceBitmapSet.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\PushSourceDesktop.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PushSourceDesktopAccessories.cpp"
 				>
 			</File>
 			<File

@@ -118,6 +118,14 @@ I can add features upon reasonable demand.
 
 Basically you want a feature, ping me, you got it.
 
+To build it locally, install VS Express 2010, install Microsoft SDK, open up your equivalent of 
+\Program Files\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\baseclasses\baseclasses.sln
+build it (debug)
+now add to your local build (project properties, from the source_code\pushdesktop.sln) adjust the VC++ Directories (Include/Library) 
+to point to your baseclasses.
+
+== Attributions ==
+
 the included speed test utility was originally from http://stereopsis.com/blttest
 (bitblt is quite hardware dependent, or so I'm told).
 

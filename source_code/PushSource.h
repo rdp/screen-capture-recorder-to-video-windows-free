@@ -29,7 +29,8 @@ const REFERENCE_TIME FPS_1  = UNITS / 1;
 
 class CPushPinDesktop;
 
-class CPushSourceDesktop : public CSource
+// parent
+class CPushSourceDesktop : public CSource, public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist which is IUnknown
 {
 
 private:
@@ -40,12 +41,33 @@ private:
     CPushPinDesktop *m_pPin;
 public:
     //////////////////////////////////////////////////////////////////////////
-    //  IUnknown
+    //  IUnknown, except we had no IUnknown [?]
     //////////////////////////////////////////////////////////////////////////
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
 
+	// ?? compiler error that these be required here?
+	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh? IUnknown_AddRef((IUnknown*)This); AddRef nondelegating? huh?
+	ULONG STDMETHODCALLTYPE Release() { return CBaseFilter::Release(); };
+	
+	////// 
+	// IAMFilterMiscFlags, in case it helps anybody else know we're a source config
+	//////
+	ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
+
+	// our own method
     IFilterGraph *GetGraph() {return m_pGraph;}
+
+	/*
+	// iBaseFilter
+	 HRESULT STDMETHODCALLTYPE FindPin( 
+            /* [string][in] */ /*LPCWSTR Id,*/
+            /* [annotation][out] */ 
+			/*
+            __out  IPin **ppPin)  {
+				int a = 3;
+				return S_OK;
+	 }*/
 
 };
 

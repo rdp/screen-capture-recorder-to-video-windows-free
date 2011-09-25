@@ -20,7 +20,7 @@ int GetTrueScreenDepth(HDC hDC) {
 int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
-  HDC DeskDC = GetDC(NULL);
+  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
   HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
   ReleaseDC(NULL, DeskDC);
 
@@ -181,8 +181,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 } // GetMediaType
 
 
+// default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Out"),
+        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
        // m_bZeroMemory(0),
         m_iFrameNumber(0),
@@ -203,6 +204,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
     // Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
+
     hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // SLOW for aero desktop ...
 	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
@@ -263,10 +265,13 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 	m_fFps = config_max_fps;
   	m_rtFrameLength = UNITS / config_max_fps; 
-
-	LocalOutput("got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
+	wchar_t out[1000];
+	swprintf(out, 1000, L"got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
+	LocalOutput(out);
+	set_config_string_setting(L"was_initially_set_to", out);
 }
+
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
@@ -283,7 +288,7 @@ CPushPinDesktop::~CPushPinDesktop()
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-	__int64 startOneRound = StartCounter();
+	__int64 startThisRound = StartCounter();
 	BYTE *pData;
     long cbData;
 
@@ -307,7 +312,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
         DeleteObject(hDib);
 
 
-
+	// for some reason the timings are messed up initially, as there's no start time.
+	// race condition?
+	// so don't count them unless they seem valid...
 	FILTER_STATE myState;
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 	bool fullyStarted =  myState == State_Running;
@@ -315,8 +322,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
 
-	
-	long double millisThisRound = GetCounterSinceStartMillis(startOneRound);
+	// calculate how long it took before we add in our own arbitrary delay to enforce fps...
+	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
 
     // wait until we "should" send this frame out...TODO...more precise et al...
 
@@ -329,9 +336,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
 
-	// for some reason the timings are messed up initially, as there's no start time.
-	// race condition?
-	// so don't count them unless they seem valid...
 	if(fullyStarted)
       m_iFrameNumber++;
 
@@ -341,8 +345,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber == 1);
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	LocalOutput("end total frames %d %.020Lfms, total since beginning of time %f fps (theoretical max fps %f)", m_iFrameNumber, millisThisRound, 
-		fpsSinceBeginningOfTime, 1.0*1000/millisThisRound);
+	LocalOutput("end total frames %d %.020Lfms, total since beginning of time %f fps (theoretical max fps %f)", m_iFrameNumber, millisThisRoundTook, 
+		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook);
 
 	previousFrameEndTime = endFrame;
     return S_OK;
@@ -394,7 +398,7 @@ HRESULT CPushPinDesktop::Get(
     if (pPropData == NULL)          return S_OK; // Caller just wants to know the size. 
     if (cbPropData < sizeof(GUID))  return E_UNEXPECTED;// The buffer is too small.
         
-    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE;
+    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE; // PIN_CATEGORY_PREVIEW ?
     return S_OK;
 }
 

@@ -1,4 +1,4 @@
-#define AppVer "0.2.4.1"
+#define AppVer "0.3.0"
 #define AppName "Screen Capturer Recorder"
 
 [UninstallRun]
@@ -8,7 +8,7 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.02
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.020.ax
 [Files]
-Source: source_code\Release\PushDesktop.ax; DestDir: {app}
+Source: source_code\Win32\Release\PushDesktop.ax; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
@@ -30,6 +30,7 @@ Name: {group}\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\configure by setting specific numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
 Name: {group}\configure\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
 Name: {group}\configure\configure by resizing a transparent window; Filename: javaw; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar window_resize.rb
+Name: {group}\configure\setup local audio streaming server: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar server_setup.rb
 Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Uninstall; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device after install msvcr100; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
