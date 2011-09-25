@@ -103,13 +103,16 @@ protected:
 	//CCritSec m_cSharedState;            // Protects our internal state
     //int m_iRepeatTime;                  // Time in msec between frames
 
+	//AM_MEDIA_TYPE requestedHardenedFormat; just use m_mt
+	bool formatAlreadyHardened;
+
 public:
 
     //////////////////////////////////////////////////////////////////////////
     //  IUnknown
     //////////////////////////////////////////////////////////////////////////
-    STDMETHODIMP QueryInterface(REFIID riid, void **ppv); // does an AddRef hmm...
-    STDMETHODIMP_(ULONG) AddRef() { return GetOwner()->AddRef(); } // gets called often
+    STDMETHODIMP QueryInterface(REFIID riid, void **ppv); 
+    STDMETHODIMP_(ULONG) AddRef() { return GetOwner()->AddRef(); } // gets called often...
     STDMETHODIMP_(ULONG) Release() { return GetOwner()->Release(); }
 
 
@@ -131,7 +134,7 @@ public:
     // Set the agreed media type and set up the necessary parameters
     HRESULT SetMediaType(const CMediaType *pMediaType);
 
-    // Support multiple display formats
+    // Support multiple display formats (CBasePin)
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 

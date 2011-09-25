@@ -188,9 +188,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
        // m_bZeroMemory(0),
         m_iFrameNumber(0),
         //m_nCurrentBitDepth(32), // negotiated...
-		m_pParent(pFilter)
+		m_pParent(pFilter),
+		formatAlreadyHardened(false)
 {
-
+	
 	// The main point of this sample is to demonstrate how to take a DIB
 	// in host memory and insert it into a video stream. 
 
@@ -375,7 +376,8 @@ HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)
 
 HRESULT CPushPinDesktop::Set(REFGUID guidPropSet, DWORD dwID, void *pInstanceData, 
                         DWORD cbInstanceData, void *pPropData, DWORD cbPropData)
-{// Set: Cannot set any properties.
+{
+	// Set: we don't have any specific properties to set...that we advertise yet anyway, and who would use them anyway?
     return E_NOTIMPL;
 }
 

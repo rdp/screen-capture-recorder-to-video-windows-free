@@ -9,6 +9,7 @@
 // CheckMediaType
 // I think VLC calls this once per each enumerated media type that it likes (3 times)
 // just to "make sure" that it's a real valid option
+// so we could "probably" just return true here, but do some checking anyway...
 //
 // We will accept 8, 16, 24 or 32 bit video formats, in any
 // image size that gives room to bounce.
@@ -16,6 +17,8 @@
 //
 HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 {
+	CAutoLock cAutoLock(m_pFilter->pStateLock());
+
     CheckPointer(pMediaType,E_POINTER);
 
     if((*(pMediaType->Type()) != MEDIATYPE_Video) ||   // we only output video
@@ -55,7 +58,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 
     // Don't accept formats with negative height, which would cause the desktop
     // image to be displayed upside down.
-    if (pvi->bmiHeader.biHeight < 0)
+	// also reject 0 that would be weird.
+    if (pvi->bmiHeader.biHeight <= 0)
         return E_INVALIDARG;
 
     return S_OK;  // This format is acceptable.
@@ -88,7 +92,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
 	
 	int bytesPerLine;
-
+	// some pasted code...
 bytesPerLine = header.biWidth * (header.biBitCount/8);
 /* round up to a dword boundary */
 if (bytesPerLine & 0x0003) 
@@ -97,10 +101,10 @@ if (bytesPerLine & 0x0003)
    ++bytesPerLine;
    }
 
- ASSERT(header.biHeight > 0);
+ ASSERT(header.biHeight > 0); // sanity check
  // NB that we add in space for the closing "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we will *never* need it, maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debut it LOL.
 pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
-    pProperties->cBuffers = 1; // 2 doesn't seem to help...
+    pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
 
 /* meanwhile, from somewhere on the web...
@@ -142,7 +146,7 @@ dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the f
 */
 
 
-	// pProperties->cbPrefix = 100; // no sure what a prefix is...didn't help anyway :P
+	// pProperties->cbPrefix = 100; // no sure what a prefix is...setting this didn't help anyway :P
 
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the
@@ -168,14 +172,15 @@ dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the f
 //
 // SetMediaType
 //
-// Called when a media type is agreed between filters (i.e. they call GetMediaType till they find one they like, then they call SetMediaType, I believe).
-//
+// Called when a media type is agreed between filters (i.e. they call GetMediaType/GetStreamCaps (preferably) till they find one they like, then they call SetMediaType, I believe).
+// called after SetFormat, so maybe they assume
+// that after enumerating, calling CheckMediaType, and setFormat, that they will enumerate again, use the first, and it be the one they setup...
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but I think maybe they have to call this to see if the type is "really" available or something.
 
     // Pass the call up to my base class
-    HRESULT hr = CSourceStream::SetMediaType(pMediaType);
+    HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns m_mt
 
     if(SUCCEEDED(hr))
     {
@@ -220,6 +225,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount,
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
+    CAutoLock cAutoLock(m_pFilter->pStateLock());
+
 
 	// "they" are supposed to call this...
 	// maybe...after negotiation of type
@@ -238,7 +245,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
 		// we ignore other things like cropping requests LODO if somebody ever cares about it...
-		m_mt = *pmt;
+		m_mt = *pmt; // only time it is ever set...
 	} else {
 		// they called it to reset us
 	}
@@ -247,14 +254,24 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
     if(pin)
     {
         IFilterGraph *pGraph = m_pParent->GetGraph();
-        pGraph->Reconnect(this);
-    }
+        HRESULT res = pGraph->Reconnect(this);
+		if(res != S_OK) // LODO check first, and then re-use the old one?
+			return res; // return early...
+    } else {
+		// graph hasn't been built yet...
+		// so we're ok with "whatever" format, just setting it up, getting our ducks ready..
+	}
+	formatAlreadyHardened = true;
     return S_OK;
 }
 
-// get current format?
+// get current format I guess...
+// or get default if they haven't called SetFormat yet...
+// LODO the default, which probably we don't do yet...unless they've already called GetStreamCaps then it'll be the last index they used LOL.
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
+    CAutoLock cAutoLock(m_pFilter->pStateLock());
+
     *ppmt = CreateMediaType(&m_mt); // windows method, also does copy
     return S_OK;
 }
@@ -262,6 +279,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
 {
+    CAutoLock cAutoLock(m_pFilter->pStateLock());
 	HRESULT hr = GetMediaType(iIndex, &m_mt); // ensure setup/re-use m_mt ...
 	// some are indeed shared, apparently.
     if(FAILED(hr))
