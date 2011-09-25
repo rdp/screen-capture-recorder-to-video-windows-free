@@ -180,7 +180,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
     CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but I think maybe they have to call this to see if the type is "really" available or something.
 
     // Pass the call up to my base class
-    HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns m_mt
+    HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns m_mt with m_mt.Set(*pmt) ... hmm...
 
     if(SUCCEEDED(hr))
     {
@@ -227,6 +227,14 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
+	// it seems they call SetMediaType first
+	// then SetFormat after [I guess for details, but it also should setup GetStreamCaps to only have one entry, its default being this one, for later calls...]
+	// or maybe some people never call SetMediaType huh? what?
+	// or maybe SetMediatype is for negotiating the finer points?
+	// I *think* it can go back and forth, then.  You can call GetStreamCaps to enumerate, then call
+	// SetFormat, then later calls to GetMediaType/GetStreamCaps/EnumMediatypes will all "have" to just give this one
+	// though theoretically they could also call EnumMediaTypes, then SetMediaType, and not call SetFormat
+	// does flash call both? what order for flash/ffmpeg/vlc calling both?
 
 	// "they" are supposed to call this...
 	// maybe...after negotiation of type

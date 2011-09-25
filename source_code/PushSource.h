@@ -73,7 +73,7 @@ public:
 
 
 // child
-class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKsPropertySet
+class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKsPropertySet //CSourceStream is ... CBasePin
 {
 
 protected:
