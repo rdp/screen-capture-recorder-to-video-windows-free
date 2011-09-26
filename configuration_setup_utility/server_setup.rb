@@ -4,29 +4,38 @@ require 'jruby-swing-helpers/play_audio'
 include SwingHelpers
 require 'java'
 require 'tempfile'
-require 'sane' # IP addrs
-p $:
+require 'sane'
 
 ENV['PATH'] = 'vendor\\ffmpeg\\bin;' + ENV['PATH'] 
+ffmpeg_list_command = "ffmpeg.exe -list_devices true -f dshow -i dummy 2>&1"
+out = `#{ffmpeg_list_command}`
+unless out.present?
+  p 'failed', out
+  raise `2nd try: #{ffmpeg_list_command}`
+end
 
-out = `ffmpeg.exe -list_devices true -f dshow -i dummy 2>&1`
-print out
 audio = out.split('DirectShow')[2]
+raise out.inspect unless audio
 names = audio.scan(/"([^"]+)"/).map{|matches| matches[0]}
 
-name = DropDownSelector.new(nil, names, "Select audio device to stream:").go_selected_value
-
-# test port is open at all...
-require 'socket'
-port = 8081
-a = TCPServer.new nil, port
-a.close
+SwingHelpers.show_blocking_message_dialog "You will next be prompted for the audio device you with to capture and stream.\nFor Vista/Windows 7 users, choose virtual-audio-capturer, for XP, you'll need to configure your recording device to record\n stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
+name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
+begin
+  require 'socket'
+  port = 8081
+  a = TCPServer.new nil, port
+  a.close
+rescue Exception => e
+  SwingHelpers.show_blocking_message_dialog "cannot start server, close VLC?\nPort #{port}\n" + e.to_s
+  exit 1
+end
 
 popup = SwingHelpers.show_non_blocking_message_dialog 'starting server...'
 
 vlc_thread = Thread.new {
-  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=ogg,dst=:#{port}/go.mp3}" ! # --qt-start-minimized  
- # mux ogg?
+  # TODO needs full path...
+  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}/go.mp3}" ! # --qt-start-minimized  
+  # mux ogg?
   print c
   system c
 }
@@ -35,22 +44,20 @@ sleep 1
 popup.close
 
 
-# LODO
-# describe error messages on the client.
+# LODO you are successfully capturing what you hear (not even streaming it yet...)
 # describe making sure mute is turned off on the client.
 
-def play_sound_and_capture_and_playback ip_addr_to_listen_on, port
+def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
 
   out = Tempfile.new 'wav' # LODO delete ja
   out = out.path + '.wav'
 
-  @p ||= PlayAudio.new 'alerts.wav' # 5s long
-  @p.loop
+  p = PlayAudio.new 'alerts.wav' # 5s long
+  p.start
 
-  c ="ffmpeg.exe -t 1 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\""
-  print c
-  system c # takes 5s...yipes LODO report how cruddy it is LOL.
-  #@p.stop
+  c ="ffmpeg.exe -t 2 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\""
+  system c
+  p.stop
 
   SwingHelpers.show_blocking_message_dialog 'now I will play back what I recorded from that stream. You\'ll then tell me if you hear anything...'
   p = PlayAudio.new out
@@ -67,16 +74,17 @@ def play_sound_and_capture_and_playback ip_addr_to_listen_on, port
   got
 end
 
-SwingHelpers.show_blocking_message_dialog 'now let\'s test if I can read from the stream locally...you\'ll hear some blips, which you should ignore, as they are broadcast and recorder for test.'
-got = play_sound_and_capture_and_playback '127.0.0.1', port
+SwingHelpers.show_blocking_message_dialog "now let's test if I can read from the stream locally...you'll hear some blips, which you should ignore, they are being broadcast and then recorded...."
+
+got = play_sound_and_capture_and_test_playback '127.0.0.1', port
 if got == :yes
   p 'good'
 else
   SwingHelpers.show_blocking_message_dialog "please check VLC\'s log messages:\n Go to VLC, hit the stop button, go to tools -> messages, change verbosity to 2, \nthen without closing the messages window, hit the play button, \nthen report back the log message"
   exit
 end
-
-SwingHelpers.show_blocking_message_dialog 'ok that worked! now we\'ll try receiving it from a more "public" IP address'
+# TODO ping from there to here...
+SwingHelpers.show_blocking_message_dialog "ok that worked! This means you are successfully capturing \'what you hear\' and streaming it.\n Now we'll try receiving it from a more \"public\" IP address to check for any blocking local firewalls."
 
 local_ip_addrs = Socket.get_local_ips # hope it works :)
 p local_ip_addrs
@@ -86,12 +94,23 @@ else
   ip = DropDownSelector.new(nil, local_ip_addrs, "Select IP address that you think the client will be most likely to see:").go_value
 end
 
-SwingHelpers.show_blocking_message_dialog "ok now let's test if we can read, locally, from our own IP address #{ip}, ignore these first blips please..."
+SwingHelpers.show_blocking_message_dialog "ok now let's test for interfering firewalls by seeing if we can read, locally, from our own IP address #{ip}, ignore these first blips again..."
 
-heard = play_sound_and_capture_and_playback ip, port
+heard = play_sound_and_capture_and_test_playback ip, port
 
-if heard == :yes
- SwingHelpers.show_blocking_message_dialog "good you're theoretically ready to broadcast.  Now turn off any firewalls here on the server, go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Capture Device\n and type in \"http://#{ip}:#{port}/go.mp3\".  It might also work to alternatively type in http://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one."
-else
+if heard == :no
  SwingHelpers.show_blocking_message_dialog "maybe you have a firewall that's disallowing connections? try turning it off, try again..."
+ exit 1
 end
+
+SwingHelpers.show_blocking_message_dialog "Good, hopefully this means local firewalls are disabled.\nNow let's double check that.\nGo to your client computer, open a command prompt, and run \"ping #{ip}\"\nYou should see outputs like\nReply from #{ip}: bytes=32 time=27ms TTL=53..."
+
+
+got = JOptionPane.show_select_buttons_prompt "did ping work from client to server?", :yes => "yes", :no => "no"
+if got == :no
+  message = "try disabling more firewalls, on client and server"
+  message += " or try with selecting a different IP address" if local_ip_addrs.length > 1
+  SwingHelpers.show_blocking_message_dialog message
+end
+
+SwingHelpers.show_blocking_message_dialog "good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Capture Device\n and type in\nhttp://#{ip}:#{port}/go.mp3\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one."
