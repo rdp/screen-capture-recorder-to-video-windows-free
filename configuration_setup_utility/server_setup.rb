@@ -38,18 +38,32 @@ end
 port = 8888
 
 if (!is_port_open(port)) 
-  SwingHelpers.show_blocking_message_dialog "Cannot start server, close open instances of VLC?\nPort #{port} seems already in use..."
+  SwingHelpers.show_blocking_message_dialog "Cannot start server, close any other open instances of VLC\nPort #{port} seems already in use..."
   exit 1
 end
 
 require 'win32/registry'
+vlc_loc = nil
 for key in [Win32::Registry::HKEY_LOCAL_MACHINE, Win32::Registry::HKEY_CURRENT_USER]
-  reg = key.open('Software\\VideoLAN\\VLC')
-  if vlc_loc = reg['InstallDir']
-    break
+  for subkey in ['Software\\VideoLAN\\VLC', 'Software\Wow6432Node\\VideoLAN\\VLC'] # allow for 64-bit java, 32-bit VLC [yipers oh my]
+    break if vlc_loc
+    begin
+      reg = key.open(subkey)
+      if vlc_loc = reg['InstallDir']
+        #p 'success', key, subkey
+      end
+    rescue => e
+      #p 'unable to open reg?' + key.to_s # happens somehow...
+    ensure
+      reg.close if reg
+    end
   end
 end
-vlc_loc ||= "c:\\program files\\videolan\\vlc"
+
+if !vlc_loc
+  SwingHelpers.show_blocking_message_dialog 'unable to determine where VLC is installed, using default [might not work]'
+  vlc_loc = "c:\\program files\\videolan\\vlc"
+end
 ENV['PATH'] = vlc_loc + ';' + ENV['PATH']
 
 popup = SwingHelpers.show_non_blocking_message_dialog 'starting server...'
@@ -69,7 +83,7 @@ popup.close
 
 def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
 
-  out = Tempfile.new 'wav' # LODO delete ja
+  out = Tempfile.new 'wav' 
   out = out.path + '.wav'
 
   p = PlayAudio.new 'alerts.wav' # 5s long
@@ -89,7 +103,7 @@ def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
   begin
     File.delete out
   rescue => ignore
-    p ignore.to_s
+    p 'unable to delete?' + out + ' ' + ignore.to_s
   end
   got
 end
@@ -111,7 +125,7 @@ end
 SwingHelpers.show_blocking_message_dialog "ok that worked! This means you are successfully capturing \'what you hear\' and streaming it.\n Now we'll try receiving it from a more \"public\" IP address to check for any blocking local firewalls."
 
 local_ip_addrs = Socket.get_local_ips # hope it works :)
-p local_ip_addrs
+p 'this computers ip addrs:' + local_ip_addrs.join(',')
 if local_ip_addrs.length == 1
   ip = local_ip_addrs.first
 else
@@ -130,7 +144,7 @@ end
 SwingHelpers.show_blocking_message_dialog "Good, hopefully this means local firewalls are disabled.\nNow let's double check that.\nGo to your client computer, open a command prompt, and run \"ping #{ip}\"\nYou should see outputs like\n\nReply from #{ip}: bytes=32 time=27ms TTL=53 ..."
 
 
-got = JOptionPane.show_select_buttons_prompt "did ping work from client to server?", :yes => "yes", :no => "no"
+got = JOptionPane.show_select_buttons_prompt "Does ping work from client to server?", :yes => "yes", :no => "no"
 if got == :no
   message = "try disabling more firewalls, on client and server"
   message += " or try with selecting a different IP address" if local_ip_addrs.length > 1
