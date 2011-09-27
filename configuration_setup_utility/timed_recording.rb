@@ -15,7 +15,7 @@ if !File.exist?(ENV['windir'] + "\\system32\\msvcr100.dll")
 end
 
 require 'ffmpeg_helpers'
-videos = FfmpegHelpers.enumerate_directshow_devices[:video] + ['none']
+videos = FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1} + ['none'] # put ours in front :)
 original_video_device=video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or none").go_selected_value
 if video_device == 'none'
   video_device = nil
@@ -23,7 +23,7 @@ else
   video_device="-f dshow -i video=\"#{video_device}\""
 end
 
-audios = FfmpegHelpers.enumerate_directshow_devices[:audio] + ['none']
+audios = FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == 'virtual-audio-capturer' ? 0 : 1} + ['none']
 audio_device = DropDownSelector.new(nil, audios, "Select audio device to capture, or none").go_selected_value
 if audio_device == 'none'
   audio_device = nil 

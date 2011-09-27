@@ -11,14 +11,17 @@ C# demo see if it works
 
 failing gstreamer backtrace
 
-try 16 -> various bits at home
+try 16 -> various bits at home, speed-wise
 
+qtrle ?
 
 send a "failing" 16-bit-ter to ramiro
   try 16 bit without DI_BITS
   hmm...
 
 check memory debug logs for ffmpeg
+
+"reset" option
 
 easy streamer setter-upper with VLC [?] ffmpeg?
   ask if you want to beep after it's done...
@@ -73,6 +76,8 @@ a "test via snapshot" method
 try out red5 :P
 
 == maybe ==
+
+ask why ffmpeg -f dshow -i video=...:audio= chokes and dies...huh?
 
 bounty camstudio encoding codec ffmpeg
   gzip
