@@ -6,6 +6,7 @@ require 'jruby-swing-helpers/swing_helpers'
 include SwingHelpers
 require 'jruby-swing-helpers/drive_info'
 require 'setup_screen_tracker_params'
+require 'fileutils'
 
 if !File.exist?(ENV['windir'] + "\\system32\\msvcr100.dll")
   SwingHelpers.show_blocking_message_dialog "warning--you don't appear to have the Microsoft visual studio 2010 runtime DLL's installed, please install them first and then run the \"re-register device\" command."
@@ -34,6 +35,11 @@ if video_device
   possible_extensions = ['avi', 'mpg']
 else
   possible_extensions = ['mp3', 'wav']
+end
+
+unless audio_device || video_device
+ SwingHelpers.show_blocking_message_dialog('must select at least one')
+ exit 1
 end
 
 file = JFileChooser.new_nonexisting_filechooser_and_go 'Select Filename for output file', DriveInfo.get_drive_with_most_space_with_slash
