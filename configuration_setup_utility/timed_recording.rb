@@ -13,9 +13,6 @@ if !File.exist?(ENV['windir'] + "\\system32\\msvcr100.dll")
   exit 1
 end
 
-# use vendored ffmpeg
-ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
-
 file = JFileChooser.new_nonexisting_filechooser_and_go 'Select Filename for output file', DriveInfo.get_drive_with_most_space_with_slash
 file += (ARGV[0] || ".avi" ) unless file =~ /\.avi$/ # force extension on them...
 if File.exist? file
@@ -24,7 +21,7 @@ if File.exist? file
   File.delete file
 end
 
-#TODO tell them current size/settings here
+# LODO tell them current size/settings here
 
 old_fps = SetupScreenTrackerParams.new.read_single_setting("force_max_fps") || 30 # our own local default...hmm...
 new_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i

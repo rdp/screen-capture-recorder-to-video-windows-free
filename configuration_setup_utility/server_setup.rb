@@ -1,3 +1,5 @@
+# TODO degradation?
+
 puts 'loading...'
 require 'add_vendored_gems'
 require 'jruby-swing-helpers/swing_helpers'
@@ -8,18 +10,8 @@ require 'java'
 require 'tempfile'
 require 'sane'
 
-ENV['PATH'] = 'vendor\\ffmpeg\\bin;' + ENV['PATH'] 
-ffmpeg_list_command = "ffmpeg.exe -list_devices true -f dshow -i dummy 2>&1"
-out = `#{ffmpeg_list_command}`
-unless out.present?
-  p 'failed', out
-  raise `2nd try: #{ffmpeg_list_command}`
-end
-
-audio = out.split('DirectShow')[2]
-raise out.inspect unless audio
-names = audio.scan(/"([^"]+)"/).map{|matches| matches[0]}
-
+require 'ffmpeg_helpers'
+names = FfmpegHelpers.enumerate_directshow_devices[:audio]
 SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
 name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
 
@@ -77,6 +69,7 @@ vlc_thread = Thread.new {
 
 sleep 1 # let VLC startup...though it takes a bit longer than this...
 popup.close
+puts "now streaming at: http://127.0.0.1:#{port}/go.mp3"
 
 # LODO you are successfully capturing what you hear (not even streaming it yet...)
 # describe making sure mute is turned off on the client.
@@ -153,4 +146,4 @@ end
 
 good_addr = "http://#{ip}:#{port}/go.mp3"
 RubyClip.set_clipboard good_addr
-SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Capture Device\n and type in\n#{good_addr}\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized.\n#{good_addr} has been copied to your local clipboard."
+SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Network Streame\n and type in\n#{good_addr}\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized.\n#{good_addr} has been copied to your local clipboard."
