@@ -25,7 +25,7 @@ OutputBaseFilename=setup {#AppName} v{#AppVer}
 OutputDir=releases
 
 [Icons]
-Name: {group}\Record\record screen or audio using current settings for a specific number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
+Name: {group}\Record\record screen or audio using current settings for a variable number of seconds; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar timed_recording.rb
 Name: {group}\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\configure by setting specific screen capture numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
 Name: {group}\configure\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}

@@ -1,3 +1,24 @@
+== broadcast/record ==
+
+perl + mp3 only works well...
+
+perl + screen cast 700x600: -vcodec mpeg4
+
+  dropping buffers like crazy, perl 0% cpu
+  dwm, ffmpeg high cpu 50%'ish... (so one core)
+  only top line is good, rest is crap.
+    huh?
+  
+  
+  ffmpeg -y -f dshow -i video=screen-capture-recorder -vcodec mpeg4  yo.avi
+    outputs *zero* packets? huh? no what? seriously.. what?
+    
+  audio still bad with anything but huffy
+    x264 default: 1MB
+    qtrle 13MB, no video LOL.
+    huffy 115MB
+    TODO fix audio bad here LOL.
+  
 == camtwist windows ==
 
 Yes, you would have to do that since image dimensions are negotiated when the graph is built. There is something called dynamic reconnection that might be of interest to you (msdn.microsoft.com/en-us/library/dd388737(v=vs.85).aspx). It allows for re-negotiation without rebuilding, but the filters in the graph need to support it AFAIR. – Ralf Jul 1 at 4:39
