@@ -20,7 +20,7 @@ original_video_device=video_device = DropDownSelector.new(nil, videos, "Select v
 if video_device == 'none'
   video_device = nil
 else
-  video_device="video=\"#{video_device}\""
+  video_device="-f dshow -i video=\"#{video_device}\""
 end
 
 audios = FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == 'virtual-audio-capturer' ? 0 : 1} + ['none']
@@ -28,7 +28,7 @@ audio_device = DropDownSelector.new(nil, audios, "Select audio device to capture
 if audio_device == 'none'
   audio_device = nil 
 else
-  audio_device="audio=\"#{audio_device}\""
+  audio_device="-f dshow -i audio=\"#{audio_device}\""
 end
 
 if video_device
@@ -68,7 +68,7 @@ SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will star
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "ffmpeg -y -f dshow -i #{[video_device, audio_device].compact.join(':')} #{new_fps} -t #{seconds} -vcodec libx264 \"#{file}\"" # LODO report qtrle no video
+c = "ffmpeg -y #{[video_device, audio_device].compact.join(' ')} #{new_fps} -t #{seconds} -vcodec huffyuv \"#{file}\"" # LODO report qtrle no video
 puts c
 system c
 p 'revealing file...'
