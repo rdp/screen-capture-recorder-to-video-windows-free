@@ -1,5 +1,7 @@
-== 0.3.0 ==
- 9-23-11
+0.3.1 9-26-11
+  add a hopefully working, hopefully human friendly self-broadcaster...
+
+0.3.0 9-23-11
  allow SetFormat to accept NULL so that it won't crash flash player. Added an interface, too, but it's un-used I doubt.
 
 0.2.5: 9-21-11:
