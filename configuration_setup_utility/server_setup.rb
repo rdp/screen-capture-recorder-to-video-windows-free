@@ -2,6 +2,7 @@ puts 'loading...'
 require 'add_vendored_gems'
 require 'jruby-swing-helpers/swing_helpers'
 require 'jruby-swing-helpers/play_audio'
+require 'jruby-swing-helpers/ruby_clip'
 include SwingHelpers
 require 'java'
 require 'tempfile'
@@ -22,7 +23,7 @@ names = audio.scan(/"([^"]+)"/).map{|matches| matches[0]}
 SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
 name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
 
-def check_port_open port
+def is_port_open port
  begin
   require 'socket'
   a = TCPServer.new nil, port
@@ -36,7 +37,7 @@ end
 
 port = 8888
 
-if (!check_port_open port) 
+if (!is_port_open(port)) 
   SwingHelpers.show_blocking_message_dialog "Cannot start server, close open instances of VLC?\nPort #{port} seems already in use..."
   exit 1
 end
@@ -60,13 +61,8 @@ vlc_thread = Thread.new {
   system c
 }
 
-sleep 1
+sleep 1 # let VLC startup...though it takes a bit longer than this...
 popup.close
-if (check_port_open port) 
-  SwingHelpers.show_blocking_message_dialog "Cannot start VLC as server?"
-  exit 1
-end
-
 
 # LODO you are successfully capturing what you hear (not even streaming it yet...)
 # describe making sure mute is turned off on the client.
@@ -83,12 +79,12 @@ def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
   system c
   p.stop
 
-  SwingHelpers.show_blocking_message_dialog 'now I will play back what I recorded from that stream. You\'ll then tell me if you hear anything...'
+  SwingHelpers.show_blocking_message_dialog 'now I will play back what I recorded from that. You\'ll then tell me if you hear anything...'
   p = PlayAudio.new out
   p.start
   sleep 4
   p.stop
-  got = JOptionPane.show_select_buttons_prompt "did you hear anything?", :yes => "yes", :no => "no"
+  got = JOptionPane.show_select_buttons_prompt "did you hear any beeps just now?", :yes => "yes", :no => "no"
   # maybe playaudio doesn't release its hold?
   begin
     File.delete out
@@ -99,6 +95,12 @@ def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
 end
 
 SwingHelpers.show_blocking_message_dialog "Server started (VLC). You can minimize it if you wish.\nNow let's test if I can read from the stream locally...you'll hear some blips, which you should ignore, they are being broadcast and then recorded...."
+
+#if (is_port_open(port)) # windows let's one supplant the other...hmm...
+#  SwingHelpers.show_blocking_message_dialog "Cannot start VLC as server?"
+#  exit 1
+#end
+
 
 got = play_sound_and_capture_and_test_playback '127.0.0.1', port
 if got == :no
@@ -135,4 +137,6 @@ if got == :no
   SwingHelpers.show_blocking_message_dialog message
 end
 
-SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Capture Device\n and type in\nhttp://#{ip}:#{port}/go.mp3\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized."
+good_addr = "http://#{ip}:#{port}/go.mp3"
+RubyClip.set_clipboard good_addr
+SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Capture Device\n and type in\n#{good_addr}\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized.\n#{good_addr} has been copied to your local clipboard."
