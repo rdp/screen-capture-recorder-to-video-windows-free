@@ -1,7 +1,8 @@
 0.3.2 9-27-11
   make it so that recorder can record anything, make it slightly more robust, too.
-  too bad it uses so much disk space...
-
+    too bad it uses so much disk space...
+  add mouse
+  
 0.3.1 9-26-11
   add a hopefully working, hopefully human friendly self-broadcaster...
 
