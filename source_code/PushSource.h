@@ -41,33 +41,22 @@ private:
     CPushPinDesktop *m_pPin;
 public:
     //////////////////////////////////////////////////////////////////////////
-    //  IUnknown, except we had no IUnknown [?]
+    //  IUnknown
     //////////////////////////////////////////////////////////////////////////
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
 
-	// ?? compiler error that these be required here?
-	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); }; // huh? IUnknown_AddRef((IUnknown*)This); AddRef nondelegating? huh?
+	// ?? compiler error that these be required here? huh?
+	ULONG STDMETHODCALLTYPE AddRef() { return CBaseFilter::AddRef(); };
 	ULONG STDMETHODCALLTYPE Release() { return CBaseFilter::Release(); };
 	
 	////// 
-	// IAMFilterMiscFlags, in case it helps anybody else know we're a source config
+	// IAMFilterMiscFlags, in case it helps somebody somewhere know we're a source config (probably unnecessary)
 	//////
 	ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
 
 	// our own method
     IFilterGraph *GetGraph() {return m_pGraph;}
-
-	/*
-	// iBaseFilter
-	 HRESULT STDMETHODCALLTYPE FindPin( 
-            /* [string][in] */ /*LPCWSTR Id,*/
-            /* [annotation][out] */ 
-			/*
-            __out  IPin **ppPin)  {
-				int a = 3;
-				return S_OK;
-	 }*/
 
 };
 
@@ -103,8 +92,8 @@ protected:
 	//CCritSec m_cSharedState;            // Protects our internal state
     //int m_iRepeatTime;                  // Time in msec between frames
 
-	//AM_MEDIA_TYPE requestedHardenedFormat; just use m_mt
-	bool formatAlreadyHardened;
+	//AM_MEDIA_TYPE requestedHardenedFormat; //just use m_mt instead...
+	bool formatAlreadySet;
 
 public:
 

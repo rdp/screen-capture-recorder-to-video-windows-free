@@ -179,7 +179,7 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 }
 
 void AddMouse(HDC hMemDC) {
-		__int64 start = StartCounter();
+	__int64 start = StartCounter();
 
 	POINT p;
 	GetCursorPos(&p); // x, y

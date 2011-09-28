@@ -227,24 +227,20 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
-	// it seems they call SetMediaType first
-	// then SetFormat after [I guess for details, but it also should setup GetStreamCaps to only have one entry, its default being this one, for later calls...]
-	// or maybe some people never call SetMediaType huh? what?
-	// or maybe SetMediatype is for negotiating the finer points?
 	// I *think* it can go back and forth, then.  You can call GetStreamCaps to enumerate, then call
 	// SetFormat, then later calls to GetMediaType/GetStreamCaps/EnumMediatypes will all "have" to just give this one
 	// though theoretically they could also call EnumMediaTypes, then SetMediaType, and not call SetFormat
 	// does flash call both? what order for flash/ffmpeg/vlc calling both?
+	// LODO update msdn
 
-	// "they" are supposed to call this...
-	// maybe...after negotiation of type
-	// to provide some format details like fps
-	// NULL means reset
-	// LODO should fail if w'ere already streaming...
+	// "they" are supposed to call this...see msdn for SetFormat
+	// LODO should fail if we're already streaming... [?]
+
+	// NULL means reset to default type...
 	if(pmt != NULL)
 	{
 		// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
-		if(pmt->formattype != FORMAT_VideoInfo)  // ?{CLSID_KsDataTypeHandlerVideo} same...
+		if(pmt->formattype != FORMAT_VideoInfo)  // same as {CLSID_KsDataTypeHandlerVideo} 
 			return E_FAIL;
 	
 		// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx I guess [meh]
@@ -253,9 +249,13 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
 		// we ignore other things like cropping requests LODO if somebody ever cares about it...
-		m_mt = *pmt; // only time it is ever set...
+		m_mt = *pmt; // only time it is ever set...except in SetMediatype too :P
+  	    formatAlreadySet = true;
 	} else {
+		formatAlreadySet = false;
 		// they called it to reset us
+		// TODO check flash player with this...
+		// it should call SetMedia or something, shouldn't it?
 	}
     IPin* pin; 
     ConnectedTo(&pin);
@@ -264,16 +264,15 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
         IFilterGraph *pGraph = m_pParent->GetGraph();
         HRESULT res = pGraph->Reconnect(this);
 		if(res != S_OK) // LODO check first, and then re-use the old one?
-			return res; // return early...
+			return res; // return early...not really sure how to handle this...
     } else {
 		// graph hasn't been built yet...
 		// so we're ok with "whatever" format, just setting it up, getting our ducks ready..
 	}
-	formatAlreadyHardened = true;
     return S_OK;
 }
 
-// get current format I guess...
+// get current format...
 // or get default if they haven't called SetFormat yet...
 // LODO the default, which probably we don't do yet...unless they've already called GetStreamCaps then it'll be the last index they used LOL.
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)

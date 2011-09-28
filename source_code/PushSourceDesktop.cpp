@@ -54,8 +54,15 @@ return RetDepth;
 //
 HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
 {
+
     CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
+	if(formatAlreadySet) {
+		if(iPosition != 0)
+          return E_INVALIDARG;
+
+	}
+
 
     if(iPosition < 0)
         return E_INVALIDARG;
@@ -189,7 +196,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         m_iFrameNumber(0),
         //m_nCurrentBitDepth(32), // negotiated...
 		m_pParent(pFilter),
-		formatAlreadyHardened(false)
+		formatAlreadySet(false)
 {
 	
 	// The main point of this sample is to demonstrate how to take a DIB
