@@ -8,7 +8,9 @@ module FfmpegHelpers
     enum = `#{ffmpeg_list_command}`
     unless enum.present?
       p 'failed', enum
-      raise `2nd try: #{ffmpeg_list_command}`
+      out = '2nd try' + `#{ffmpeg_list_command}`
+      p out
+      raise out
     end
 
     audio = enum.split('DirectShow')[2]

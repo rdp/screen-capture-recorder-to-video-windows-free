@@ -73,7 +73,7 @@ SwingHelpers.show_blocking_message_dialog "Server started (VLC). You can minimiz
 
 if(JOptionPane.show_select_buttons_prompt("Would you like to test your setup, or just continue running server?", :yes => "test server setup", :no => "just run the server") == :no)
  b = SwingHelpers.show_non_blocking_message_dialog "ok, exiting, it should be running, just leave VLC running...you can minimize it if desired..."
- sleep 1
+ sleep 2.5
  b.close
  exit 0
 end
