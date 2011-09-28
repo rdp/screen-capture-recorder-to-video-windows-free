@@ -1,6 +1,6 @@
-#define AppVer "0.3.2"
+#define AppVer "0.3.3"
 #define AppName "Screen Capturer Recorder"
-; AppId == AppName
+; AppId == AppName BTW
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.020.ax

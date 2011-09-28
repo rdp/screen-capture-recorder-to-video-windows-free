@@ -1,3 +1,6 @@
+0.3.3 9-28-11
+  make an easy out way when starting audio server
+
 0.3.2 9-27-11
   make it so that recorder can record anything, make it slightly more robust, too.
     too bad it uses so much disk space...

@@ -1,5 +1,3 @@
-# TODO degradation?
-
 puts 'loading...'
 require 'add_vendored_gems'
 require 'jruby-swing-helpers/swing_helpers'
@@ -58,7 +56,7 @@ if !vlc_loc
 end
 ENV['PATH'] = vlc_loc + ';' + ENV['PATH']
 
-popup = SwingHelpers.show_non_blocking_message_dialog 'starting server...'
+popup = SwingHelpers.show_non_blocking_message_dialog 'starting audio server...'
 vlc_thread = Thread.new {
   # TODO needs full path...
   c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}/go.mp3}" ! # --qt-start-minimized  
@@ -70,6 +68,18 @@ vlc_thread = Thread.new {
 sleep 1 # let VLC startup...though it takes a bit longer than this...
 popup.close
 puts "now streaming at: http://127.0.0.1:#{port}/go.mp3"
+
+SwingHelpers.show_blocking_message_dialog "Server started (VLC). You can minimize it if you wish."
+
+if(JOptionPane.show_select_buttons_prompt("Would you like to test your setup, or just continue running server?", :yes => "test server setup", :no => "just run the server") == :no)
+ b = SwingHelpers.show_non_blocking_message_dialog "ok, exiting, it should be running, just leave VLC running...you can minimize it if desired..."
+ sleep 1
+ b.close
+ exit 0
+end
+
+
+SwingHelpers.show_blocking_message_dialog "First let's test if I can read from the stream locally...you'll hear some blips, which you should ignore, they are being broadcast and then recorded...."
 
 # LODO you are successfully capturing what you hear (not even streaming it yet...)
 # describe making sure mute is turned off on the client.
@@ -100,8 +110,6 @@ def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
   end
   got
 end
-
-SwingHelpers.show_blocking_message_dialog "Server started (VLC). You can minimize it if you wish.\nNow let's test if I can read from the stream locally...you'll hear some blips, which you should ignore, they are being broadcast and then recorded...."
 
 #if (is_port_open(port)) # windows let's one supplant the other...hmm...
 #  SwingHelpers.show_blocking_message_dialog "Cannot start VLC as server?"
