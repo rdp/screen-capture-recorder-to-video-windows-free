@@ -51,18 +51,21 @@ return RetDepth;
 //      3    Return a 16bit mediatype (rgb555)
 //      4    Return 8 bit palettised format
 //      >4   Invalid
+// except that we changed the orderings a bit...
 //
 HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
 {
-
     CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 	if(formatAlreadySet) {
 		if(iPosition != 0)
           return E_INVALIDARG;
-
+		// you only have one option, buddy. (see SetFormat's msdn)
+		pmt->Set(m_mt);
+		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*)m_mt.pbFormat; // right ...
+		VIDEOINFO *pviHere = (VIDEOINFO  *) pmt->pbFormat;
+		return S_OK;
 	}
-
 
     if(iPosition < 0)
         return E_INVALIDARG;
@@ -78,6 +81,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     // Initialize the VideoInfo structure before configuring its members
     ZeroMemory(pvi, sizeof(VIDEOINFO));
 
+
 	if(iPosition == 0) {
 		// pass it our "preferred" which is unchanged pixel format
 		switch(m_iScreenBitRate)
@@ -90,9 +94,11 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 			// iPosition = 1; // 32 bit possibly better...
 			// 32 -> 24: getdibits took 2.251000ms
 			// 32 -> 32: getdibits took 2.916480ms
+			// except those numbers might be misleading...
 			break;
 		case 15:
-			iPosition = 2;//4; // odd case, but fear of crashing ffmpeg remains in my heart...
+			//iPosition = 4; //fear of crashing ffmpeg remains in my heart...
+			iPosition = 2;
 			break;
 		case 8:
 			iPosition = 5;
@@ -100,7 +106,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 		case 32:
 			iPosition = 2; // 32 -> 24 bit, figure since I'm already doing a conversion, might as well lose a few unused bits...
 			break; 
-		default: // our high quality 32-bit, but really should never get here...
+		default: // our high quality 32-bit, but we really should never get to the default option now...
 			iPosition = 1;
 			break;
 		}
@@ -121,7 +127,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
         }
 
         case 2:
-        {   // Return our 24bit format
+        {   // Return our 24bit format, same as above.
             pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 24;
             break;
@@ -129,7 +135,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
         case 3:
         {       
-            // 16 bit per pixel RGB565
+            // 16 bit per pixel RGB565 BI_BITFIELDS
 
             // Place the RGB masks as the first 3 doublewords in the palette area
             for(int i = 0; i < 3; i++)
@@ -147,7 +153,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
+            pvi->bmiHeader.biCompression = BI_BITFIELDS; // TODO BI_RGB here...
             pvi->bmiHeader.biBitCount    = 16;
             break;
         }
@@ -274,7 +280,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_fFps = config_max_fps;
   	m_rtFrameLength = UNITS / config_max_fps; 
 	wchar_t out[1000];
-	swprintf(out, 1000, L"got2 %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
+	swprintf(out, 1000, L"default from reg: %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 	LocalOutput(out);
 	set_config_string_setting(L"was_initially_set_to", out);

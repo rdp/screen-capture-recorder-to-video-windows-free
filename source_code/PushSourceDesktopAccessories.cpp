@@ -47,6 +47,15 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     if(pvi == NULL)
         return E_INVALIDARG;
 
+	if(formatAlreadySet) {
+		// it must be the same as our current...see SetFormat msdn
+	    if(m_mt == *pMediaType) {
+			return S_OK;
+		} else {
+  		   return VFW_E_TYPE_NOT_ACCEPTED;
+		}
+	}
+
     // Check if the image width & height have changed
     if(    pvi->bmiHeader.biWidth   != m_iImageWidth || 
        abs(pvi->bmiHeader.biHeight) != m_iImageHeight)
@@ -172,15 +181,15 @@ dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the f
 //
 // SetMediaType
 //
-// Called when a media type is agreed between filters (i.e. they call GetMediaType/GetStreamCaps (preferably) till they find one they like, then they call SetMediaType, I believe).
-// called after SetFormat, so maybe they assume
-// that after enumerating, calling CheckMediaType, and setFormat, that they will enumerate again, use the first, and it be the one they setup...
+// Called when a media type is agreed between filters (i.e. they call GetMediaType+GetStreamCaps/ienumtypes I guess till they find one they like, then they call SetMediaType).
+// all this after calling SetFormat, if they do, I guess.
+// pMediaType is assumed to have passed CheckMediaType "already" and be good to go...
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but I think maybe they have to call this to see if the type is "really" available or something.
 
     // Pass the call up to my base class
-    HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns m_mt with m_mt.Set(*pmt) ... hmm...
+    HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns our local m_mt via m_mt.Set(*pmt) ... 
 
     if(SUCCEEDED(hr))
     {
@@ -206,7 +215,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
                 hr = E_INVALIDARG;
                 break;
         }
-		LocalOutput("bitcount requested: %d\n", pvi->bmiHeader.biBitCount);
+		LocalOutput("bitcount finally negotiated: %d\n", pvi->bmiHeader.biBitCount);
     } 
 
     return hr;
@@ -214,13 +223,6 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 } // SetMediaType
 
 #define DECLARE_PTR(type, ptr, expr) type* ptr = (type*)(expr);
-
-HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
-{
-    *piCount = 6;
-    *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is an MS thing.
-    return S_OK;
-}
 
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
@@ -247,42 +249,54 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
-		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they desire...
+		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request...
 		// we ignore other things like cropping requests LODO if somebody ever cares about it...
-		m_mt = *pmt; // only time it is ever set...except in SetMediatype too :P
   	    formatAlreadySet = true;
-	} else {
-		formatAlreadySet = false;
-		// they called it to reset us
-		// TODO check flash player with this...
-		// it should call SetMedia or something, shouldn't it?
+		m_mt = *pmt; // save it away...
 	}
-    IPin* pin; 
+    IPin* pin;
     ConnectedTo(&pin);
     if(pin)
     {
+		// for now just hope this path succeeds LOL
         IFilterGraph *pGraph = m_pParent->GetGraph();
         HRESULT res = pGraph->Reconnect(this);
-		if(res != S_OK) // LODO check first, and then re-use the old one?
-			return res; // return early...not really sure how to handle this...
+		if(res != S_OK) // LODO check first, and then just re-use the old one?
+			return res; // else return early...not really sure how to handle this...since we already set m_mt...but it's a pretty rare case I think...
+		// plus ours is a weird case...
     } else {
 		// graph hasn't been built yet...
-		// so we're ok with "whatever" format, just setting it up, getting our ducks ready..
+		// so we're ok with "whatever" format they pass us, we're just in the setup phase...
 	}
+	// success of some type
+	if(pmt == NULL) {
+		// they called it to reset us...
+		formatAlreadySet = false;
+	} else {
+		// formatAlreadySet = true; // ja
+	}
+
     return S_OK;
 }
 
-// get current format...
+// get's the current format...I guess...
 // or get default if they haven't called SetFormat yet...
 // LODO the default, which probably we don't do yet...unless they've already called GetStreamCaps then it'll be the last index they used LOL.
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
-    *ppmt = CreateMediaType(&m_mt); // windows method, also does copy
+    *ppmt = CreateMediaType(&m_mt); // windows internal method, also does copy
     return S_OK;
 }
 
+
+HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
+{
+    *piCount = 6;
+    *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is an MS struct
+    return S_OK;
+}
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
 {
