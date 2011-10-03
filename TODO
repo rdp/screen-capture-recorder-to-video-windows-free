@@ -1,6 +1,6 @@
 == actually do ==
 
-rename force_max_fps
+@ffmpeg can you capture realtime?
 
 nextsprocket my citrix competitor LOL, no good.
  though shared virtualbox boxes might work just as well...
@@ -20,8 +20,6 @@ send a "failing" 16-bit-ter to ramiro
   hmm...
 
 check memory debug logs for ffmpeg
-
-"reset" option
 
 easy streamer setter-upper with VLC [?] ffmpeg?
   ask if you want to beep after it's done...
@@ -48,8 +46,7 @@ dropdowns for selecting an audio side by side the video
   can do just audio
   @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
 
-ffmpeg subtitles
-
+ffmpeg subtitles example
 
 can do "start", "stop" with audio + video
   just audio
@@ -65,7 +62,6 @@ do we/should we re-encode after the capture?
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-
 bounty audio mixer ffmpeg, offer to help :P
   
 bounty ffserver windows [?]
@@ -76,6 +72,8 @@ a "test via snapshot" method
 try out red5 :P
 
 == maybe ==
+
+"reset all" option
 
 ask why ffmpeg -f dshow -i video=...:audio= chokes and dies...huh?
 
