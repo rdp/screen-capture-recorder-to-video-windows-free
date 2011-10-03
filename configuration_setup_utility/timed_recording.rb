@@ -56,7 +56,7 @@ end
 
 if original_video_device == 'screen-capture-recorder'
   # LODO tell them current size/settings here
-  old_fps = SetupScreenTrackerParams.new.read_single_setting("force_max_fps") || 30 # our own local default...hmm...
+  old_fps = SetupScreenTrackerParams.new.read_single_setting("default_max_fps") || 15 # our own local default...hmm...
   new_fps = SwingHelpers.get_user_input("desired capture speed (frames per second) [more means more responsive, but requires more cpu/disk]", old_fps).to_i
   new_fps = "-r #{new_fps}"
 end

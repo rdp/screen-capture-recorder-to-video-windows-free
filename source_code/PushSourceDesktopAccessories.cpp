@@ -95,67 +95,29 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 	BITMAPINFOHEADER header = pvi->bmiHeader;
 	ASSERT(header.biPlanes == 1); // sanity check
-	ASSERT(header.biCompression == 0); // meaning "none" sanity check
-	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. As in *way* too small.
-	// now we try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
+	// ASSERT(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS
+	// now try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
+	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
 	
 	int bytesPerLine;
 	// some pasted code...
-bytesPerLine = header.biWidth * (header.biBitCount/8);
-/* round up to a dword boundary */
-if (bytesPerLine & 0x0003) 
+   bytesPerLine = header.biWidth * (header.biBitCount/8);
+   /* round up to a dword boundary */
+   if (bytesPerLine & 0x0003) 
    {
-   bytesPerLine |= 0x0003;
-   ++bytesPerLine;
+     bytesPerLine |= 0x0003;
+     ++bytesPerLine;
    }
 
- ASSERT(header.biHeight > 0); // sanity check
- // NB that we add in space for the closing "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we will *never* need it, maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debut it LOL.
-pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+	ASSERT(header.biHeight > 0); // sanity check
+	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
+	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debut it LOL.
+	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
 
-/* meanwhile, from somewhere on the web...
-
-10x10 24 bit
-"header length"
-14
-"info length"
-40
-"data length"
-320
-"total"
-374 (but that didn't include a pixel array, which you may want to...)
-
-;Initialize BITMAPINFOHEADER
-bi\biSize=SizeOf(BITMAPINFOHEADER)
-bi\biWidth=dwWidth ;fill in width from parameter
-bi\biHeight=dwHeight ;fill in height from parameter
-bi\biPlanes=1 ;must be 1
-bi\biBitCount=wBitCount ;bits per pixel from parameter
-bi\biCompression=#BI_RGB ;none
-bi\biSizeImage=0 ;0's here mean "default"
-bi\biXPelsPerMeter=0
-bi\biYPelsPerMeter=0
-bi\biClrUsed=0
-bi\biClrImportant=0
-
-;Now determine the size of the color table
-If wBitCount != 24 ;no color table for 24-bit or 32, default size otherwise
-  bi\biClrUsed=1 << wBitCount ;standard size table (2, 16, 256 or 0) assume ok...
-EndIf
-
-;Calculate size of memory block required to store the DIB.
-;This block should be big enough to hold the BITMAPINFOHEADER,
-;the color table and the bits.
-dwBytesPerLine=((dwWidth*wBitCount)+31)/32*4
-dwLen=bi\biSize+(bi\biClrUsed*SizeOf(RGBQUAD))+(dwBytesPerLine*dwHeight) ; the full size, might be wrong see above
-
-*/
-
-
-	// pProperties->cbPrefix = 100; // no sure what a prefix is...setting this didn't help anyway :P
+	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the segfaults anyway :P
 
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the

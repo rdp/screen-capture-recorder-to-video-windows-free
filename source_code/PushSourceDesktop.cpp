@@ -270,7 +270,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 
-	int config_max_fps = read_config_setting(TEXT("force_max_fps")); // TODO allow floats!
+	int config_max_fps = read_config_setting(TEXT("default_max_fps")); // LODO allow floats in here, too!
 	ASSERT(config_max_fps >= 0);
 	if(config_max_fps == 0) {
 	  // TODO my force_max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
