@@ -1,6 +1,8 @@
 == actually do ==
 
 @ffmpeg can you capture realtime?
+  maybe pipe through avisynth and it can for now?
+    also for audio as a work around for now...hmm...
 
 nextsprocket my citrix competitor LOL, no good.
  though shared virtualbox boxes might work just as well...
