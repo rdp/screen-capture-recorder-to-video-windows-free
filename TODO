@@ -15,9 +15,13 @@ try 16 -> various bits at home, speed-wise
 
 qtrle ?
 
+crash in graphedit trying to render pin
+
 send a "failing" 16-bit-ter to ramiro
   try 16 bit without DI_BITS
   hmm...
+
+doesn't install in XP anymore?
 
 check memory debug logs for ffmpeg
 
