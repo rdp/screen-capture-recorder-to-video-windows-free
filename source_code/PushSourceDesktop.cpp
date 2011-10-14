@@ -283,16 +283,15 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	swprintf(out, 1000, L"default from reg: %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 	LocalOutput(out);
-	set_config_string_setting(L"was_initially_set_to", out);
+	// does this work with flash?
+	// set_config_string_setting(L"last_set_it_to", out);
 }
 
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
-	
     // Release the device context
     DeleteDC(hScrDc);
-
 	// I don't think it ever gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }

@@ -305,20 +305,20 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
 	
-  HKEY hKey;
-  LONG i;
+   HKEY hKey;
+   LONG i;
     
-       DWORD dwDisp = 0;
-       LPDWORD lpdwDisp = &dwDisp;
-
+    DWORD dwDisp = 0;
+    LPDWORD lpdwDisp = &dwDisp;
 
     i = RegCreateKeyEx(HKEY_CURRENT_USER,
-       L"SOFTWARE\\os_screen_capture", 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, lpdwDisp); // fails from flash player...
-    
+       L"SOFTWARE\\os_screen_capture", 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, lpdwDisp); // fails in flash player...
+
     if (i == ERROR_SUCCESS)
     {
-		// fails from flash player...
-		i = RegSetKeyValue(hKey, NULL, szValueName, REG_SZ, szToThis, wcslen(szToThis)*2+1); // ?
+		// bad for XP = RegSetKeyValueA(hKey, NULL, szValueName, REG_SZ, ...
+        i = RegSetValueEx(hKey, szValueName, 0, REG_SZ, (LPBYTE) szToThis, wcslen(szToThis)*2+1);
+
     } else {
        // failed to set...
 	}
