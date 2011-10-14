@@ -1,6 +1,7 @@
 This program allows one to "record" your desktop, or even stream it, with the help of VLC.
 
 It also includes some helper "record your screen capture" and setup utilities.
+  In order to use those you'll want/need the java JRE installed on your system first.
 
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
 You can use this with any (directshow compatible) program to capture or stream, like VLC.
