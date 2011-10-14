@@ -1,5 +1,5 @@
-#define AppVer "0.3.0"
-#define AppName "Screen Capturer Recorder Device Only"
+#define AppVer "0.3.4"
+#define AppName "Screen Capturer Recorder Just DirectShow Device Only"
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax

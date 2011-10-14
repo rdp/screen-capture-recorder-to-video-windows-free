@@ -1,3 +1,6 @@
+0.3.4 10-14-11
+  make it work with XP again
+
 0.3.3 9-28-11
   make an easy out way when starting audio server
 
