@@ -81,6 +81,8 @@ try out red5 :P
 
 == maybe ==
 
+do I "need" a BI_BITFIELDS even? make it optional? 32-bit?
+
 "reset all" option
 
 ask why ffmpeg -f dshow -i video=...:audio= chokes and dies...huh?

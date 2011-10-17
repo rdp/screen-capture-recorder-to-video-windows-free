@@ -141,7 +141,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
+            // LODO research this...does it come from the machine with...it set, or not?
+			// pvi->bmiHeader.biCompression = BI_BITFIELDS;
+			pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 16;
             break;
         }
@@ -153,7 +155,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS; // TODO BI_RGB here...
+            // LODO
+			// pvi->bmiHeader.biCompression = BI_BITFIELDS;
             pvi->bmiHeader.biBitCount    = 16;
             break;
         }
