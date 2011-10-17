@@ -21,14 +21,6 @@ qtrle ?
 
 crash in graphedit trying to render pin
 
-send a "failing" 16-bit-ter to ramiro
-  try 16 bit without DI_BITS
-  hmm...
-
-doesn't install in XP anymore?
-
-check memory debug logs for ffmpeg
-
 easy streamer setter-upper with VLC [?] ffmpeg?
   ask if you want to beep after it's done...
   tell how to setup record what you hear, if initial fails (instructions)
@@ -81,7 +73,10 @@ try out red5 :P
 
 == maybe ==
 
-do I "need" a BI_BITFIELDS even? make it optional? 32-bit?
+  do I "need" a BI_BITFIELDS even? make it optional? 32-bit?
+  
+  system tray "start" "stop"
+  prompt for filename after
 
 "reset all" option
 
