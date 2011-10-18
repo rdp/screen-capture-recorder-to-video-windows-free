@@ -12,15 +12,19 @@ Download installer and run, from
 
  https://sourceforge.net/projects/screencapturer/files
 
+ NB that you may need need to install the MSVC 2010 runtime distro first, if it's not already
+ installed on your machine (typically, it already is).
+ http://www.microsoft.com/download/en/details.aspx?id=5555
+
 == Usage ==
 
-Use the helper programs within Programs -> Screen Capture Recorder
+Use the helper programs provide in start menu -> Programs -> Screen Capture Recorder
 
 Or use anything that can read from a Directshow Capture Device (ex: VLC).
 
 a VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
 
-an ffmpeg example:
+an ffmpeg example (requires ffmpeg 32 bit -- 64 bit is available upon request):
 
 $ ffplay -f dshow -i video="screen-capture-recorder"
 
