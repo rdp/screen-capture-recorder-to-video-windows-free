@@ -93,7 +93,7 @@ void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	// bitblt screen DC to memory DC
 	__int64 start = StartCounter();
 	// CAPTUREBLT does not seem to give a mouse...
-    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY |CAPTUREBLT); //CAPTUREBLT for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
+  BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT is for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
 	long double elapsed = GetCounterSinceStartMillis(start);
 
 	LocalOutput("bitblt took %.020Lf ms", elapsed);
