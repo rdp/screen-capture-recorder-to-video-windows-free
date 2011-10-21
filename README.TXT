@@ -10,7 +10,8 @@ You can use this with any (directshow compatible) program to capture or stream, 
 
 Download installer and run, from 
 
- https://sourceforge.net/projects/screencapturer/files
+  https://github.com/rdp/screen-capture-recorder-to-video-windows-free/downloads
+    older versions can be found here: https://sourceforge.net/projects/screencapturer/files
 
  NB that you may need need to install the MSVC 2010 runtime distro first, if it's not already
  installed on your machine (typically, it already is).
@@ -106,8 +107,8 @@ Other feedback/problems/questions ping me rogerdpack@gmail.com or mailing list: 
 
 ==  Redistribution ==
 
-You can use this/redistribute it with your own software if you wish by redistributing the DLL 
-(PushDesktop.ax) alongside with your app.
+You can use this/redistribute it with your own software if you wish by just redistributing the DLL 
+(PushDesktop.ax) alongside with your app (see installer_just_device.iss).
 You'd have to register it manually (regsvr32 PushDesktop.ax, may need administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
 in the same dir as your exe) for the dll to work/install, in case end users don't have it installed, in that case).
