@@ -41,22 +41,16 @@ easy streamer setter-upper with VLC [?] ffmpeg?
   add encodings dropdown
     options "encode with this, then really encode using that"
 
-include the audio grabber too
-  or complain/warn if they "should" have installed it already :)
-  
 dropdowns for selecting an audio side by side the video
-  can do just audio
   @audio "here's how to have both:" plus instructions from http://camstudio.org/forum/discussion/33/waveoutgetselectcontrol-failed/p2
-
-ffmpeg subtitles example
 
 can do "start", "stop" with audio + video
   just audio
     note it in the other project
 
-can use hwnd.
-  re-check stats when using versus not.
-  does this work when thence dragged too...?
+can use hwnd dorectly.
+  double check stats when using versus not.
+  should work when dragged too...?
 
 do we/should we re-encode after the capture?
   what's the second best [available] for capture after huffyuv?
@@ -64,16 +58,23 @@ do we/should we re-encode after the capture?
   maybe there are slightly lossy ones that work well?
   x264 low compression or what not? high speed x264?
 
-bounty audio mixer ffmpeg, offer to help :P
-  
 bounty ffserver windows [?]
 
 a "test via snapshot" method
-  add a "start infinite mirror" helper app :P
 
+add a "start infinite mirror" helper app :P
+
+it should default to 24 bit I guess, always
+
+== maybe/never ==
+
+
+http://superuser.com/questions/6801/what-is-the-best-software-for-desktop-recording
+  check for ideas
+
+bounty audio mixer ffmpeg, offer to help :P
+  
 try out red5 :P
-
-== maybe ==
 
   do I "need" a BI_BITFIELDS even? make it optional? 32-bit?
   
@@ -82,12 +83,16 @@ try out red5 :P
 
 "reset all" option
 
-ask why ffmpeg -f dshow -i video=...:audio= chokes and dies...huh?
+ask why ffmpeg -f dshow -i video=...:audio= stutters
 
 bounty camstudio encoding codec ffmpeg
   gzip
 
-check if VLC has a more efficient SelectObject
+create the "amazing morpher/sweet broadcasting dshow input"
+  it can have checkmarks for "on/off" of one way, I guess.
+  AviSynth input, with ffmpeg input into that LOL.
+
+https://github.com/Kovensky/mplayer-kovensky.git 
 
 Another way is to directly manipulate the desktop bitmap in the Video Memory if enough memory is available as provided by DirectDraw.  http://www.codeproject.com/KB/cs/DesktopCaptureWithMouse.aspx hmm
 
