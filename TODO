@@ -64,12 +64,17 @@ a "test via snapshot" method
 
 add a "start infinite mirror" helper app :P
 
+it should default to 24 bit I guess, always
 
 == maybe/never ==
+
+
+http://superuser.com/questions/6801/what-is-the-best-software-for-desktop-recording
+  check for ideas
+
 bounty audio mixer ffmpeg, offer to help :P
   
 try out red5 :P
-check if VLC has a more efficient SelectObject
 
   do I "need" a BI_BITFIELDS even? make it optional? 32-bit?
   
