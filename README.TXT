@@ -52,6 +52,8 @@ input source with that graphedit filename specified.
 gstreamer works, as well:
 $ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
 
+I've even had Skype accidentally use it, thinking it was my webcam.
+
 Let me know if you want an easier way made for anything.
 
 == Configuration ==
