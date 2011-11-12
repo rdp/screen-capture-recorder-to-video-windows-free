@@ -1,5 +1,15 @@
-== actually do, unordered ==
+== ???? ==
 
+don't prompt, remember previous settings et al :P
+prompt for priority
+can display transparent window as part of setup phase
+
+start green overlay flashing when ffmpeg actually starts LOL
+
+prompt for filename "after"
+  make audio "device only" ?
+    new icon "record audio only" ?
+	
 @ffmpeg can you capture realtime?
   maybe pipe through avisynth and it can for now?
     also for audio as a work around for now...hmm...
