@@ -26,6 +26,7 @@ C# demo see if it works
 can ffmpeg be forced to "drop all them other frames, just chose the latest"? to keep up? does it keep up?
 
 force them to have java installed first :P
+delete storage file on uninstall
 
 "issues"
 
