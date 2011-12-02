@@ -67,7 +67,15 @@ add a "start infinite mirror" helper app :P
 it should default to 24 bit I guess, always
 
 == maybe/never ==
+@TODO: screen capture needs a real "window"
+@TODO: screen capture: provide a demo VLC streaming example command line and/or saving it to disk
 
+@TODO: when they hold down "x" it highlights the mouse
+@TODO: it can follow the mouse, too
+
+benchmark full screen speed, too.
+
+use sox to combine audio [?]
 
 http://superuser.com/questions/6801/what-is-the-best-software-for-desktop-recording
   check for ideas
@@ -84,7 +92,8 @@ try out red5 :P
 "reset all" option
 
 ask why ffmpeg -f dshow -i video=...:audio= stutters
-
+  fix it
+  
 bounty camstudio encoding codec ffmpeg
   gzip
 

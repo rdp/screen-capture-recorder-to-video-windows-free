@@ -35,4 +35,4 @@ Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.
 Name: {group}\Uninstall; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device after install msvcr100, if necessary; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
 Name: {group}\configure\Display current capture settings; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar setup_screen_tracker_params.rb --just-display-current-settings
-Name: {group}\Broadcast\setup local audio streaming server; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar server_setup.rb
+Name: {group}\Broadcast\setup local audio streaming server; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar broadcast_server_setup.rb
