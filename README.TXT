@@ -41,13 +41,15 @@ or
 or combine it with recording "what you hear" audio [vista/windows 7] (using ffmpeg in this example):
 
   $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback be careful...
-The audio device name will vary according to your local box.
+  
+The audio device name can be other dshow audio devices, as well.
 
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your 
 input source with that graphedit filename specified.
 
 gstreamer works, as well:
-$ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
+
+  $ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
 
 Let me know if you want an easier way made for it.
 
