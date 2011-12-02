@@ -1,5 +1,17 @@
-== actually do, unordered ==
+== ???? ==
 
+get skype preview/google  to work with it
+
+don't prompt, remember previous settings et al :P
+prompt for priority
+can display transparent window as part of setup phase
+
+start green overlay flashing when ffmpeg actually starts LOL
+
+prompt for filename "after"
+  make audio "device only" ?
+    new icon "record audio only" ?
+	
 @ffmpeg can you capture realtime?
   maybe pipe through avisynth and it can for now?
     also for audio as a work around for now...hmm...
@@ -10,6 +22,8 @@ nextsprocket my citrix competitor LOL, no good.
     I don't know if I could ever compete. bad idea.
 
 C# demo see if it works
+
+can ffmpeg be forced to "drop all them other frames, just chose the latest"? to keep up? does it keep up?
 
 force them to have java installed first :P
 

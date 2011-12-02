@@ -51,7 +51,8 @@ gstreamer works, as well:
 
   $ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
 
-Let me know if you want an easier way made for it.
+I've even had Skype accidentally use it, thinking it was my webcam.
+Let me know if you want an easier way made for it for anything.
 
 == Configuration ==
 
