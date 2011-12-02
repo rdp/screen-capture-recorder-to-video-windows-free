@@ -6,12 +6,16 @@ It also includes some helper "record your screen capture" and setup utilities.
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
 You can use this with any (directshow compatible) program to capture or stream, like VLC.
 
+It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
+  see https://github.com/rdp/virtual-audio-capture-grabber-device
+  and some utilities for it.
+
 == Installation ==
 
 Download installer and run, from 
 
-  https://github.com/rdp/screen-capture-recorder-to-video-windows-free/downloads
-    older versions can be found here: https://sourceforge.net/projects/screencapturer/files
+  https://sourceforge.net/projects/screencapturer/files
+    (sorry it's on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
 
  NB that you may need need to install the MSVC 2010 runtime distro first, if it's not already
  installed on your machine (typically, it already is).
@@ -19,32 +23,25 @@ Download installer and run, from
 
 == Usage ==
 
-Use the helper programs provide in start menu -> Programs -> Screen Capture Recorder
+Use some helper programs provided in 
+ Start menu -> Programs -> Screen Capture Recorder -> XXX
 
-Or use anything that can read from a Directshow Capture Device (ex: VLC).
+Or use any 3rd party program that can read from a Directshow Capture Device (ex: VLC).
 
-a VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
+VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
 
-an ffmpeg example (requires ffmpeg 32 bit -- 64 bit is available upon request):
+ffmpeg example (requires ffmpeg 32 bit -- 64 bit is available upon request):
 
-$ ffplay -f dshow -i video="screen-capture-recorder"
+  $ ffplay -f dshow -i video="screen-capture-recorder"
 
 or
 
-$ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 -t 10 screen-capture.mp4 # -t 10 for 10 seconds recording
+  $ ffmpeg -f dshow  -i video="screen-capture-recorder"  -r 20 -t 10 screen-capture.mp4 # -t 10 for 10 seconds recording
 
-or combine it with recorded audio (with ffmpeg) if desired:
+or combine it with recording "what you hear" audio [vista/windows 7] (using ffmpeg in this example):
 
-$ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback be careful...
+  $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback be careful...
 The audio device name will vary according to your local box.
-
-
-Also note that if you want broadcast/recording of "what you hear/waveout" in vista+
-then https://github.com/rdp/virtual-audio-capture-grabber-device
-may be of interest to you.
-
-Another program that leverages this internally is sensible cinema's upconversion (pins it to the location of a given HWND window 
-then calls mplayer with it).
 
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your 
 input source with that graphedit filename specified.
@@ -52,7 +49,7 @@ input source with that graphedit filename specified.
 gstreamer works, as well:
 $ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
 
-Let me know if you want an easier way made for anything.
+Let me know if you want an easier way made for it.
 
 == Configuration ==
 
