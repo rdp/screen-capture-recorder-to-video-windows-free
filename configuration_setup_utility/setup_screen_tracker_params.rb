@@ -19,16 +19,21 @@ class SetupScreenTrackerParams
     name = name.to_s # allow for symbols
     raise "unknown name #{name}" unless Settings.include?(name)
     raise unless value.is_a? Fixnum # pass in 0 if you want to reset anything...
+	p 'warning, got a negative' if value < 0
     @screen_reg.write(name, Win32::Registry::REG_DWORD, value)
     set_value = read_single_setting name
 	set_value ||= 0 # this is a bit kludgey...
-    raise 'unable to set?' + name + 'remainder set as ' + set_value.to_s unless set_value == value
+    raise 'unable to set?' + name + ' remained set as ' + set_value.to_s unless set_value == value
   end
   
   # will return nil if not set in the registry...
   def read_single_setting name
     raise "unknown name #{name}" unless Settings.include?(name)
-    out = @screen_reg[name] rescue nil
+    out = @screen_reg.read_i(name) rescue nil
+	if out && out > (1<<31) # underflow? like 4294967288 for -1, or maybe i shoudl disallow negatives?
+	  p 'warning, got a negative...'
+	  out -=  (1<<32)
+	end
     out = nil if out == 0 # handle having been set previously back to the default.
     out
   end
