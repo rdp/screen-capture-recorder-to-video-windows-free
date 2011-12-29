@@ -1,10 +1,14 @@
 == ???? ==
 
-16 bit javaw.exe doesn't seem "present" for 64 bit machines. what?
+window resizing can accidentally start off screen [!]
+
+16 bit javaw.exe doesn't seem "present" for 64 bit machines. what? nor java.exe?
 printwindow instead? (msdn)
 
 can "smart poll" to know when it should switch to/grab the next frame [yeah right]
   like sample subsections to look for change LOL
+  1/3rd the time, up front dedup [I guess this is the most efficient place to look for dupe's...]
+  also why...does it seem to drag like that when upscaling? Is upconverting maxing out a core?
   
 get skype preview/google  to work with it
 
