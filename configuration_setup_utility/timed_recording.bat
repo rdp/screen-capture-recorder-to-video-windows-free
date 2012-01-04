@@ -1,0 +1,1 @@
+java  -jar jruby-complete-1.6.4.jar timed_recording.rb

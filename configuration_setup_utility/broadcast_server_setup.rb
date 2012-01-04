@@ -67,7 +67,7 @@ local_ip_addrs = Socket.get_local_ips
 if ARGV[0] == "--redo-with-last-run"
   # lodo, port check might be poor, if we ever have it variable
   old_ip = LocalStorage['ip_previously_selected']
-  SwingHelpers.show_blocking_message_dialog "ip address may have changed, please rerun config for audio broadcaster" unless old_ip.in? local_ip_addrs 
+  SwingHelpers.show_blocking_message_dialog "ip address may have changed, or it was never configured yet\nPlease rerun original audio broadcaster config, and go through all step completely to set it up." unless old_ip.in? local_ip_addrs 
   assert (c=LocalStorage['last_version']).present?
   Thread.new { system c + " --qt-start-minimized" }
   dialog = SwingHelpers.show_blocking_message_dialog "started vlc server minimized...access remotely via #{LocalStorage['url_to_access_it']}"
