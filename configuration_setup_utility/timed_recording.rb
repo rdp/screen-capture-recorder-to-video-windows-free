@@ -1,6 +1,6 @@
 puts 'loading...'
 
-require 'add_vendored_gems'
+require 'add_vendored_gems_to_load_path'
 
 require 'jruby-swing-helpers/swing_helpers'
 include SwingHelpers

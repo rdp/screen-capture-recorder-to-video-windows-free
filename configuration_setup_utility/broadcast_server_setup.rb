@@ -1,38 +1,22 @@
 puts 'loading...'
-require 'add_vendored_gems'
+require 'add_vendored_gems_to_load_path'
+require 'java'
 require 'jruby-swing-helpers/swing_helpers'
 require 'jruby-swing-helpers/play_audio'
 require 'jruby-swing-helpers/ruby_clip'
-include SwingHelpers
-require 'java'
 require 'tempfile'
 require 'sane'
+require 'jruby-swing-helpers/storage'
+include SwingHelpers
+LocalStorage = Storage.new('server_setup')
 
-require 'ffmpeg_helpers'
-names = FfmpegHelpers.enumerate_directshow_devices[:audio]
-SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
-name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
-
-def is_port_open port
- begin
-  require 'socket'
-  a = TCPServer.new nil, port
-  a.close
-  true
- rescue Exception => e
-  p e.to_s
-  false
- end
-end  
-
-port = 8888
-
-if (!is_port_open(port)) 
-  SwingHelpers.show_blocking_message_dialog "Cannot start server, close any other open instances of VLC\nPort #{port} seems already in use..."
-  exit 1
+if ARGV[0].in? ['-h', '--help']
+  puts "syntax: [--redo-with-last-run]"
+  exit 0
 end
 
 require 'win32/registry'
+
 vlc_loc = nil
 for key in [Win32::Registry::HKEY_LOCAL_MACHINE, Win32::Registry::HKEY_CURRENT_USER]
   for subkey in ['Software\\VideoLAN\\VLC', 'Software\Wow6432Node\\VideoLAN\\VLC'] # allow for 64-bit java, 32-bit VLC [yipers oh my]
@@ -56,20 +40,58 @@ if !vlc_loc
 end
 ENV['PATH'] = vlc_loc + ';' + ENV['PATH']
 
+
+
+def is_port_open port
+ begin
+  require 'socket'
+  a = TCPServer.new nil, port
+  a.close
+  true
+ rescue Exception => e
+  p e.to_s
+  false
+ end
+end  
+
+port = 8888
+extension = '/go.mp3'
+
+if (!is_port_open(port)) 
+  SwingHelpers.show_blocking_message_dialog "Cannot start server, close any other open instances of VLC\nPort #{port} seems already in use..."
+  exit 1
+end
+
+local_ip_addrs = Socket.get_local_ips
+
+if ARGV[0] == "--redo-with-last-run"
+  # lodo, port check might be poor, if we ever have it variable
+  old_ip = LocalStorage['ip_previously_selected']
+  SwingHelpers.show_blocking_message_dialog "ip address may have changed, please rerun config for audio broadcaster" unless old_ip.in? local_ip_addrs 
+  assert (c=LocalStorage['last_version']).present?
+  Thread.new { system c + " --qt-start-minimized" }
+  dialog = SwingHelpers.show_blocking_message_dialog "started vlc server minimized...access remotely via #{LocalStorage['url_to_access_it']}"
+  exit 0
+end
+
+
+require 'ffmpeg_helpers'
+names = FfmpegHelpers.enumerate_directshow_devices[:audio]
+SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
+name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
+
 popup = SwingHelpers.show_non_blocking_message_dialog 'starting audio server...'
 vlc_thread = Thread.new {
-  # TODO needs full path...
-  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}/go.mp3}" ! # --qt-start-minimized  
-  # mux ogg?
+  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}#{extension}}" ! # --qt-start-minimized  
   print c
-  system c
+  LocalStorage['last_version'] = c
+  system c # we let this go forever
 }
 
-sleep 1 # let VLC startup...though it takes a bit longer than this...
+sleep 1 # let VLC startup...though it takes a bit longer than this at times :P...
 popup.close
-puts "now streaming at: http://127.0.0.1:#{port}/go.mp3"
 
-SwingHelpers.show_blocking_message_dialog "Server started (VLC). You can minimize it if you wish."
+SwingHelpers.show_blocking_message_dialog "Server started (VLC) on :#{port}#{extension}. You can minimize VLC if you wish."
 
 if(JOptionPane.show_select_buttons_prompt("Would you like to test your setup, or just continue running server?", :yes => "test server setup", :no => "just run the server") == :no)
  b = SwingHelpers.show_non_blocking_message_dialog "ok, exiting, it should be running, just leave VLC running...you can minimize it if desired..."
@@ -125,7 +147,6 @@ end
 
 SwingHelpers.show_blocking_message_dialog "ok that worked! This means you are successfully capturing \'what you hear\' and streaming it.\n Now we'll try receiving it from a more \"public\" IP address to check for any blocking local firewalls."
 
-local_ip_addrs = Socket.get_local_ips # hope it works :)
 p 'this computers ip addrs:' + local_ip_addrs.join(',')
 if local_ip_addrs.length == 1
   ip = local_ip_addrs.first
@@ -134,6 +155,8 @@ else
 end
 
 SwingHelpers.show_blocking_message_dialog "ok now let's test for interfering firewalls by seeing if we can read, locally, from our own IP address #{ip}, ignore these first blips again..."
+LocalStorage['ip_previously_selected'] = ip
+LocalStorage['url_to_access_it'] = "http://#{ip}:#{port}#{extension}"
 
 heard = play_sound_and_capture_and_test_playback ip, port
 
@@ -152,6 +175,6 @@ if got == :no
   SwingHelpers.show_blocking_message_dialog message
 end
 
-good_addr = "http://#{ip}:#{port}/go.mp3"
+good_addr = "http://#{ip}:#{port}#{extension}"
 RubyClip.set_clipboard good_addr
-SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Network Streame\n and type in\n#{good_addr}\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}/go.mp3\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized.\n#{good_addr} has been copied to your local clipboard."
+SwingHelpers.show_blocking_message_dialog "Good you're theoretically done! Ready to go!  Now go to your client (receiving) machine,\nRun VLC -> Media Menu -> Open Network Streame\n and type in\n#{good_addr}\nIt might also work to alternatively type in\nhttp://#{Socket.gethostname}:#{port}#{extension}\nIt should connect, and audio from this computer play on that one.\nLeave VLC running on the server computer, though it can be minimized.\n#{good_addr} has been copied to your local clipboard."

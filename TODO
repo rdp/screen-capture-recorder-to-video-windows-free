@@ -6,6 +6,19 @@ it should probably say when it is starting...
   a registry setting for "am capturing"? if prompted...
     just one LOL
 
+window resizing can accidentally start off screen [!]
+
+16 bit javaw.exe doesn't seem "present" for 64 bit machines. what? nor java.exe?
+printwindow instead? (msdn)
+
+can "smart poll" to know when it should switch to/grab the next frame [yeah right]
+  like sample subsections to look for change LOL
+  1/3rd the time, up front dedup [I guess this is the most efficient place to look for dupe's...]
+    except it doesn't cost much so why not...100 fps? or poll [prolly not]?
+  also why...does it seem to drag like that when upscaling? Is upconverting maxing out a core?
+  
+get skype preview/google  to work with it
+
 don't prompt, remember previous settings et al :P
 prompt for priority
 can display transparent window as part of setup phase
@@ -30,8 +43,9 @@ C# demo see if it works
 can ffmpeg be forced to "drop all them other frames, just chose the latest"? to keep up? does it keep up?
 
 force them to have java installed first :P
+delete storage file on uninstall
 
-failing gstreamer backtrace
+"issues"
 
 try 16 -> various bits at home, speed-wise
 
@@ -85,7 +99,15 @@ add a "start infinite mirror" helper app :P
 it should default to 24 bit I guess, always
 
 == maybe/never ==
+@TODO: screen capture needs a real "window"
+@TODO: screen capture: provide a demo VLC streaming example command line and/or saving it to disk
 
+@TODO: when they hold down "x" it highlights the mouse
+@TODO: it can follow the mouse, too
+
+benchmark full screen speed, too.
+
+use sox to combine audio [?]
 
 http://superuser.com/questions/6801/what-is-the-best-software-for-desktop-recording
   check for ideas
@@ -102,7 +124,8 @@ try out red5 :P
 "reset all" option
 
 ask why ffmpeg -f dshow -i video=...:audio= stutters
-
+  fix it
+  
 bounty camstudio encoding codec ffmpeg
   gzip
 
@@ -247,3 +270,4 @@ ffplay version N-32726-ga254452, Copyright (c) 2003-2011 the FFmpeg developers
 
 == never ==
 can i use camstudio's captions adder?
+rename the device itself 64 bit, include both :P (and with audio)

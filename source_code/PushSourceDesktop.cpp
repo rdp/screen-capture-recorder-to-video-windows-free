@@ -83,33 +83,11 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
 
 	if(iPosition == 0) {
-		// pass it our "preferred" which is unchanged pixel format
-		switch(m_iScreenBitRate)
-		{
-		case 24:
-			iPosition = 2;
-			break;
-		case 16:
-			iPosition = 2;//1;// 3; both fail in ffmpeg <sigh>. //2 -> 24 bit
-			// iPosition = 1; // 32 bit possibly better...
+		// pass it our "preferred" which is 24 bits...just guessing, of course
+		iPosition = 2;
 			// 32 -> 24: getdibits took 2.251000ms
 			// 32 -> 32: getdibits took 2.916480ms
-			// except those numbers might be misleading...
-			break;
-		case 15:
-			//iPosition = 4; //fear of crashing ffmpeg remains in my heart...
-			iPosition = 2;
-			break;
-		case 8:
-			iPosition = 5;
-			break;
-		case 32:
-			iPosition = 2; // 32 -> 24 bit, figure since I'm already doing a conversion, might as well lose a few unused bits...
-			break; 
-		default: // our high quality 32-bit, but we really should never get to the default option now...
-			iPosition = 1;
-			break;
-		}
+			// except those numbers might be misleading in terms of total speed...
 	}
 
     switch(iPosition)
@@ -226,7 +204,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
-    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES);
+    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently...
     m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
 
 	m_iScreenBitRate = GetTrueScreenDepth(hScrDc);// no 15/16 diff here -> GetDeviceCaps(hScrDc, BITSPIXEL); // http://us.generation-nt.com/answer/get-desktop-format-help-26384242.html
@@ -237,7 +215,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// assume 0 means not set...negative ignore :)
 	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
 	int config_start_x = read_config_setting(TEXT("start_x"));
-	if(config_start_x != 0) { // negatives allowed...
+	if(config_start_x != 0) { // negatives are ok...
 	  m_rScreen.left = config_start_x;
 	}
 
@@ -251,22 +229,22 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(config_width >= 0); // negatives not allowed...
 	if(config_width > 0) {
 		int desired = m_rScreen.left + config_width; // using DWORD here makes the math wrong to allow for negative values [dual monitor...]
-		int max_possible = m_rScreen.right;
-		if(desired < max_possible)
+		//int max_possible = m_rScreen.right; // disabled until I get dual monitor working. or should I allow off screen captures anyway?
+		//if(desired < max_possible)
 			m_rScreen.right = desired;
-		else
-			m_rScreen.right = max_possible;
+		//else
+		//	m_rScreen.right = max_possible;
 	}
 
 	int config_height = read_config_setting(TEXT("height"));
 	ASSERT(config_width >= 0);
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
-		int max_possible = m_rScreen.bottom;
-		if(desired < max_possible)
+		//int max_possible = m_rScreen.bottom; // disabled, see above.
+		//if(desired < max_possible)
 			m_rScreen.bottom = desired;
-		else
-			m_rScreen.bottom = max_possible;
+		//else
+		//	m_rScreen.bottom = max_possible;
 	}
 
     // Save dimensions for later use in FillBuffer() et al
