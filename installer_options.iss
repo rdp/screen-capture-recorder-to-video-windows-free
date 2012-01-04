@@ -1,4 +1,4 @@
-#define AppVer "0.3.6"
+#define AppVer "0.3.7"
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
 
@@ -34,6 +34,6 @@ Name: {group}\configure\configure screen capture by resizing a transparent windo
 Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
 Name: {group}\Uninstall {#AppName}; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device after install msvcr100, if necessary; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
-Name: {group}\configure\Display current capture settings; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar setup_screen_tracker_params.rb --just-display-current-settings
+Name: {group}\configure\Display current capture settings; Filename: {app}\configuration_setup_utility\display_current_settings.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar setup_screen_tracker_params.rb --just-display-current-settings
 Name: {group}\Broadcast\setup local audio streaming server; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar broadcast_server_setup.rb
 Name: {group}\Broadcast\restart local audio streaming server with same setup as was run previous; Filename: java; WorkingDir: {app}\configuration_setup_utility; Parameters: -jar jruby-complete-1.6.4.jar broadcast_server_setup.rb --redo-with-last-run

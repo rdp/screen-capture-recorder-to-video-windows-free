@@ -29,11 +29,11 @@ class SetupScreenTrackerParams
   # will return nil if not set in the registry...
   def read_single_setting name
     raise "unknown name #{name}" unless Settings.include?(name)
-    out = @screen_reg.read_i(name) rescue nil
-	if out && out > (1<<31) # underflow? like 4294967288 for -1, or maybe i shoudl disallow negatives?
-	  p 'warning, got a negative...'
-	  out -=  (1<<32)
-	end
+    out = @screen_reg[name] rescue nil # can be a string or dword
+	  if out && out.is_a?(Numeric) && out > (1<<31) # underflow? like 4294967288 for -1, or maybe i should just disallow negatives?
+	    p 'warning, got a negative...'
+	    out -=  (1<<32)
+	  end
     out = nil if out == 0 # handle having been set previously back to the default.
     out
   end
