@@ -203,53 +203,8 @@ void AddMouse(HDC hMemDC) {
 		}
 	}
 	DrawIcon(hMemDC, p.x, p.y, hcur);
-	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start));
-
+	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // it is typically almost no time at all. Very fast.
 }
-//#include <afxwin.h> //fails
-/*
-bool AddCursor(CDC* pDC) 
-{
-	CPoint ptCursor;
-	VERIFY(::GetCursorPos(&ptCursor));
-	ptCursor.x -= _zoomFrame.left;
-	ptCursor.y -= _zoomFrame.top;
-	double zoom = m_rectView.Width()/(double)_zoomFrame.Width(); // TODO: need access to zoom in this class badly
-	ptCursor.x *= zoom;
-	ptCursor.y *= zoom;
-
-	// TODO: This shift left and up is kind of bogus.
-	// The values are half the width and height of the higlight area.
-	InsertHighLight(pDC, ptCursor);
-
-	// Draw the Cursor
-	HCURSOR hcur = m_cCursor.Cursor();
-	ICONINFO iconinfo;
-	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
-	if (ret) {
-		ptCursor.x -= iconinfo.xHotspot;
-		ptCursor.y -= iconinfo.yHotspot;
-
-		// need to delete the hbmMask and hbmColor bitmaps
-		// otherwise the program will crash after a while
-		// after running out of resource
-		// TODO: can we cache it and don't use GetIconInfo every frame?
-		// We make several shots per second it will save us some resources if cursor is not changed
-		if (iconinfo.hbmMask) {
-			::DeleteObject(iconinfo.hbmMask);
-		}
-		if (iconinfo.hbmColor) {
-			::DeleteObject(iconinfo.hbmColor);
-		}
-	}
-	// TODO: Rewrite to handle better
-	// HDC hScreenDC = ::GetDC(NULL);
-	// HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
-	// ::DrawIconEx( hMemDC, ptCursor.x, ptCursor.y, hcur, 0, 0, 0, NULL, DI_NORMAL);
-	pDC->DrawIcon(ptCursor.x, ptCursor.y, hcur);
-	return true;
-}
-*/
 
 
 // some from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
