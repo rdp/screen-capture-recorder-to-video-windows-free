@@ -177,7 +177,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
                 hr = E_INVALIDARG;
                 break;
         }
-		LocalOutput("bitcount finally negotiated: %d\n", pvi->bmiHeader.biBitCount);
+		LocalOutput("bitcount requested/negotiated: %d\n", pvi->bmiHeader.biBitCount);
     } 
 
     return hr;

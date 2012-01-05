@@ -1,4 +1,4 @@
-0.3.8 
+0.3.8 1-5-12 
   bring audio skipper back to a known release
   minor verbiage tweaks
 

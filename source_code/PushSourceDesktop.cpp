@@ -94,18 +94,19 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     {
         case 1:
         {    
-            // Return our highest quality 32bit format
+            // 32bit format
 
             // Since we use RGB888 (the default for 32 bit), there is
             // no reason to use BI_BITFIELDS to specify the RGB
-            // masks. Also, not everything supports BI_BITFIELDS
+            // masks [sometimes even if you don't have enough bits you don't need to anyway?]
+			// Also, not everything supports BI_BITFIELDS ...
             pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 32;
             break;
         }
 
         case 2:
-        {   // Return our 24bit format, same as above.
+        {   // Return our 24bit format, same as above comments
             pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 24;
             break;
@@ -119,8 +120,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            // LODO research this...does it come from the machine with...it set, or not?
-			// pvi->bmiHeader.biCompression = BI_BITFIELDS;
+            // LODO research this...does it come from the machine with...it set, or not? ...
+			pvi->bmiHeader.biCompression = BI_BITFIELDS;
 			pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 16;
             break;
@@ -133,7 +134,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            // LODO
+            // LODO ???
 			// pvi->bmiHeader.biCompression = BI_BITFIELDS;
             pvi->bmiHeader.biBitCount    = 16;
             break;
@@ -149,12 +150,12 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
         }
     }
 
-    // Adjust the parameters common to all formats
+    // Now adjust some parameters that are the same for all formats
     pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
     pvi->bmiHeader.biWidth      = m_iImageWidth;
     pvi->bmiHeader.biHeight     = m_iImageHeight;
     pvi->bmiHeader.biPlanes     = 1;
-    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader);
+    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
     pvi->bmiHeader.biClrImportant = 0;
 	pvi->AvgTimePerFrame = m_rtFrameLength; // hard set currently...
 
@@ -333,7 +334,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	if(fullyStarted)
       m_iFrameNumber++;
 
-	// Set TRUE on every sample for uncompressed frames
+	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
     pSample->SetSyncPoint(TRUE);
 	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber == 1);
