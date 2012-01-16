@@ -1,6 +1,9 @@
-== ???? ==
+= todo =
 
 some super dumb-easy way to record the screen.
+  "resize this window, and go!" with ability to stop--basically for recording films, etc.
+
+== ???? ==
 
 it should probably say when it is starting...
   a registry setting for "am capturing"? if prompted...
@@ -17,7 +20,7 @@ can "smart poll" to know when it should switch to/grab the next frame [yeah righ
     except it doesn't cost much so why not...100 fps? or poll [prolly not]?
   also why...does it seem to drag like that when upscaling? Is upconverting maxing out a core?
   
-get skype preview/google  to work with it
+get skype preview/google to work with it
 
 don't prompt, remember previous settings et al :P
 prompt for priority
