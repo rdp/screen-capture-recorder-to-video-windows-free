@@ -1,9 +1,18 @@
 = todo =
 
-some super dumb-easy way to record the screen.
-  "resize this window, and go!" with ability to stop--basically for recording films, etc.
+can re-get the pos. each frame
+
+audio 64 bit
+  does audio show up as a capture source?  
 
 == ???? ==
+
+distribute with msiexec
+
+install 64 bit with 32 always 
+
+some super dumb-easy way to record the screen.
+  "resize this window, and go!" with ability to stop--basically for recording films, etc.
 
 it should probably say when it is starting...
   a registry setting for "am capturing"? if prompted...
