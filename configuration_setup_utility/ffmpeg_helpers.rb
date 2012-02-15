@@ -10,7 +10,7 @@ module FfmpegHelpers
       p 'failed', enum
       out = '2nd try' + `#{ffmpeg_list_command}`
       p out
-      raise out
+      raise out # jruby???
     end
 
     audio = enum.split('DirectShow')[2]

@@ -1,6 +1,18 @@
-== all maybe ==
+= todo =
+
+can re-get the pos. each frame
+
+audio 64 bit too
+  does audio show up as a capture source currently in VLC? I guess it already does...
+  
+distribute with msiexec[s]
+
+install 64 bit with 32 always...sure :P
+
+== maybe ==
 
 some super dumb-easy way to record the screen.
+  "resize this window, and go!" with ability to stop--basically for recording films, etc.
 
 it should probably say when it is starting...
   a registry setting for "am capturing"? if prompted...
