@@ -9,6 +9,8 @@ distribute with msiexec[s]
 
 install 64 bit with 32 always...sure :P
 
+prompt for "resize to multiple of 2? 8?"
+
 == maybe ==
 
 some super dumb-easy way to record the screen.
