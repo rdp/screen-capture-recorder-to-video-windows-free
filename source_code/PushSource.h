@@ -95,6 +95,7 @@ protected:
 	//AM_MEDIA_TYPE requestedHardenedFormat; //just use m_mt instead...
 	bool formatAlreadySet;
 
+
 public:
 
     //////////////////////////////////////////////////////////////////////////
@@ -144,6 +145,8 @@ public:
     HRESULT STDMETHODCALLTYPE Get(REFGUID guidPropSet, DWORD dwPropID, void *pInstanceData,DWORD cbInstanceData, void *pPropData, DWORD cbPropData, DWORD *pcbReturned);
     HRESULT STDMETHODCALLTYPE QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
+private:
+	void readCurrentPosition();
 
 };
 

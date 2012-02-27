@@ -40,7 +40,7 @@ void LocalOutput(const char *str, ...)
 
 void LocalOutput(const wchar_t *str, ...) 
 {
-#ifdef _DEBUG  // avoid in release mode...
+#ifdef _DEBUG  // avoid in release mode...it takes like 1ms each!
   wchar_t buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -73,7 +73,7 @@ __int64 StartCounter()
     return (__int64) li.QuadPart;
 }
 
-long double GetCounterSinceStartMillis(__int64 sinceThisTime)
+long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually calling this call takes about 0.01 ms itself...
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
@@ -93,13 +93,13 @@ void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	// bitblt screen DC to memory DC
 	__int64 start = StartCounter();
 	// CAPTUREBLT does not seem to give a mouse...
-  BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT is for layered windows [?] huh? windows 7 aero only then or what? seriously? also causes mouse flickerign, or do I notice that with camstudio?
+    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it?
 	long double elapsed = GetCounterSinceStartMillis(start);
-
 	LocalOutput("bitblt took %.020Lf ms", elapsed);
 }
 
 #include <malloc.h>
+
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
@@ -129,7 +129,9 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 	LocalOutput("memcpy took %.020Lf ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
 	free(local);*/
 }
+
 void AddMouse(HDC hMemDC);
+
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
     HDC         hMemDC;         // screen DC and memory DC

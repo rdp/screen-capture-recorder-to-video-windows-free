@@ -1,3 +1,6 @@
+0.3.9 2-27-12
+  make it respond to registry changes for (for now just position, not size...ask me if you want the other)
+
 0.3.8 1-5-12 
   bring audio skipper back to a known release
   minor verbiage tweaks

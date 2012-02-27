@@ -213,18 +213,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// my custom config settings...
 
 	WarmupCounter();
-	// assume 0 means not set...negative ignore :)
-	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
-	int config_start_x = read_config_setting(TEXT("start_x"));
-	if(config_start_x != 0) { // negatives are ok...
-	  m_rScreen.left = config_start_x;
-	}
 
-	// is there a better way to do this registry stuff?
-	int config_start_y = read_config_setting(TEXT("start_y"));
-	if(config_start_y != 0) { 
-	  m_rScreen.top = config_start_y;
-	}
+    readCurrentPosition();
 
 	int config_width = read_config_setting(TEXT("width"));
 	ASSERT(config_width >= 0); // negatives not allowed...
@@ -248,9 +238,12 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		//	m_rScreen.bottom = max_possible;
 	}
 
+
     // Save dimensions for later use in FillBuffer() et al
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(m_iImageWidth > 0);
+	ASSERT(m_iImageHeight > 0);
 
 	int config_max_fps = read_config_setting(TEXT("default_max_fps")); // LODO allow floats in here, too!
 	ASSERT(config_max_fps >= 0);
@@ -262,13 +255,39 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_fFps = config_max_fps;
   	m_rtFrameLength = UNITS / config_max_fps; 
 	wchar_t out[1000];
-	swprintf(out, 1000, L"default from reg: %d %d %d %d -> %d %d %d %d %dfps\n", config_start_x, config_start_y, config_height, config_width, 
+	swprintf(out, 1000, L"default from reg: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 	LocalOutput(out);
+
 	// does this work with flash?
 	// set_config_string_setting(L"last_set_it_to", out);
 }
 
+void CPushPinDesktop::readCurrentPosition() {
+	__int64 start = StartCounter();
+
+	// assume 0 means not set...negative ignore :)
+	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
+	int old_x = m_rScreen.left;
+	int old_y = m_rScreen.top;
+
+	int config_start_x = read_config_setting(TEXT("start_x"));
+	if(config_start_x != 0) { // negatives are ok...
+	  m_rScreen.left = config_start_x;
+	}
+
+	// is there a better way to do this registry stuff?
+	int config_start_y = read_config_setting(TEXT("start_y"));
+	if(config_start_y != 0) { 
+	  m_rScreen.top = config_start_y;
+	}
+	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
+	  wchar_t out[1000];
+	  swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
+	  LocalOutput(out);
+	  LocalOutput("readCurrentPosition with swprintf took %fms", GetCounterSinceStartMillis(start));
+	}
+}
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
@@ -288,7 +307,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
-
+	readCurrentPosition();
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
     cbData = pSample->GetSize();
