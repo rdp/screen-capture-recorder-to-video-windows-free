@@ -1,3 +1,7 @@
+0.4.0 2-12
+
+fix mouse bug, make it "really" respond to registry changes
+
 0.3.9 2-27-12
   make it respond to registry changes for (for now just position, not size...ask me if you want the other)
 

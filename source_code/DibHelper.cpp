@@ -130,7 +130,7 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 	free(local);*/
 }
 
-void AddMouse(HDC hMemDC);
+void AddMouse(HDC hMemDC, LPRECT lpRect);
 
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
@@ -165,7 +165,7 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC);
+	AddMouse(hMemDC, lpRect);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture
@@ -180,15 +180,14 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     return hBitmap;
 }
 
-void AddMouse(HDC hMemDC) {
+void AddMouse(HDC hMemDC, LPRECT lpRect) {
 	__int64 start = StartCounter();
 
 	POINT p;
 	GetCursorPos(&p); // x, y
-	// TODO just incorporate all the junk from camstudio [?]
-	//HCURSOR hcur = ::GetCursor(); // LODO cache maybe [?]
+	// TODO just incorporate all the other mouse junk from camstudio [?]
 	CURSORINFO globalCursor;
-	globalCursor.cbSize = sizeof(CURSORINFO);
+	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 	ICONINFO iconinfo;
@@ -204,7 +203,9 @@ void AddMouse(HDC hMemDC) {
 			::DeleteObject(iconinfo.hbmColor);
 		}
 	}
-	DrawIcon(hMemDC, p.x, p.y, hcur);
+
+
+	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur);
 	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // it is typically almost no time at all. Very fast.
 }
 

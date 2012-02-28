@@ -214,7 +214,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	WarmupCounter();
 
-    readCurrentPosition();
+    readCurrentPosition(0);
 
 	int config_width = read_config_setting(TEXT("width"));
 	ASSERT(config_width >= 0); // negatives not allowed...
@@ -252,7 +252,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  config_max_fps = 30; // set a high default so that the "caller" application knows that we can serve 'em up fast if desired...of course, if they just never set it then we'll probably be flooding them but who's problem is that, eh?
 	  // LODO only do this on some special pin or something [?] this way seems ok...
 	}
-	m_fFps = config_max_fps;
+	m_fFps = config_max_fps; // int to float for now
   	m_rtFrameLength = UNITS / config_max_fps; 
 	wchar_t out[1000];
 	swprintf(out, 1000, L"default from reg: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
@@ -263,7 +263,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// set_config_string_setting(L"last_set_it_to", out);
 }
 
-void CPushPinDesktop::readCurrentPosition() {
+void CPushPinDesktop::readCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
 
 	// assume 0 means not set...negative ignore :)
@@ -272,20 +272,20 @@ void CPushPinDesktop::readCurrentPosition() {
 	int old_y = m_rScreen.top;
 
 	int config_start_x = read_config_setting(TEXT("start_x"));
-	if(config_start_x != 0) { // negatives are ok...
-	  m_rScreen.left = config_start_x;
-	}
+    m_rScreen.left = config_start_x;
 
 	// is there a better way to do this registry stuff?
 	int config_start_y = read_config_setting(TEXT("start_y"));
-	if(config_start_y != 0) { 
-	  m_rScreen.top = config_start_y;
-	}
+	m_rScreen.top = config_start_y;
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  wchar_t out[1000];
 	  swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
 	  LocalOutput(out);
 	  LocalOutput("readCurrentPosition with swprintf took %fms", GetCounterSinceStartMillis(start));
+	  if(isReRead) {
+		m_rScreen.right = m_rScreen.left + m_iImageWidth;
+		m_rScreen.bottom = m_rScreen.top + m_iImageHeight;
+	  }
 	}
 }
 
@@ -307,7 +307,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
-	readCurrentPosition();
+	readCurrentPosition(1);
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
     cbData = pSample->GetSize();
