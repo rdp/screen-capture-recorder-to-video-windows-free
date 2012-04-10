@@ -331,7 +331,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// so don't count them unless they seem valid...
 	FILTER_STATE myState;
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
-	bool fullyStarted =  myState == State_Running;
+	bool fullyStarted = myState == State_Running;
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
@@ -341,12 +341,19 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     // wait until we "should" send this frame out...TODO...more precise et al...
 
-	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
+	/*if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
+	}*/
+
+	// two options: now + frameLength, or "previous" + frameLength
+	// prefer larger...
+	if(now < previousFrameEndTime) {
+		now = previousFrameEndTime;
 	}
+
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
 
