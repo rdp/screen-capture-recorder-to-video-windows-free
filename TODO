@@ -11,6 +11,8 @@ install 64 bit with 32 always...sure :P
 
 prompt for "resize to multiple of 2? 8?"
 
+fix hard crash when writing to the reg [audio?]
+
 == maybe ==
 
 some super dumb-easy way to record the screen.
