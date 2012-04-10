@@ -5,7 +5,7 @@ require 'win32/registry'
 # if you have ever used win32ole on any previous thread, then you can use class within *that* same thread. Odd, I know.
 # 
 class SetupScreenTrackerParams
-  Settings = ['height', 'width', 'start_x', 'start_y', 'default_max_fps']
+  Settings = ['height', 'width', 'start_x', 'start_y', 'default_max_fps', 'hwnd_to_track']
  
    def delete_single_setting name
     with_reg do
