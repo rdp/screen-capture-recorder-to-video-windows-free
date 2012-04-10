@@ -10,13 +10,12 @@
  *  
  *
  **********************************************/
-#define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger!
+#define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger! can evaluate "a" twice.
 
-DWORD globalStart;
-
+DWORD globalStart; // performance benchmarking
 
 int GetTrueScreenDepth(HDC hDC) {
-
+	// don't think I really use/rely on this method anymore...luckily since it looks gross
 int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
@@ -208,7 +207,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently...
     m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
 
-	m_iScreenBitRate = GetTrueScreenDepth(hScrDc);// no 15/16 diff here -> GetDeviceCaps(hScrDc, BITSPIXEL); // http://us.generation-nt.com/answer/get-desktop-format-help-26384242.html
+	// unused m_iScreenBitRate = GetTrueScreenDepth(hScrDc);// no 15/16 diff here -> GetDeviceCaps(hScrDc, BITSPIXEL); // http://us.generation-nt.com/answer/get-desktop-format-help-26384242.html
 
 	// my custom config settings...
 
@@ -254,8 +253,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 	m_fFps = config_max_fps; // int to float for now
   	m_rtFrameLength = UNITS / config_max_fps; 
+
 	wchar_t out[1000];
-	swprintf(out, 1000, L"default from reg: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
+	swprintf(out, 1000, L"default/from reg read config as: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
 		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 	LocalOutput(out);
 
@@ -328,29 +328,25 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
 
 	// Copy the DIB bits over into our filter's output buffer.
-    // Since sample size may be larger than the image size, bound the copy size.
-    int nSize = min(pVih->bmiHeader.biSizeImage, (DWORD) cbData); // cbData is the size of pData
+	// cbData is the size of pData FWIW
     HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
 	
     if (hDib)
         DeleteObject(hDib);
 
-
-	// for some reason the timings are messed up initially, as there's no start time.
+	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
 	// race condition?
-	// so don't count them unless they seem valid...
+	// so don't do some calculations unless we're in State_Running
 	FILTER_STATE myState;
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
-	bool fullyStarted =  myState == State_Running;
+	bool fullyStarted = myState == State_Running;
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
 
 	// calculate how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
-
     // wait until we "should" send this frame out...TODO...more precise et al...
-
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
@@ -358,15 +354,16 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		}
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
-    pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *)&now);
 
-	if(fullyStarted)
+	if(fullyStarted) {
       m_iFrameNumber++;
+	}
 
 	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
     pSample->SetSyncPoint(TRUE);
 	// only set discontinuous for the first...I think...
-	pSample->SetDiscontinuity(m_iFrameNumber == 1);
+	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	LocalOutput("end total frames %d %.020Lfms, total since beginning of time %f fps (theoretical max fps %f)", m_iFrameNumber, millisThisRoundTook, 
