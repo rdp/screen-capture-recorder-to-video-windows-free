@@ -200,33 +200,29 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
 
-    hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // SLOW for aero desktop ...
+    hScrDc = GetDC((HWND) read_config_setting(TEXT("hwnd_to_track"), NULL));
 	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
-    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently...
+    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
     m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
 
-	// unused m_iScreenBitRate = GetTrueScreenDepth(hScrDc);// no 15/16 diff here -> GetDeviceCaps(hScrDc, BITSPIXEL); // http://us.generation-nt.com/answer/get-desktop-format-help-26384242.html
-
-	// my custom config settings...
-
+	// now read some custom settings...
 	WarmupCounter();
-
     reReadCurrentPosition(0);
 
-	int config_width = read_config_setting(TEXT("width"));
+	int config_width = read_config_setting(TEXT("width"), 0);
 	ASSERT(config_width >= 0); // negatives not allowed...
 	if(config_width > 0) {
-		int desired = m_rScreen.left + config_width; // using DWORD here makes the math wrong to allow for negative values [dual monitor...]
-		//int max_possible = m_rScreen.right; // disabled until I get dual monitor working. or should I allow off screen captures anyway?
+		int desired = m_rScreen.left + config_width;
+		//int max_possible = m_rScreen.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
 		//if(desired < max_possible)
 			m_rScreen.right = desired;
 		//else
 		//	m_rScreen.right = max_possible;
 	}
 
-	int config_height = read_config_setting(TEXT("height"));
+	int config_height = read_config_setting(TEXT("height"), 0);
 	ASSERT(config_width >= 0);
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
@@ -244,14 +240,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(m_iImageWidth > 0);
 	ASSERT(m_iImageHeight > 0);
 
-	int config_max_fps = read_config_setting(TEXT("default_max_fps")); // LODO allow floats in here, too!
-	ASSERT(config_max_fps >= 0);
-	if(config_max_fps == 0) {
-	  // TODO my force_max_fps logic is "off" by one frame, assuming it ends up getting used at all :P
-	  config_max_fps = 30; // set a high default so that the "caller" application knows that we can serve 'em up fast if desired...of course, if they just never set it then we'll probably be flooding them but who's problem is that, eh?
-	  // LODO only do this on some special pin or something [?] this way seems ok...
-	}
-	m_fFps = config_max_fps; // int to float for now
+	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when requested
+	ASSERT(config_max_fps >= 0);	
+	m_fFps = config_max_fps; // int to float conversion ok for now
   	m_rtFrameLength = UNITS / config_max_fps; 
 
 	wchar_t out[1000];
@@ -271,11 +262,11 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	int old_x = m_rScreen.left;
 	int old_y = m_rScreen.top;
 
-	int config_start_x = read_config_setting(TEXT("start_x"));
+	int config_start_x = read_config_setting(TEXT("start_x"), m_rScreen.left);
     m_rScreen.left = config_start_x;
 
 	// is there a better way to do this registry stuff?
-	int config_start_y = read_config_setting(TEXT("start_y"));
+	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top);
 	m_rScreen.top = config_start_y;
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  wchar_t out[1000];
@@ -293,7 +284,7 @@ CPushPinDesktop::~CPushPinDesktop()
 {   
     // Release the device context
     DeleteDC(hScrDc);
-	// I don't think it ever gets here... somebody doesn't call it anyway :)
+	// I don't think it ever even gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
 
@@ -345,7 +336,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
 
-	// calculate how long it took before we add in our own arbitrary delay to enforce fps...
+	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
     // wait until we "should" send this frame out...TODO...more precise et al...
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...

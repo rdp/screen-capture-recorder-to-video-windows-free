@@ -22,18 +22,19 @@ class WindowResize
       setter_getter.re_init
       got = {:start_x => f.get_location.x, :start_y => f.get_location.y, :width => f.get_size.width, :height => f.get_size.height}
       for key, setting in got
-	    factor = 2
-        if setting % factor != 0 and [:width, :height].include?(key)
-          SwingHelpers.show_blocking_message_dialog "warning #{key} is an odd number, which won't record for mplayer/ffmpeg\nso rounding it up for you..."
-          setting = (setting/factor*factor) + factor # round up phew!
-		  got[key] = setting # for the english output at the end
+  	    for name, factor in {'mplayer/ffmpeg' => 2, 'vlc' => 8}
+          if setting % factor != 0 and [:width, :height].include?(key)
+            SwingHelpers.show_blocking_message_dialog "warning #{key} is not divisible by #{factor}, which won't record for #{name}\nso rounding it up for you..."
+            setting = (setting/factor*factor) + factor # round up phew!
+		        got[key] = setting # for the english output at the end
+          end
         end
         setter_getter.set_single_setting key, setting
       end
       SwingHelpers.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
       f.dispose
-    }
-    current_values = setter_getter.all_current_values
+  }
+  current_values = setter_getter.all_current_values
 	width = current_values['width'] || 200
 	height = current_values['height'] || 200
 	min_val = 35

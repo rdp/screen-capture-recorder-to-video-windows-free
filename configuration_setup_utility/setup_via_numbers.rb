@@ -1,6 +1,7 @@
 require 'setup_screen_tracker_params.rb'
 require 'add_vendored_gems_to_load_path.rb' # for swinghelpers' sane
 
+# no delete functionality in this one...
 def do_command_line
   setter = SetupScreenTrackerParams.new
   for type in SetupScreenTrackerParams::Settings
@@ -16,10 +17,12 @@ def do_command_line
       require 'jruby-swing-helpers/swing_helpers'
       previous_setting ||= ''
       received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
-      raise 'cancelled...remaining settings have not been changed, but previous ones were' unless received # it should at least be the empty string...
+      raise 'cancelled...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
     end
-    if received == ''
-      received = 0 # 0 is interpreted as "use defaults" when read from the registry, in the C code
+    if received == '' # allow "empty" input to mean "reset this"
+      setter.delete_single_setting type
+      p 'deleted ' + type.to_s
+      next
     else
       received = received.to_i
     end
@@ -35,9 +38,8 @@ def do_command_line
       end
     end
     setter.set_single_setting type, received
-    puts "set #{type} => #{received} (0 means default)"
+    puts "set #{type} => #{received}"
   end
-  setter.teardown
   p 'done setting them all' unless ARGV.index('--just-display-current-settings')
 end
 

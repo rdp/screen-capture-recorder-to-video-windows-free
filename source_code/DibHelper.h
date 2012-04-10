@@ -12,6 +12,7 @@
 void LocalOutput(const char *str, ...);
 void LocalOutput(const wchar_t *str, ...);
 
+#define NOT_SET_IN_REGISTRY 0 // match ruby file
 
 /* DIB macros */
 #define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
@@ -52,7 +53,7 @@ int PalEntriesOnDevice (HDC hDC);
 WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
 
-DWORD read_config_setting(LPCTSTR szValueName);
+int read_config_setting(LPCTSTR szValueName, int default);
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis );
 
 void WarmupCounter();

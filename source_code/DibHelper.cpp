@@ -17,7 +17,7 @@
 
 void logToFile(char *log_this) {
     FILE *f;
-	fopen_s(&f, "c:\\temp\\yo2", "a"); // fails if using it in flash player...
+	fopen_s(&f, "c:\\temp\\yo2", "a"); // this call fails if using the filter within flash player...
 	fprintf(f, log_this);
 	fclose(f);
 }
@@ -32,7 +32,6 @@ void LocalOutput(const char *str, ...)
   vsprintf_s(buf,str,ptr);
   OutputDebugStringA(buf);
   OutputDebugStringA("\n");
-  // also works: OutputDebugString(L"yo ho2");
   //logToFile(buf); 
   //logToFile("\n");
 #endif
@@ -40,7 +39,7 @@ void LocalOutput(const char *str, ...)
 
 void LocalOutput(const wchar_t *str, ...) 
 {
-#ifdef _DEBUG  // avoid in release mode...it takes like 1ms each!
+#ifdef _DEBUG  // avoid in release mode...takes like 1ms each message!
   wchar_t buf[2048];
   va_list ptr;
   va_start(ptr,str);
@@ -52,7 +51,6 @@ void LocalOutput(const wchar_t *str, ...)
   //logToFile("\n");
 #endif
 }
-
 
 long double PCFreqMillis = 0.0;
 
@@ -80,7 +78,8 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 	assert(PCFreqMillis != 0.0); // make sure it's been initialized...
     return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
 } // LODO do I really need long double here? no really.
-// use like 
+
+// use these methods like 
 // 	__int64 start = StartCounter();
 // ...
 // long double elapsed = GetCounterSinceStartMillis(start)
@@ -145,6 +144,8 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
+
+	// LODO reuse?
     //hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); 
     hMemDC = CreateCompatibleDC(hScrDC);
 
@@ -182,10 +183,9 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 
 void AddMouse(HDC hMemDC, LPRECT lpRect) {
 	__int64 start = StartCounter();
-
 	POINT p;
 	GetCursorPos(&p); // x, y
-	// TODO just incorporate all the other mouse junk from camstudio [?]
+	// LODO incorporate other mouse stuff?
 	CURSORINFO globalCursor;
 	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
@@ -204,9 +204,8 @@ void AddMouse(HDC hMemDC, LPRECT lpRect) {
 		}
 	}
 
-
 	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur);
-	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // it is typically almost no time at all. Very fast.
+	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms
 }
 
 
@@ -235,29 +234,30 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 	return NOERROR;
 }
 
- DWORD read_config_setting(LPCTSTR szValueName) {
-  
+// returns default if nothing is in the registry
+ int read_config_setting(LPCTSTR szValueName, int default) {
   HKEY hKey;
   LONG i;
+  i = RegOpenKeyEx(HKEY_CURRENT_USER,
+      L"SOFTWARE\\os_screen_capture",  0, KEY_READ, &hKey);
     
-    i = RegOpenKeyEx(HKEY_CURRENT_USER,
-       L"SOFTWARE\\os_screen_capture",  0, KEY_READ, &hKey);
-    
-    if ( i != ERROR_SUCCESS)
-    {
-        return 0; // zero means not set...
-    } else {
-      
-		DWORD dwVal;
-
-		HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
-		RegCloseKey(hKey); // done with that
-		if (FAILED(hr)) {
-		  return 0;
+  if ( i != ERROR_SUCCESS)
+  {
+    return default;
+  } else {
+	DWORD dwVal;
+	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
+	RegCloseKey(hKey); // done with that
+	if (FAILED(hr)) {
+	  return default;
+	} else {
+		if(dwVal == NOT_SET_IN_REGISTRY) {
+			return default;
 		} else {
-		  return dwVal; // if "the setter" sets it to 0, that is also interpreted as not set...see README
+	      return dwVal;
 		}
-    }
+	}
+  }
  
 }
 
