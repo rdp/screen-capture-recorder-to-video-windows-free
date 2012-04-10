@@ -1,6 +1,12 @@
+0.5.0 4-10-12
+
+add "optional" hwnd_to_track registry setting.  Currently if the window "goes away" then it will just grab black.
+If it doesn't exist at start time, it raises an exception.
+"delete" the registry key if you want to clear it.
+
 0.4.0 2-12
 
-fix mouse bug, make it "really" respond to registry changes
+fix mouse bug, make it "really" respond to registry changes for window size (window can move)
 
 0.3.9 2-27-12
   make it respond to registry changes for (for now just position, not size...ask me if you want the other)

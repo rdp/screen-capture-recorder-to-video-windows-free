@@ -10,7 +10,8 @@ It also includes a directshow source capture filter device for recording "what y
   see https://github.com/rdp/virtual-audio-capture-grabber-device
   and some utilities for it.
 
-Note that turning off aero can dramatically increase speed of capture.
+Note that turning off the aero windows manager (if you're on vista) can dramatically 
+increase speed of capture.
   
 == Installation ==
 
