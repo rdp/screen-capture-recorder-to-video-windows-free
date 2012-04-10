@@ -213,7 +213,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	WarmupCounter();
 
-    readCurrentPosition(0);
+    reReadCurrentPosition(0);
 
 	int config_width = read_config_setting(TEXT("width"));
 	ASSERT(config_width >= 0); // negatives not allowed...
@@ -263,7 +263,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// set_config_string_setting(L"last_set_it_to", out);
 }
 
-void CPushPinDesktop::readCurrentPosition(int isReRead) {
+void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
 
 	// assume 0 means not set...negative ignore :)
@@ -317,7 +317,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
-	readCurrentPosition(1);
+	reReadCurrentPosition(1);
+
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
     cbData = pSample->GetSize();
