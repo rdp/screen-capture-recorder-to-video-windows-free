@@ -58,6 +58,9 @@ public:
 	// our own method
     IFilterGraph *GetGraph() {return m_pGraph;}
 
+	// CBaseFilter, some pdf told me I should (msdn agrees)
+	STDMETHODIMP GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *State);
+
 };
 
 

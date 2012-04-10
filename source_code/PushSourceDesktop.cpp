@@ -297,6 +297,16 @@ CPushPinDesktop::~CPushPinDesktop()
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
 
+// according to msdn, too
+HRESULT CPushSourceDesktop::GetState(DWORD dw, FILTER_STATE *pState)
+{
+    CheckPointer(pState, E_POINTER);
+    *pState = m_State;
+    if (m_State == State_Paused)
+        return VFW_S_CANT_CUE;
+    else
+        return S_OK;
+}
 
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
