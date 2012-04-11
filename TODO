@@ -1,19 +1,21 @@
 = todo =
 
-can re-get the pos. each frame
-
-audio 64 bit too
-  does audio show up as a capture source currently in VLC? I guess it already does...
-  
 distribute with msiexec[s]
+
+== maybe ==
+
+try MAX(now, end previous)
+
+try sleep 'right' ms
+ask what I should *really* do here...
+
+try non monotonic LOL
 
 install 64 bit with 32 always...sure :P
 
-prompt for "resize to multiple of 2? 8?"
-
 fix hard crash when writing to the reg [audio?]
 
-== maybe ==
+allow for PrintWindow as a capture option. LOL. yeah right.
 
 some super dumb-easy way to record the screen.
   "resize this window, and go!" with ability to stop--basically for recording films, etc.
