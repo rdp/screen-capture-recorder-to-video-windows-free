@@ -1,4 +1,4 @@
-#define AppVer "0.3.8"
+#define AppVer "0.5.0"
 #define AppName "Screen Capturer Recorder Device Only x64"
 
 [UninstallRun]
