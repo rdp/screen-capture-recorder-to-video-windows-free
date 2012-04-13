@@ -14,9 +14,9 @@
 
 DWORD globalStart; // performance benchmarking
 
-int GetTrueScreenDepth(HDC hDC) {
-	// don't think I really use/rely on this method anymore...luckily since it looks gross
-int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
+int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
+
+	int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
   HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
@@ -240,7 +240,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(m_iImageWidth > 0);
 	ASSERT(m_iImageHeight > 0);
 
-	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when requested
+	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
 	m_fFps = config_max_fps; // int to float conversion ok for now
   	m_rtFrameLength = UNITS / config_max_fps; 
@@ -335,18 +335,21 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
-
+	now = max(now, previousFrameEndTime);
+	
 	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	/*
     // wait until we "should" send this frame out...TODO...more precise et al...
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
-	}
+	}*/
+
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
-    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *)&now);
+    pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
 
 	if(fullyStarted) {
       m_iFrameNumber++;
