@@ -7,6 +7,7 @@ def do_command_line
   for type in SetupScreenTrackerParams::Settings
     p type
     previous_setting = setter.read_single_setting type
+	p 'previous', previous_setting
     if ARGV.index('--just-display-current-settings') || ARGV.index('--just')
       puts "#{type}=#{previous_setting}"
       next
@@ -24,7 +25,13 @@ def do_command_line
       p 'deleted ' + type.to_s
       next
     else
-      received = received.to_i
+	  if received =~ /^0x/
+	    received = received.to_i(16) # 0x009004
+	  elsif received =~ /\./
+	    raise 'cannot use floats, at least today'
+	  else
+        received = received.to_i
+	  end
     end
     if (received % 2 == 1) && ['height', 'width'].include?(type)
       warning= "warning--odd numbers were chosen, but videos with odd number width/height are rejected by mplayer for some reason, so be careful [setting it anyway]!"

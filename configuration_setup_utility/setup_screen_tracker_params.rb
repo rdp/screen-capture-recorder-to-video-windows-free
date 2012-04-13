@@ -44,7 +44,10 @@ class SetupScreenTrackerParams
         # convert to a ruby negative
   	    out -= (1<<32)
   	  end
-      out
+      if out
+	    out = out.to_i
+	  end
+	  out
     end
   end
   

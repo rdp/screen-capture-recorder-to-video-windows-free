@@ -129,7 +129,7 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 	free(local);*/
 }
 
-void AddMouse(HDC hMemDC, LPRECT lpRect);
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC);
 
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
@@ -145,9 +145,7 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 
-	// LODO reuse?
-    //hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); 
-    hMemDC = CreateCompatibleDC(hScrDC);
+    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse?
 
     // determine points of where to grab from it
     nX  = lpRect->left;
@@ -166,7 +164,7 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC, lpRect);
+	AddMouse(hMemDC, lpRect, hScrDC);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture
@@ -181,15 +179,22 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     return hBitmap;
 }
 
-void AddMouse(HDC hMemDC, LPRECT lpRect) {
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC) {
 	__int64 start = StartCounter();
 	POINT p;
 	GetCursorPos(&p); // x, y
+
 	// LODO incorporate other mouse stuff?
 	CURSORINFO globalCursor;
-	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
+	globalCursor.cbSize = sizeof(CURSORINFO); // could cache cursor I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
+
+	// if we're tracking some hwnd, where it is relative to the mouse
+	RECT whereWindowIs;
+	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in :)
+	GetWindowRect(hwnd, &whereWindowIs);
+
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
 	if(ret) {
@@ -204,7 +209,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect) {
 		}
 	}
 
-	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur);
+	DrawIcon(hMemDC, p.x-lpRect->left - whereWindowIs.left, p.y-lpRect->top - whereWindowIs.top, hcur);
 	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms
 }
 

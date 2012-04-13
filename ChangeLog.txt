@@ -1,3 +1,5 @@
+fix mouse if using hwnd, allow for hex input to command liner
+
 0.5.0 4-10-12
 
 add "optional" hwnd_to_track registry setting.  Currently if the window "goes away" then it will just grab black.
