@@ -2,32 +2,36 @@
 
 distribute with msiexec[s]
 
+disable aero till we get windows 8 LOL.
+
 == maybe ==
 
+me disable aero <gah for windows 8, but that's in the future though...>
+  or figure out if I can even get better than 15 fps at all.
+  TODO: beat 15 fps in windows 7
+
+dedupe?
+
 try MAX(now, end previous)
+  sent it...
 
 try sleep 'right' ms
-ask what I should *really* do here...
 
-try non monotonic LOL
+don't use getDIBits [raw memcpy?] if we already match the right stuff. Oh wait getDIBits is probably already optimized for this case so we might not gain
+anything, plus, this is a teeny overhead, compared to aero at least. Like nuffin'
 
-install 64 bit with 32 always...sure :P
+ask what I should *really* do waiting-wise here...
 
-fix hard crash when writing to the reg [audio?]
+install 64 bit-ter with 32 always...sure :P
 
-allow for PrintWindow as a capture option. LOL. yeah right.
+resize with DirectX. Not. LOL.
+
+catch hard crash when writing to the reg
 
 some super dumb-easy way to record the screen.
   "resize this window, and go!" with ability to stop--basically for recording films, etc.
 
-it should probably say when it is starting...
-  a registry setting for "am capturing"? if prompted...
-    just one LOL
-
-window resizing can accidentally start off screen [!]
-
 16 bit javaw.exe doesn't seem "present" for 64 bit machines. what? nor java.exe?
-printwindow instead? (msdn)
 
 can "smart poll" to know when it should switch to/grab the next frame [yeah right]
   like sample subsections to look for change LOL
@@ -38,8 +42,8 @@ can "smart poll" to know when it should switch to/grab the next frame [yeah righ
 get skype preview/google to work with it
 
 don't prompt, remember previous settings et al :P
+
 prompt for priority
-can display transparent window as part of setup phase
 
 start green overlay flashing when ffmpeg actually starts LOL
 
@@ -56,8 +60,6 @@ nextsprocket my citrix competitor LOL, no good.
  on online.net
     I don't know if I could ever compete. bad idea.
 
-C# demo see if it works
-
 can ffmpeg be forced to "drop all them other frames, just chose the latest"? to keep up? does it keep up?
 
 force them to have java installed first :P
@@ -65,13 +67,9 @@ delete storage file on uninstall
 
 "issues"
 
-try 16 -> various bits at home, speed-wise
-
 qtrle ?
 
 fix sound crackling <sniff>
-
-crash in graphedit trying to render pin
 
 easy streamer setter-upper with VLC [?] ffmpeg?
   ask if you want to beep after it's done...

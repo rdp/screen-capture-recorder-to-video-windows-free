@@ -28,12 +28,12 @@ OutputDir=releases
 [Icons]
 Name: {group}\Record\record screen or audio using current settings for a variable number of seconds; Filename: {app}\configuration_setup_utility\timed_recording.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
 Name: {group}\Readme; Filename: {app}\README.TXT
-Name: {group}\configure\configure by setting specific screen capture numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
-Name: {group}\configure\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
-Name: {group}\configure\configure screen capture by resizing a transparent window; Filename: {app}\configuration_setup_utility\resizable_window.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
-Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
-Name: {group}\Uninstall {#AppName}; Filename: {uninstallexe}
-Name: {group}\configure\re-register capture device after install msvcr100, if necessary; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
-Name: {group}\configure\Display current capture settings; Filename: {app}\configuration_setup_utility\display_current_settings.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
+Name: {group}\configure/troubleshoot\configure by setting specific screen capture numbers; Filename: {app}\configuration_setup_utility\edit_config.bat; WorkingDir: {app}\configuration_setup_utility
+Name: {group}\configure/troubleshoot\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
+Name: {group}\configure/troubleshoot\configure screen capture by resizing a transparent window; Filename: {app}\configuration_setup_utility\resizable_window.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
+Name: {group}\configure/troubleshoot\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
+Name: {group}\configure/troubleshoot\re-register capture device after install msvcr100, if necessary; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
+Name: {group}\configure/troubleshoot\Display current capture settings; Filename: {app}\configuration_setup_utility\display_current_settings.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
 Name: {group}\Broadcast\setup local audio streaming server; Filename: {app}\configuration_setup_utility\run_broadcast_audio_server.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
 Name: {group}\Broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\rerun_audio_server.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
+Name: {group}\Uninstall {#AppName}; Filename: {uninstallexe}

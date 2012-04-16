@@ -16,7 +16,7 @@ DWORD globalStart; // performance benchmarking
 
 int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
 
-	int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
+int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
   HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
@@ -44,7 +44,7 @@ return RetDepth;
 //
 // Prefered types should be ordered by quality, with zero as highest quality.
 // Therefore, iPosition =
-//      0    Return a 32bit mediatype
+//      0    Return a 24bit mediatype "as the default" since I guessed it might be faster though who knows
 //      1    Return a 24bit mediatype
 //      2    Return 16bit RGB565
 //      3    Return a 16bit mediatype (rgb555)
@@ -59,9 +59,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 	if(formatAlreadySet) {
 		if(iPosition != 0)
           return E_INVALIDARG;
-		// you only have one option, buddy. (see SetFormat's msdn)
+		// you can only have one option, buddy. (see SetFormat's msdn)
 		pmt->Set(m_mt);
-		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*)m_mt.pbFormat; // right ...
+		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*)m_mt.pbFormat;
 		VIDEOINFO *pviHere = (VIDEOINFO  *) pmt->pbFormat;
 		return S_OK;
 	}
@@ -69,7 +69,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     if(iPosition < 0)
         return E_INVALIDARG;
 
-    // Have we run off the end of types?
+    // Have we run out of types?
     if(iPosition > 5)
         return VFW_S_NO_MORE_ITEMS;
 
@@ -80,13 +80,12 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     // Initialize the VideoInfo structure before configuring its members
     ZeroMemory(pvi, sizeof(VIDEOINFO));
 
-
 	if(iPosition == 0) {
 		// pass it our "preferred" which is 24 bits...just guessing, of course
 		iPosition = 2;
 			// 32 -> 24: getdibits took 2.251000ms
 			// 32 -> 32: getdibits took 2.916480ms
-			// except those numbers might be misleading in terms of total speed...
+			// except those numbers might be misleading in terms of total speed... <sigh>
 	}
 
     switch(iPosition)
@@ -119,7 +118,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            // LODO research this...does it come from the machine with...it set, or not? ...
 			pvi->bmiHeader.biCompression = BI_BITFIELDS;
 			pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 16;
@@ -133,8 +131,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            // LODO ???
-			// pvi->bmiHeader.biCompression = BI_BITFIELDS;
+            // LODO ??? need? not need? BI_BITFIELDS? Or is this the default so we don't need it? Or do we need a different type that doesn't specify BI_BITFIELDS?
+			pvi->bmiHeader.biCompression = BI_BITFIELDS;
             pvi->bmiHeader.biBitCount    = 16;
             break;
         }
@@ -240,18 +238,23 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT(m_iImageWidth > 0);
 	ASSERT(m_iImageHeight > 0);
 
+	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
 	m_fFps = config_max_fps; // int to float conversion ok for now
   	m_rtFrameLength = UNITS / config_max_fps; 
 
-	wchar_t out[1000];
-	swprintf(out, 1000, L"default/from reg read config as: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
-		m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
-	LocalOutput(out);
+#ifdef _DEBUG 
+	  wchar_t out[1000];
+	  swprintf(out, 1000, L"default/from reg read config as: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
+		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 
+	  __int64 measureDebugOutputSpeed = StartCounter();
+	  LocalOutput(out);
+	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
 	// does this work with flash?
 	// set_config_string_setting(L"last_set_it_to", out);
+#endif
 }
 
 void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
@@ -319,13 +322,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
 
-	// Copy the DIB bits over into our filter's output buffer.
-	// cbData is the size of pData FWIW
-    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
-	
-    if (hDib)
-        DeleteObject(hDib);
-
 	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
 	// race condition?
 	// so don't do some calculations unless we're in State_Running
@@ -335,21 +331,28 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
-	now = max(now, previousFrameEndTime);
 	
-	// capture how long it took before we add in our own arbitrary delay to enforce fps...
-	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
-	/*
     // wait until we "should" send this frame out...TODO...more precise et al...
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
-	}*/
+	}
 
+	// Copy the DIB bits over into our filter's output buffer.
+	// cbData is the size of pData FWIW
+    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
+	
+    if (hDib)
+        DeleteObject(hDib);
+	CSourceStream::m_pFilter->StreamTime(now);
+	
+	// capture how long it took before we add in our own arbitrary delay to enforce fps...
+	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
-    pSample->SetTime((REFERENCE_TIME *) &now, &endFrame);
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &now);
 
 	if(fullyStarted) {
       m_iFrameNumber++;
@@ -361,7 +364,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	LocalOutput("end total frames %d %.020Lfms, total since beginning of time %f fps (theoretical max fps %f)", m_iFrameNumber, millisThisRoundTook, 
+	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook);
 
 	previousFrameEndTime = endFrame;

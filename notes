@@ -1,3 +1,27 @@
+= speed 2 =
+
+with aero:
+
+"can't seem to get debug above 19 fps or so, even when set to 60/ or set to not wait at all"
+  goes down to almost exactly 15 fps after awhile. Man that seems messed up.
+  
+"benchmarker with aero" 
+  no movement:
+   avg. 52.8 fps
+   min. 19.1 fps
+   max: 70.8 fps
+ yes movement occurring:
+    avg: 30.8
+    max: 64.1
+    min: 12.9
+
+"benchmarker without aero"
+
+interestingly 'capture from windows 640x480' average goes from 800 to 560 (400?) when there is movement.
+  
+my prog without aero:
+ 28.4, seems to work fine, I limited it to 30 fps
+  
 = speed =
 
 GetDc versus 	//hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // SLOW for aero desktop ...

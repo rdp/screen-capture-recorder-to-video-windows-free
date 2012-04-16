@@ -87,12 +87,10 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 // or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
 
 
-// split out for profiling purposes, though does clarify the code a bit..
 void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	// bitblt screen DC to memory DC
 	__int64 start = StartCounter();
-	// CAPTUREBLT does not seem to give a mouse...
-    BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); //CAPTUREBLT is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it?
+	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
 	long double elapsed = GetCounterSinceStartMillis(start);
 	LocalOutput("bitblt took %.020Lf ms", elapsed);
 }
@@ -103,7 +101,6 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
 
-	// taking me like 73% cpu ?
 	// I think cxImage uses this same call...
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
 	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...
@@ -192,7 +189,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC) {
 
 	// if we're tracking some hwnd, where it is relative to the mouse
 	RECT whereWindowIs;
-	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in :)
+	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
 	GetWindowRect(hwnd, &whereWindowIs);
 
 	ICONINFO iconinfo;
@@ -210,7 +207,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC) {
 	}
 
 	DrawIcon(hMemDC, p.x-lpRect->left - whereWindowIs.left, p.y-lpRect->top - whereWindowIs.top, hcur);
-	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms
+	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms, 0.13 ms with WindowFromDC et al
 }
 
 
