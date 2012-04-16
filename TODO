@@ -8,7 +8,9 @@ disable aero till we get windows 8 LOL.
 
 me disable aero <gah for windows 8, but that's in the future though...>
   or figure out if I can even get better than 15 fps at all.
-  TODO: beat 15 fps in windows 7
+  TODO: beat 15 fps in windows 7/8
+
+flip a bit when you're "on" versus "off" (in the registry)
 
 dedupe?
 
@@ -280,9 +282,11 @@ ffplay version N-32726-ga254452, Copyright (c) 2003-2011 the FFmpeg developers
 
 == other ==
 
- rename "like camstudio" or the like/propaganda
+separate settings per program that will capture from us? Kind of weird...
+  
+rename "like camstudio" or the like/propaganda
 
- shearing (?) compared to itself upscreened...
+shearing (?) compared to itself upscreened...
 
 == never ==
 can i use camstudio's captions adder?

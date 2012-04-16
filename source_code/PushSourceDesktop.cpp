@@ -154,7 +154,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pvi->bmiHeader.biPlanes     = 1;
     pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
     pvi->bmiHeader.biClrImportant = 0;
-	pvi->AvgTimePerFrame = m_rtFrameLength; // hard set currently...
+	pvi->AvgTimePerFrame = m_rtFrameLength; // from our config or default
 
     SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
     SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
@@ -335,7 +335,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
     if (hDib)
         DeleteObject(hDib);
-	CSourceStream::m_pFilter->StreamTime(now);
 	
 	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
@@ -353,7 +352,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &now);
-
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}

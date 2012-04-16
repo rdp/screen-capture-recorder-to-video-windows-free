@@ -12,7 +12,8 @@ It also includes a directshow source capture filter device for recording "what y
 
 Note that turning off the aero windows manager (if you're on vista) can dramatically 
 increase speed of capture.
-  
+"Another trick I have found to be necessary is to go into the Display Properties->Settings->Advanced->Troubleshoot and slide the Hardware Acceleration slider to one stop above None."
+
 == Installation ==
 
 Download installer and run, from 
