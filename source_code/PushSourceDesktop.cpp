@@ -329,17 +329,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 	bool fullyStarted = myState == State_Running;
 
-	CRefTime now;
-    CSourceStream::m_pFilter->StreamTime(now);
-	
-    // wait until we "should" send this frame out...TODO...more precise et al...
-	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
-		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
-		  Sleep(1);
-          CSourceStream::m_pFilter->StreamTime(now);
-		}
-	}
-
 	// Copy the DIB bits over into our filter's output buffer.
 	// cbData is the size of pData FWIW
     HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
@@ -350,6 +339,17 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	
+	CRefTime now;
+    CSourceStream::m_pFilter->StreamTime(now);
+	
+    // wait until we "should" send this frame out...TODO...more precise et al...
+	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
+		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
+		  Sleep(1);
+          CSourceStream::m_pFilter->StreamTime(now);
+		}
+	}
 	
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &now);
