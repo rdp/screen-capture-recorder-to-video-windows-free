@@ -6,6 +6,14 @@ disable aero till we get windows 8 LOL.
 
 == maybe ==
 
+increase priority when capturing?
+
+try "setting time for one frame in the future"
+  seemed to fail
+  
+try "set start time, take snapshot, set end time" [?]
+  
+  
 me disable aero <gah for windows 8, but that's in the future though...>
   or figure out if I can even get better than 15 fps at all.
   TODO: beat 15 fps in windows 7/8

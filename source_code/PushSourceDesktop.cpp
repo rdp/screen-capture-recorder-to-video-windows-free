@@ -14,28 +14,167 @@
 
 DWORD globalStart; // performance benchmarking
 
-int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
 
-int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
-if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
-  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
-  HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
-  ReleaseDC(NULL, DeskDC);
+// default child constructor...
+CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
+        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
+        m_FramesWritten(0),
+       // m_bZeroMemory(0),
+        m_iFrameNumber(0),
+        //m_nCurrentBitDepth(32), // negotiated...
+		m_pParent(pFilter),
+		formatAlreadySet(false)
+{
+	
+	// The main point of this sample is to demonstrate how to take a DIB
+	// in host memory and insert it into a video stream. 
 
-  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP);
+	// To keep this sample as simple as possible, we just read the desktop image
+	// from a file and copy it into every frame that we send downstream.
+    //
+	// In the filter graph, we connect this filter to the AVI Mux, which creates 
+    // the AVI file with the video frames we pass to it. In this case, 
+    // the end result is a screen capture video (GDI images only, with no
+    // support for overlay surfaces).
 
-  if (hOldBMP != NULL) {
-    SetPixelV(hDC, 0, 0, 0x000400);
-    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
-    SelectObject(hDC, hOldBMP);
-  }
+    // Get the device context of the main display, just to get some metrics for it...
+	globalStart = GetTickCount();
 
-  DeleteObject(hBMP);
+    hScrDc = GetDC((HWND) read_config_setting(TEXT("hwnd_to_track"), NULL));
+	ASSERT(hScrDc != 0);
+    // Get the dimensions of the main desktop window
+    m_rScreen.left   = m_rScreen.top = 0;
+    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
+    m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
+
+	// now read some custom settings...
+	WarmupCounter();
+    reReadCurrentPosition(0);
+
+	int config_width = read_config_setting(TEXT("width"), 0);
+	ASSERT(config_width >= 0); // negatives not allowed...
+	if(config_width > 0) {
+		int desired = m_rScreen.left + config_width;
+		//int max_possible = m_rScreen.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
+		//if(desired < max_possible)
+			m_rScreen.right = desired;
+		//else
+		//	m_rScreen.right = max_possible;
+	} else {
+		// leave full screen
+	}
+
+	int config_height = read_config_setting(TEXT("height"), 0);
+	ASSERT(config_height >= 0); // negatives not allowed, if it's set :)
+	if(config_height > 0) {
+		int desired = m_rScreen.top + config_height;
+		//int max_possible = m_rScreen.bottom; // disabled, see above.
+		//if(desired < max_possible)
+			m_rScreen.bottom = desired;
+		//else
+		//	m_rScreen.bottom = max_possible;
+	} else {
+		// leave full screen
+	}
+
+
+    // Save dimensions for later use in FillBuffer() et al
+    m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
+    m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(m_iImageWidth > 0);
+	ASSERT(m_iImageHeight > 0);
+
+	// default 30 fps...hmm...
+	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
+	ASSERT(config_max_fps >= 0);	
+	m_fFps = config_max_fps; // int to float conversion ok for now
+  	m_rtFrameLength = UNITS / config_max_fps; 
+
+#ifdef _DEBUG 
+	  wchar_t out[1000];
+	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps\n", m_iImageHeight, m_iImageWidth, 
+		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
+
+	  __int64 measureDebugOutputSpeed = StartCounter();
+	  LocalOutput(out);
+	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
+	// does this work with flash?
+	// set_config_string_setting(L"last_set_it_to", out);
+#endif
 }
 
-return RetDepth;
+
+
+
+// This is where we insert the DIB bits into the video stream.
+// FillBuffer is called once for every sample in the stream.
+HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
+{
+	__int64 startThisRound = StartCounter();
+	BYTE *pData;
+    long cbData;
+
+    CheckPointer(pSample, E_POINTER);
+	reReadCurrentPosition(1);
+
+    // Access the sample's data buffer
+    pSample->GetPointer(&pData);
+    cbData = pSample->GetSize();
+
+    // Make sure that we're still using video format
+    ASSERT(m_mt.formattype == FORMAT_VideoInfo);
+
+    VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
+
+	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
+	// race condition?
+	// so don't do some calculations unless we're in State_Running
+	FILTER_STATE myState;
+	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
+	bool fullyStarted = myState == State_Running;
+
+	
+	// capture how long it took before we add in our own arbitrary delay to enforce fps...
+	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	
+	// Copy the DIB bits over into our filter's output buffer.
+	// cbData is the size of pData FWIW
+    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
+	
+    if (hDib)
+        DeleteObject(hDib);
+	CRefTime now;
+    CSourceStream::m_pFilter->StreamTime(now);
+
+    // wait until we "should" send this frame out...TODO...more precise et al...
+	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
+		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
+		  Sleep(1);
+          CSourceStream::m_pFilter->StreamTime(now);
+		}
+	}
+	REFERENCE_TIME endFrame = now + m_rtFrameLength;
+	
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+	if(fullyStarted) {
+      m_iFrameNumber++;
+	}
+
+	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
+    pSample->SetSyncPoint(TRUE);
+
+	// only set discontinuous for the first...I think...
+	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
+
+	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
+	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
+		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook);
+
+	previousFrameEndTime = endFrame;
+    return S_OK;
 }
+
 
 //
 // GetMediaType
@@ -173,89 +312,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 } // GetMediaType
 
 
-// default child constructor...
-CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
-        m_FramesWritten(0),
-       // m_bZeroMemory(0),
-        m_iFrameNumber(0),
-        //m_nCurrentBitDepth(32), // negotiated...
-		m_pParent(pFilter),
-		formatAlreadySet(false)
-{
-	
-	// The main point of this sample is to demonstrate how to take a DIB
-	// in host memory and insert it into a video stream. 
-
-	// To keep this sample as simple as possible, we just read the desktop image
-	// from a file and copy it into every frame that we send downstream.
-    //
-	// In the filter graph, we connect this filter to the AVI Mux, which creates 
-    // the AVI file with the video frames we pass to it. In this case, 
-    // the end result is a screen capture video (GDI images only, with no
-    // support for overlay surfaces).
-
-    // Get the device context of the main display, just to get some metrics for it...
-	globalStart = GetTickCount();
-
-    hScrDc = GetDC((HWND) read_config_setting(TEXT("hwnd_to_track"), NULL));
-	ASSERT(hScrDc != 0);
-    // Get the dimensions of the main desktop window
-    m_rScreen.left   = m_rScreen.top = 0;
-    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
-    m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
-
-	// now read some custom settings...
-	WarmupCounter();
-    reReadCurrentPosition(0);
-
-	int config_width = read_config_setting(TEXT("width"), 0);
-	ASSERT(config_width >= 0); // negatives not allowed...
-	if(config_width > 0) {
-		int desired = m_rScreen.left + config_width;
-		//int max_possible = m_rScreen.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
-		//if(desired < max_possible)
-			m_rScreen.right = desired;
-		//else
-		//	m_rScreen.right = max_possible;
-	}
-
-	int config_height = read_config_setting(TEXT("height"), 0);
-	ASSERT(config_width >= 0);
-	if(config_height > 0) {
-		int desired = m_rScreen.top + config_height;
-		//int max_possible = m_rScreen.bottom; // disabled, see above.
-		//if(desired < max_possible)
-			m_rScreen.bottom = desired;
-		//else
-		//	m_rScreen.bottom = max_possible;
-	}
-
-
-    // Save dimensions for later use in FillBuffer() et al
-    m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
-    m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
-	ASSERT(m_iImageWidth > 0);
-	ASSERT(m_iImageHeight > 0);
-
-	// default 30 fps...hmm...
-	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
-	ASSERT(config_max_fps >= 0);	
-	m_fFps = config_max_fps; // int to float conversion ok for now
-  	m_rtFrameLength = UNITS / config_max_fps; 
-
-#ifdef _DEBUG 
-	  wchar_t out[1000];
-	  swprintf(out, 1000, L"default/from reg read config as: %d %d -> %dt %db %dl %dr %dfps\n", config_height, config_width, 
-		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
-
-	  __int64 measureDebugOutputSpeed = StartCounter();
-	  LocalOutput(out);
-	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
-	// does this work with flash?
-	// set_config_string_setting(L"last_set_it_to", out);
-#endif
-}
 
 void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
@@ -300,73 +356,6 @@ HRESULT CPushSourceDesktop::GetState(DWORD dw, FILTER_STATE *pState)
         return VFW_S_CANT_CUE;
     else
         return S_OK;
-}
-
-// This is where we insert the DIB bits into the video stream.
-// FillBuffer is called once for every sample in the stream.
-HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
-{
-	__int64 startThisRound = StartCounter();
-	BYTE *pData;
-    long cbData;
-
-    CheckPointer(pSample, E_POINTER);
-	reReadCurrentPosition(1);
-
-    // Access the sample's data buffer
-    pSample->GetPointer(&pData);
-    cbData = pSample->GetSize();
-
-    // Make sure that we're still using video format
-    ASSERT(m_mt.formattype == FORMAT_VideoInfo);
-
-    VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
-
-	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
-	// race condition?
-	// so don't do some calculations unless we're in State_Running
-	FILTER_STATE myState;
-	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
-	bool fullyStarted = myState == State_Running;
-
-	// Copy the DIB bits over into our filter's output buffer.
-	// cbData is the size of pData FWIW
-    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
-	
-    if (hDib)
-        DeleteObject(hDib);
-	
-	// capture how long it took before we add in our own arbitrary delay to enforce fps...
-	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
-	
-	CRefTime now;
-    CSourceStream::m_pFilter->StreamTime(now);
-	
-    // wait until we "should" send this frame out...TODO...more precise et al...
-	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
-		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
-		  Sleep(1);
-          CSourceStream::m_pFilter->StreamTime(now);
-		}
-	}
-	
-	REFERENCE_TIME endFrame = now + m_rtFrameLength;
-    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &now);
-	if(fullyStarted) {
-      m_iFrameNumber++;
-	}
-
-	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
-    pSample->SetSyncPoint(TRUE);
-	// only set discontinuous for the first...I think...
-	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
-
-	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
-		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook);
-
-	previousFrameEndTime = endFrame;
-    return S_OK;
 }
 
 HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)

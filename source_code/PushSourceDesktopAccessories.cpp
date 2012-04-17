@@ -324,3 +324,28 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 
 }
 
+
+
+
+int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
+
+int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
+
+if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
+  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
+  HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
+  ReleaseDC(NULL, DeskDC);
+
+  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP);
+
+  if (hOldBMP != NULL) {
+    SetPixelV(hDC, 0, 0, 0x000400);
+    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
+    SelectObject(hDC, hOldBMP);
+  }
+
+  DeleteObject(hBMP);
+}
+
+return RetDepth;
+}

@@ -11,7 +11,11 @@ class SetupScreenTrackerParams
     with_reg do
       name = name.to_s # allow for name to be a symbol
       assert_valid_name(name)
-      @screen_reg.delete(name)
+      begin
+	    @screen_reg.delete(name)
+	  rescue Win32::Registry::Error => e
+	    raise unless e.to_s =~ /The system cannot find the file specified./
+	  end
     end
     raise if read_single_setting name
   end

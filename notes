@@ -1,3 +1,22 @@
+= speed 3 =
+
+did see a lot of 'skipping too old of pictures'
+
+avcodec warning: almost fed libavcodec with a frame in the past (current: 478212364815, last: 956171418235)
+stream_out_transcode debug: late picture skipped (57085)
+stream_out_transcode debug: late picture skipped (62135)
+stream_out_transcode debug: late picture skipped (75515)
+stream_out_transcode debug: late picture skipped (71363)
+stream_out_transcode debug: late picture skipped (75041)
+stream_out_transcode debug: late picture skipped (69066)
+stream_out_transcode debug: late picture skipped (55001)
+stream_out_transcode debug: late picture skipped (66319)
+stream_out_transcode debug: late picture skipped (70228)
+stream_out_transcode debug: late picture skipped (83418)
+stream_out_transcode debug: late picture skipped (25602)
+stream_out_transcode debug: late picture skipped (12861)
+stream_out_transcode debug: drift is too high, resetting master sync
+
 = speed 2 =
 
 with aero:
