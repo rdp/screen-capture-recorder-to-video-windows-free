@@ -30,7 +30,7 @@ const REFERENCE_TIME FPS_1  = UNITS / 1;
 class CPushPinDesktop;
 
 // parent
-class CPushSourceDesktop : public CSource, public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist which is IUnknown
+class CPushSourceDesktop : public CSource // public IAMFilterMiscFlags // CSource is CBaseFilter is IBaseFilter is IMediaFilter is IPersist which is IUnknown
 {
 
 private:
@@ -53,14 +53,15 @@ public:
 	////// 
 	// IAMFilterMiscFlags, in case it helps somebody somewhere know we're a source config (probably unnecessary)
 	//////
-	ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
+	// ULONG STDMETHODCALLTYPE GetMiscFlags() { return AM_FILTER_MISC_FLAGS_IS_SOURCE; } 
+	// not sure if we should define the above without also implementing  IAMPushSource interface.
 
 	// our own method
     IFilterGraph *GetGraph() {return m_pGraph;}
 
 	// CBaseFilter, some pdf told me I should (msdn agrees)
 	STDMETHODIMP GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *State);
-
+	STDMETHODIMP Stop(); //http://social.msdn.microsoft.com/Forums/en/windowsdirectshowdevelopment/thread/a9e62057-f23b-4ce7-874a-6dd7abc7dbf7
 };
 
 
@@ -73,8 +74,9 @@ protected:
     int m_FramesWritten;				// To track where we are in the file
     //BOOL m_bZeroMemory;                 // Do we need to clear the buffer?
     //CRefTime m_rtSampleTime;	        // The time stamp for each sample
-
+public:
     int m_iFrameNumber;
+protected:
     REFERENCE_TIME m_rtFrameLength;
 	float m_fFps;
 	REFERENCE_TIME previousFrameEndTime;

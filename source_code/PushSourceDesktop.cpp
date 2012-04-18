@@ -125,7 +125,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     // Make sure that we're still using video format
     ASSERT(m_mt.formattype == FORMAT_VideoInfo);
 
-    VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
+    VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*) m_mt.pbFormat;
 
 	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
 	// race condition?
@@ -133,10 +133,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	FILTER_STATE myState;
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 	bool fullyStarted = myState == State_Running;
-
-	
-	// capture how long it took before we add in our own arbitrary delay to enforce fps...
-	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
 	
 	// Copy the DIB bits over into our filter's output buffer.
 	// cbData is the size of pData FWIW
@@ -146,8 +142,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
         DeleteObject(hDib);
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
-
-    // wait until we "should" send this frame out...TODO...more precise et al...
+	
+	// capture how long it took before we add in our own arbitrary delay to enforce fps...
+	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	
+    // wait until we "should" send this frame out...TODO...more precise et al...??
 	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
@@ -156,7 +155,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
-    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+    pSample->SetTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
+	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
@@ -312,7 +312,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 } // GetMediaType
 
 
-
 void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
 
@@ -417,4 +416,17 @@ HRESULT CPushPinDesktop::QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWO
     // We support getting this property, but not setting it.
     if (pTypeSupport) *pTypeSupport = KSPROPERTY_SUPPORT_GET; 
     return S_OK;
+}
+
+STDMETHODIMP CPushSourceDesktop::Stop(){
+
+	CAutoLock filterLock(m_pLock);
+
+	//Default implementation
+	HRESULT hr = CBaseFilter::Stop();
+
+	//Reset pin resources
+	m_pPin->m_iFrameNumber = 0;
+
+	return hr;
 }

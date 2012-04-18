@@ -105,28 +105,9 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
 	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...
 	LocalOutput("getdibits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
-
-	/*
-	  without aero:
-      bitblt took 2.10171999999999980000 ms (with aero:  53.8527600000ms)
-      getdibits took 2.435400ms
-      memcpy took 2.01952000000000000000 # hmm...
-
-	*/
-
-	/*
-	int size = pHeader->bmiHeader.biSizeImage; // bytes
-	BYTE *local = (BYTE *) malloc(size);
-	start = StartCounter();	
-	memcpy(local, pData, size);
-
-	
-	__int64 now = StartCounter(); 
-	LocalOutput("memcpy took %.020Lf ", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
-	free(local);*/
 }
 
-void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC);
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd);
 
 HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
@@ -159,9 +140,12 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hBitmap);
 
+	// grab the hwnd if we're tracking it:
+	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
+
 	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC, lpRect, hScrDC);
+	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture
@@ -176,21 +160,17 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     return hBitmap;
 }
 
-void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC) {
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
 	POINT p;
-	GetCursorPos(&p); // x, y
-
-	// LODO incorporate other mouse stuff?
+	GetCursorPos(&p); // current x, y
+	
 	CURSORINFO globalCursor;
-	globalCursor.cbSize = sizeof(CURSORINFO); // could cache cursor I guess...
+	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-	// if we're tracking some hwnd, where it is relative to the mouse
-	RECT whereWindowIs;
-	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
-	GetWindowRect(hwnd, &whereWindowIs);
+	ScreenToClient(hwnd, &p);
 
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
@@ -206,7 +186,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC) {
 		}
 	}
 
-	DrawIcon(hMemDC, p.x-lpRect->left - whereWindowIs.left, p.y-lpRect->top - whereWindowIs.top, hcur);
+	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur);
 	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms, 0.13 ms with WindowFromDC et al
 }
 

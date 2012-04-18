@@ -1,3 +1,26 @@
+= getdibits speed =
+
+
+	/*
+	  without aero:
+      bitblt took 2.10171999999999980000 ms (with aero:  53.8527600000ms)
+      getdibits took 2.435400ms
+      memcpy took 2.01952000000000000000 # hmm...
+
+	*/
+
+	/*
+	int size = pHeader->bmiHeader.biSizeImage; // bytes
+	BYTE *local = (BYTE *) malloc(size);
+	start = StartCounter();	
+	memcpy(local, pData, size);
+
+	
+	__int64 now = StartCounter(); 
+	LocalOutput("memcpy took %.020Lf ", GetCounterSinceStartMillis(start)); // takes 1.1 versus 3.8ms for getdibits, but that's with 80fps compared to max 251...so may not be the bottleneck
+	free(local);*/
+
+
 = speed 3 =
 
 did see a lot of 'skipping too old of pictures'
@@ -16,6 +39,9 @@ stream_out_transcode debug: late picture skipped (83418)
 stream_out_transcode debug: late picture skipped (25602)
 stream_out_transcode debug: late picture skipped (12861)
 stream_out_transcode debug: drift is too high, resetting master sync
+
+
+setting it to "frame number" seemingly resulted in...buffer good buffer good when watching or streaming. So it's probably not streaming's fault...
 
 = speed 2 =
 
