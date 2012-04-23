@@ -104,6 +104,7 @@ protected:
 
 	boolean m_bReReadRegistry;
 	boolean m_bDeDupe;
+	int m_millisToSleepBeforePollForChanges;
 
     void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
 

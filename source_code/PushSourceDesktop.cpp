@@ -18,8 +18,6 @@ DWORD globalStart; // performance benchmarking
 // #pragma comment(lib,"dwmapi.lib")  // ?
 #include <dwmapi.h>
 
-IMediaSample *lastGoodSample = NULL;
-
 // default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
@@ -115,11 +113,12 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bDeDupe = 1;
 		LocalOutput("set it to do dedup'ing");
 	}
+	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_changes"), 10);
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];
-	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps\n", m_iImageHeight, m_iImageWidth, 
-		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
+	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between polling %d, m_bReReadRegistry? %d \n", m_iImageHeight, m_iImageWidth, 
+		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
 
 	  LocalOutput(out); // warmup for the below debug
 	  __int64 measureDebugOutputSpeed = StartCounter();
@@ -130,7 +129,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 #endif
 }
 
-
+BYTE *pOldData = NULL; // TODO free it...
 
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
@@ -166,24 +165,28 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  // Copy the DIB bits over into our filter's output buffer.
 	  // cbData is the size of pData FWIW
       CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
-
 	
-      // TODO de-dupe
-	  if(0) {//m_bDeDupe) {
-		if(lastGoodSample) {
-			gotNew = true;
-			lastGoodSample->Release();
+	  // pSample->AddRef(); // causes it to hang, so create our own copies
+
+	  if(m_bDeDupe) {
+		if(pOldData) {
+			if(memcmp(pData, pOldData, cbData)==0) { // desktop:  10ms for 640x1152, still 100 fps uh guess...
+			  Sleep(m_millisToSleepBeforePollForChanges);
+			} else {
+			  gotNew = true;
+			  memcpy(pOldData, pData, cbData); // 4ms for 640x1152, but it's worth it LOL.
+			}
 		} else {
-		  lastGoodSample = pSample;
-		  pSample->AddRef();
+		  // init
+		  pOldData =(BYTE *) malloc(cbData);
+		  memcpy(pOldData, pData, cbData);
 		  gotNew = true;
 		}
 	  } else {
+		// it's always new!
 	    gotNew = true;
 	  }
-	  
 	}
-
 
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
@@ -198,7 +201,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
           CSourceStream::m_pFilter->StreamTime(now);
 		}
 	} else {
-		LocalOutput("it missed some time");
+		LocalOutput("it missed some time"); // we don't miss time I don't think
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
@@ -394,6 +397,9 @@ CPushPinDesktop::~CPushPinDesktop()
     DeleteDC(hScrDc);
 	// I don't think it ever even gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
+	if(pOldData)
+		free(pOldData);
+
 }
 
 // according to msdn, too
