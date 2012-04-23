@@ -13,6 +13,9 @@
 
 #include <stdio.h>
 #include <assert.h>
+// dwm turn off shtuff
+// #pragma comment(lib,"dwmapi.lib")  // ?
+#include <dwmapi.h>
 
 
 void logToFile(char *log_this) {
@@ -128,9 +131,10 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms
 
 	if(ret) {
-		p.x -= iconinfo.xHotspot; // align it right, I guess...
+		p.x -= iconinfo.xHotspot; // align mouse, I guess...
 		p.y -= iconinfo.yHotspot;
-		// avoid some leak or other
+
+		// avoid some memory leak or other
 		if (iconinfo.hbmMask) {
 			::DeleteObject(iconinfo.hbmMask);
 		}
@@ -138,10 +142,9 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 			::DeleteObject(iconinfo.hbmColor);
 		}
 	}
-
-	__int64 start2 = StartCounter();
+	
 	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
-	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes 0.1 ms, 0.125 ms with WindowFromDC 
+	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes 0.125 ms
 }
 
 // partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
@@ -222,5 +225,78 @@ HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
 	}
 	RegCloseKey(hKey); 
 	return i;
+
+}
+
+
+typedef HRESULT (WINAPI * DwmIsCompositionEnabledFunction)(__out BOOL* isEnabled);
+typedef HRESULT (WINAPI * DwmGetWindowAttributeFunction) (
+ __in  HWND hwnd,
+ __in  DWORD dwAttribute,
+ __out PVOID pvAttribute,
+ DWORD cbAttribute
+);
+
+typedef HRESULT (WINAPI * DwmEnableCompositionFunction)(__in UINT uCompositionAction);
+
+HRESULT turnOffAero() {
+  HRESULT aResult = S_OK;
+  
+  HMODULE dwmapiDllHandle = LoadLibrary(L"dwmapi.dll");  
+  
+  if (NULL != dwmapiDllHandle ) // not on Vista/Windows7 so no aero so no need to account for aero.
+  {
+	  DwmEnableCompositionFunction DwmEnableComposition;
+	  DwmEnableComposition = (DwmEnableCompositionFunction) ::GetProcAddress(dwmapiDllHandle, "DwmEnableComposition");
+   if( NULL != DwmEnableComposition )
+   {
+    aResult = DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+   }
+
+  }
+  FreeLibrary(dwmapiDllHandle);
+  return aResult;
+}
+
+// calculates rectangle of the owner of the window over me
+void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere) 
+{
+  HRESULT aResult = S_OK;
+
+  HWND ownerHandle = ::GetWindow(ofThis, GW_OWNER );
+  ::GetWindowRect(ownerHandle, toHere); // default to old way of getting the window rectandle
+
+  // Load the dll and keep the handle to it
+  // must load dynamicaly because this dll exists only in vista -- not in xp.
+  // if this is running on XP then use old way.
+  
+  HMODULE dwmapiDllHandle = LoadLibrary(L"dwmapi.dll");  
+  
+  if (NULL != dwmapiDllHandle ) // not on Vista/Windows7 so no aero so no need to account for aero.
+  {
+   BOOL isEnabled;
+   DwmIsCompositionEnabledFunction DwmIsCompositionEnabled;
+   DwmIsCompositionEnabled = (DwmIsCompositionEnabledFunction) ::GetProcAddress(dwmapiDllHandle, "DwmIsCompositionEnabled" );
+   if( NULL != DwmIsCompositionEnabled )
+   {
+    aResult = DwmIsCompositionEnabled( &isEnabled);
+   }
+   BOOL s = SUCCEEDED( aResult );
+   if ( s && isEnabled )
+   {
+    DwmGetWindowAttributeFunction DwmGetWindowAttribute;
+    DwmGetWindowAttribute = (DwmGetWindowAttributeFunction) ::GetProcAddress(dwmapiDllHandle, "DwmGetWindowAttribute" ) ;
+    if( NULL != DwmGetWindowAttribute) 
+    {
+      RECT extendedBounds;
+      HRESULT aResult = DwmGetWindowAttribute( ownerHandle, DWMWA_EXTENDED_FRAME_BOUNDS, &extendedBounds, sizeof( RECT) ) ;
+      if( SUCCEEDED( aResult ) )
+      {
+		DwmGetWindowAttribute( ownerHandle, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof(RECT));
+      }
+    }
+   }
+   FreeLibrary(dwmapiDllHandle);
+  }
 
 }

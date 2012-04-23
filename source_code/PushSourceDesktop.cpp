@@ -14,9 +14,6 @@
 
 DWORD globalStart; // performance benchmarking
 
-// dwm turn off shtuff
-// #pragma comment(lib,"dwmapi.lib")  // ?
-#include <dwmapi.h>
 
 // default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
@@ -45,7 +42,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
 
-    hScrDc = GetDC((HWND) read_config_setting(TEXT("hwnd_to_track"), NULL));
+	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
+    hScrDc = GetDC(m_iHwndToTrack);
 	ASSERT(hScrDc != 0);
     // Get the dimensions of the main desktop window
     m_rScreen.left   = m_rScreen.top = 0;
@@ -82,7 +80,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 
-
     // Save dimensions for later use in FillBuffer() et al
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
@@ -102,7 +99,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
       version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 	  GetVersionEx((LPOSVERSIONINFO)&version);
 	  if(version.dwMajorVersion >= 6) { // meaning vista +
-	    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+	    turnOffAero();
 	  }
 	}
 	if(is_config_set_to_1(TEXT("track_new_x_y_coords_each_frame_if_1"))) {
@@ -517,13 +514,9 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
-	// grab the hwnd if we're tracking it:
-	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
-
-
 	doJustBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
+	AddMouse(hMemDC, lpRect, hScrDC, m_iHwndToTrack);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture...whatever this even means...
