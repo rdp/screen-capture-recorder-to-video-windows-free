@@ -56,6 +56,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	int config_width = read_config_setting(TEXT("width"), 0);
 	ASSERT(config_width >= 0); // negatives not allowed...
+	int config_height = read_config_setting(TEXT("height"), 0);
+	ASSERT(config_height >= 0); // negatives not allowed, if it's set :)
+
 	if(config_width > 0) {
 		int desired = m_rScreen.left + config_width;
 		//int max_possible = m_rScreen.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
@@ -67,8 +70,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 
-	int config_height = read_config_setting(TEXT("height"), 0);
-	ASSERT(config_height >= 0); // negatives not allowed, if it's set :)
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
 		//int max_possible = m_rScreen.bottom; // disabled, see above.
@@ -79,21 +80,15 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	} else {
 		// leave full screen
 	}
-
+	
     // Save dimensions for later use in FillBuffer() et al
     m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
+
+
+
 	ASSERT(m_iImageWidth > 0);
 	ASSERT(m_iImageHeight > 0);
- 
-    if(m_iHwndToTrack != NULL) {
-		// make sure we only capture 'this much'
-		RECT p;
-		GetRectOfWindowIncludingAero(m_iHwndToTrack, &p);
-		m_iImageWidth = min(p.right-p.left, m_iImageWidth);
-		m_iImageHeight = min(p.bottom-p.top, m_iImageHeight);
-	}
-
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
@@ -539,4 +534,22 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 
 	if (hRawBitmap) // HDIB is the same as HBITMAP apparently...
         DeleteObject(hRawBitmap);
+}
+
+void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
+	__int64 start = StartCounter();
+	 // Bit block transfer from screen our compatible memory DC.
+	
+    if(m_iHwndToTrack != NULL) {
+      // make sure we only capture 'not too much'
+      RECT p;
+	  GetClientRect(m_iHwndToTrack, &p);
+      //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p);
+      nWidth = min(p.right-p.left, nWidth);
+	  nHeight= min(p.bottom-p.top, nHeight);
+    }
+
+	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
+	long double elapsed = GetCounterSinceStartMillis(start);
+	//LocalOutput("bitblt took %.020Lf ms", elapsed);
 }

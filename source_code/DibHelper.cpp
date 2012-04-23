@@ -92,14 +92,6 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 // or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
 
 
-void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
-	__int64 start = StartCounter();
-	 // Bit block transfer from screen our compatible memory DC.
-	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
-	long double elapsed = GetCounterSinceStartMillis(start);
-	//LocalOutput("bitblt took %.020Lf ms", elapsed);
-}
-
 //#include <malloc.h>
 
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
