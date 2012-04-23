@@ -106,12 +106,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  }
 	}
 	if(is_config_set_to_1(TEXT("track_new_x_y_coords_each_frame_if_1"))) {
-	  m_bReReadRegistry = 1;
-	  LocalOutput("set it to be re-reading..."); // it seems to take like 5ms each time to re-read it... meh
+		m_bReReadRegistry = 1; // takes 5ms
 	}
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
-		m_bDeDupe = 1;
-		LocalOutput("set it to do dedup'ing");
+		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
 	}
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_changes"), 10);
 
