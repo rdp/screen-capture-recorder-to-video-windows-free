@@ -1,0 +1,1 @@
+regsvr32  %~dp0\PushDesktop.ax

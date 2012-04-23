@@ -28,12 +28,13 @@ void LocalOutput(const char *str, ...)
 #ifdef _DEBUG  // avoid in release mode...
   char buf[2048];
   va_list ptr;
-  va_start(ptr,str);
+  va_start(ptr, str);
   vsprintf_s(buf,str,ptr);
   OutputDebugStringA(buf);
   OutputDebugStringA("\n");
   //logToFile(buf); 
   //logToFile("\n");
+  va_end(ptr);
 #endif
 }
 
@@ -42,10 +43,11 @@ void LocalOutput(const wchar_t *str, ...)
 #ifdef _DEBUG  // avoid in release mode...takes like 1ms each message!
   wchar_t buf[2048];
   va_list ptr;
-  va_start(ptr,str);
+  va_start(ptr, str);
   vswprintf_s(buf,str,ptr);
   OutputDebugString(buf);
   OutputDebugString(L"\n");
+  va_end(ptr);
   // also works: OutputDebugString(L"yo ho2");
   //logToFile(buf); 
   //logToFile("\n");
