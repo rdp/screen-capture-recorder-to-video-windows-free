@@ -23,6 +23,7 @@ DWORD globalStart; // performance benchmarking
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
+		m_bReReadRegistry(0),
        // m_bZeroMemory(0),
         m_iFrameNumber(0),
         //m_nCurrentBitDepth(32), // negotiated...
@@ -104,6 +105,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 	  }
 	}
+	if(read_config_setting(TEXT("track_new_x_y_coords_each_frame_if_1"), 0) == 1) {
+	  m_bReReadRegistry = 1;
+	  LocalOutput("set it to be re-reading..."); // it seems to take like 5ms each [?]
+	}
+
 #ifdef _DEBUG 
 	  wchar_t out[1000];
 	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps\n", m_iImageHeight, m_iImageWidth, 
@@ -128,7 +134,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
-	reReadCurrentPosition(1);
+	if(m_bReReadRegistry) {
+	  reReadCurrentPosition(1);
+	}
 
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
@@ -179,10 +187,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
+#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
-
+#endif
 	previousFrameEndTime = endFrame;
     return S_OK;
 }
@@ -340,11 +349,11 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	// is there a better way to do this registry stuff?
 	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top);
 	m_rScreen.top = config_start_y;
-	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
-	  wchar_t out[1000];
+ wchar_t out[1000];
 	  swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
 	  LocalOutput(out);
-	  LocalOutput("readCurrentPosition with swprintf took %fms", GetCounterSinceStartMillis(start));
+	  LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start));
+	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  if(isReRead) {
 		m_rScreen.right = m_rScreen.left + m_iImageWidth;
 		m_rScreen.bottom = m_rScreen.top + m_iImageHeight;

@@ -69,14 +69,11 @@ public:
 class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKsPropertySet //CSourceStream is ... CBasePin
 {
 
-protected:
-
-    int m_FramesWritten;				// To track where we are in the file
-    //BOOL m_bZeroMemory;                 // Do we need to clear the buffer?
-    //CRefTime m_rtSampleTime;	        // The time stamp for each sample
 public:
     int m_iFrameNumber;
+
 protected:
+    int m_FramesWritten;				// To track where we are, mostly debug now
     REFERENCE_TIME m_rtFrameLength; // also used to get the fps
 	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
@@ -96,6 +93,7 @@ protected:
 	// int m_iScreenBitRate;
 	HDC hScrDc;
 
+
 	//CCritSec m_cSharedState;            // Protects our internal state
     //int m_iRepeatTime;                  // Time in msec between frames
 
@@ -103,6 +101,8 @@ protected:
 	bool formatAlreadySet;
 
 	float GetFps();
+
+	boolean m_bReReadRegistry;
 
 public:
 
