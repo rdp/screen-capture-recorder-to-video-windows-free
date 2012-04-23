@@ -103,8 +103,9 @@ protected:
 	float GetFps();
 
 	boolean m_bReReadRegistry;
+	boolean m_bDeDupe;
 
-    void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader);
+    void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
 
 public:
 

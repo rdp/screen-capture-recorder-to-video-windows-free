@@ -167,6 +167,11 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 	return NOERROR;
 }
 
+
+boolean is_config_set_to_1(LPCTSTR szValueName) {
+  return read_config_setting(szValueName, 0) == 1;
+}
+
 // returns default if nothing is in the registry
  int read_config_setting(LPCTSTR szValueName, int default) {
   HKEY hKey;

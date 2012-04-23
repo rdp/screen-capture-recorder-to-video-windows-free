@@ -15,15 +15,17 @@
 DWORD globalStart; // performance benchmarking
 
 // dwm turn off shtuff
-#pragma comment(lib,"dwmapi.lib") 
+// #pragma comment(lib,"dwmapi.lib")  // ?
 #include <dwmapi.h>
 
+IMediaSample *lastGoodSample = NULL;
 
 // default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
 		m_bReReadRegistry(0),
+		m_bDeDupe(0),
        // m_bZeroMemory(0),
         m_iFrameNumber(0),
         //m_nCurrentBitDepth(32), // negotiated...
@@ -105,9 +107,13 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 	  }
 	}
-	if(read_config_setting(TEXT("track_new_x_y_coords_each_frame_if_1"), 0) == 1) {
+	if(is_config_set_to_1(TEXT("track_new_x_y_coords_each_frame_if_1"))) {
 	  m_bReReadRegistry = 1;
 	  LocalOutput("set it to be re-reading..."); // it seems to take like 5ms each time to re-read it... meh
+	}
+	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
+		m_bDeDupe = 1;
+		LocalOutput("set it to do dedup'ing");
 	}
 
 #ifdef _DEBUG 
@@ -155,10 +161,30 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 	bool fullyStarted = myState == State_Running;
 	
-	// Copy the DIB bits over into our filter's output buffer.
-	// cbData is the size of pData FWIW
-    CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
+	boolean gotNew = false;
+	while(!gotNew) {
+	  // Copy the DIB bits over into our filter's output buffer.
+	  // cbData is the size of pData FWIW
+      CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
+
 	
+      // TODO de-dupe
+	  if(0) {//m_bDeDupe) {
+		if(lastGoodSample) {
+			gotNew = true;
+			lastGoodSample->Release();
+		} else {
+		  lastGoodSample = pSample;
+		  pSample->AddRef();
+		  gotNew = true;
+		}
+	  } else {
+	    gotNew = true;
+	  }
+	  
+	}
+
+
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
 	
@@ -198,7 +224,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 }
 
 float CPushPinDesktop::GetFps() {
-	return UNITS / m_rtFrameLength;
+	return (float) (UNITS / m_rtFrameLength);
 }
 //
 // GetMediaType
@@ -456,7 +482,7 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 }
 
 
-void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
+void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
@@ -490,6 +516,7 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	// grab the hwnd if we're tracking it:
 	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
 
+
 	doJustBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
 	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
@@ -499,7 +526,6 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	// Get the BITMAP from the HBITMAP [?]
     hRawBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
-	// TODO de-dupe
 	doDIBits(hScrDC, hRawBitmap, nHeight, pData, pHeader);
 
     // clean up

@@ -53,6 +53,7 @@ WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
 
 int read_config_setting(LPCTSTR szValueName, int default);
+boolean is_config_set_to_1(LPCTSTR szValueName);
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis );
 
 void WarmupCounter();
