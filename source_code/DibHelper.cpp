@@ -149,7 +149,7 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
 
     // select old bitmap back into memory DC and get handle to
-    // bitmap of the capture
+    // bitmap of the capture...whatever that means...
     hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
 	doDIBits(hScrDC, hBitmap, nHeight, pData, pHeader);

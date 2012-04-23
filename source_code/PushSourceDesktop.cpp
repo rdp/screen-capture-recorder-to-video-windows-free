@@ -173,6 +173,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
+	} else {
+		LocalOutput("it missed some time");
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
@@ -190,8 +192,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
-		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
+	//LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
+	//	fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 #endif
 	previousFrameEndTime = endFrame;
     return S_OK;

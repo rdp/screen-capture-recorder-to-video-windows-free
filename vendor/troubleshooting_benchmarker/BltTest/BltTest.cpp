@@ -75,7 +75,7 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			char *nl = report + sprintf(report, "This is your theoretical maximum speed:\r\n\r\nCapture from window %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				kWidth, kHeight, afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
-			report + sprintf(nl, "Capture desktop (all windows) %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+			report + sprintf(nl, "Capture desktop (all windows, with aero) %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				kWidth, kHeight, afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
 			
 			HWND ec = ::GetDlgItem(hwnd, IDC_RESTEXT);
@@ -272,13 +272,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		QueryPerformanceCounter(&s1);
 
 		if (framecount < kFramesBlt) {
-		   HDC dc = (HDC)GetDC(NULL); // desktop [?]
+			// from the desktop
+		   HDC dc = GetDC(NULL); // desktop HWND
 			//HDC dc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
 			::CaptureDC(hBitmap, dc);
 			::GdiFlush();
 			DeleteDC(dc);
 		} else {
+			// from the window
 			HDC dc = (HDC)GetDC(hwnd);
 			::CaptureDC(hBitmap, dc);
 			::GdiFlush();

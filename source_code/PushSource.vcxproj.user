@@ -6,7 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe </LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>dshow:// --dshow-caching=50000 --dshow-fps=30 --dshow-vdev=screen-capture-recorder --sout-mux-caching=20000 :sout=#transcode{vcodec=mp2v,vb=7000,width=720,height=480,fps=30,acodec=mpga,ab=384,channels=2,samplerate=44100}:udp{mux=ts,dst=10.88.44.149} :ttl=1 :sout-keep</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>dshow:// --dshow-caching=50000 --dshow-fps=30 --dshow-adev=none --dshow-vdev=screen-capture-recorder --sout-mux-caching=20000 :sout=#transcode{vcodec=mp2v,vb=7000,width=720,height=480,fps=30,acodec=mpga,ab=384,channels=2,samplerate=44100}:udp{mux=ts,dst=10.88.44.149} :ttl=1 :sout-keep --live-caching=3000  --sout-mux-caching=3000 -vvv</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe</LocalDebuggerCommand>
