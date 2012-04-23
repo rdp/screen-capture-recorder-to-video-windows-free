@@ -88,7 +88,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
-	m_fFps = config_max_fps; // int to float conversion ok for now
+
+	// m_rtFrameLength  also re-negotiated later...
   	m_rtFrameLength = UNITS / config_max_fps; 
 
 #ifdef _DEBUG 
@@ -103,7 +104,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// set_config_string_setting(L"last_set_it_to", out);
 #endif
 }
-
 
 
 
@@ -156,7 +156,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
     pSample->SetTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
-	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
+	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
@@ -168,14 +168,16 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
-		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook);
+	LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
+		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 
 	previousFrameEndTime = endFrame;
     return S_OK;
 }
 
-
+float CPushPinDesktop::GetFps() {
+	return UNITS / m_rtFrameLength;
+}
 //
 // GetMediaType
 //

@@ -77,13 +77,14 @@ protected:
 public:
     int m_iFrameNumber;
 protected:
-    REFERENCE_TIME m_rtFrameLength;
-	float m_fFps;
+    REFERENCE_TIME m_rtFrameLength; // also used to get the fps
+	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
 
     RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
 
     int m_iImageHeight;                 // The current image height
+
     int m_iImageWidth;                  // And current image width
     int m_nCurrentBitDepth;             // capture requested bit depth
 
@@ -98,9 +99,10 @@ protected:
 	//CCritSec m_cSharedState;            // Protects our internal state
     //int m_iRepeatTime;                  // Time in msec between frames
 
-	//AM_MEDIA_TYPE requestedHardenedFormat; //just use m_mt instead...
+	//AM_MEDIA_TYPE requestedHardenedFormat; //just use m_mt instead of an extra local copy here...
 	bool formatAlreadySet;
 
+	float GetFps();
 
 public:
 

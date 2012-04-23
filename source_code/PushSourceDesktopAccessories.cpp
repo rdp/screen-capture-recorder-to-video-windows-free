@@ -211,7 +211,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
-		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request...
+		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less.  VLC does, for instance.
 		// we ignore other things like cropping requests
   	    formatAlreadySet = true;
 		m_mt = *pmt; // and save it away...
@@ -270,9 +270,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
         return hr;
     }
 
-    *pmt = CreateMediaType(&m_mt); // windows method, also does a copy
+    *pmt = CreateMediaType(&m_mt); // a windows lib method, also does a copy
 	if (*pmt == NULL) return E_OUTOFMEMORY;
-
 
 	
     DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
@@ -317,14 +316,11 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 	pvscc->MinFrameInterval = m_rtFrameLength; // large default is a small min frame interval
 	pvscc->MaxFrameInterval = 50000000; // 0.2 fps
 
-    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*m_fFps; // if in 8 bit mode. I guess.
-    pvscc->MaxBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*32*m_fFps;
+    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*GetFps(); // if in 8 bit mode. I guess.
+    pvscc->MaxBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*32*GetFps();
 
 	return hr;
-
 }
-
-
 
 
 int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
