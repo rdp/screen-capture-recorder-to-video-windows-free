@@ -87,9 +87,9 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 // or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
 
 
-void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
-	// bitblt screen DC to memory DC
+void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	__int64 start = StartCounter();
+	 // Bit block transfer from screen our compatible memory DC.
 	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
 	long double elapsed = GetCounterSinceStartMillis(start);
 	//LocalOutput("bitblt took %.020Lf ms", elapsed);
@@ -110,21 +110,21 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd);
 
-HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
+void CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 {
     HDC         hMemDC;         // screen DC and memory DC
-    HBITMAP     hBitmap, hOldBitmap;    // handles to deice-dependent bitmaps
+    HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY, nX2, nY2;       // coordinates of rectangle to grab
     int         nWidth, nHeight;        // DIB width and height
 
     // check for an empty rectangle
     if (IsRectEmpty(lpRect))
-      return NULL;
+      return;
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 
-    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse?
+    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Any GetDC too...
 
     // determine points of where to grab from it
     nX  = lpRect->left;
@@ -136,29 +136,31 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
     nHeight = nY2 - nY;
 
     // create a bitmap compatible with the screen DC
-    hBitmap = CreateCompatibleBitmap(hScrDC, nWidth, nHeight);
+    hRawBitmap = CreateCompatibleBitmap(hScrDC, nWidth, nHeight);
 
     // select new bitmap into memory DC
-    hOldBitmap = (HBITMAP) SelectObject(hMemDC, hBitmap);
+    hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
 	// grab the hwnd if we're tracking it:
 	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
 
-	doBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
+	doJustBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
 
 	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
 
     // select old bitmap back into memory DC and get handle to
-    // bitmap of the capture...whatever that means...
-    hBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
+    // bitmap of the capture...whatever this even means...
+	// Get the BITMAP from the HBITMAP [?]
+    hRawBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
-	doDIBits(hScrDC, hBitmap, nHeight, pData, pHeader);
+	// TODO de-dupe
+	doDIBits(hScrDC, hRawBitmap, nHeight, pData, pHeader);
 
     // clean up
     DeleteDC(hMemDC);
 
-    // return handle to the bitmap
-    return hBitmap;
+	if (hRawBitmap) // HDIB is the same as HBITMAP apparently...
+        DeleteObject(hRawBitmap);
 }
 
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {

@@ -157,10 +157,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	// Copy the DIB bits over into our filter's output buffer.
 	// cbData is the size of pData FWIW
-    HDIB hDib = CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
+    CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
 	
-    if (hDib)
-        DeleteObject(hDib);
 	CRefTime now;
     CSourceStream::m_pFilter->StreamTime(now);
 	

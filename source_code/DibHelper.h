@@ -27,7 +27,7 @@ HDIB ChangeBitmapFormat (HBITMAP	hBitmap,
                          HPALETTE hPal);
 HDIB ChangeDIBFormat (HDIB hDIB, WORD wBitCount, DWORD dwCompression);
 
-HBITMAP CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader);
+void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader);
 HDIB CopyScreenToDIB (LPRECT);
 HBITMAP CopyWindowToBitmap (HWND, WORD);
 HDIB CopyWindowToDIB (HWND, WORD);
