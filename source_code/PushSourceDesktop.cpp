@@ -542,14 +542,15 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScr
 	
     if(m_iHwndToTrack != NULL) {
       // make sure we only capture 'not too much'
+	  // a bit confusing to not do it here, since we still want the 'big window' for the sum size...hmm...
+	  // we might just have to cache these values if we don't want to call GetClientRect each frame...
       RECT p;
-	  GetClientRect(m_iHwndToTrack, &p);
-      //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p);
-      nWidth = min(p.right-p.left, nWidth);
+	  GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
+      //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
+	  nWidth = min(p.right-p.left, nWidth);
 	  nHeight= min(p.bottom-p.top, nHeight);
     }
 
 	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
-	long double elapsed = GetCounterSinceStartMillis(start);
-	//LocalOutput("bitblt took %.020Lf ms", elapsed);
+	//LocalOutput("bitblt took %.020Lf ms", GetCounterSinceStartMillis(start));
 }
