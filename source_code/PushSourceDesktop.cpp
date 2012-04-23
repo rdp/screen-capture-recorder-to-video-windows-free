@@ -85,6 +85,15 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
 	ASSERT(m_iImageWidth > 0);
 	ASSERT(m_iImageHeight > 0);
+ 
+    if(m_iHwndToTrack != NULL) {
+		// make sure we only capture 'this much'
+		RECT p;
+		GetRectOfWindowIncludingAero(m_iHwndToTrack, &p);
+		m_iImageWidth = min(p.right-p.left, m_iImageWidth);
+		m_iImageHeight = min(p.bottom-p.top, m_iImageHeight);
+	}
+
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested

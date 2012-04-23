@@ -258,13 +258,13 @@ HRESULT turnOffAero() {
   return aResult;
 }
 
-// calculates rectangle of the owner of the window over me
+// calculates rectangle of the hwnd
+// *might* no longer be necessary but...but...hmm...
 void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere) 
 {
   HRESULT aResult = S_OK;
 
-  HWND ownerHandle = ::GetWindow(ofThis, GW_OWNER );
-  ::GetWindowRect(ownerHandle, toHere); // default to old way of getting the window rectandle
+  ::GetWindowRect(ofThis, toHere); // default to old way of getting the window rectandle
 
   // Load the dll and keep the handle to it
   // must load dynamicaly because this dll exists only in vista -- not in xp.
@@ -288,11 +288,11 @@ void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere)
     DwmGetWindowAttribute = (DwmGetWindowAttributeFunction) ::GetProcAddress(dwmapiDllHandle, "DwmGetWindowAttribute" ) ;
     if( NULL != DwmGetWindowAttribute) 
     {
-      RECT extendedBounds;
-      HRESULT aResult = DwmGetWindowAttribute( ownerHandle, DWMWA_EXTENDED_FRAME_BOUNDS, &extendedBounds, sizeof( RECT) ) ;
+      HRESULT aResult = DwmGetWindowAttribute( ofThis, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof( RECT) ) ;
       if( SUCCEEDED( aResult ) )
       {
-		DwmGetWindowAttribute( ownerHandle, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof(RECT));
+		// hopefully we're ok either way
+		// DwmGetWindowAttribute( ofThis, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof(RECT));
       }
     }
    }
