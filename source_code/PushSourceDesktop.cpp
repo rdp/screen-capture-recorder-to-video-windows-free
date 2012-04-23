@@ -14,6 +14,9 @@
 
 DWORD globalStart; // performance benchmarking
 
+// dwm turn off shtuff
+#pragma comment(lib,"dwmapi.lib") 
+#include <dwmapi.h>
 
 
 // default child constructor...
@@ -89,9 +92,18 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
 
-	// m_rtFrameLength  also re-negotiated later...
+	// m_rtFrameLength is also re-negotiated later...
   	m_rtFrameLength = UNITS / config_max_fps; 
 
+	if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1) { // guess we're forced to build in Windows 7 now?
+      OSVERSIONINFOEX version;
+      ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
+      version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	  GetVersionEx((LPOSVERSIONINFO)&version);
+	  if(version.dwMajorVersion >= 6) { // vista +
+	    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+	  }
+	}
 #ifdef _DEBUG 
 	  wchar_t out[1000];
 	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps\n", m_iImageHeight, m_iImageWidth, 
