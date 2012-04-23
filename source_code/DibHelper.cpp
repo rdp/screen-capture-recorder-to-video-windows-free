@@ -92,7 +92,7 @@ void doBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
 	__int64 start = StartCounter();
 	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
 	long double elapsed = GetCounterSinceStartMillis(start);
-	LocalOutput("bitblt took %.020Lf ms", elapsed);
+	//LocalOutput("bitblt took %.020Lf ms", elapsed);
 }
 
 #include <malloc.h>
@@ -103,8 +103,9 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 
 	// I think cxImage uses this same call...
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
-	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...
-	LocalOutput("getdibits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms, but that's with 80fps compared to max 251...but for larger things might make more difference...
+	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...except it probably doesn't hurt much...
+
+	//LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }
 
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd);
@@ -163,17 +164,19 @@ HBITMAP CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *p
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
 	POINT p;
-	GetCursorPos(&p); // current x, y
+
+	// GetCursorPos(&p); // get current x, y 0.008 ms
 	
 	CURSORINFO globalCursor;
 	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-	ScreenToClient(hwnd, &p);
+	ScreenToClient(hwnd, &p); // 0.010ms
 
 	ICONINFO iconinfo;
-	BOOL ret = ::GetIconInfo(hcur, &iconinfo);
+	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms
+
 	if(ret) {
 		p.x -= iconinfo.xHotspot; // align it right, I guess...
 		p.y -= iconinfo.yHotspot;
@@ -186,12 +189,12 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 		}
 	}
 
-	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur);
-	LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // 0.1 ms, 0.13 ms with WindowFromDC et al
+	__int64 start2 = StartCounter();
+	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
+	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes 0.1 ms, 0.125 ms with WindowFromDC 
 }
 
-
-// some from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
+// partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
 
 // =====================================================================================
 HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {

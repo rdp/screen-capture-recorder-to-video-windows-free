@@ -101,13 +101,13 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
       ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
       version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 	  GetVersionEx((LPOSVERSIONINFO)&version);
-	  if(version.dwMajorVersion >= 6) { // vista +
+	  if(version.dwMajorVersion >= 6) { // meaning vista +
 	    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 	  }
 	}
 	if(read_config_setting(TEXT("track_new_x_y_coords_each_frame_if_1"), 0) == 1) {
 	  m_bReReadRegistry = 1;
-	  LocalOutput("set it to be re-reading..."); // it seems to take like 5ms each [?]
+	  LocalOutput("set it to be re-reading..."); // it seems to take like 5ms each time to re-read it... meh
 	}
 
 #ifdef _DEBUG 
@@ -115,6 +115,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps\n", m_iImageHeight, m_iImageWidth, 
 		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps);
 
+	  LocalOutput(out); // warmup for the below debug
 	  __int64 measureDebugOutputSpeed = StartCounter();
 	  LocalOutput(out);
 	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
