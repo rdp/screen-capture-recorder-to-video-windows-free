@@ -454,3 +454,57 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 
 	return hr;
 }
+
+
+void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
+{
+    HDC         hMemDC;         // screen DC and memory DC
+    HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
+    int         nX, nY, nX2, nY2;       // coordinates of rectangle to grab
+    int         nWidth, nHeight;        // DIB width and height
+
+    // check for an empty rectangle
+    if (IsRectEmpty(lpRect))
+      return;
+
+    // create a DC for the screen and create
+    // a memory DC compatible to screen DC   
+
+    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Any GetDC too...
+
+    // determine points of where to grab from it
+    nX  = lpRect->left;
+    nY  = lpRect->top;
+    nX2 = lpRect->right;
+    nY2 = lpRect->bottom;
+
+    nWidth  = nX2 - nX;
+    nHeight = nY2 - nY;
+
+    // create a bitmap compatible with the screen DC
+    hRawBitmap = CreateCompatibleBitmap(hScrDC, nWidth, nHeight);
+
+    // select new bitmap into memory DC
+    hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
+
+	// grab the hwnd if we're tracking it:
+	HWND hwnd = WindowFromDC(hScrDC); // LODO don't be lazy and use this method, pass HWND in, or "know" whether we care or not. :)
+
+	doJustBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
+
+	AddMouse(hMemDC, lpRect, hScrDC, hwnd);
+
+    // select old bitmap back into memory DC and get handle to
+    // bitmap of the capture...whatever this even means...
+	// Get the BITMAP from the HBITMAP [?]
+    hRawBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
+
+	// TODO de-dupe
+	doDIBits(hScrDC, hRawBitmap, nHeight, pData, pHeader);
+
+    // clean up
+    DeleteDC(hMemDC);
+
+	if (hRawBitmap) // HDIB is the same as HBITMAP apparently...
+        DeleteObject(hRawBitmap);
+}

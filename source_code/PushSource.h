@@ -104,6 +104,8 @@ protected:
 
 	boolean m_bReReadRegistry;
 
+    void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader);
+
 public:
 
     //////////////////////////////////////////////////////////////////////////

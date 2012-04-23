@@ -27,7 +27,6 @@ HDIB ChangeBitmapFormat (HBITMAP	hBitmap,
                          HPALETTE hPal);
 HDIB ChangeDIBFormat (HDIB hDIB, WORD wBitCount, DWORD dwCompression);
 
-void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader);
 HDIB CopyScreenToDIB (LPRECT);
 HBITMAP CopyWindowToBitmap (HWND, WORD);
 HDIB CopyWindowToDIB (HWND, WORD);
@@ -59,3 +58,6 @@ HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis );
 void WarmupCounter();
 __int64 StartCounter();
 long double GetCounterSinceStartMillis(__int64 start);
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd);
+void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY);
+void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
