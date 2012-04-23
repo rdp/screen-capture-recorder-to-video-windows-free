@@ -32,11 +32,12 @@
 const int kWidth  = 640; // originally 640x480 I think
 const int kHeight = 480;
 const int kFramesBlt = 100;
-const int kFramesRev = 10;
+// reverse actually means "from desktop" from us, I think
+const int kFramesRev = 100;
 
-// Record min/max/avg for bitblt and reverse-blt
+// Record min/max for bitblts
+
 LARGE_INTEGER totblt, totrev;
-
 double minblt = 100000000000;
 double minrev = 100000000000;
 double maxblt = 0;
@@ -73,9 +74,9 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			double toMB = double(kWidth * kHeight * 4) / 1024 / 1024;
 
-			char *nl = report + sprintf(report, "This is your theoretical maximum speed:\r\n\r\nCapture from window %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
-				kWidth, kHeight, afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
-			report + sprintf(nl, "Capture desktop (all windows, with aero) %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+			char *nl = report + sprintf(report, "Theoretical maximum speed (%dx%d):\r\n\r\nCapture from HWND Win %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+				kWidth, kHeight, kWidth, kHeight, afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
+			report + sprintf(nl, "Desktop (all windows,aero)%dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				kWidth, kHeight, afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
 			
 			HWND ec = ::GetDlgItem(hwnd, IDC_RESTEXT);
@@ -204,7 +205,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 		::ShowWindow((HWND)hwnd, SW_SHOWNORMAL);
 
-		if (!hwnd) return -1;
+		if (!hwnd) {
+			MessageBox(NULL, TEXT("unable to create window?"), NULL, MB_OK);
+			return -1;
+
+		}
 	}
 
 	// ------------------------------------------------------------------------------------------------'
@@ -253,7 +258,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	// ------------------------------------------------------------------------------------------------
 	// main loop
 	// ------------------------------------------------------------------------------------------------
-	for (int framecount = 0; framecount < kFramesBlt + kFramesRev; framecount ++) {
+	for (int framecount = 0; framecount < kFramesBlt + kFramesRev; framecount++) {
 
 		int result = 1;
 		MSG msg;
