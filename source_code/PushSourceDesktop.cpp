@@ -122,7 +122,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  LocalOutput(out);
 	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
 	  // does this work with flash?
-	  // set_config_string_setting(L"last_init_config_was", out);
+	  set_config_string_setting(L"last_init_config_was", out);
 #endif
 }
 
@@ -230,10 +230,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
+	swprintf(out, L"done frame! total frames so far: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
-	//LocalOutput(out);
-	set_config_string_setting(L"debug_out", out);
+	LocalOutput(out);
+	//set_config_string_setting(L"debug_out", out);
 #endif
 	previousFrameEndTime = endFrame;
     return S_OK;
@@ -262,9 +262,14 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 	if(formatAlreadySet) {
-		// you can only have one option, buddy, if formatAlreadySet. (see SetFormat's msdn)
+		// you can only have one option, buddy, if setFormat already called. (see SetFormat's msdn)
 		if(iPosition != 0)
           return E_INVALIDARG;
+		VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
+
+		// Set copies these in for us pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
+        // pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
+
 		pmt->Set(m_mt);
 		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*) m_mt.pbFormat;
 		VIDEOINFO *pviHere = (VIDEOINFO  *) pmt->pbFormat;
@@ -360,7 +365,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pvi->bmiHeader.biHeight     = m_iFullHeight;
     pvi->bmiHeader.biPlanes     = 1;
     pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
-    pvi->bmiHeader.biClrImportant = 0;
+    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the size
+
+	pvi->bmiHeader.biClrImportant = 0;
 	pvi->AvgTimePerFrame = m_rtFrameLength; // from our config or default
 
     SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
@@ -373,7 +380,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     // Work out the GUID for the subtype from the header info.
     const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
     pmt->SetSubtype(&SubTypeGUID);
-    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
+
 
     return NOERROR;
 

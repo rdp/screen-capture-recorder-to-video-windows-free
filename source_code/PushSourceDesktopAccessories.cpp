@@ -116,6 +116,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+	// pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
 	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the VLC segfaults anyway :P
@@ -212,13 +213,24 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
-		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less.  VLC does, for instance.
+		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than our default.  VLC can, for instance.
 		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // TODO scale [?]
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
+		
+		// these values it [skype] seems to just keep the default for. Which are too big now if it's down scaling. weird. Leave them too big I guess they don't matter anyway.
+		//pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader);
+		//pmt->lSampleSize = pvi->bmiHeader.biSizeImage;
+
+		if(getWidth() > m_iFullWidth || getHeight() > m_iFullHeight) {
+			return E_FAIL; // I can't believe skype seemingly did this once.  Huh?
+		}
 
 		// ignore other things like cropping requests
-		m_mt = *pmt; // and now save it away...
+
+		// now save it away...
+		m_mt = *pmt; 
   	    formatAlreadySet = true;
+		// continue on.
 	}
     IPin* pin;
     ConnectedTo(&pin);
@@ -234,6 +246,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		// graph hasn't been built yet...
 		// so we're ok with "whatever" format they pass us, we're just in the setup phase...
 	}
+
 	// success of some type
 	if(pmt == NULL) {
 		// they called it to reset us...
