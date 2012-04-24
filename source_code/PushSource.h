@@ -79,11 +79,13 @@ protected:
 	REFERENCE_TIME previousFrameEndTime;
 
     RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
-
-    int m_iImageHeight;                 // The current image height
-
-    int m_iImageWidth;                  // And current image width
     int m_nCurrentBitDepth;             // capture requested bit depth
+
+    int getWidth();                     // capture requested width
+    int getHeight();                   
+
+	int m_iFullWidth;
+	int m_iFullHeight;
 
     CMediaType m_MediaType;
     CImageDisplay m_Display;            // Figures out our media type for us

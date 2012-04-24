@@ -48,7 +48,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
         return E_INVALIDARG;
 
 	if(formatAlreadySet) {
-		// it must be the same as our current...see SetFormat msdn
+		// then it must be the same as our current...see SetFormat msdn
 	    if(m_mt == *pMediaType) {
 			return S_OK;
 		} else {
@@ -57,8 +57,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 	}
 
     // Check if the image width & height have changed
-    if(    pvi->bmiHeader.biWidth   != m_iImageWidth || 
-       abs(pvi->bmiHeader.biHeight) != m_iImageHeight)
+    if(    pvi->bmiHeader.biWidth   != getWidth() || 
+       abs(pvi->bmiHeader.biHeight) != getHeight())
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image.
@@ -101,16 +101,18 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
 	
 	int bytesPerLine;
+	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small...
 	// some pasted code...
-   bytesPerLine = header.biWidth * (header.biBitCount/8);
-   /* round up to a dword boundary */
-   if (bytesPerLine & 0x0003) 
-   {
-     bytesPerLine |= 0x0003;
-     ++bytesPerLine;
-   }
+    bytesPerLine = header.biWidth * (header.biBitCount/8);
+    /* round up to a dword boundary */
+    if (bytesPerLine & 0x0003) 
+    {
+      bytesPerLine |= 0x0003;
+      ++bytesPerLine;
+    }
 
 	ASSERT(header.biHeight > 0); // sanity check
+	ASSERT(header.biWidth > 0); // sanity check
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
@@ -211,9 +213,12 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less.  VLC does, for instance.
-		// we ignore other things like cropping requests
+		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // TODO scale [?]
+		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
+
+		// ignore other things like cropping requests
+		m_mt = *pmt; // and now save it away...
   	    formatAlreadySet = true;
-		m_mt = *pmt; // and save it away...
 	}
     IPin* pin;
     ConnectedTo(&pin);
@@ -276,47 +281,42 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
     DECLARE_PTR(VIDEO_STREAM_CONFIG_CAPS, pvscc, pSCC);
 	
     /*
-	  most are deprecated... yet some still used? odd
+	  most of these are listed as deprecated by msdn... yet some still used, apparently. odd.
 	*/
 
     pvscc->VideoStandard = AnalogVideo_None;
-    pvscc->InputSize.cx = m_iImageWidth;
-	pvscc->InputSize.cy = m_iImageHeight;
+    pvscc->InputSize.cx = m_iFullWidth;
+	pvscc->InputSize.cy = m_iFullHeight;
 
-	pvscc->MinCroppingSize.cx = m_iImageWidth;
-    pvscc->MinCroppingSize.cy = m_iImageHeight;
-    pvscc->MaxCroppingSize.cx = m_iImageWidth;
-    pvscc->MaxCroppingSize.cy = m_iImageHeight;
-    pvscc->CropGranularityX = 1; // most of these values are fake..
+	// most of these values are fakes..
+	pvscc->MinCroppingSize.cx = m_iFullWidth;
+    pvscc->MinCroppingSize.cy = m_iFullHeight;
+
+    pvscc->MaxCroppingSize.cx = m_iFullWidth;
+    pvscc->MaxCroppingSize.cy = m_iFullHeight;
+
+    pvscc->CropGranularityX = 1;
     pvscc->CropGranularityY = 1;
-    pvscc->CropAlignX = 0;
-    pvscc->CropAlignY = 0;
+    pvscc->CropAlignX = 1;
+    pvscc->CropAlignY = 1;
 
-    pvscc->MinOutputSize.cx = m_iImageWidth;
-    pvscc->MinOutputSize.cy = m_iImageHeight;
-    pvscc->MaxOutputSize.cx = m_iImageWidth;
-    pvscc->MaxOutputSize.cy = m_iImageHeight;
+    pvscc->MinOutputSize.cx = 1;
+    pvscc->MinOutputSize.cy = 1;
+    pvscc->MaxOutputSize.cx = m_iFullWidth;
+    pvscc->MaxOutputSize.cy = m_iFullHeight;
     pvscc->OutputGranularityX = 1;
     pvscc->OutputGranularityY = 1;
-    pvscc->StretchTapsX = 0;
-    pvscc->StretchTapsY = 0;
-    pvscc->ShrinkTapsX = 0;
-    pvscc->ShrinkTapsY = 0;
-	
 
-	/* LODO can they request a frame interval? huh? it seems like they could somehow hmm...
-	// if they could then we should allow it here, too...should...
-    pvscc->MinFrameInterval = 200000;   //50 fps
-    pvscc->MaxFrameInterval = 50000000; // 0.2 fps
-	pvscc->MinBitsPerSecond = (80 * 60 * 3 * 8) / 5;
-    pvscc->MaxBitsPerSecond = 640 * 480 * 3 * 8 * 50;
-	*/
+    pvscc->StretchTapsX = 1; // We do 1 tap. I guess...
+    pvscc->StretchTapsY = 1;
+    pvscc->ShrinkTapsX = 1;
+    pvscc->ShrinkTapsY = 1;
 
-	pvscc->MinFrameInterval = m_rtFrameLength; // large default is a small min frame interval
+	pvscc->MinFrameInterval = m_rtFrameLength; // the larger default is actually the MinFrameInterval, not the max
 	pvscc->MaxFrameInterval = 50000000; // 0.2 fps
 
-    pvscc->MinBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*8*GetFps(); // if in 8 bit mode. I guess.
-    pvscc->MaxBitsPerSecond = (LONG) m_iImageWidth*m_iImageHeight*32*GetFps();
+    pvscc->MinBitsPerSecond = (LONG) 1*1*8*GetFps(); // if in 8 bit mode 1x1. I guess.
+    pvscc->MaxBitsPerSecond = (LONG) m_iFullWidth*m_iFullHeight*32*GetFps() + 44; // + 44 header size? + the palette?
 
 	return hr;
 }

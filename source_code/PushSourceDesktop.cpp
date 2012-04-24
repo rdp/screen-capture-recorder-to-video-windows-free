@@ -21,8 +21,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         m_FramesWritten(0),
 		m_bReReadRegistry(0),
 		m_bDeDupe(0),
-       // m_bZeroMemory(0),
         m_iFrameNumber(0),
+		m_iFullWidth(0),
+	    m_iFullHeight(0),
         //m_nCurrentBitDepth(32), // negotiated...
 		m_pParent(pFilter),
 		formatAlreadySet(false)
@@ -45,7 +46,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
     hScrDc = GetDC(m_iHwndToTrack);
 	ASSERT(hScrDc != 0);
-    // Get the dimensions of the main desktop window
+
+    // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
     m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
     m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
@@ -70,6 +72,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 
+	m_iFullWidth = m_rScreen.right - m_rScreen.left;
+	ASSERT(m_iFullWidth > 0);
+
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
 		//int max_possible = m_rScreen.bottom; // disabled, see above.
@@ -80,16 +85,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	} else {
 		// leave full screen
 	}
+	m_iFullHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(m_iFullHeight > 0);
 	
-    // Save dimensions for later use in FillBuffer() et al
-    m_iImageWidth  = m_rScreen.right  - m_rScreen.left;
-    m_iImageHeight = m_rScreen.bottom - m_rScreen.top;
-
-
-
-	ASSERT(m_iImageWidth > 0);
-	ASSERT(m_iImageHeight > 0);
-
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
@@ -116,17 +114,30 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];
-	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between polling %d, m_bReReadRegistry? %d \n", m_iImageHeight, m_iImageWidth, 
+	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", getHeight(), getWidth(), 
 		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
 
 	  LocalOutput(out); // warmup for the below debug
 	  __int64 measureDebugOutputSpeed = StartCounter();
 	  LocalOutput(out);
 	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
-	// does this work with flash?
-	// set_config_string_setting(L"last_set_it_to", out);
+	  // does this work with flash?
+	  // set_config_string_setting(L"last_init_config_was", out);
 #endif
 }
+
+int CPushPinDesktop::getWidth() {
+    int iImageWidth  = m_rScreen.right  - m_rScreen.left;
+	ASSERT(iImageWidth > 0);
+	return iImageWidth;
+}
+
+int CPushPinDesktop::getHeight() {
+    int iImageHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(iImageHeight > 0);
+	return iImageHeight;
+}
+
 
 BYTE *pOldData = NULL;
 
@@ -218,8 +229,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	//LocalOutput("done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
-	//	fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
+	wchar_t out[1000];
+	swprintf(out, L"done frame! total frames so far: %d this one took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, millisThisRoundTook, 
+		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
+	//LocalOutput(out);
+	set_config_string_setting(L"debug_out", out);
 #endif
 	previousFrameEndTime = endFrame;
     return S_OK;
@@ -248,14 +262,16 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 	if(formatAlreadySet) {
+		// you can only have one option, buddy, if formatAlreadySet. (see SetFormat's msdn)
 		if(iPosition != 0)
           return E_INVALIDARG;
-		// you can only have one option, buddy. (see SetFormat's msdn)
 		pmt->Set(m_mt);
-		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*)m_mt.pbFormat;
+		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*) m_mt.pbFormat;
 		VIDEOINFO *pviHere = (VIDEOINFO  *) pmt->pbFormat;
 		return S_OK;
 	}
+
+	// do we ever even get past here? hmm
 
     if(iPosition < 0)
         return E_INVALIDARG;
@@ -340,8 +356,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
     // Now adjust some parameters that are the same for all formats
     pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
-    pvi->bmiHeader.biWidth      = m_iImageWidth;
-    pvi->bmiHeader.biHeight     = m_iImageHeight;
+    pvi->bmiHeader.biWidth      = m_iFullWidth;
+    pvi->bmiHeader.biHeight     = m_iFullHeight;
     pvi->bmiHeader.biPlanes     = 1;
     pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
     pvi->bmiHeader.biClrImportant = 0;
@@ -380,14 +396,14 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	m_rScreen.top = config_start_y;
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  if(isReRead) {
-		m_rScreen.right = m_rScreen.left + m_iImageWidth;
-		m_rScreen.bottom = m_rScreen.top + m_iImageHeight;
+		m_rScreen.right = m_rScreen.left + getWidth();
+		m_rScreen.bottom = m_rScreen.top + getHeight();
 	  }
 	}
     wchar_t out[1000];
 	swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
-	LocalOutput(out);
 	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start));
+	LocalOutput(out);
 }
 
 CPushPinDesktop::~CPushPinDesktop()

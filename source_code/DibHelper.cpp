@@ -198,9 +198,8 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
 
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
 	
-   HKEY hKey;
-   LONG i;
-    
+    HKEY hKey;
+    LONG i;    
     DWORD dwDisp = 0;
     LPDWORD lpdwDisp = &dwDisp;
 
