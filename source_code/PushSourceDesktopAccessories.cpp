@@ -112,12 +112,11 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
 	ASSERT(header.biHeight > 0); // sanity check
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
-	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debut it LOL.
+	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
-
-	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the segfaults anyway :P
+	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the VLC segfaults anyway :P
 
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the

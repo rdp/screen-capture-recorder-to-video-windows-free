@@ -128,7 +128,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 #endif
 }
 
-BYTE *pOldData = NULL; // TODO free it...
+BYTE *pOldData = NULL;
 
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
@@ -200,7 +200,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
           CSourceStream::m_pFilter->StreamTime(now);
 		}
 	} else {
-		LocalOutput("it missed some time"); // we don't miss time I don't think
+		LocalOutput("it missed some time"); // we don't miss time typically I don't think
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
@@ -378,16 +378,16 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	// is there a better way to do this registry stuff?
 	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top);
 	m_rScreen.top = config_start_y;
- wchar_t out[1000];
-	  swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
-	  LocalOutput(out);
-	  LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start));
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  if(isReRead) {
 		m_rScreen.right = m_rScreen.left + m_iImageWidth;
 		m_rScreen.bottom = m_rScreen.top + m_iImageHeight;
 	  }
 	}
+    wchar_t out[1000];
+	swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
+	LocalOutput(out);
+	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start));
 }
 
 CPushPinDesktop::~CPushPinDesktop()
@@ -397,11 +397,10 @@ CPushPinDesktop::~CPushPinDesktop()
 	// I don't think it ever even gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 	if(pOldData)
-		free(pOldData);
-
+		free(pOldData); // de-dupe stuff
 }
 
-// according to msdn, too
+// according to msdn...
 HRESULT CPushSourceDesktop::GetState(DWORD dw, FILTER_STATE *pState)
 {
     CheckPointer(pState, E_POINTER);
