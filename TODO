@@ -5,30 +5,22 @@ distribute with msiexec[s]
 sleep approx. round up
 don't creep on "slept too long" [were we equal before my start, prev. end?]
 
-== maybe ==
+or use own clock/iampushsource maybe
+
+try sleep 'right' ms
+
+== maybe/never ==
 
 "follow mouse" option LOL
 
 increase priority when capturing?
+  optionally
 
 try "setting time for one frame in the future"
   seemed to fail
   
-try "set start time, take snapshot, set end time" [?]
-  
-  
-me disable aero <gah for windows 8, but that's in the future though...>
   or figure out if I can even get better than 15 fps at all.
   TODO: beat 15 fps in windows 7/8
-
-flip a bit when you're "on" versus "off" (in the registry)
-
-dedupe?
-
-try MAX(now, end previous)
-  sent it...
-
-try sleep 'right' ms
 
 don't use getDIBits [raw memcpy?] if we already match the right stuff. Oh wait getDIBits is probably already optimized for this case so we might not gain
 anything, plus, this is a teeny overhead, compared to aero at least. Like nuffin'
