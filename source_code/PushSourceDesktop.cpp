@@ -110,7 +110,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
 		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
 	}
-	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_changes"), 10);
+	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];
@@ -211,12 +211,12 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
           CSourceStream::m_pFilter->StreamTime(now);
 		}
 	} else {
-		LocalOutput("it missed some time"); // we don't miss time typically I don't think
+		LocalOutput("it missed some time"); // we don't miss time typically I don't think, un
 	}
 	REFERENCE_TIME endFrame = now + m_rtFrameLength;
 	
     pSample->SetTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
-	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless
+	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless seemingly
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
@@ -233,7 +233,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	swprintf(out, L"done frame! total frames so far: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 	LocalOutput(out);
-	//set_config_string_setting(L"debug_out", out);
+	set_config_string_setting(L"debug_out", out);
 #endif
 	previousFrameEndTime = endFrame;
     return S_OK;
@@ -267,8 +267,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
           return E_INVALIDARG;
 		VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 
-		// Set copies these in for us pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
+		// Set() copies these in for us pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
         // pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
+		// nobody uses sample size anyway :P
 
 		pmt->Set(m_mt);
 		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*) m_mt.pbFormat;

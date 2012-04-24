@@ -1,4 +1,13 @@
+0.6.0 4/24/12
+
 fix mouse if using hwnd, allow for hex input to command liner
+
+Add *tons* more options in the registry, also make it so you can specify a small window if desired, ex: vlc's --dshow-size="100x100" [crops currently, subject to change!]
+
+new registry options:
+
+'disable_aero_for_vista_plus_if_1', 'track_new_x_y_coords_each_frame_if_1', 
+    'dedup_if_1', 'millis_to_sleep_between_poll_for_dedupe_changes'
 
 0.5.0 4-10-12
 

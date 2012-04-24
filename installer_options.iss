@@ -1,13 +1,15 @@
-#define AppVer "0.5.0"
+#define AppVer "0.6.0"
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
+
+[Run]
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.027.ax
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.027.ax
-[Run]
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.027.ax
+
 [Files]
 Source: source_code\Win32\Release\PushDesktop.ax; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme

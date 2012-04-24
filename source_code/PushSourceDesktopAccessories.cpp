@@ -116,7 +116,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
-	// pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help
+	// pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
+	
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
 	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the VLC segfaults anyway :P
@@ -222,7 +223,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		//pmt->lSampleSize = pvi->bmiHeader.biSizeImage;
 
 		if(getWidth() > m_iFullWidth || getHeight() > m_iFullHeight) {
-			return E_FAIL; // I can't believe skype seemingly did this once.  Huh?
+			return E_FAIL; // I can't believe skype seemed did this once.  Huh?
 		}
 
 		// ignore other things like cropping requests

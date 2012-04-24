@@ -7,7 +7,7 @@ require 'win32/registry'
 class SetupScreenTrackerParams
   Settings = ['height', 'width', 'start_x', 'start_y', 'default_max_fps', 
     'hwnd_to_track', 'disable_aero_for_vista_plus_if_1', 'track_new_x_y_coords_each_frame_if_1', 
-    'dedup_if_1', 'millis_to_sleep_between_poll_for_changes']
+    'dedup_if_1', 'millis_to_sleep_between_poll_for_dedupe_changes']
  
    def delete_single_setting name
     with_reg do
