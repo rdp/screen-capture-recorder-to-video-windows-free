@@ -22,10 +22,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bReReadRegistry(0),
 		m_bDeDupe(0),
         m_iFrameNumber(0),
-		m_iFullWidth(0),
+		pOldData(NULL),
 		m_iConvertToI420(false),
-	    m_iFullHeight(0),
-        //m_nCurrentBitDepth(32), // negotiated...
+        //m_nCurrentBitDepth(32), // negotiated later...
 		m_pParent(pFilter),
 		formatAlreadySet(false)
 {
@@ -140,8 +139,6 @@ int CPushPinDesktop::getHeight() {
 }
 
 
-BYTE *pOldData = NULL;
-
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
@@ -178,21 +175,15 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  // pSample->AddRef(); // causes it to hang, so create our own copies
 
 	  if(m_bDeDupe) {
-		if(pOldData) {
-			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // desktop:  10ms for 640x1152, still 100 fps uh guess...
+			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // took desktop:  10ms for 640x1152, still 100 fps uh guess...
 			  Sleep(m_millisToSleepBeforePollForChanges);
 			} else {
 			  gotNew = true;
-			  memcpy(pOldData, pData, pSample->GetSize()); // 4ms for 640x1152, but it's worth it LOL.
+			  memcpy(pOldData, pData, pSample->GetSize()); // took 4ms for 640x1152, but it's worth it LOL.
+			  // LODO memcmp and memcpy at the same time LOL.
 			}
-		} else {
-		  // init
-		  pOldData =(BYTE *) malloc(pSample->GetSize());
-		  memcpy(pOldData, pData, pSample->GetSize());
-		  gotNew = true;
-		}
 	  } else {
-		// it's always new!
+		// it's always new for everyone else!
 	    gotNew = true;
 	  }
 	}
@@ -429,8 +420,11 @@ CPushPinDesktop::~CPushPinDesktop()
     DeleteDC(hScrDc);
 	// I don't think it ever even gets here... somebody doesn't call it anyway :)
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
-	if(pOldData)
-		free(pOldData); // de-dupe stuff
+
+    if(pOldData) {
+		free(pOldData);
+		pOldData = NULL;
+	}
 }
 
 // according to msdn...
@@ -571,8 +565,6 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	
 	if(m_iConvertToI420) {
-		if(!pOldData) 
-			pOldData = (BYTE *) malloc(pSample->GetSize()); // TODO this assumes our sample sizes never change...hmm...probably just allocate this after a call to SetFormat or some odd.
 	   memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here x2[?]
 		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 31ms for 1920x1080 desktop	

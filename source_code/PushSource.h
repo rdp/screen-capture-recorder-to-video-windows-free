@@ -107,6 +107,7 @@ protected:
 	HWND m_iHwndToTrack;
     void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
 	void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY);
+    BYTE *pOldData;
 
 public:
 

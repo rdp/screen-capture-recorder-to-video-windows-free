@@ -166,6 +166,13 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     {
         return E_FAIL;
     }
+    if(pOldData) {
+		free(pOldData);
+		pOldData = NULL;
+	}
+    pOldData =(BYTE *) malloc(pProperties->cbBuffer*pProperties->cBuffers);
+    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // just in case :P
+	
 
     return NOERROR;
 
