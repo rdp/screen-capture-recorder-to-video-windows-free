@@ -351,7 +351,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             break;
         }
 		case 6:
-		{ // i420 freak-o
+		{ // the i420 freak-o
                pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
                pvi->bmiHeader.biBitCount    = 12;
 			   pvi->bmiHeader.biSizeImage = (m_iFullWidth*m_iFullHeight*3)/2; 
@@ -412,7 +412,7 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	  }
 	}
     wchar_t out[1000];
-	swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
+	swprintf(out, 1000, L"new screen pos from reg: %d %d\n", config_start_x, config_start_y);
 	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start)); // 0.416880ms
 	LocalOutput(out);
 }
@@ -421,8 +421,8 @@ CPushPinDesktop::~CPushPinDesktop()
 {   
     // Release the device context
     DeleteDC(hScrDc);
-	// I don't think it ever even gets here... somebody doesn't call it anyway :)
-    DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
+	// They *should* call this...
+    DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
 
     if(pOldData) {
 		free(pOldData);
@@ -562,7 +562,7 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	if(m_iConvertToI420) {
 		tweakableHeader.bmiHeader.biBitCount = 32;
 		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
-		tweakableHeader.bmiHeader.biCompression = 0;
+		tweakableHeader.bmiHeader.biCompression = BI_RGB;
 		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down...
 	}
 	doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.

@@ -41,8 +41,6 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     // Get the format area of the media type
     VIDEOINFO *pvi = (VIDEOINFO *) pMediaType->Format();
 
-	// const GUID i420 = WMMEDIASUBTYPE_I420; // should == 30323449-0000-0010-8000-00AA00389B71
-
     if(    (SubType2 != MEDIASUBTYPE_RGB8) // these are all the same value? But maybe the pointers are different. Hmm.
         && (SubType2 != MEDIASUBTYPE_RGB565)
         && (SubType2 != MEDIASUBTYPE_RGB555)
@@ -50,18 +48,22 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
         && (SubType2 != MEDIASUBTYPE_RGB32)
 		)
     {
-		if(SubType2 == WMMEDIASUBTYPE_I420) { // sometimes 
+		if(SubType2 == WMMEDIASUBTYPE_I420) { // 30323449-0000-0010-8000-00AA00389B71 MEDIASUBTYPE_I420 == WMMEDIASUBTYPE_I420
 			if(pvi->bmiHeader.biBitCount == 12) {
 				// ok
 			}else {
 			  return E_INVALIDARG;
 			}
 		} else {
-          return E_INVALIDARG; // sometimes they ask for YV12 {32315659-0000-0010-8000-00AA00389B71}, or MEDIASUBTYPE_IYUV {56555949-0000-0010-8000-00AA00389B71}, which is apparently "identical format" to I420
+          return E_INVALIDARG; // sometimes FLME asks for YV12 {32315659-0000-0010-8000-00AA00389B71}, or  
+		  // 32595559-0000-0010-8000-00AA00389B71  MEDIASUBTYPE_YUY2, which is apparently "identical format" to I420
+		  // 43594448-0000-0010-8000-00AA00389B71  MEDIASUBTYPE_HDYC
+		  // 59565955-0000-0010-8000-00AA00389B71  MEDIASUBTYPE_UYVY
+		  // 56555949-0000-0010-8000-00AA00389B71  MEDIASUBTYPE_IYUV # dunno if I actually get this one
 		}
     } else {
 		 // RGB's -- ok -- WFMLE doesn't get here :P
-
+		 return E_INVALIDARG;
 	}
 
     if(pvi == NULL)
