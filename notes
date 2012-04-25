@@ -8,6 +8,8 @@ ffmpeg did not show the lower limit [right?] TODO
 vscrcap did work, with preview of just that window [weird]
   then grabbed a little left, [also weird, unrelatedly]
   couldn't go low enough. ok weird.
+
+// VLC does seem to reject I420, WFMLE reject's RGB
   
 = getdibits speed =
 

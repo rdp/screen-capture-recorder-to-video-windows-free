@@ -60,8 +60,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
           return E_INVALIDARG; // sometimes they ask for YV12 {32315659-0000-0010-8000-00AA00389B71}, or MEDIASUBTYPE_IYUV {56555949-0000-0010-8000-00AA00389B71}, which is apparently "identical format" to I420
 		}
     } else {
-		 return E_INVALIDARG; // for now :P
-		 // RGB's -- ok -- WFME doesn't get here though.
+		 // RGB's -- ok -- WFMLE doesn't get here :P
+
 	}
 
     if(pvi == NULL)
@@ -171,13 +171,11 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 		pOldData = NULL;
 	}
     pOldData =(BYTE *) malloc(pProperties->cbBuffer*pProperties->cBuffers);
-    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // just in case :P
-	
+    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // just in case :P	
 
     return NOERROR;
 
 } // DecideBufferSize
-
 
 //
 // SetMediaType
