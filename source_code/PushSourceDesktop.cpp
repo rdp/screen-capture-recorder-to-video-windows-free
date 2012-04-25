@@ -138,6 +138,7 @@ int CPushPinDesktop::getHeight() {
 	return iImageHeight;
 }
 
+int countMissed = 0;
 
 // This is where we insert the DIB bits into the video stream.
 // FillBuffer is called once for every sample in the stream.
@@ -201,10 +202,14 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		}
 		// avoid a tidge of creep since we sleep until [typically] just past the previous end.
 		endFrame = previousFrameEndTime + m_rtFrameLength;
+	    
 	} else {
-	  LocalOutput("it missed some time"); // we don't miss time typically I don't think, unless de-dupe is turned on
-	  endFrame = now + m_rtFrameLength;
+	  LocalOutput("it missed some time %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on
+	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
+	  endFrame = now + m_rtFrameLength/10;
+	  //previousFrameEndTime = previousFrameEndTime + m_rtFrameLength; // pretend to let it try and catch up, if it ever can :P
 	}
+	previousFrameEndTime = endFrame;
     
 	LocalOutput("marking frame %llu %llu", now, endFrame);
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
@@ -212,7 +217,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
-	previousFrameEndTime = endFrame;
 
 	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
     pSample->SetSyncPoint(TRUE);
