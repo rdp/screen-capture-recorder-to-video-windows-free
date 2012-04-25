@@ -106,7 +106,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  }
 	}
 	if(is_config_set_to_1(TEXT("track_new_x_y_coords_each_frame_if_1"))) {
-		m_bReReadRegistry = 1; // takes 5ms
+		m_bReReadRegistry = 1; // takes 0.416880ms, but I thought it took more when I made it off by default :P
 	}
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
 		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
@@ -419,7 +419,7 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	}
     wchar_t out[1000];
 	swprintf(out, 1000, L"new screen post from reg: %d %d\n", config_start_x, config_start_y);
-	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start));
+	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start)); // 0.416880ms
 	LocalOutput(out);
 }
 
@@ -573,9 +573,9 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	if(m_iConvertToI420) {
 		if(!pOldData) 
 			pOldData = (BYTE *) malloc(pSample->GetSize()); // TODO this assumes our sample sizes never change...hmm...probably just allocate this after a call to SetFormat or some odd.
-	    memcpy(/* dest */ pOldData, pData, pSample->GetSize());
+	   memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here x2[?]
-		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);		
+		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 31ms for 1920x1080 desktop	
 	} else {
 		// nada :P
 	}
