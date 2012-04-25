@@ -565,15 +565,15 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 		tweakableHeader.bmiHeader.biCompression = BI_RGB;
 		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down...
 	}
-	doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	
 	if(m_iConvertToI420) {
+		doDIBits(hScrDC, hRawBitmap, nHeight, pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here x2[?]
 		// seems to work to read and write from the same buffer...bit scary :P
-		rgb32_to_i420(nWidth, nHeight, (const char *) pData, (char *) pData);// 31ms for 1920x1080 desktop	
+		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 31ms for 1920x1080 desktop	
 	} else {
-		// nada :P
+	  doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	}
 
     // clean up

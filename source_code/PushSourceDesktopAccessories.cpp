@@ -129,9 +129,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small...
 	// some pasted code...
 	int bytesPerPixel = (header.biBitCount/8);
-
 	if(m_iConvertToI420) {
-		bytesPerPixel = (32/8); // we may need more space everywhere like 32 bits...TODO pData may not actually need to be this big...yikes
+		bytesPerPixel = 32/8; // we convert from 32 bit
 	}
 
     bytesPerLine = header.biWidth * bytesPerPixel;
@@ -146,9 +145,13 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	ASSERT(header.biWidth > 0); // sanity check
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
-	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+	int bitmapSize = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+	pProperties->cbBuffer = bitmapSize;
 	//pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
-	
+	if(m_iConvertToI420) {
+	  pProperties->cbBuffer = header.biHeight * header.biWidth*3/2; // necessary to prevent an "out of memory" error for FMLE. Yikes. Oh wow yikes.
+	}
+
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
 	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the VLC segfaults anyway :P
@@ -172,7 +175,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 		free(pOldData);
 		pOldData = NULL;
 	}
-    pOldData =(BYTE *) malloc(pProperties->cbBuffer*pProperties->cBuffers);
+    pOldData = (BYTE *) malloc(max(pProperties->cbBuffer*pProperties->cBuffers, bitmapSize));
     memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
 
     return NOERROR;
