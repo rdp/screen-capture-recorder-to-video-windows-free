@@ -202,14 +202,17 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		}
 		// avoid a tidge of creep since we sleep until [typically] just past the previous end.
 		endFrame = previousFrameEndTime + m_rtFrameLength;
+	    endFrame = max(0, endFrame);
+	    previousFrameEndTime = endFrame;
 	    
 	} else {
 	  LocalOutput("it missed some time %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
-	  endFrame = now + m_rtFrameLength/10;
-	  //previousFrameEndTime = previousFrameEndTime + m_rtFrameLength; // pretend to let it try and catch up, if it ever can :P
+      endFrame = now + m_rtFrameLength;
+	  previousFrameEndTime = previousFrameEndTime + m_rtFrameLength; // pretend to let it try and catch up, if it ever can :P
+	 //previousFrameEndTime = endFrame;
 	}
-	previousFrameEndTime = endFrame;
+	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
     
 	LocalOutput("marking frame %llu %llu", now, endFrame);
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);

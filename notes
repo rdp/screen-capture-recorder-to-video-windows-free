@@ -1,6 +1,48 @@
-= with adjust timestamp =
+= with adjust timestamp etc.=
 
-28.7 old 29.2 new after 2000 frames. sweet.
+== after 2000 frames ==
+28.7 old "bad way" 
+29.2 new /1
+29.4 with "let it try and catch up"
+
+/10:
+
+[75 fps]
+
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695109797791)
+main warning: late buffer for mux input (59001)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695109831124)
+main warning: late buffer for mux input (48233)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695109864457)
+main warning: late buffer for mux input (30142)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695109897791)
+main warning: late buffer for mux input (17535)
+main warning: late buffer for mux input (11623)
+main warning: late buffer for mux input (85)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695109997791)
+main warning: late buffer for mux input (20703)
+main warning: late buffer for mux input (8251)
+main warning: late buffer for mux input (11175)
+main warning: late buffer for mux input (13749)
+main warning: late buffer for mux input (21396)
+main warning: late buffer for mux input (21325)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695111029206)
+main warning: late buffer for mux input (59648)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (695111062539)
+main warning: late buffer for mux input (68080)
+
+/1:
+
+3000 bad messages
+3800 reset
+4200 bad
+4730 reset
+5000 bad
+
++ 1:
+
+117 fps
+unresponsive VLC.
 
 = FMLE =
 
