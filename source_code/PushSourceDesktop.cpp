@@ -3,6 +3,7 @@
 #include "PushSource.h"
 #include "PushGuids.h"
 #include "DibHelper.h"
+#include <wmsdkidl.h>
 
 /**********************************************
  *
@@ -12,10 +13,9 @@
  **********************************************/
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger! can evaluate "a" twice.
 
-DWORD globalStart; // performance benchmarking
+DWORD globalStart; // for some debug performance benchmarking
 
-
-// default child constructor...
+// the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
@@ -28,7 +28,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_pParent(pFilter),
 		formatAlreadySet(false)
 {
-	
+
 	// The main point of this sample is to demonstrate how to take a DIB
 	// in host memory and insert it into a video stream. 
 
@@ -355,6 +355,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
                pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
                pvi->bmiHeader.biBitCount    = 12;
 			   pvi->bmiHeader.biSizeImage = (m_iFullWidth*m_iFullHeight*3)/2; 
+			   pmt->SetSubtype(&WMMEDIASUBTYPE_I420);
 			   break;
 		}
     }
@@ -364,7 +365,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pvi->bmiHeader.biWidth      = m_iFullWidth;
     pvi->bmiHeader.biHeight     = m_iFullHeight;
     pvi->bmiHeader.biPlanes     = 1;
-	if(pvi->bmiHeader.biSizeImage==0)
+	if(pvi->bmiHeader.biSizeImage == 0)
       pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
     pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the above size
 
@@ -379,8 +380,10 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pmt->SetTemporalCompression(FALSE);
 
     // Work out the GUID for the subtype from the header info.
-    const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
-    pmt->SetSubtype(&SubTypeGUID);
+	if(*pmt->Subtype() == GUID_NULL) {
+      const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
+      pmt->SetSubtype(&SubTypeGUID);
+	}
 
 
     return NOERROR;
@@ -565,7 +568,7 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	
 	if(m_iConvertToI420) {
-	   // memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
+	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here x2[?]
 		// seems to work to read and write from the same buffer...bit scary :P
 		rgb32_to_i420(nWidth, nHeight, (const char *) pData, (char *) pData);// 31ms for 1920x1080 desktop	

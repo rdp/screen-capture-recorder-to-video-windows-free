@@ -103,7 +103,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 // DecideBufferSize
 //
 // This will always be called after the format has been sucessfully
-// negotiated. So we have a look at m_mt to see what size image we agreed.
+// negotiated (negotiatebuffersize). So we have a look at m_mt to see what size image we agreed.
 // Then we can ask for buffers of the correct size to contain them.
 //
 HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
@@ -129,7 +129,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	int bytesPerPixel = (header.biBitCount/8);
 
 	if(m_iConvertToI420) {
-		bytesPerPixel = (32/8); // we'll need more space everywhere...TODO pData may not actually need to be this big...yikes
+		bytesPerPixel = (32/8); // we may need more space everywhere like 32 bits...TODO pData may not actually need to be this big...yikes
 	}
 
     bytesPerLine = header.biWidth * bytesPerPixel;
@@ -145,7 +145,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	pProperties->cbBuffer = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
-	// pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
+	//pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
 	
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
@@ -171,7 +171,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 		pOldData = NULL;
 	}
     pOldData =(BYTE *) malloc(pProperties->cbBuffer*pProperties->cBuffers);
-    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // just in case :P	
+    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
 
     return NOERROR;
 
