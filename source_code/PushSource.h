@@ -73,13 +73,14 @@ public:
     int m_iFrameNumber;
 
 protected:
+
     int m_FramesWritten;				// To track where we are, mostly debug now
     REFERENCE_TIME m_rtFrameLength; // also used to get the fps
 	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
 
     RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
-    int m_nCurrentBitDepth;             // capture requested bit depth
+    //int m_nCurrentBitDepth;             // capture requested bit depth
 
     int getWidth();                     // capture requested width
     int getHeight();                   
@@ -91,16 +92,12 @@ protected:
     CImageDisplay m_Display;            // Figures out our media type for us
 	CPushSourceDesktop* m_pParent;
 
-	// unused now
-	// int m_iScreenBitRate;
 	HDC hScrDc;
 
-
 	//CCritSec m_cSharedState;            // Protects our internal state
-    //int m_iRepeatTime;                  // Time in msec between frames
 
-	//AM_MEDIA_TYPE requestedHardenedFormat; //just use m_mt instead of an extra local copy here...
 	bool formatAlreadySet;
+	bool m_iConvertToI420;
 
 	float GetFps();
 

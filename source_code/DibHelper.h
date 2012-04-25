@@ -65,3 +65,4 @@ void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData,
 
 void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere);
 HRESULT turnOffAero();
+int rgb32_to_i420(int width, int height, const char * src, char * dst);

@@ -4,9 +4,10 @@
     <LocalDebuggerCommand>a</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe </LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Program Files (x86)\Adobe\Flash Media Live Encoder 3.2\FlashMediaLiveEncoder.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>dshow:// --dshow-fps=30 --dshow-adev=none --dshow-vdev=screen-capture-recorder -vvv --dshow-size="100x100"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommand>c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe</LocalDebuggerCommand>

@@ -23,6 +23,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bDeDupe(0),
         m_iFrameNumber(0),
 		m_iFullWidth(0),
+		m_iConvertToI420(false),
 	    m_iFullHeight(0),
         //m_nCurrentBitDepth(32), // negotiated...
 		m_pParent(pFilter),
@@ -147,7 +148,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
 	__int64 startThisRound = StartCounter();
 	BYTE *pData;
-    long cbData;
 
     CheckPointer(pSample, E_POINTER);
 	if(m_bReReadRegistry) {
@@ -156,7 +156,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
-    cbData = pSample->GetSize();
 
     // Make sure that we're still using video format
     ASSERT(m_mt.formattype == FORMAT_VideoInfo);
@@ -172,24 +171,24 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	boolean gotNew = false;
 	while(!gotNew) {
-	  // Copy the DIB bits over into our filter's output buffer.
-	  // cbData is the size of pData FWIW
+	  // Copy the DIB bits/raw bits for i420 over into our filter's output buffer.
+
       CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
 	  // pSample->AddRef(); // causes it to hang, so create our own copies
 
 	  if(m_bDeDupe) {
 		if(pOldData) {
-			if(memcmp(pData, pOldData, cbData)==0) { // desktop:  10ms for 640x1152, still 100 fps uh guess...
+			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // desktop:  10ms for 640x1152, still 100 fps uh guess...
 			  Sleep(m_millisToSleepBeforePollForChanges);
 			} else {
 			  gotNew = true;
-			  memcpy(pOldData, pData, cbData); // 4ms for 640x1152, but it's worth it LOL.
+			  memcpy(pOldData, pData, pSample->GetSize()); // 4ms for 640x1152, but it's worth it LOL.
 			}
 		} else {
 		  // init
-		  pOldData =(BYTE *) malloc(cbData);
-		  memcpy(pOldData, pData, cbData);
+		  pOldData =(BYTE *) malloc(pSample->GetSize());
+		  memcpy(pOldData, pData, pSample->GetSize());
 		  gotNew = true;
 		}
 	  } else {
@@ -242,6 +241,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 float CPushPinDesktop::GetFps() {
 	return (float) (UNITS / m_rtFrameLength);
 }
+
+enum FourCC { FOURCC_NONE = 0, FOURCC_I420 = 100, FOURCC_YUY2 = 101, FOURCC_RGB32 = 102 };// from http://www.conaito.com/docus/voip-video-evo-sdk-capi/group__videocapture.html
 //
 // GetMediaType
 //
@@ -283,7 +284,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
         return E_INVALIDARG;
 
     // Have we run out of types?
-    if(iPosition > 5)
+    if(iPosition > 6)
         return VFW_S_NO_MORE_ITEMS;
 
     VIDEOINFO *pvi = (VIDEOINFO *) pmt->AllocFormatBuffer(sizeof(VIDEOINFO));
@@ -358,6 +359,13 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             pvi->bmiHeader.biClrUsed     = iPALETTE_COLORS;
             break;
         }
+		case 6:
+		{ // i420 freak-o
+               pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
+               pvi->bmiHeader.biBitCount    = 12;
+			   pvi->bmiHeader.biSizeImage = (m_iFullWidth*m_iFullHeight*3)/2; 
+			   break;
+		}
     }
 
     // Now adjust some parameters that are the same for all formats
@@ -365,8 +373,9 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pvi->bmiHeader.biWidth      = m_iFullWidth;
     pvi->bmiHeader.biHeight     = m_iFullHeight;
     pvi->bmiHeader.biPlanes     = 1;
-    pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
-    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the size
+	if(pvi->bmiHeader.biSizeImage==0)
+      pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
+    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the above size
 
 	pvi->bmiHeader.biClrImportant = 0;
 	pvi->AvgTimePerFrame = m_rtFrameLength; // from our config or default
@@ -512,6 +521,7 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 
 void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
+
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY, nX2, nY2;       // coordinates of rectangle to grab
@@ -546,16 +556,34 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	AddMouse(hMemDC, lpRect, hScrDC, m_iHwndToTrack);
 
     // select old bitmap back into memory DC and get handle to
-    // bitmap of the capture...whatever this even means...
-	// Get the BITMAP from the HBITMAP [?]
+    // bitmap of the capture...whatever this even means...	
     hRawBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
-	doDIBits(hScrDC, hRawBitmap, nHeight, pData, pHeader);
+	BITMAPINFO tweakableHeader;
+	memcpy(&tweakableHeader, pHeader, sizeof(BITMAPINFO));
+
+	if(m_iConvertToI420) {
+		tweakableHeader.bmiHeader.biBitCount = 32;
+		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
+		tweakableHeader.bmiHeader.biCompression = 0;
+		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down...
+	}
+	doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+	
+	if(m_iConvertToI420) {
+		if(!pOldData) 
+			pOldData = (BYTE *) malloc(pSample->GetSize()); // TODO this assumes our sample sizes never change...hmm...probably just allocate this after a call to SetFormat or some odd.
+	    memcpy(/* dest */ pOldData, pData, pSample->GetSize());
+		// TODO smarter conversion/memcpy's around here x2[?]
+		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);		
+	} else {
+		// nada :P
+	}
 
     // clean up
     DeleteDC(hMemDC);
 
-	if (hRawBitmap) // HDIB is the same as HBITMAP apparently...
+	if (hRawBitmap)
         DeleteObject(hRawBitmap);
 }
 

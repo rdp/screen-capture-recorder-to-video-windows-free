@@ -4,6 +4,7 @@
 #include "PushGuids.h"
 #include "DibHelper.h"
 
+#include <wmsdkidl.h>
 
 //
 // CheckMediaType
@@ -27,22 +28,41 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
         return E_INVALIDARG;
     }
 
+	// const GUID Type = *pMediaType->Type(); // always just MEDIATYPE_Video
+
     // Check for the subtypes we support
-    const GUID *SubType = pMediaType->Subtype();
-    if (SubType == NULL)
+    if (pMediaType->Subtype() == NULL)
         return E_INVALIDARG;
 
-    if(    (*SubType != MEDIASUBTYPE_RGB8)
-        && (*SubType != MEDIASUBTYPE_RGB565)
-        && (*SubType != MEDIASUBTYPE_RGB555)
-        && (*SubType != MEDIASUBTYPE_RGB24)
-        && (*SubType != MEDIASUBTYPE_RGB32))
-    {
-        return E_INVALIDARG;
-    }
-
+	const GUID SubType2 = *pMediaType->Subtype();
+	if(SubType2 == GUID_NULL)
+		return E_INVALIDARG;
+	
     // Get the format area of the media type
     VIDEOINFO *pvi = (VIDEOINFO *) pMediaType->Format();
+
+	// const GUID i420 = WMMEDIASUBTYPE_I420; // should == 30323449-0000-0010-8000-00AA00389B71
+
+    if(    (SubType2 != MEDIASUBTYPE_RGB8) // these are all the same value? But maybe the pointers are different. Hmm.
+        && (SubType2 != MEDIASUBTYPE_RGB565)
+        && (SubType2 != MEDIASUBTYPE_RGB555)
+        && (SubType2 != MEDIASUBTYPE_RGB24)
+        && (SubType2 != MEDIASUBTYPE_RGB32)
+		)
+    {
+		if(SubType2 == WMMEDIASUBTYPE_I420) { // sometimes 
+			if(pvi->bmiHeader.biBitCount == 12) {
+				// ok
+			}else {
+			  return E_INVALIDARG;
+			}
+		} else {
+          return E_INVALIDARG; // sometimes they ask for YV12 {32315659-0000-0010-8000-00AA00389B71}, or MEDIASUBTYPE_IYUV {56555949-0000-0010-8000-00AA00389B71}, which is apparently "identical format" to I420
+		}
+    } else {
+		 return E_INVALIDARG; // for now :P
+		 // RGB's -- ok -- WFME doesn't get here though.
+	}
 
     if(pvi == NULL)
         return E_INVALIDARG;
@@ -57,8 +77,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 	}
 
     // Check if the image width & height have changed
-    if(    pvi->bmiHeader.biWidth   != getWidth() || 
-       abs(pvi->bmiHeader.biHeight) != getHeight())
+    if(    pvi->bmiHeader.biWidth != getWidth() || 
+       pvi->bmiHeader.biHeight != getHeight())
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image.
@@ -69,6 +89,9 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     // image to be displayed upside down.
 	// also reject 0 that would be weird.
     if (pvi->bmiHeader.biHeight <= 0)
+        return E_INVALIDARG;
+
+    if (pvi->bmiHeader.biWidth <= 0)
         return E_INVALIDARG;
 
     return S_OK;  // This format is acceptable.
@@ -103,7 +126,13 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	int bytesPerLine;
 	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small...
 	// some pasted code...
-    bytesPerLine = header.biWidth * (header.biBitCount/8);
+	int bytesPerPixel = (header.biBitCount/8);
+
+	if(m_iConvertToI420) {
+		bytesPerPixel = (32/8); // we'll need more space everywhere...TODO pData may not actually need to be this big...yikes
+	}
+
+    bytesPerLine = header.biWidth * bytesPerPixel;
     /* round up to a dword boundary */
     if (bytesPerLine & 0x0003) 
     {
@@ -155,6 +184,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns our local m_mt via m_mt.Set(*pmt) ... 
+    m_iConvertToI420 = false; // in case they are re-negotiating...
 
     if(SUCCEEDED(hr))
     {
@@ -164,13 +194,17 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
         switch(pvi->bmiHeader.biBitCount)
         {
+		    case 12:     // i420
+			    m_iConvertToI420 = true;
+                hr = S_OK;
+			    break;
             case 8:     // 8-bit palettized
             case 16:    // RGB565, RGB555
             case 24:    // RGB24
             case 32:    // RGB32
                 // Save the current media type and bit depth
-                m_MediaType = *pMediaType;
-                m_nCurrentBitDepth = pvi->bmiHeader.biBitCount;
+                //m_MediaType = *pMediaType; // use SetMediaType above instead
+                //m_nCurrentBitDepth = pvi->bmiHeader.biBitCount;
                 hr = S_OK;
                 break;
 
@@ -222,9 +256,12 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		//pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader);
 		//pmt->lSampleSize = pvi->bmiHeader.biSizeImage;
 
-		if(getWidth() > m_iFullWidth || getHeight() > m_iFullHeight) {
+		// do this check after setting width so that that check'll pass
+		if(CheckMediaType((CMediaType *) pmt) != S_OK) {
 			return E_FAIL; // I can't believe skype seemed did this once.  Huh?
+			// flash media live encoder uses this to determine widths. yikes FMLE yikes
 		}
+		int a = pvi->bmiHeader.biBitCount;
 
 		// ignore other things like cropping requests
 
@@ -273,11 +310,12 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount, int *piSize)
 {
-    *piCount = 6;
+    *piCount = 7;
     *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS); // VIDEO_STREAM_CONFIG_CAPS is an MS struct
     return S_OK;
 }
 
+// returns the "range" of fps, etc. for this index
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
