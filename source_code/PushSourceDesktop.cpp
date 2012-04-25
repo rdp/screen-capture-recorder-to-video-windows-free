@@ -179,37 +179,40 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 			  Sleep(m_millisToSleepBeforePollForChanges);
 			} else {
 			  gotNew = true;
-			  memcpy(pOldData, pData, pSample->GetSize()); // took 4ms for 640x1152, but it's worth it LOL.
-			  // LODO memcmp and memcpy at the same time LOL.
+			  memcpy( /* dest */ pOldData, pData, pSample->GetSize()); // took 4ms for 640x1152, but it's worth it LOL.
+			  // LODO memcmp and memcpy in the same loop LOL.
 			}
 	  } else {
 		// it's always new for everyone else!
 	    gotNew = true;
 	  }
 	}
-
-	CRefTime now;
-    CSourceStream::m_pFilter->StreamTime(now);
-	
 	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
-	
+
+	CRefTime now;
+	CRefTime endFrame;
+    CSourceStream::m_pFilter->StreamTime(now);
     // wait until we "should" send this frame out...TODO...more precise et al...??
-	if(m_iFrameNumber > 0 && (now > 0)) { // now > 0 to accomodate for if there is no reference graph clock at all...
+	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also boot strap time ignore it :P
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
+		// avoid a tidge of creep since we sleep until [typically] just past the previous end.
+		endFrame = previousFrameEndTime + m_rtFrameLength;
 	} else {
-		LocalOutput("it missed some time"); // we don't miss time typically I don't think, un
+	  LocalOutput("it missed some time"); // we don't miss time typically I don't think, unless de-dupe is turned on
+	  endFrame = now + m_rtFrameLength;
 	}
-	REFERENCE_TIME endFrame = now + m_rtFrameLength;
-	
-    pSample->SetTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame);
+    
+	LocalOutput("marking frame %llu %llu", now, endFrame);
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless seemingly
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
+	previousFrameEndTime = endFrame;
 
 	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
     pSample->SetSyncPoint(TRUE);
@@ -220,12 +223,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames so far: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
+	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 	LocalOutput(out);
 	set_config_string_setting(L"debug_out", out);
 #endif
-	previousFrameEndTime = endFrame;
     return S_OK;
 }
 

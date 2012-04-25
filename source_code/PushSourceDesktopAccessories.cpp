@@ -50,7 +50,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     {
 		if(SubType2 == WMMEDIASUBTYPE_I420) { // 30323449-0000-0010-8000-00AA00389B71 MEDIASUBTYPE_I420 == WMMEDIASUBTYPE_I420
 			if(pvi->bmiHeader.biBitCount == 12) {
-				// ok
+				// ok -- WFMLE uses this, VLC *can* too
 			}else {
 			  return E_INVALIDARG;
 			}
@@ -63,7 +63,6 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 		}
     } else {
 		 // RGB's -- ok -- WFMLE doesn't get here :P
-		 return E_INVALIDARG;
 	}
 
     if(pvi == NULL)
@@ -130,7 +129,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// some pasted code...
 	int bytesPerPixel = (header.biBitCount/8);
 	if(m_iConvertToI420) {
-		bytesPerPixel = 32/8; // we convert from 32 bit
+	  bytesPerPixel = 32/8; // we convert from a 32 bit to i420, so need more space
 	}
 
     bytesPerLine = header.biWidth * bytesPerPixel;
@@ -175,7 +174,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 		free(pOldData);
 		pOldData = NULL;
 	}
-    pOldData = (BYTE *) malloc(max(pProperties->cbBuffer*pProperties->cBuffers, bitmapSize));
+    pOldData = (BYTE *) malloc(max(pProperties->cbBuffer*pProperties->cBuffers, bitmapSize)); // we convert from a 32 bit to i420, so need more space, hence max
     memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
 
     return NOERROR;
@@ -206,6 +205,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
         {
 		    case 12:     // i420
 			    m_iConvertToI420 = true;
+				ASSERT(!m_bDeDupe); // not compatible yet
                 hr = S_OK;
 			    break;
             case 8:     // 8-bit palettized
