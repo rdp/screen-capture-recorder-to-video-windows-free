@@ -95,15 +95,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// m_rtFrameLength is also re-negotiated later...
   	m_rtFrameLength = UNITS / config_max_fps; 
 
-	if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1) { // guess we're forced to build in Windows 7 now?
-      OSVERSIONINFOEX version;
-      ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
-      version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	  GetVersionEx((LPOSVERSIONINFO)&version);
-	  if(version.dwMajorVersion >= 6) { // meaning vista +
-	    turnOffAero();
-	  }
-	}
 	if(is_config_set_to_1(TEXT("track_new_x_y_coords_each_frame_if_1"))) {
 		m_bReReadRegistry = 1; // takes 0.416880ms, but I thought it took more when I made it off by default :P
 	}
@@ -111,6 +102,18 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
 	}
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
+
+	// LODO reset it with each run...somehow...Stop method or something...
+	OSVERSIONINFOEX version;
+    ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
+    version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((LPOSVERSIONINFO)&version);
+	if(version.dwMajorVersion >= 6) { // meaning vista +
+	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
+	    turnAeroOn(false);
+	  else
+	    turnAeroOn(true);
+	}
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];

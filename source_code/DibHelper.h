@@ -64,5 +64,5 @@ void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int n
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
 
 void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere);
-HRESULT turnOffAero();
+HRESULT turnAeroOn(boolean onOrOff);
 int rgb32_to_i420(int width, int height, const char * src, char * dst);

@@ -232,22 +232,26 @@ typedef HRESULT (WINAPI * DwmGetWindowAttributeFunction) (
 
 typedef HRESULT (WINAPI * DwmEnableCompositionFunction)(__in UINT uCompositionAction);
 
-HRESULT turnOffAero() {
+HRESULT turnAeroOn(boolean on) {
   HRESULT aResult = S_OK;
   
   HMODULE dwmapiDllHandle = LoadLibrary(L"dwmapi.dll");  
   
-  if (NULL != dwmapiDllHandle ) // not on Vista/Windows7 so no aero so no need to account for aero.
+  if (dwmapiDllHandle != NULL) // not on Vista/Windows7 so no aero so no need to account for aero.
   {
 	  DwmEnableCompositionFunction DwmEnableComposition;
 	  DwmEnableComposition = (DwmEnableCompositionFunction) ::GetProcAddress(dwmapiDllHandle, "DwmEnableComposition");
    if( NULL != DwmEnableComposition )
    {
-    aResult = DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+	  if(on)
+		aResult = DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+	  else {
+        aResult = DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+	  }
    }
 
+   FreeLibrary(dwmapiDllHandle);
   }
-  FreeLibrary(dwmapiDllHandle);
   return aResult;
 }
 
