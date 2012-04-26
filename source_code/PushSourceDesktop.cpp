@@ -214,7 +214,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		// let it pretend and try to catch up, it's not quite a frame behind
         previousFrameEndTime = previousFrameEndTime + m_rtFrameLength;
 	  } else {
-		endFrame = now + m_rtFrameLength/2;
+		endFrame = now + m_rtFrameLength/2; // ??
 		previousFrameEndTime = endFrame;
 	  }
 	    
