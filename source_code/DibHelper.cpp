@@ -300,7 +300,10 @@ void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere)
 
 
 /* from libvidcap or some odd 
-Based on formulas found at http://en.wikipedia.org/wiki/YUV */
+Based on formulas found at http://en.wikipedia.org/wiki/YUV 
+
+but improved
+*/
 int rgb32_to_i420(int width, int height, const char * src, char * dst)
 {
 	unsigned char * dst_y_even;
@@ -314,11 +317,14 @@ int rgb32_to_i420(int width, int height, const char * src, char * dst)
 	src_even = (const unsigned char *)src;
 	src_odd = src_even + width * 4;
 
-	dst_y_even = (unsigned char *)dst;
+	// it's planar
+
+	dst_y_even = (unsigned char *) dst;
 	dst_y_odd = dst_y_even + width;
 	dst_u = dst_y_even + width * height;
 	dst_v = dst_u + ((width * height) >> 2);
 
+	// NB this doesn't work perfectly for u and v values of the edges of the video if your video size is not divisible by 2. FWIW.
 	for ( i = 0; i < height / 2; ++i )
 	{
 		for ( j = 0; j < width / 2; ++j )
@@ -329,27 +335,47 @@ int rgb32_to_i420(int width, int height, const char * src, char * dst)
 			r = *src_even++;
 			++src_even;
 			*dst_y_even++ = (( r * 66 + g * 129 + b * 25 + 128 ) >> 8 ) + 16;
-
-			*dst_u++ = (( r * -38 - g * 74 + b * 112 + 128 ) >> 8 ) + 128;
-			*dst_v++ = (( r * 112 - g * 94 - b * 18 + 128 ) >> 8 ) + 128;
+			short sum_r = r, sum_g = g, sum_b = b;
 
 			b = *src_even++;
 			g = *src_even++;
 			r = *src_even++;
 			++src_even;
 			*dst_y_even++ = (( r * 66 + g * 129 + b * 25 + 128 ) >> 8 ) + 16;
+			sum_r += r;
+			sum_g += g;
+			sum_b += b;
 
 			b = *src_odd++;
 			g = *src_odd++;
 			r = *src_odd++;
 			++src_odd;
 			*dst_y_odd++ = (( r * 66 + g * 129 + b * 25 + 128 ) >> 8 ) + 16;
+			sum_r += r;
+			sum_g += g;
+			sum_b += b;
 
 			b = *src_odd++;
 			g = *src_odd++;
 			r = *src_odd++;
 			++src_odd;
 			*dst_y_odd++ = (( r * 66 + g * 129 + b * 25 + 128 ) >> 8 ) + 16;
+			sum_r += r;
+			sum_g += g;
+			sum_b += b;
+
+			// compute ave's of this 2x2 bloc for us and v
+			// could use Catmull-Rom interpolation maybe?
+			sum_r += 2;
+			sum_g += 2;
+			sum_b += 2;
+
+			sum_r /= 4;
+			sum_g /= 4;
+			sum_b /= 4;
+
+			*dst_u++ = (( sum_r * -38 - sum_g * 74 + sum_b * 112 + 128 ) >> 8 ) + 128; // only one
+			*dst_v++ = (( sum_r * 112 - sum_g * 94 - sum_b * 18 + 128 ) >> 8 ) + 128; // only one
 		}
 
 		dst_y_even += width;
@@ -359,4 +385,65 @@ int rgb32_to_i420(int width, int height, const char * src, char * dst)
 	}
 
 	return 0;
+}
+
+
+
+#define rgbtoy(b, g, r, y) \
+y=(unsigned char)(((int)(30*r) + (int)(59*g) + (int)(11*b))/100)
+
+#define rgbtoyuv(b, g, r, y, u, v) \
+rgbtoy(b, g, r, y); \
+u=(unsigned char)(((int)(-17*r) - (int)(33*g) + (int)(50*b)+12800)/100); \
+v=(unsigned char)(((int)(50*r) - (int)(42*g) - (int)(8*b)+12800)/100)
+
+void RGBtoYUV420PSameSize (const unsigned char * rgb,
+unsigned char * yuv,
+unsigned rgbIncrement, // 4 I think
+unsigned char flip,
+int srcFrameWidth, int srcFrameHeight)
+{
+unsigned int planeSize;
+unsigned int halfWidth;
+
+unsigned char * yplane;
+unsigned char * uplane;
+unsigned char * vplane;
+const unsigned char * rgbIndex;
+
+int x, y;
+unsigned char * yline;
+unsigned char * uline;
+unsigned char * vline;
+
+planeSize = srcFrameWidth * srcFrameHeight;
+halfWidth = srcFrameWidth >> 1;
+
+// get pointers to the data
+yplane = yuv;
+uplane = yuv + planeSize;
+vplane = yuv + planeSize + (planeSize >> 2);
+rgbIndex = rgb;
+
+for (y = 0; y < srcFrameHeight; y++)
+{
+yline = yplane + (y * srcFrameWidth);
+uline = uplane + ((y >> 1) * halfWidth);
+vline = vplane + ((y >> 1) * halfWidth);
+
+if (flip)
+rgbIndex = rgb + (srcFrameWidth*(srcFrameHeight-1-y)*rgbIncrement);
+
+for (x = 0; x < (int) srcFrameWidth; x+=2)
+{
+rgbtoyuv(rgbIndex[0], rgbIndex[1], rgbIndex[2], *yline, *uline, *vline);
+rgbIndex += rgbIncrement;
+yline++;
+rgbtoyuv(rgbIndex[0], rgbIndex[1], rgbIndex[2], *yline, *uline, *vline);
+rgbIndex += rgbIncrement;
+yline++;
+uline++;
+vline++;
+}
+}
 }

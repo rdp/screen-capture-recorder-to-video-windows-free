@@ -104,7 +104,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 // DecideBufferSize
 //
 // This will always be called after the format has been sucessfully
-// negotiated (negotiatebuffersize). So we have a look at m_mt to see what size image we agreed.
+// negotiated (this is negotiatebuffersize). So we have a look at m_mt to see what size image we agreed.
 // Then we can ask for buffers of the correct size to contain them.
 //
 HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
@@ -153,8 +153,6 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
     pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
 
-	// pProperties->cbPrefix = 100; // no sure what a prefix even is...setting this didn't help the VLC segfaults anyway :P
-
     // Ask the allocator to reserve us some sample memory. NOTE: the function
     // can succeed (return NOERROR) but still not have allocated the
     // memory that we requested, so we must check we got whatever we wanted.
@@ -173,16 +171,6 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
 	// now some "once per run" setups
 	
-    OSVERSIONINFOEX version;
-    ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
-    version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	GetVersionEx((LPOSVERSIONINFO)&version);
-	if(version.dwMajorVersion >= 6) { // meaning vista +
-	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
-	    turnAeroOn(false);
-	  else
-	    turnAeroOn(true);
-	}
 	if(pOldData) {
 		free(pOldData);
 		pOldData = NULL;
@@ -200,9 +188,10 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 // Called when a media type is agreed between filters (i.e. they call GetMediaType+GetStreamCaps/ienumtypes I guess till they find one they like, then they call SetMediaType).
 // all this after calling SetFormat, if they do, I guess.
 // pMediaType is assumed to have passed CheckMediaType "already" and be good to go...
+// except WFMLE sends us a junk type, so we check anyway.
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
-    CAutoLock cAutoLock(m_pFilter->pStateLock()); // get here twice [?] VLC, but I think maybe they have to call this to see if the type is "really" available or something.
+    CAutoLock cAutoLock(m_pFilter->pStateLock());
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns our local m_mt via m_mt.Set(*pmt) ... 
@@ -247,6 +236,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 #define DECLARE_PTR(type, ptr, expr) type* ptr = (type*)(expr);
 
 
+// sets fps, etc.
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -271,7 +261,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
-		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than our default.  VLC can, for instance.
+		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC can specify this, for instance.
 		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // TODO scale [?]
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
 		
