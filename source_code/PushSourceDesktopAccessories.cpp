@@ -50,7 +50,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     {
 		if(SubType2 == WMMEDIASUBTYPE_I420) { // 30323449-0000-0010-8000-00AA00389B71 MEDIASUBTYPE_I420 == WMMEDIASUBTYPE_I420
 			if(pvi->bmiHeader.biBitCount == 12) {
-				// ok -- WFMLE uses this, VLC *can* too
+				// ok -- WFMLE uses this, VLC *can* also use it, too
 			}else {
 			  return E_INVALIDARG;
 			}
