@@ -169,11 +169,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	boolean gotNew = false;
 	while(!gotNew) {
-	  // Copy the DIB bits/raw bits for i420 over into our filter's output buffer.
 
       CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
-	  // pSample->AddRef(); // causes it to hang, so create our own copies
+	  // pSample->AddRef(); // causes it to hang, so for now create our own copies
 
 	  if(m_bDeDupe) {
 			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // took desktop:  10ms for 640x1152, still 100 fps uh guess...
