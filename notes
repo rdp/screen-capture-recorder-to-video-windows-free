@@ -4,6 +4,8 @@ Seems to *need* --live-caching=3000
 
 http://forum.videolan.org/viewtopic.php?f=4&t=99906 related
 
+12 resets in 40K frames.
+
 = latest way, cool recatch =
 
 avcodec warning: almost fed libavcodec with two frames with the same PTS (697016627077)

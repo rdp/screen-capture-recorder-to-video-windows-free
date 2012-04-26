@@ -1,6 +1,21 @@
+0.6.1 4/26/12
+
+add i420 output support for flash media live encoder. Yikes.
+"synchronize" the output fps better, for VLC sake.  It still lets you specify an fps that your system
+can't actually do, in the which case you'll get messages like:
+
+
+avcodec warning: almost fed libavcodec with two frames with the same PTS (754903828860)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (754903862193)
+stream_out_transcode debug: drift is too high, resetting master sync
+stream_out_transcode debug: drift is too high, resetting master sync
+
+see http://forum.videolan.org/viewtopic.php?f=4&t=99906
+
+
 0.6.0 4/24/12
 
-fix mouse if using hwnd, allow for hex input to command liner
+fix mouse if using hwnd, allow for hex input to command line script input utility (also has a window input utility).
 
 Add *tons* more options in the registry, also make it so you can specify a small window if desired, ex: vlc's --dshow-size="100x100" [crops currently, subject to change!]
 

@@ -193,7 +193,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CRefTime now;
 	CRefTime endFrame;
     CSourceStream::m_pFilter->StreamTime(now);
-    // wait until we "should" send this frame out...TODO...more precise et al...??
+
+    // wait until we "should" send this frame out...
 	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also boot strap time ignore it :P
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  Sleep(1);
@@ -209,11 +210,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
 	  LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
-	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I need the long long cast?
+	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I need a long long cast?
 		// let it pretend and try to catch up, it's not quite a frame behind
         previousFrameEndTime = previousFrameEndTime + m_rtFrameLength;
 	  } else {
-		endFrame = now + m_rtFrameLength/2; // ??
+		endFrame = now + m_rtFrameLength/2; // ?? seems to work...I guess...
 		previousFrameEndTime = endFrame;
 	  }
 	    
@@ -236,7 +237,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.02f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
+	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
 		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 	LocalOutput(out);
 	set_config_string_setting(L"debug_out", out);
