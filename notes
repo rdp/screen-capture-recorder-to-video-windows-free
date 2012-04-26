@@ -1,5 +1,9 @@
 = with adjust timestamp etc.=
 
+Seems to *need* --live-caching=3000
+
+http://forum.videolan.org/viewtopic.php?f=4&t=99906 related
+
 == after 2000 frames ==
 28.7 old "bad way" 
 29.2 new /1
