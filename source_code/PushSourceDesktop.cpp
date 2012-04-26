@@ -588,10 +588,9 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 	if(m_iConvertToI420) {
 		doDIBits(hScrDC, hRawBitmap, nHeight, pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
-		// TODO smarter conversion/memcpy's around here x2[?]
+		// TODO smarter conversion/memcpy's around here [?]
 		// seems to work to read and write from the same buffer...bit scary :P
-			__int64 startThisRound = StartCounter();
-		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 31ms for 1920x1080 desktop	
+		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 
 		//RGBtoYUV420PSameSize((const unsigned char *) pOldData, (unsigned char *) pData, 4, 0, nWidth, nHeight); // 180ms for 1920x1080 but does work :)
 		LocalOutput("rgb32_to_i420 took %.020Lf ms", GetCounterSinceStartMillis(startThisRound));

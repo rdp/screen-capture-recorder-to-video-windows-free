@@ -302,7 +302,8 @@ void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere)
 /* from libvidcap or some odd 
 Based on formulas found at http://en.wikipedia.org/wiki/YUV 
 
-but improved
+improved, improvement slowdown
+31ms -> 36.8ms for 1920x1080 desktop with the averaging stuff.
 */
 int rgb32_to_i420(int width, int height, const char * src, char * dst)
 {
@@ -364,12 +365,14 @@ int rgb32_to_i420(int width, int height, const char * src, char * dst)
 			sum_g += g;
 			sum_b += b;
 
-			// compute ave's of this 2x2 bloc for us and v
-			// could use Catmull-Rom interpolation maybe?
-			sum_r += 2;
-			sum_g += 2;
-			sum_b += 2;
+			// compute ave's of this 2x2 bloc for its u and v values
+			// could use Catmull-Rom interpolation possibly? http://msdn.microsoft.com/en-us/library/Aa904813#yuvformats_420formats_16bitsperpixel
+			// rounding by one? don't care enough... 39 ms -> 36.8
+			//sum_r += 2;
+			//sum_g += 2;
+			//sum_b += 2;
 
+			// divide by 4
 			sum_r /= 4;
 			sum_g /= 4;
 			sum_b /= 4;
