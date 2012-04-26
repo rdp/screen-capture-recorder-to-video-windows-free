@@ -202,15 +202,22 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		}
 		// avoid a tidge of creep since we sleep until [typically] just past the previous end.
 		endFrame = previousFrameEndTime + m_rtFrameLength;
-	    endFrame = max(0, endFrame);
 	    previousFrameEndTime = endFrame;
 	    
 	} else {
 	  LocalOutput("it missed some time %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
-      endFrame = now + m_rtFrameLength;
-	  previousFrameEndTime = previousFrameEndTime + m_rtFrameLength; // pretend to let it try and catch up, if it ever can :P
-	 //previousFrameEndTime = endFrame;
+	  endFrame = now + m_rtFrameLength;
+	  // most of this stuff I just made up because it "sounded right"
+	  LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
+	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I need the long long cast?
+		// let it pretend and try to catch up, it's not quite a frame behind
+        previousFrameEndTime = previousFrameEndTime + m_rtFrameLength;
+	  } else {
+		endFrame = now + m_rtFrameLength/2;
+		previousFrameEndTime = endFrame;
+	  }
+	    
 	}
 	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
     
