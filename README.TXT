@@ -54,6 +54,12 @@ gstreamer works, as well:
 I've even had Skype accidentally use it, thinking it was my webcam.
 Let me know if you want an easier way made for it for anything.
 
+
+== Streaming ==
+
+You can stream using it with ffmpeg (to an rtmp server) or VLC (itself as a server, or to an rtmp server) or
+with Flash Media Live Encoder, to some flash server.
+
 == Configuration ==
 
 By default, it captures the "full screen" of the main desktop monitor (all windows, overlapping, there).
