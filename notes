@@ -4,6 +4,39 @@ Seems to *need* --live-caching=3000
 
 http://forum.videolan.org/viewtopic.php?f=4&t=99906 related
 
+= latest way, cool recatch =
+
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016627077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016660411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016693744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016727077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016760411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016793744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016827077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016860411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697016893744)
+ frames with the same PTS (697019027077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019060411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019093744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019127077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019160411)
+access_output_udp debug: packet has been sent too late (433107180)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019193744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019227077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019260411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019293744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019327077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019360411)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019393744)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019427077)
+avcodec warning: almost fed libavcodec with two frames with the same PTS (697019460411)
+stream_out_transcode debug: drift is too high, resetting master sync
+access_output_udp debug: packet has been sent too late (436105288)
+
+
+@13000
+
+
 == after 2000 frames ==
 28.7 old "bad way" 
 29.2 new /1
