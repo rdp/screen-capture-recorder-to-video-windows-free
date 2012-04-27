@@ -508,16 +508,18 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 	return hr;
 }
 
-
 void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
-
     HDC         hMemDC;         // screen DC and memory DC
-    HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
+    HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY;       // coordinates of rectangle to grab
-	int         iFinalHeight = getNegotiatedFinalHeight(), iFinalWidth=getNegotiatedFinalWidth();
+	int         iFinalHeight = getNegotiatedFinalHeight();
+	int         iFinalWidth  = getNegotiatedFinalWidth();
 	
     ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
+	
+    // create a bitmap compatible with the screen DC
+    hRawBitmap = CreateCompatibleBitmap(hScrDC, iFinalWidth, iFinalHeight);
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
@@ -531,9 +533,6 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 	// sanity checks
 	ASSERT(lpRect->right - lpRect->left == iFinalWidth);
 	ASSERT(lpRect->bottom - lpRect->top == iFinalHeight);
-
-    // create a bitmap compatible with the screen DC
-    hRawBitmap = CreateCompatibleBitmap(hScrDC, iFinalWidth, iFinalHeight);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);

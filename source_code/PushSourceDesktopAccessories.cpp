@@ -121,17 +121,17 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 	BITMAPINFOHEADER header = pvi->bmiHeader;
 	ASSERT(header.biPlanes == 1); // sanity check
-	// ASSERT(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS
+	// ASSERT(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?]
 	// now try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
 	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
 	
 	int bytesPerLine;
-	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small...
+	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small for VLC? LODO try it :)
 	// some pasted code...
 	int bytesPerPixel = (header.biBitCount/8);
 	if(m_iConvertToI420) {
-	  bytesPerPixel = 32/8; // we convert from a 32 bit to i420, so need more space
+	  bytesPerPixel = 32/8; // we convert from a 32 bit to i420, so need more space in this case
 	}
 
     bytesPerLine = header.biWidth * bytesPerPixel;
@@ -185,6 +185,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	    turnAeroOn(true);
 	}
 
+	
 	if(pOldData) {
 		free(pOldData);
 		pOldData = NULL;
@@ -202,14 +203,14 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 // Called when a media type is agreed between filters (i.e. they call GetMediaType+GetStreamCaps/ienumtypes I guess till they find one they like, then they call SetMediaType).
 // all this after calling SetFormat, if they do, I guess.
 // pMediaType is assumed to have passed CheckMediaType "already" and be good to go...
-// except WFMLE sends us a junk type, so we check anyway.
+// except WFMLE sends us a junk type, so we check it anyway LODO do we? Or is it the other method SetFormat that they call in vain? Or it first?
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns our local m_mt via m_mt.Set(*pmt) ... 
-    m_iConvertToI420 = false; // in case they are re-negotiating...
+    m_iConvertToI420 = false; // in case we are re-negotiating the type and it was set to i420 before...
 
     if(SUCCEEDED(hr))
     {
@@ -249,8 +250,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
 #define DECLARE_PTR(type, ptr, expr) type* ptr = (type*)(expr);
 
-
-// sets fps, etc.
+// sets fps, size, (etc.)
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -276,7 +276,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC can specify this, for instance.
-		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth;
+		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [m_rScreen gets set here]
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
 
 		// do this check after setting width so that that check'll pass
@@ -284,11 +284,10 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 			return E_FAIL; // I can't believe skype seemed did this once.  Huh?
 			// flash media live encoder uses this to determine widths. yikes FMLE yikes
 		}
-		int a = pvi->bmiHeader.biBitCount;
 
-		// ignore other things like cropping requests
+		// ignore other things like cropping requests for now...
 
-		// now save it away...
+		// now save it away...for being able to re-offer it later. We could use SetMediaType but we're just being lazy and re-using m_mt for many things I guess
 		m_mt = *pmt; 
   	    formatAlreadySet = true;
 		// continue on.
@@ -349,7 +348,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
         return hr;
     }
 
-    *pmt = CreateMediaType(&m_mt); // a windows lib method, also does a copy
+    *pmt = CreateMediaType(&m_mt); // a windows lib method, also does a copy for us
 	if (*pmt == NULL) return E_OUTOFMEMORY;
 
 	

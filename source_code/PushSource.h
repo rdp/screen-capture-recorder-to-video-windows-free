@@ -93,6 +93,7 @@ protected:
 	CPushSourceDesktop* m_pParent;
 
 	HDC hScrDc;
+	HBITMAP     hRawBitmap;
 
 	//CCritSec m_cSharedState;            // Protects our internal state
 
