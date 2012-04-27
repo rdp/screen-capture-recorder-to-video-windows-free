@@ -173,6 +173,18 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
 	// now some "once per run" setups
 	
+	// LODO reset aer with each run...somehow...somehow...Stop method or something...
+	OSVERSIONINFOEX version;
+    ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
+    version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((LPOSVERSIONINFO)&version);
+	if(version.dwMajorVersion >= 6) { // meaning vista +
+	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
+	    turnAeroOn(false);
+	  else
+	    turnAeroOn(true);
+	}
+
 	if(pOldData) {
 		free(pOldData);
 		pOldData = NULL;

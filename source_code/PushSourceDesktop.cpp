@@ -97,17 +97,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
 
-	// LODO reset it with each run...somehow...Stop method or something...
-	OSVERSIONINFOEX version;
-    ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
-    version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	GetVersionEx((LPOSVERSIONINFO)&version);
-	if(version.dwMajorVersion >= 6) { // meaning vista +
-	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
-	    turnAeroOn(false);
-	  else
-	    turnAeroOn(true);
-	}
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];
@@ -603,7 +592,6 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 	   // Bit block transfer from screen our compatible memory DC.	Apparently faster than stretching, too
        BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
 	   // 9.3 ms 1920x1080 -> 1920x1080
-
 	   // LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
 	}
 	else {
@@ -613,6 +601,7 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 			// low quality stretching -- looks terrible
 			// COLORONCOLOR took 92ms for 1920x1080 -> 1000x1000, 69ms/80ms for 1920x1080 -> 500x500 aero
 			// 20 ms 1920x1080 -> 500x500 without aero
+			 // LODO can we get better results with better speed? the default is sooo ugly.
     	}
 		else
 		{

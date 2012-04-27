@@ -2,20 +2,20 @@
 
 distribute with msiexec[s]
 
-def scale + add reg. for the same
-
 == maybe/never ==
+
+crashes in virtualdub?
 
 better...reg names [explicit, with default]
 
-preview pin...maybe? [skype needs it or maybe resizability i420?
-
-don't turn off aero until we actually start doing something, not just on new method call
+skype hack so it will show in the preview LOL.
 
 "follow mouse" option LOL
 
+"yellow circle around mouse" option LOL
+
 increase priority when capturing?
-  optionally
+  optionally?
 
 try "setting time for one frame in the future"
   seemed to fail
@@ -24,7 +24,7 @@ try "setting time for one frame in the future"
   TODO: beat 15 fps in windows 7/8
 
 don't use getDIBits [raw memcpy?] if we already match the right stuff. Oh wait getDIBits is probably already optimized for this case so we might not gain
-anything, plus, this is a teeny overhead, compared to aero at least. Like nuffin'
+anything, plus, this is a teeny overhead, compared to aero at least.
 
 ask what I should *really* do waiting-wise here...
 
