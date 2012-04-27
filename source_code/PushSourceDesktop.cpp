@@ -522,36 +522,31 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hRawBitmap, hOldBitmap;    // handles to device-dependent bitmaps
-    int         nX, nY, nX2, nY2;       // coordinates of rectangle to grab
-    int         nWidth, nHeight;        // DIB width and height
-
-    // check for an empty rectangle
-    if (IsRectEmpty(lpRect))
-      return;
+    int         nX, nY;       // coordinates of rectangle to grab
+	int         iFinalHeight = getNegotiatedFinalHeight(), iFinalWidth=getNegotiatedFinalWidth();
+	
+    ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
 
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 
     hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Anything else too...do they cost much comparatively though?
 
-    // determine points of where to grab from it
+    // determine points of where to grab from it, though I think we control these with m_rScreen
     nX  = lpRect->left;
     nY  = lpRect->top;
-    nX2 = lpRect->right;
-    nY2 = lpRect->bottom;
 
-    nWidth  = nX2 - nX; // LODO don't have to recalculate these here anyway?
-	ASSERT(nWidth == getNegotiatedFinalWidth());
-    nHeight = nY2 - nY;
-	ASSERT(nHeight == getNegotiatedFinalHeight());
+	// sanity checks
+	ASSERT(lpRect->right - lpRect->left == iFinalWidth);
+	ASSERT(lpRect->bottom - lpRect->top == iFinalHeight);
 
     // create a bitmap compatible with the screen DC
-    hRawBitmap = CreateCompatibleBitmap(hScrDC, nWidth, nHeight);
+    hRawBitmap = CreateCompatibleBitmap(hScrDC, iFinalWidth, iFinalHeight);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
-	doJustBitBlt(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), hScrDC, nX, nY);
+	doJustBitBlt(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalWidth, iFinalHeight, hScrDC, nX, nY);
 
 	AddMouse(hMemDC, lpRect, hScrDC, m_iHwndToTrack);
 
@@ -566,16 +561,16 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 		tweakableHeader.bmiHeader.biBitCount = 32;
 		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
 		tweakableHeader.bmiHeader.biCompression = BI_RGB;
-		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down...
+		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion to i420 after...
 	}
 	
 	if(m_iConvertToI420) {
-		doDIBits(hScrDC, hRawBitmap, nHeight, pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+		doDIBits(hScrDC, hRawBitmap, getNegotiatedFinalHeight(), pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here [?]
-		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
+		rgb32_to_i420(iFinalWidth, iFinalHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
-	  doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+	  doDIBits(hScrDC, hRawBitmap, iFinalHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	}
 
     // clean up
@@ -591,15 +586,12 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 	boolean notNeedStretching = (iFinalWidth == nWidth) && (iFinalHeight == nHeight);
 
 	if(m_iHwndToTrack != NULL)
-		ASSERT(notNeedStretching); // TODO this doesn't support HWND plus scaling...hmm... LODO move assertion
+		ASSERT(notNeedStretching); // this doesn't support HWND plus scaling...hmm... LODO move assertion LODO implement low prio since they probably are just needing that window, not with scaling too [?]
 
-	// if source and dest are equal, we dont need stretching
 	if (notNeedStretching) {
-
 	  if(m_iHwndToTrack != NULL) {
-		
-        // make sure we only capture 'not too much' i.e. not past this HWND, for the case of Aero being turned off, it shows other windows
-	    // a bit confusing to not do it here, since we still want the 'big window' for the sum size...hmm...
+        // make sure we only capture 'not too much' i.e. not past the border of this HWND, for the case of Aero being turned off, it shows other windows that we don't want
+	    // a bit confusing, I know
         RECT p;
 	    GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
         //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms took too long, hopefully no longer necessary even :) LODO delete
@@ -607,21 +599,25 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 	    nHeight= min(p.bottom-p.top, nHeight);
       }
 
-	   // Bit block transfer from screen our compatible memory DC.	
-       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY);// CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
+	   // Bit block transfer from screen our compatible memory DC.	Apparently faster than stretching, too
+       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
 	}
 	else {
 		if (m_iStretchMode == 0)
     	{
+	        SetStretchBltMode (hMemDC, COLORONCOLOR); // SetStretchBltMode call itself takes 0.003ms
 			// low quality stretching
-	        SetStretchBltMode (hMemDC, COLORONCOLOR);
+			// COLORONCOLOR took 92ms for 1918x1018
     	}
 		else
 		{
-			// high quality streching, but 3 times as slow.
 		    SetStretchBltMode (hMemDC, HALFTONE);
+			// high quality stretching
+			// HALFTONE took 160ms for 1918x1018
 		}
+		start = StartCounter();
         StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
+		LocalOutput("stretching took %.020Lf ms", GetCounterSinceStartMillis(start));
 	}
 
 	//LocalOutput("bitblt/stretchblt took %.020Lf ms", GetCounterSinceStartMillis(start));
