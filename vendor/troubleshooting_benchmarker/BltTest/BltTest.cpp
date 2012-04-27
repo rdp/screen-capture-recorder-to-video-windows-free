@@ -185,7 +185,7 @@ int CaptureDC(HBITMAP hRawBitmap, HDC srcDC)
 		return 1;
 
 	// don't cheat and re-use it...though I suppose we could too...
-    hRawBitmap = CreateCompatibleBitmap(hSrcDC, kWidth, kHeight);
+    // hRawBitmap = CreateCompatibleBitmap(hSrcDC, kWidth, kHeight);
 
 	HBITMAP	hOldBitmap	= (HBITMAP) ::SelectObject(hMemDC, hRawBitmap);
 
@@ -197,7 +197,7 @@ int CaptureDC(HBITMAP hRawBitmap, HDC srcDC)
 
 	hRawBitmap = (HBITMAP)::SelectObject(hMemDC, hOldBitmap);
 	// and now new stuff, actually get the data
-	/*
+	
 	//BITMAP bitmap;
     //GetObject(hRawBitmap, sizeof(BITMAP), &bitmap);
 	BITMAPINFO info;
@@ -209,13 +209,13 @@ int CaptureDC(HBITMAP hRawBitmap, HDC srcDC)
 	char * pData = (char *) malloc(info.bmiHeader.biSize);
 	GetDIBits(hSrcDC, hRawBitmap, 0, kHeight, pData, (BITMAPINFO *) &info.bmiHeader, DIB_RGB_COLORS);
 	::ReleaseDC(NULL, hSrcDC);
-	::DeleteDC(hMemDC);
 
 	free(pData);
-	*/
+	
 
+	::DeleteDC(hMemDC);
+	::DeleteDC(hSrcDC);
 	::GdiFlush();
-	DeleteDC(hSrcDC);
 	return 0;
 }
 

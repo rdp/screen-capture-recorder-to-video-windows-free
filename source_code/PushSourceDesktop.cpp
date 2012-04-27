@@ -26,7 +26,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_iConvertToI420(false),
         //m_nCurrentBitDepth(32), // negotiated later...
 		m_pParent(pFilter),
-		formatAlreadySet(false)
+		formatAlreadySet(false),
+		hRawBitmap(NULL)
 {
 
     // Get the device context of the main display, just to get some metrics for it...
@@ -417,6 +418,9 @@ CPushPinDesktop::~CPushPinDesktop()
 	// They *should* call this...
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
 
+    if (hRawBitmap)
+      DeleteObject(hRawBitmap); // don't need those bytes anymore -- I think we are supposed to delete this but not hOldBitmap
+
     if(pOldData) {
 		free(pOldData);
 		pOldData = NULL;
@@ -517,15 +521,10 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 	int         iFinalWidth  = getNegotiatedFinalWidth();
 	
     ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
-	
-    // create a bitmap compatible with the screen DC
-    hRawBitmap = CreateCompatibleBitmap(hScrDC, iFinalWidth, iFinalHeight);
-
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 
-    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Anything else too...do they cost much comparatively though?
-
+    hMemDC = CreateCompatibleDC(hScrDC); //  0.02ms Anything else to reuse?
     // determine points of where to grab from it, though I think we control these with m_rScreen
     nX  = lpRect->left;
     nY  = lpRect->top;
@@ -543,7 +542,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture...whatever this even means...	
-    hRawBitmap = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
+    HBITMAP hRawBitmap2 = (HBITMAP) SelectObject(hMemDC, hOldBitmap);
 
 	BITMAPINFO tweakableHeader;
 	memcpy(&tweakableHeader, pHeader, sizeof(BITMAPINFO));
@@ -556,19 +555,17 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 	}
 	
 	if(m_iConvertToI420) {
-		doDIBits(hScrDC, hRawBitmap, getNegotiatedFinalHeight(), pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+		doDIBits(hScrDC, hRawBitmap2, getNegotiatedFinalHeight(), pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here [?]
 		rgb32_to_i420(iFinalWidth, iFinalHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
-	  doDIBits(hScrDC, hRawBitmap, iFinalHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+	  doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	}
 
     // clean up
     DeleteDC(hMemDC);
 
-	if (hRawBitmap)
-      DeleteObject(hRawBitmap); // don't need those bytes anymore -- I think we are supposed to delete this but not hOldBitmap
 }
 
 void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {

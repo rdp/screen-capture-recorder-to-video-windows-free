@@ -192,6 +192,9 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	}
     pOldData = (BYTE *) malloc(max(pProperties->cbBuffer*pProperties->cBuffers, bitmapSize)); // we convert from a 32 bit to i420, so need more space, hence max
     memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
+	
+    // create a bitmap compatible with the screen DC
+	hRawBitmap = CreateCompatibleBitmap(hScrDc, getNegotiatedFinalWidth(), getNegotiatedFinalHeight());
 
     return NOERROR;
 
