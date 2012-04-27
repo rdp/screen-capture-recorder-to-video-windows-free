@@ -1,8 +1,9 @@
 = todo =
 
-distribute with msiexec[s]
-
 == maybe/never ==
+
+use memcpy? might need "funky" line stuff...hmm...does it though? what is going on there? (+ 31)/32 but I don't seem to experience failures with i420? or do I?
+use drawdibdraw for speed?
 
 crashes in virtualdub?
 

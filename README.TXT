@@ -15,11 +15,9 @@ It also includes a directshow source capture filter device for recording "what y
 Download installer and run, from 
 
   https://sourceforge.net/projects/screencapturer/files
-    (sorry it's on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
+    (sorry the files  sourceforge: github limits their disk usage space and I'm hitting up against the limit)
 
- NB that you may need need to install the MSVC 2010 runtime distro first, if it's not already
- installed on your machine (typically, it already is).
- http://www.microsoft.com/download/en/details.aspx?id=5555
+ NB that if you install the 64 bit device, you'll need to install the MSVC 2010 64 bit runtime first : http://www.microsoft.com/en-us/download/details.aspx?id=14632
 
 == Usage ==
 

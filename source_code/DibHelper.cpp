@@ -91,16 +91,6 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 // printf("took %.020Lf ms", elapsed);
 // or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
 
-void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
-    // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
-	__int64 start = StartCounter();
-
-	// I think cxImage uses this same call...
-    GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
-	// lodo time memcpy too...in case GetDIBits kind of shtinks despite its advertising...except it probably doesn't hurt much...
-
-	//LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
-}
 
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
@@ -395,11 +385,9 @@ int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this metho
 int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
 
 if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
-  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
-  HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
-  ReleaseDC(NULL, DeskDC);
+  HBITMAP hBMP = CreateCompatibleBitmap(hDC, 1, 1);
 
-  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP);
+  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP); // TODO do we need to delete this?
 
   if (hOldBMP != NULL) {
     SetPixelV(hDC, 0, 0, 0x000400);

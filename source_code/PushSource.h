@@ -98,6 +98,7 @@ protected:
 
 	bool formatAlreadySet;
 	bool m_iConvertToI420;
+	bool m_iScreenBitDepth;
 
 	float GetFps();
 
@@ -106,7 +107,9 @@ protected:
 	int m_millisToSleepBeforePollForChanges;
 	HWND m_iHwndToTrack;
     void CopyScreenToDataBlock(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
-	void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
+	void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
+	void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
+
     BYTE *pOldData;
 
 	int m_iStretchToThisConfigWidth;

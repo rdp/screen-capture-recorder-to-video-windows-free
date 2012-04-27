@@ -34,6 +34,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
     hScrDc = GetDC(m_iHwndToTrack);
+	m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT(hScrDc != 0);
 
     // Get the dimensions of the main desktop window as the default
@@ -183,7 +184,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
-	  LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
+	  //LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
 	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I need a long long cast?
 		// let it pretend and try to catch up, it's not quite a frame behind
         previousFrameEndTime = previousFrameEndTime + m_rtFrameLength;
@@ -411,6 +412,7 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 CPushPinDesktop::~CPushPinDesktop()
 {   
     // Release the device context
+	::ReleaseDC(NULL, hScrDc);
     DeleteDC(hScrDc);
 	// They *should* call this...
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
@@ -567,7 +569,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
     DeleteDC(hMemDC);
 
 	if (hRawBitmap)
-        DeleteObject(hRawBitmap);
+      DeleteObject(hRawBitmap); // don't need those bytes anymore -- I think we are supposed to delete this but not hOldBitmap
 }
 
 void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
@@ -613,7 +615,7 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
 	}
 
-	LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
+	//LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
@@ -642,4 +644,15 @@ int CPushPinDesktop::getCaptureDesiredFinalHeight(){
 	} else {
 		return m_iCaptureConfigHeight; // defaults to full/config
 	}
+}
+
+void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
+    // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
+	__int64 start = StartCounter();
+
+	// this seems to be the only way to actually get data out of an HBITMAP [?] LODO ask if you can access the bits directly for a memcpy :)
+
+    GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
+	
+	//LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }

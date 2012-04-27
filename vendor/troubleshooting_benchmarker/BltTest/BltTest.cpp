@@ -31,13 +31,15 @@
 
 const int kWidth  = 640; // originally 640x480 I think
 const int kHeight = 480;
-const int kFramesBlt = 100;
-// reverse actually means "from desktop" from us, I think
+// FramesBlt actually means "from desktop" from us, I think, so keep it low
+const int kFramesBlt = 10;
 const int kFramesRev = 100;
+
+const int kFramesWithMemCpy = 100;
 
 // Record min/max for bitblts
 
-LARGE_INTEGER totblt, totrev;
+LARGE_INTEGER totblt, totrev, totmemcpy;
 double minblt = 100000000000;
 double minrev = 100000000000;
 double maxblt = 0;
@@ -63,6 +65,7 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// averages
 			double afps0 = (double)f.QuadPart * kFramesBlt / (double)totblt.QuadPart;
 			double afps1 = (double)f.QuadPart * kFramesRev / (double)totrev.QuadPart;
+			double afps2 = (double)f.QuadPart * kFramesWithMemCpy / (double)totmemcpy.QuadPart;
 
 			// mins
 			double nfps0 = (double)f.QuadPart / minblt;
@@ -76,7 +79,7 @@ int __stdcall DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			char *nl = report + sprintf(report, "Theoretical maximum speed (%dx%d):\r\n\r\nCapture from HWND Win %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				kWidth, kHeight, kWidth, kHeight, afps1, afps1 * toMB, nfps1, nfps1 * toMB, xfps1, xfps1 * toMB);
-			report + sprintf(nl, "Desktop (all windows,aero)%dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
+			report + sprintf(nl, "Desktop (all windows, with aero if enabled) %dx%d:\r\navg: %.1f fps [%.1f MB/sec]\r\nmax: %.1f fps [%.1f MB/sec]\r\nmin: %.1f fps [%.1f MB/sec]\r\n",
 				kWidth, kHeight, afps0, afps0 * toMB, nfps0, nfps0 * toMB, xfps0, xfps0 * toMB);
 			
 			HWND ec = ::GetDlgItem(hwnd, IDC_RESTEXT);
@@ -146,30 +149,73 @@ static ATOM Register(HINSTANCE hInstance)
 	return RegisterClass(&wc);
 }
 
+
+
+int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
+
+int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
+
+if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
+  HBITMAP hBMP = CreateCompatibleBitmap(hDC, 1, 1);
+
+  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP); // TODO do we need to delete this?
+
+  if (hOldBMP != NULL) {
+    SetPixelV(hDC, 0, 0, 0x000400);
+    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
+    SelectObject(hDC, hOldBMP);
+  }
+
+  DeleteObject(hBMP);
+}
+
+return RetDepth;
+}
+
 // ================================================================================================
 // Given an HBITMAP (dibsection) and hardware dc, screen-capture
 // ================================================================================================
-int CaptureDC(HBITMAP hbdst, HDC srcDC)
+int CaptureDC(HBITMAP hRawBitmap, HDC srcDC)
 {
 	// a compatible dc for the screen and offscreen
-	HDC defaultDC       = GetDC(NULL);
-	HDC hOffscreenDC	= CreateCompatibleDC(defaultDC);
-	::ReleaseDC(NULL, defaultDC);
+	HDC hSrcDC       = GetDC(NULL);
+	HDC hMemDC	= CreateCompatibleDC(hSrcDC);
 
-	if (!hOffscreenDC)	
+	if (!hMemDC)	
 		return 1;
 
-	HBITMAP	hOldBitmap	= (HBITMAP)::SelectObject(hOffscreenDC, hbdst);
+	// don't cheat and re-use it...though I suppose we could too...
+    hRawBitmap = CreateCompatibleBitmap(hSrcDC, kWidth, kHeight);
 
-	int result = BitBlt(hOffscreenDC,				// destination
+	HBITMAP	hOldBitmap	= (HBITMAP) ::SelectObject(hMemDC, hRawBitmap);
+
+	int result = BitBlt(hMemDC,				// destination
 						0, 0, kWidth, kHeight,		// destination position
 						srcDC,						// source
 						0, 0,						// source position
 						SRCCOPY);
 
-	::SelectObject(hOffscreenDC, hOldBitmap);
-	::DeleteDC(hOffscreenDC);
+	hRawBitmap = (HBITMAP)::SelectObject(hMemDC, hOldBitmap);
+	// and now new stuff, actually get the data
+	/*
+	//BITMAP bitmap;
+    //GetObject(hRawBitmap, sizeof(BITMAP), &bitmap);
+	BITMAPINFO info;
+	info.bmiHeader.biBitCount = GetTrueScreenDepth(hSrcDC);
+	info.bmiHeader.biHeight = kHeight;
+	info.bmiHeader.biWidth = kWidth;
+	info.bmiHeader.biPlanes = 1;
+	info.bmiHeader.biSize = kHeight*(kWidth)*info.bmiHeader.biBitCount/8; // NB this simplistic calculation assumes your width is divisible by 4
+	char * pData = (char *) malloc(info.bmiHeader.biSize);
+	GetDIBits(hSrcDC, hRawBitmap, 0, kHeight, pData, (BITMAPINFO *) &info.bmiHeader, DIB_RGB_COLORS);
+	::ReleaseDC(NULL, hSrcDC);
+	::DeleteDC(hMemDC);
 
+	free(pData);
+	*/
+
+	::GdiFlush();
+	DeleteDC(hSrcDC);
 	return 0;
 }
 
@@ -193,6 +239,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	totblt.QuadPart = 0;
 	totrev.QuadPart = 0;
+	totmemcpy.QuadPart = 0;
 
 
 	// ------------------------------------------------------------------------------------------------
@@ -213,7 +260,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	}
 
 	// ------------------------------------------------------------------------------------------------'
-	// Create a bitmap
+	// Create a checker-board bitmap
 	// ------------------------------------------------------------------------------------------------
 	{
 		BITMAPINFO bmi;
@@ -246,7 +293,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	// make capture from window look like a chess board
+	// make the capture from window look like a chess board
 
 	HDC dc = (HDC)GetDC(hwnd);
 	HBITMAP oldbitmap = (HBITMAP)SelectObject((HDC)hdc, hBitmap);
@@ -258,7 +305,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	// ------------------------------------------------------------------------------------------------
 	// main loop
 	// ------------------------------------------------------------------------------------------------
-	for (int framecount = 0; framecount < kFramesBlt + kFramesRev; framecount++) {
+	for (int framecount = 0; framecount < kFramesBlt + kFramesRev + kFramesWithMemCpy; framecount++) {
 
 		int result = 1;
 		MSG msg;
@@ -278,18 +325,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 		if (framecount < kFramesBlt) {
 			// from the desktop
-		   HDC dc = GetDC(NULL); // desktop HWND
-			//HDC dc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
-
-			::CaptureDC(hBitmap, dc);
-			::GdiFlush();
-			DeleteDC(dc);
-		} else {
+		   HDC dc = GetDC(NULL); // desktop HWND //HDC dc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
+		   ::CaptureDC(hBitmap, dc);
+		} else if (framecount < (kFramesBlt + kFramesRev)) {
 			// from the window
 			HDC dc = (HDC)GetDC(hwnd);
 			::CaptureDC(hBitmap, dc);
-			::GdiFlush();
-			DeleteDC(dc);
+		} else {
+			HDC dc = GetDC(NULL);
+			::CaptureDC(hBitmap, dc);
 		}
 
 		QueryPerformanceCounter(&s2);
@@ -300,10 +344,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			if (diff.QuadPart < minblt) minblt = diff.QuadPart;
 			if (diff.QuadPart > maxblt) maxblt = diff.QuadPart;
 			totblt.QuadPart += s2.QuadPart - s1.QuadPart;
-		} else {
+		} else if (framecount < (kFramesBlt + kFramesRev)) {
 			if (diff.QuadPart < minrev) minrev = diff.QuadPart;
 			if (diff.QuadPart > maxrev) maxrev = diff.QuadPart;
 			totrev.QuadPart += s2.QuadPart - s1.QuadPart;
+		} else {
+			totmemcpy.QuadPart += s2.QuadPart - s1.QuadPart;
 		}
 	}
 	
