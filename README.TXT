@@ -88,20 +88,14 @@ it's too slow!
 	There's also a registry setting to have it turned off "automatically"
 	I have only been able to get max 15 fps when capturing aero [ping me if you want me to look into improving this somewhat, I have some ideas...]
   disabling or enabling "hardware acceleration" for the desktop might help, too, or setting it to one stop above none
-  try switching from 32 to 16 bit output (the filter, and/or your desktop itself--or both!).
-  It's a tidge faster to capture (90fps compared to 80fps on my box)
-  
-  If you have dual core, then theoretically capturing with aero on will 
-  just cause the capture thread to probably eat "an entire core" if you are trying to capture at 
-  20 fps or higher.  So it may be worth it, if you have the extra cpu, to not care.
+  try switching from 32 to 16 bit output (the filter), and/or your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
 
-Note that if your output is, say, going to be 10 fps "actually used" in the end.
-Ex: ffmpeg -f dshow -i video=video-capture-recorder yo.mp4 -r 10 # output file is only 10 fps.
+Note that if your output is, say, going to be 10 fps "actually used" in the end, ex:
+$ ffmpeg -f dshow -i video=video-capture-recorder yo.mp4 -r 10 # output file is only 10 fps.
 
-Then to save cpu, a "good" directshow application will also set its the "source fps" parameter,
-that they pass on to this filter, and everybody's in 10 fps and happy.
+Then to save cpu, a "good" application will also instruct the "source fps" to be 10 fps
+that they pass on to this filter, and everybody's in 10 fps and hopefully happy, and cpu is saved.
 ex: vlc.exe dshow:// ... :dshow-fps=10
-
 vlc then passes this in to SetFormat after negotiation, and the device accepts it, and feeds you at 10 fps.
 
 Some "bad" directshow applications don't pass this in.
@@ -116,16 +110,13 @@ Other feedback/problems/questions ping me roger-projects@googlegroups.com or bro
 
 ==  Redistribution ==
 
-You can use this/redistribute it with your own software if you wish by just redistributing the DLL 
-(PushDesktop.ax) alongside with your app (see installer_just_device.iss for how I do it).
-You'd have to register it manually (regsvr32 PushDesktop.ax, may require administrator rights) as part of your install.
+You have to register the devicemanually (regsvr32 PushDesktop.ax, may require administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
 in the same dir as your exe) for the dll to work/install, in case end users don't have it installed, in that case).
-Or you may be able to recompile it to work around that, etc.
 
 == Code/Future work/Attributions ==
 
-The code is gently lifted from ("inspired by")
+The code is gently based on/lifted from ("inspired by")
   ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around the 'net.
   so you'll probably want to install the Windows SDK before messing around with the source code.
 

@@ -294,6 +294,9 @@ Based on formulas found at http://en.wikipedia.org/wiki/YUV
 
 improved, improvement slowdown
 31ms -> 36.8ms for 1920x1080 desktop with the averaging stuff.
+
+TODO I guess you could get more speed by using swscale (with its MMX)
+or by clustering this to take advantage of RAM blocks better in L2 cache. Maybe?
 */
 int rgb32_to_i420(int width, int height, const char * src, char * dst)
 {

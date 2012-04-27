@@ -1,3 +1,11 @@
+0.6.2 4/27/12
+
+fix for i420 color output looking grey :P
+add some more parameters for internal "scaling" if you want to have windows do that for you, before passing it off down the pipe.
+rename some parameters
+speedup! (well, if you don't have aero installed) max 100fps -> 250 fps
+fix benchmarker to be slightly more realistic.
+
 0.6.1 4/26/12
 
 add i420 output support for flash media live encoder. Yikes.
