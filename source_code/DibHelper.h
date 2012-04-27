@@ -60,14 +60,9 @@ void WarmupCounter();
 __int64 StartCounter();
 long double GetCounterSinceStartMillis(__int64 start);
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd);
-void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY);
+void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
 void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
 
 void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere);
 HRESULT turnAeroOn(boolean onOrOff);
 int rgb32_to_i420(int width, int height, const char * src, char * dst);
-void RGBtoYUV420PSameSize (const unsigned char * rgb,
-unsigned char * yuv,
-unsigned rgbIncrement,
-unsigned char flip,
-int srcFrameWidth, int srcFrameHeight);

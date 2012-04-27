@@ -17,7 +17,7 @@ DWORD globalStart; // for some debug performance benchmarking
 
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
-        : CSourceStream(NAME("Push Source CPushPinDesktop child"), phr, pFilter, L"Capture"),
+        : CSourceStream(NAME("Push Source CPushPinDesktop child/pin"), phr, pFilter, L"Capture"),
         m_FramesWritten(0),
 		m_bReReadRegistry(0),
 		m_bDeDupe(0),
@@ -28,17 +28,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_pParent(pFilter),
 		formatAlreadySet(false)
 {
-
-	// The main point of this sample is to demonstrate how to take a DIB
-	// in host memory and insert it into a video stream. 
-
-	// To keep this sample as simple as possible, we just read the desktop image
-	// from a file and copy it into every frame that we send downstream.
-    //
-	// In the filter graph, we connect this filter to the AVI Mux, which creates 
-    // the AVI file with the video frames we pass to it. In this case, 
-    // the end result is a screen capture video (GDI images only, with no
-    // support for overlay surfaces).
 
     // Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
@@ -56,9 +45,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	WarmupCounter();
     reReadCurrentPosition(0);
 
-	int config_width = read_config_setting(TEXT("width"), 0);
+	int config_width = read_config_setting(TEXT("capture_width"), 0);
 	ASSERT(config_width >= 0); // negatives not allowed...
-	int config_height = read_config_setting(TEXT("height"), 0);
+	int config_height = read_config_setting(TEXT("capture_height"), 0);
 	ASSERT(config_height >= 0); // negatives not allowed, if it's set :)
 
 	if(config_width > 0) {
@@ -72,8 +61,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 
-	m_iFullWidth = m_rScreen.right - m_rScreen.left;
-	ASSERT(m_iFullWidth > 0);
+	m_iCaptureConfigWidth = m_rScreen.right - m_rScreen.left;
+	ASSERT(m_iCaptureConfigWidth  > 0);
 
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
@@ -85,9 +74,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	} else {
 		// leave full screen
 	}
-	m_iFullHeight = m_rScreen.bottom - m_rScreen.top;
-	ASSERT(m_iFullHeight > 0);
-	
+	m_iCaptureConfigHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(m_iCaptureConfigHeight > 0);	
+
+	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0);
+	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0);
+	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
+	ASSERT(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
+
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
 	ASSERT(config_max_fps >= 0);	
@@ -117,8 +111,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 #ifdef _DEBUG 
 	  wchar_t out[1000];
-	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", getHeight(), getWidth(), 
-		  m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
+	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
+		  getNegotiatedFinalHeight(), getNegotiatedFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
 
 	  LocalOutput(out); // warmup for the below debug
 	  __int64 measureDebugOutputSpeed = StartCounter();
@@ -127,18 +121,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  // does this work with flash?
 	  set_config_string_setting(L"last_init_config_was", out);
 #endif
-}
-
-int CPushPinDesktop::getWidth() {
-    int iImageWidth  = m_rScreen.right  - m_rScreen.left;
-	ASSERT(iImageWidth > 0);
-	return iImageWidth;
-}
-
-int CPushPinDesktop::getHeight() {
-    int iImageHeight = m_rScreen.bottom - m_rScreen.top;
-	ASSERT(iImageHeight > 0);
-	return iImageHeight;
 }
 
 int countMissed = 0;
@@ -173,7 +155,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	boolean gotNew = false;
 	while(!gotNew) {
 
-      CopyScreenToBitmap(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
+      CopyScreenToDataBlock(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
 	  // pSample->AddRef(); // causes it to hang, so for now create our own copies
 
@@ -240,8 +222,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f)", m_iFrameNumber, getWidth(), getHeight(), millisThisRoundTook, 
-		fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
+	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f)", 
+		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
 	LocalOutput(out);
 	set_config_string_setting(L"debug_out", out);
 #endif
@@ -373,7 +355,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 		{ // the i420 freak-o
                pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
                pvi->bmiHeader.biBitCount    = 12;
-			   pvi->bmiHeader.biSizeImage = (m_iFullWidth*m_iFullHeight*3)/2; 
+			   pvi->bmiHeader.biSizeImage = (getCaptureDesiredFinalWidth()*getCaptureDesiredFinalHeight()*3)/2; 
 			   pmt->SetSubtype(&WMMEDIASUBTYPE_I420);
 			   break;
 		}
@@ -381,8 +363,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
     // Now adjust some parameters that are the same for all formats
     pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
-    pvi->bmiHeader.biWidth      = m_iFullWidth;
-    pvi->bmiHeader.biHeight     = m_iFullHeight;
+    pvi->bmiHeader.biWidth      = getCaptureDesiredFinalWidth();
+    pvi->bmiHeader.biHeight     = getCaptureDesiredFinalHeight();
     pvi->bmiHeader.biPlanes     = 1;
 	if(pvi->bmiHeader.biSizeImage == 0)
       pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
@@ -426,8 +408,8 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	m_rScreen.top = config_start_y;
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  if(isReRead) {
-		m_rScreen.right = m_rScreen.left + getWidth();
-		m_rScreen.bottom = m_rScreen.top + getHeight();
+		m_rScreen.right = m_rScreen.left + m_iCaptureConfigWidth;
+		m_rScreen.bottom = m_rScreen.top + m_iCaptureConfigHeight;
 	  }
 	}
     wchar_t out[1000];
@@ -535,7 +517,7 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 }
 
 
-void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
+void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
 
     HDC         hMemDC;         // screen DC and memory DC
@@ -550,7 +532,7 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 
-    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Any GetDC too...
+    hMemDC = CreateCompatibleDC(hScrDC); // LODO reuse? Anything else too...do they cost much comparatively though?
 
     // determine points of where to grab from it
     nX  = lpRect->left;
@@ -558,8 +540,10 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
     nX2 = lpRect->right;
     nY2 = lpRect->bottom;
 
-    nWidth  = nX2 - nX;
+    nWidth  = nX2 - nX; // LODO don't have to recalculate these here anyway?
+	ASSERT(nWidth == getNegotiatedFinalWidth());
     nHeight = nY2 - nY;
+	ASSERT(nHeight == getNegotiatedFinalHeight());
 
     // create a bitmap compatible with the screen DC
     hRawBitmap = CreateCompatibleBitmap(hScrDC, nWidth, nHeight);
@@ -567,7 +551,7 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
-	doJustBitBlt(hMemDC, nWidth, nHeight, hScrDC, nX, nY);
+	doJustBitBlt(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), hScrDC, nX, nY);
 
 	AddMouse(hMemDC, lpRect, hScrDC, m_iHwndToTrack);
 
@@ -589,7 +573,6 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
 		doDIBits(hScrDC, hRawBitmap, nHeight, pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here [?]
-		// seems to work to read and write from the same buffer...bit scary :P
 		rgb32_to_i420(nWidth, nHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
 	  doDIBits(hScrDC, hRawBitmap, nHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
@@ -602,21 +585,72 @@ void CPushPinDesktop::CopyScreenToBitmap(HDC hScrDC, LPRECT lpRect, BYTE *pData,
         DeleteObject(hRawBitmap);
 }
 
-void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY) {
+void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
 	__int64 start = StartCounter();
-	 // Bit block transfer from screen our compatible memory DC.
-	
-    if(m_iHwndToTrack != NULL) {
-      // make sure we only capture 'not too much'
-	  // a bit confusing to not do it here, since we still want the 'big window' for the sum size...hmm...
-	  // we might just have to cache these values if we don't want to call GetClientRect each frame...
-      RECT p;
-	  GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
-      //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
-	  nWidth = min(p.right-p.left, nWidth);
-	  nHeight= min(p.bottom-p.top, nHeight);
-    }
+    
+	boolean notNeedStretching = (iFinalWidth == nWidth) && (iFinalHeight == nHeight);
 
-	BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
-	//LocalOutput("bitblt took %.020Lf ms", GetCounterSinceStartMillis(start));
+	if(m_iHwndToTrack != NULL)
+		ASSERT(notNeedStretching); // TODO this doesn't support HWND plus scaling...hmm... LODO move assertion
+
+	// if source and dest are equal, we dont need stretching
+	if (notNeedStretching) {
+
+	  if(m_iHwndToTrack != NULL) {
+		
+        // make sure we only capture 'not too much' i.e. not past this HWND, for the case of Aero being turned off, it shows other windows
+	    // a bit confusing to not do it here, since we still want the 'big window' for the sum size...hmm...
+        RECT p;
+	    GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
+        //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms took too long, hopefully no longer necessary even :) LODO delete
+	    nWidth = min(p.right-p.left, nWidth);
+	    nHeight= min(p.bottom-p.top, nHeight);
+      }
+
+	   // Bit block transfer from screen our compatible memory DC.	
+       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY);// CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
+	}
+	else {
+		if (m_iStretchMode == 0)
+    	{
+			// low quality stretching
+	        SetStretchBltMode (hMemDC, COLORONCOLOR);
+    	}
+		else
+		{
+			// high quality streching, but 3 times as slow.
+		    SetStretchBltMode (hMemDC, HALFTONE);
+		}
+        StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
+	}
+
+	//LocalOutput("bitblt/stretchblt took %.020Lf ms", GetCounterSinceStartMillis(start));
+}
+
+int CPushPinDesktop::getNegotiatedFinalWidth() {
+    int iImageWidth  = m_rScreen.right - m_rScreen.left;
+	ASSERT(iImageWidth > 0);
+	return iImageWidth;
+}
+
+int CPushPinDesktop::getNegotiatedFinalHeight() {
+    int iImageHeight = m_rScreen.bottom - m_rScreen.top;
+	ASSERT(iImageHeight > 0);
+	return iImageHeight;
+}
+
+int CPushPinDesktop::getCaptureDesiredFinalWidth() {
+	if(m_iStretchToThisConfigWidth > 0) {
+		return m_iStretchToThisConfigWidth;
+	} else {
+		return m_iCaptureConfigWidth; // full/config setting, static
+	}
+}
+
+int CPushPinDesktop::getCaptureDesiredFinalHeight(){
+	if(m_iStretchToThisConfigHeight > 0) {
+		return m_iStretchToThisConfigHeight;
+	} else {
+		return m_iCaptureConfigHeight; // defaults to full/config
+	}
 }

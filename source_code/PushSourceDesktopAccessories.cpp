@@ -78,8 +78,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 	}
 
     // Check if the image width & height have changed
-    if(    pvi->bmiHeader.biWidth != getWidth() || 
-       pvi->bmiHeader.biHeight != getHeight())
+    if(    pvi->bmiHeader.biWidth != getNegotiatedFinalWidth() || 
+       pvi->bmiHeader.biHeight != getNegotiatedFinalHeight())
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image.
@@ -94,6 +94,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 
     if (pvi->bmiHeader.biWidth <= 0)
         return E_INVALIDARG;
+
+    
 
     return S_OK;  // This format is acceptable.
 
@@ -262,12 +264,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC can specify this, for instance.
-		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // TODO scale [?]
+		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth;
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
-		
-		// these values it [skype] seems to just keep the default for. Which are too big now if it's down scaling. weird. Leave them too big I guess they don't matter anyway.
-		//pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader);
-		//pmt->lSampleSize = pvi->bmiHeader.biSizeImage;
 
 		// do this check after setting width so that that check'll pass
 		if(CheckMediaType((CMediaType *) pmt) != S_OK) {
@@ -350,15 +348,15 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 	*/
 
     pvscc->VideoStandard = AnalogVideo_None;
-    pvscc->InputSize.cx = m_iFullWidth;
-	pvscc->InputSize.cy = m_iFullHeight;
+    pvscc->InputSize.cx = getCaptureDesiredFinalWidth();
+	pvscc->InputSize.cy = getCaptureDesiredFinalHeight();
 
 	// most of these values are fakes..
-	pvscc->MinCroppingSize.cx = m_iFullWidth;
-    pvscc->MinCroppingSize.cy = m_iFullHeight;
+	pvscc->MinCroppingSize.cx = getCaptureDesiredFinalWidth();
+    pvscc->MinCroppingSize.cy = getCaptureDesiredFinalHeight();
 
-    pvscc->MaxCroppingSize.cx = m_iFullWidth;
-    pvscc->MaxCroppingSize.cy = m_iFullHeight;
+    pvscc->MaxCroppingSize.cx = getCaptureDesiredFinalWidth();
+    pvscc->MaxCroppingSize.cy = getCaptureDesiredFinalHeight();
 
     pvscc->CropGranularityX = 1;
     pvscc->CropGranularityY = 1;
@@ -367,8 +365,8 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
 
     pvscc->MinOutputSize.cx = 1;
     pvscc->MinOutputSize.cy = 1;
-    pvscc->MaxOutputSize.cx = m_iFullWidth;
-    pvscc->MaxOutputSize.cy = m_iFullHeight;
+    pvscc->MaxOutputSize.cx = getCaptureDesiredFinalWidth();
+    pvscc->MaxOutputSize.cy = getCaptureDesiredFinalHeight();
     pvscc->OutputGranularityX = 1;
     pvscc->OutputGranularityY = 1;
 
@@ -378,34 +376,11 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TY
     pvscc->ShrinkTapsY = 1;
 
 	pvscc->MinFrameInterval = m_rtFrameLength; // the larger default is actually the MinFrameInterval, not the max
-	pvscc->MaxFrameInterval = 50000000; // 0.2 fps
+	pvscc->MaxFrameInterval = 500000000; // 0.02 fps :) [though it could go lower, really...]
 
     pvscc->MinBitsPerSecond = (LONG) 1*1*8*GetFps(); // if in 8 bit mode 1x1. I guess.
-    pvscc->MaxBitsPerSecond = (LONG) m_iFullWidth*m_iFullHeight*32*GetFps() + 44; // + 44 header size? + the palette?
+    pvscc->MaxBitsPerSecond = (LONG) getCaptureDesiredFinalWidth()*getCaptureDesiredFinalHeight()*32*GetFps() + 44; // + 44 header size? + the palette?
 
 	return hr;
 }
 
-
-int GetTrueScreenDepth(HDC hDC) {	// don't think I really use/rely on this method anymore...luckily since it looks gross
-
-int RetDepth = GetDeviceCaps(hDC, BITSPIXEL);
-
-if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
-  HDC DeskDC = GetDC(NULL); // TODO probably wrong for HWND hmm...
-  HBITMAP hBMP = CreateCompatibleBitmap(DeskDC, 1, 1);
-  ReleaseDC(NULL, DeskDC);
-
-  HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP);
-
-  if (hOldBMP != NULL) {
-    SetPixelV(hDC, 0, 0, 0x000400);
-    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
-    SelectObject(hDC, hOldBMP);
-  }
-
-  DeleteObject(hBMP);
-}
-
-return RetDepth;
-}

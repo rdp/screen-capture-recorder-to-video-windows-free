@@ -82,11 +82,11 @@ protected:
     RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
     //int m_nCurrentBitDepth;             // capture requested bit depth
 
-    int getWidth();                     // capture requested width
-    int getHeight();                   
+    int getNegotiatedFinalWidth();
+    int getNegotiatedFinalHeight();                   
 
-	int m_iFullWidth;
-	int m_iFullHeight;
+	int m_iCaptureConfigWidth;
+	int m_iCaptureConfigHeight;
 
     CMediaType m_MediaType;
     CImageDisplay m_Display;            // Figures out our media type for us
@@ -105,9 +105,16 @@ protected:
 	boolean m_bDeDupe;
 	int m_millisToSleepBeforePollForChanges;
 	HWND m_iHwndToTrack;
-    void CopyScreenToBitmap(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
-	void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, HDC hScrDC, int nX, int nY);
+    void CopyScreenToDataBlock(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
+	void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
     BYTE *pOldData;
+
+	int m_iStretchToThisConfigWidth;
+    int m_iStretchToThisConfigHeight;
+    int m_iStretchMode;
+
+	int getCaptureDesiredFinalWidth();
+	int getCaptureDesiredFinalHeight();
 
 public:
 
@@ -162,7 +169,3 @@ private:
 	void reReadCurrentPosition(int isReRead);
 
 };
-
-
-
-
