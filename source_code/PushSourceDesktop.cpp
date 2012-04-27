@@ -190,7 +190,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	    previousFrameEndTime = endFrame;
 	    
 	} else {
-	  LocalOutput("it missed some time %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on
+	  LocalOutput("it missed a frame--can't keep up %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
@@ -206,9 +206,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	}
 	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
     
-	LocalOutput("marking frame %llu %llu", now, endFrame);
+	// LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless seemingly
+
 	if(fullyStarted) {
       m_iFrameNumber++;
 	}
@@ -591,7 +592,7 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 	if (notNeedStretching) {
 	  if(m_iHwndToTrack != NULL) {
         // make sure we only capture 'not too much' i.e. not past the border of this HWND, for the case of Aero being turned off, it shows other windows that we don't want
-	    // a bit confusing, I know
+	    // a bit confusing...
         RECT p;
 	    GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
         //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms took too long, hopefully no longer necessary even :) LODO delete
@@ -601,26 +602,29 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 
 	   // Bit block transfer from screen our compatible memory DC.	Apparently faster than stretching, too
        BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
+	   // 9.3 ms 1920x1080 -> 1920x1080
+
+	   // LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
 	}
 	else {
 		if (m_iStretchMode == 0)
     	{
 	        SetStretchBltMode (hMemDC, COLORONCOLOR); // SetStretchBltMode call itself takes 0.003ms
-			// low quality stretching
-			// COLORONCOLOR took 92ms for 1918x1018
+			// low quality stretching -- looks terrible
+			// COLORONCOLOR took 92ms for 1920x1080 -> 1000x1000, 69ms/80ms for 1920x1080 -> 500x500 aero
+			// 20 ms 1920x1080 -> 500x500 without aero
     	}
 		else
 		{
 		    SetStretchBltMode (hMemDC, HALFTONE);
 			// high quality stretching
-			// HALFTONE took 160ms for 1918x1018
+			// HALFTONE took 160ms for 1920x1080 -> 1000x1000, 107ms/120ms for 1920x1080 -> 1000x1000
+			// 50 ms 1920x1080 -> 500x500 without aero
 		}
-		start = StartCounter();
-        StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
-		LocalOutput("stretching took %.020Lf ms", GetCounterSinceStartMillis(start));
+	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
 	}
 
-	//LocalOutput("bitblt/stretchblt took %.020Lf ms", GetCounterSinceStartMillis(start));
+	LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
