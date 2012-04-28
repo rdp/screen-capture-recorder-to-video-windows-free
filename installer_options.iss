@@ -1,11 +1,11 @@
-#define AppVer "0.6.1"
+#define AppVer "0.6.2"
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
 
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.027.ax
-Filename: {tmp}\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
+Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
@@ -17,8 +17,8 @@ Source: README.TXT; DestDir: {app}; Flags: isreadme
 Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
-Source: vendor\*.*; DestDir: {app}\vendor; Flags: recursesubdirs; MinVersion: 0,6.0.6000
-Source: vendor/vcredist_x86.exe; DestDir: {tmp}
+Source: vendor\*.ax; DestDir: {app}\vendor
+Source: vendor\vcredist_x86.exe; DestDir: {app}\vendor
 
 [Setup]
 AppName={#AppName}

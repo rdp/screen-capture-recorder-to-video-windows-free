@@ -184,9 +184,6 @@ int CaptureDC(HBITMAP hRawBitmap, HDC srcDC)
 	if (!hMemDC)	
 		return 1;
 
-	// don't cheat and re-use it...though I suppose we could too...
-    // hRawBitmap = CreateCompatibleBitmap(hSrcDC, kWidth, kHeight);
-
 	HBITMAP	hOldBitmap	= (HBITMAP) ::SelectObject(hMemDC, hRawBitmap);
 
 	int result = BitBlt(hMemDC,				// destination

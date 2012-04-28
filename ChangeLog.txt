@@ -6,6 +6,8 @@ rename some parameters
 speedup! (well, if you don't have aero installed) max 100fps -> 250 fps
 fix benchmarker to be slightly more realistic.
 
+default is 16 bit capture now, in an attempt to make it more speedy. Tell me if you don't want/like this though!
+
 0.6.1 4/26/12
 
 add i420 output support for flash media live encoder. Yikes.
