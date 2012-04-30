@@ -1,17 +1,17 @@
 = todo =
 
-work in XP
-fix the scaling bug
 (fix the flicker bug) mouse?
 
-== maybe/never ==
-
-use memcpy? might need "funky" line stuff...hmm...does it though? what is going on there? (+ 31)/32 but I don't seem to experience failures with i420? or do I?
-use drawdibdraw for speed?
+== maybe ==
 
 crashes in virtualdub?
+stop button
 
+== never ==
 better...reg names [explicit, with default]
+TODO: beat 15 fps in windows 7/8/ask about it msdn
+use memcpy? might need "funky" line stuff...hmm...does it though? what is going on there? (+ 31)/32 but I don't seem to experience failures with i420? or do I?
+use drawdibdraw for speed?
 
 skype hack so it will show in the preview LOL.
 
@@ -26,8 +26,7 @@ try "setting time for one frame in the future"
   seemed to fail
   
   or figure out if I can even get better than 15 fps at all.
-  TODO: beat 15 fps in windows 7/8
-
+  
 don't use getDIBits [raw memcpy?] if we already match the right stuff. Oh wait getDIBits is probably already optimized for this case so we might not gain
 anything, plus, this is a teeny overhead, compared to aero at least.
 
@@ -35,7 +34,7 @@ ask what I should *really* do waiting-wise here...
 
 install 64 bit-ter with 32 always...sure :P
 
-resize with DirectX. Not. LOL.
+scale with DirectX. Not. LOL.
 
 catch hard crash when writing to the reg
 
@@ -50,13 +49,8 @@ can "smart poll" to know when it should switch to/grab the next frame [yeah righ
     except it doesn't cost much so why not...100 fps? or poll [prolly not]?
   also why...does it seem to drag like that when upscaling? Is upconverting maxing out a core?
   
-get skype preview/google to work with it
-
-don't prompt, remember previous settings et al :P
-
-prompt for priority
-
 start green overlay flashing when ffmpeg actually starts LOL
+  plus "start pause" synchro LOL.
 
 prompt for filename "after"
   make audio "device only" ?

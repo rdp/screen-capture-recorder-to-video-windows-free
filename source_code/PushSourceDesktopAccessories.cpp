@@ -62,7 +62,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 		  // 56555949-0000-0010-8000-00AA00389B71  MEDIASUBTYPE_IYUV # dunno if I actually get this one
 		}
     } else {
-		 // RGB's -- ok -- WFMLE doesn't get here :P
+		 // RGB's -- our default -- WFMLE doesn't get here :P
 	}
 
     if(pvi == NULL)
