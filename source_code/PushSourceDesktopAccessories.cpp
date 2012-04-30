@@ -50,7 +50,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     {
 		if(SubType2 == WMMEDIASUBTYPE_I420) { // 30323449-0000-0010-8000-00AA00389B71 MEDIASUBTYPE_I420 == WMMEDIASUBTYPE_I420
 			if(pvi->bmiHeader.biBitCount == 12) {
-				// ok -- WFMLE uses this, VLC *can* also use it, too
+				// 12 is right -- WFMLE uses this, VLC *can* also use it, too
 			}else {
 			  return E_INVALIDARG;
 			}
@@ -81,21 +81,19 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     if(    pvi->bmiHeader.biWidth != getNegotiatedFinalWidth() || 
        pvi->bmiHeader.biHeight != getNegotiatedFinalHeight())
     {
-        // If the image width/height is changed, fail CheckMediaType() to force
-        // the renderer to resize the image.
-        return E_INVALIDARG;
+        // If the image width/height is changed, and they're reconnecting [I must presume] the graph
+		// then we don't care, we'll give it to them in whatever size they want, now, and just scale to fit, so don't fail.
+        // return E_INVALIDARG;
     }
 
     // Don't accept formats with negative height, which would cause the desktop
     // image to be displayed upside down.
-	// also reject 0 that would be weird.
+	// also reject 0's that would be weird.
     if (pvi->bmiHeader.biHeight <= 0)
         return E_INVALIDARG;
 
     if (pvi->bmiHeader.biWidth <= 0)
         return E_INVALIDARG;
-
-    
 
     return S_OK;  // This format is acceptable.
 
