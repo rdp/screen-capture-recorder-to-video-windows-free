@@ -281,7 +281,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC can specify this, for instance.
-		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [m_rScreen gets set here]
+		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen it gets setup right here]
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
 
 		// do this check after setting width so that that check'll pass
