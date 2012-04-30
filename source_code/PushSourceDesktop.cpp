@@ -23,10 +23,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bDeDupe(0),
         m_iFrameNumber(0),
 		pOldData(NULL),
-		m_iConvertToI420(false),
+		m_bConvertToI420(false),
         //m_nCurrentBitDepth(32), // negotiated later...
 		m_pParent(pFilter),
-		formatAlreadySet(false),
+		m_bFormatAlreadySet(false),
 		hRawBitmap(NULL)
 {
 
@@ -212,10 +212,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
-	double fpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
+	m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f)", 
-		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, fpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps());
+	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f), frame missed %d", 
+		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps(), countMissed);
 	LocalOutput(out);
 	set_config_string_setting(L"debug_out", out);
 #endif
@@ -246,7 +246,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 {
     CheckPointer(pmt, E_POINTER);
     CAutoLock cAutoLock(m_pFilter->pStateLock());
-	if(formatAlreadySet) {
+	if(m_bFormatAlreadySet) {
 		// you can only have one option, buddy, if setFormat already called. (see SetFormat's msdn)
 		if(iPosition != 0)
           return E_INVALIDARG;
@@ -411,14 +411,20 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
+	// They *should* call this method...
+
     // Release the device context
 	::ReleaseDC(NULL, hScrDc);
     DeleteDC(hScrDc);
-	// They *should* call this...
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
 
+	wchar_t out[1000];
+	swprintf(out, L"done frame! total frames: %d this one (%dx%d)  %.02f ave fps, negotiated fps %.06f, frame missed %d", 
+		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), m_fFpsSinceBeginningOfTime, GetFps(), countMissed);
+	set_config_string_setting(L"last_run_performance", out);
+
     if (hRawBitmap)
-      DeleteObject(hRawBitmap); // don't need those bytes anymore -- I think we are supposed to delete this but not hOldBitmap
+      DeleteObject(hRawBitmap); // don't need those bytes anymore -- I think we are supposed to delete just this and not hOldBitmap
 
     if(pOldData) {
 		free(pOldData);
@@ -522,7 +528,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
     ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
-
+	
     hMemDC = CreateCompatibleDC(hScrDC); //  0.02ms Anything else to reuse?
     // determine points of where to grab from it, though I think we control these with m_rScreen
     nX  = lpRect->left;
@@ -546,14 +552,14 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 	BITMAPINFO tweakableHeader;
 	memcpy(&tweakableHeader, pHeader, sizeof(BITMAPINFO));
 
-	if(m_iConvertToI420) {
+	if(m_bConvertToI420) {
 		tweakableHeader.bmiHeader.biBitCount = 32;
 		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
 		tweakableHeader.bmiHeader.biCompression = BI_RGB;
 		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion to i420 after...
 	}
 	
-	if(m_iConvertToI420) {
+	if(m_bConvertToI420) {
 		doDIBits(hScrDC, hRawBitmap2, getNegotiatedFinalHeight(), pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
 	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's around here [?]

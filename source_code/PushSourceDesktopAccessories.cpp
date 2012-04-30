@@ -68,7 +68,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     if(pvi == NULL)
         return E_INVALIDARG;
 
-	if(formatAlreadySet) {
+	if(m_bFormatAlreadySet) {
 		// then it must be the same as our current...see SetFormat msdn
 	    if(m_mt == *pMediaType) {
 			return S_OK;
@@ -130,7 +130,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small for VLC? LODO try it :)
 	// some pasted code...
 	int bytesPerPixel = (header.biBitCount/8);
-	if(m_iConvertToI420) {
+	if(m_bConvertToI420) {
 	  bytesPerPixel = 32/8; // we convert from a 32 bit to i420, so need more space in this case
 	}
 
@@ -149,7 +149,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	int bitmapSize = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
 	pProperties->cbBuffer = bitmapSize;
 	//pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
-	if(m_iConvertToI420) {
+	if(m_bConvertToI420) {
 	  pProperties->cbBuffer = header.biHeight * header.biWidth*3/2; // necessary to prevent an "out of memory" error for FMLE. Yikes. Oh wow yikes.
 	}
 
@@ -194,6 +194,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
 	
     // create a bitmap compatible with the screen DC
+	if(hRawBitmap)
+		DeleteObject (hRawBitmap);
 	hRawBitmap = CreateCompatibleBitmap(hScrDc, getNegotiatedFinalWidth(), getNegotiatedFinalHeight());
 
     return NOERROR;
@@ -213,7 +215,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
     // Pass the call up to my base class
     HRESULT hr = CSourceStream::SetMediaType(pMediaType); // assigns our local m_mt via m_mt.Set(*pmt) ... 
-    m_iConvertToI420 = false; // in case we are re-negotiating the type and it was set to i420 before...
+    m_bConvertToI420 = false; // in case we are re-negotiating the type and it was set to i420 before...
 
     if(SUCCEEDED(hr))
     {
@@ -224,7 +226,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
         switch(pvi->bmiHeader.biBitCount)
         {
 		    case 12:     // i420
-			    m_iConvertToI420 = true;
+			    m_bConvertToI420 = true;
 				ASSERT(!m_bDeDupe); // not compatible yet
                 hr = S_OK;
 			    break;
@@ -292,7 +294,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		// now save it away...for being able to re-offer it later. We could use SetMediaType but we're just being lazy and re-using m_mt for many things I guess
 		m_mt = *pmt; 
-  	    formatAlreadySet = true;
+  	    m_bFormatAlreadySet = true;
 		// continue on.
 	}
     IPin* pin;
@@ -313,7 +315,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 	// success of some type
 	if(pmt == NULL) {
 		// they called it to reset us...
-		formatAlreadySet = false;
+		m_bFormatAlreadySet = false;
 	} else {
 		// formatAlreadySet = true; // ja
 	}
