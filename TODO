@@ -1,15 +1,20 @@
 = todo =
 
-(fix the flicker bug) mouse?
-  NOMIRRORBITMAP
 == maybe ==
 
 crashes in virtualdub?
 stop button
 
 == never ==
+
+check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
+
+(fix the flicker bug) mouse?
+  my email of ideas to him
+  
 better...reg names [explicit, with default]
 TODO: beat 15 fps in windows 7/8/ask about it msdn
+
 use memcpy? might need "funky" line stuff...hmm...does it though? what is going on there? (+ 31)/32 but I don't seem to experience failures with i420? or do I?
 use drawdibdraw for speed?
 
