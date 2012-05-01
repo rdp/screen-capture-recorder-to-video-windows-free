@@ -1,7 +1,7 @@
 = todo =
 
 (fix the flicker bug) mouse?
-
+  NOMIRRORBITMAP
 == maybe ==
 
 crashes in virtualdub?

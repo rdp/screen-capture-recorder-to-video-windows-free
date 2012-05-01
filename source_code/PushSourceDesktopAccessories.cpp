@@ -81,9 +81,9 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     if(    pvi->bmiHeader.biWidth != getNegotiatedFinalWidth() || 
        pvi->bmiHeader.biHeight != getNegotiatedFinalHeight())
     {
-        // If the image width/height is changed, and they're reconnecting [I must presume] the graph
-		// then we don't care, we'll give it to them in whatever size they want, now, and just scale to fit, so don't fail.
-        // return E_INVALIDARG;
+        // If the image width/height is changed, fail CheckMediaType() to force
+        // the renderer to resize the image		
+        return E_INVALIDARG;
     }
 
     // Don't accept formats with negative height, which would cause the desktop

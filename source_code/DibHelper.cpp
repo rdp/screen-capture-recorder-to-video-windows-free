@@ -297,6 +297,9 @@ improved, improvement slowdown
 
 TODO I guess you could get more speed by using swscale (with its MMX)
 or by clustering this to take advantage of RAM blocks better in L2 cache. Maybe?
+
+TODO I "guess" could get more speed by passing in/converting from 16 bit RGB, instead of 32.  Less RAM to load.
+
 */
 int rgb32_to_i420(int width, int height, const char * src, char * dst)
 {
@@ -365,7 +368,7 @@ int rgb32_to_i420(int width, int height, const char * src, char * dst)
 			//sum_g += 2;
 			//sum_b += 2;
 
-			// divide by 4
+			// divide by 4 to average
 			sum_r /= 4;
 			sum_g /= 4;
 			sum_b /= 4;

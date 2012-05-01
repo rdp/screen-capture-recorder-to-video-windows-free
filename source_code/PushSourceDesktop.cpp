@@ -522,8 +522,8 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY;       // coordinates of rectangle to grab
-	int         iFinalHeight = getNegotiatedFinalHeight();
-	int         iFinalWidth  = getNegotiatedFinalWidth();
+	int         iFinalHeight = getCaptureDesiredFinalHeight();
+	int         iFinalWidth  = getCaptureDesiredFinalWidth();
 	
     ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
     // create a DC for the screen and create
@@ -534,9 +534,9 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
     nX  = lpRect->left;
     nY  = lpRect->top;
 
-	// sanity checks
-	ASSERT(lpRect->right - lpRect->left == iFinalWidth);
-	ASSERT(lpRect->bottom - lpRect->top == iFinalHeight);
+	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
+	// ASSERT(lpRect->right - lpRect->left == iFinalWidth);
+	// ASSERT(lpRect->bottom - lpRect->top == iFinalHeight);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
