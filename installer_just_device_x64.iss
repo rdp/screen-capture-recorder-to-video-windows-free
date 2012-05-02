@@ -1,10 +1,11 @@
-#define AppVer "0.5.0"
+#define AppVer "0.x.x" GUESS WE HAVENT RELEASED ONE FOR AWHILE :P
 #define AppName "Screen Capturer Recorder Device Only x64"
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
 [Run]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
+
 [Files]
 Source: source_code\x64\releasex64\PushDesktop.ax; DestDir: {app}
 Source: ChangeLog.txt; DestDir: {app}
@@ -22,6 +23,6 @@ OutputDir=releases
 
 [Icons]
 Name: {group}\Readme; Filename: {app}\README.TXT
-Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
+Name: {group}\configure\ChangeLog; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Uninstall; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device after install msvcr100; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax

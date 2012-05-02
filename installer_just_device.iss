@@ -21,6 +21,6 @@ OutputDir=releases
 
 [Icons]
 Name: {group}\Readme; Filename: {app}\README.TXT
-Name: {group}\configure\Release Notes for v{#AppVer}; Filename: {app}\ChangeLog.txt
+Name: {group}\configure\ChangeLog; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Uninstall; Filename: {uninstallexe}
 Name: {group}\configure\re-register capture device after install msvcr100; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
