@@ -3,11 +3,13 @@
 == maybe ==
 
 crashes in virtualdub?
-a stop button
+a stop button for recording
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
   
 == all never ==
+
+check if libswscale would be "faster" than using windows' own resizing methods. Yikes if it is LOL.
 
 multi thread so that it can do BitBlt while "the other one" is doing memcpy etc. LOL
 
