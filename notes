@@ -1,3 +1,16 @@
+= tearing =
+
+http://www.mail-archive.com/realbasic-nug@lists.realsoftware.com/msg27760.html saw it
+http://www.tomshardware.com/forum/131420-33-vertical-sync-windows “graphics acceleration slider”
+take out the mouse snapshot?
+gdiflush help?
+WindowFromDC cause it?
+http://community.justin.tv/forums/archive/index.php/t-10128.html another instance
+ http://nl.justin.tv/alphamalet/b/299341848 (profanity below though)
+   those may not actually be directly related, as possibly they're just encountering blips in the capture card.
+
+CAPTUREBLT apparently helps?
+
 = with adjust timestamp etc.=
 
 Seems to *need* --live-caching=3000
