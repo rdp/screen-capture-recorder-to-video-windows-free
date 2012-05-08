@@ -55,8 +55,16 @@ Let me know if you want an easier way made for it for anything.
 
 == Streaming ==
 
-You can stream using it with ffmpeg (to an rtmp server) or VLC (itself as a server, or to an rtmp server) or
-with Flash Media Live Encoder, to some flash server.
+You can stream using it with ffmpeg (to an rtmp server) or to UDP, or use VLC (itself as a server, or VLC to an rtmp server) or
+use Flash Media Live Encoder, to some flash server.
+
+"I can confirm also that VLC is very nice for everything but real-time
+steaming video, since it has a 1-second or more video delay" (use ffmpeg instead?)
+
+ffplay to say it nicely: sucks big time.  The image quality is horrible, pixelated.
+
+VLC can receive a UDP stream and look good: 
+vnc -vvv udp://127.0.0.1:1234
 
 == Configuration ==
 
