@@ -517,8 +517,8 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY;       // coordinates of rectangle to grab
-	int         iFinalHeight = getCaptureDesiredFinalHeight();
-	int         iFinalWidth  = getCaptureDesiredFinalWidth();
+	int         iFinalStretchHeight = getNegotiatedFinalHeight();
+	int         iFinalStretchWidth  = getNegotiatedFinalWidth();
 	
     ASSERT(!IsRectEmpty(&m_rScreen)); // that would be unexpected
     // create a DC for the screen and create
@@ -531,13 +531,13 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
     nY  = m_rScreen.top;
 
 	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
-	// ASSERT(m_rScreen.bottom - m_rScreen.top == iFinalHeight);
-	// ASSERT(m_rScreen.right - m_rScreen.left == iFinalWidth);
+	ASSERT(m_rScreen.bottom - m_rScreen.top == iFinalStretchHeight);
+	ASSERT(m_rScreen.right - m_rScreen.left == iFinalStretchWidth);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
-	doJustBitBlt(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalWidth, iFinalHeight, hScrDC, nX, nY);
+	doJustBitBltOrScaling(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalStretchWidth, iFinalStretchHeight, hScrDC, nX, nY);
 
 	AddMouse(hMemDC, &m_rScreen, hScrDC, m_iHwndToTrack);
 
@@ -557,50 +557,51 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	
 	if(m_bConvertToI420) {
 		// copy it to a temporary buffer first
-		doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pOldData, &tweakableHeader);
+		doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pOldData, &tweakableHeader);
 	    // memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
 		// TODO smarter conversion/memcpy's here [?]
-		rgb32_to_i420(iFinalWidth, iFinalHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
+		rgb32_to_i420(iFinalStretchWidth, iFinalStretchHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
-	  doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pData, &tweakableHeader);
+	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
 	}
 
     // clean up
     DeleteDC(hMemDC);
 }
 
-void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
+void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
 	__int64 start = StartCounter();
     
 	boolean notNeedStretching = (iFinalWidth == nWidth) && (iFinalHeight == nHeight);
 
 	if(m_iHwndToTrack != NULL)
-		ASSERT(notNeedStretching); // this doesn't support HWND plus scaling...hmm... LODO move assertion LODO implement low prio since they probably are just needing that window, not with scaling too [?]
+		ASSERT(notNeedStretching); // we don't support HWND plus scaling...hmm... LODO move assertion LODO implement this (low prio since they probably are just needing that window, not with scaling too [?])
 
 	if (notNeedStretching) {
+
 	  if(m_iHwndToTrack != NULL) {
         // make sure we only capture 'not too much' i.e. not past the border of this HWND, for the case of Aero being turned off, it shows other windows that we don't want
 	    // a bit confusing...
         RECT p;
 	    GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
-        //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms took too long, hopefully no longer necessary even :) LODO delete
+        //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
 	    nWidth = min(p.right-p.left, nWidth);
-	    nHeight= min(p.bottom-p.top, nHeight);
+	    nHeight = min(p.bottom-p.top, nHeight);
       }
 
-	   // Bit block transfer from screen our compatible memory DC.	Apparently faster than stretching, too
-       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered windows [?] huh? windows 7 aero only then or what? seriously? also it causes mouse flickerign, or does it? [doesn't seem to help anyway]
+	   // Bit block transfer from screen our compatible memory DC.	Apparently this is faster than stretching.
+       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered (transparent) windows in non-aero I guess (which happens to include the mouse, but we do that elsewhere)
 	   // 9.3 ms 1920x1080 -> 1920x1080
 	   // LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
 	}
 	else {
 		if (m_iStretchMode == 0)
     	{
-	        SetStretchBltMode (hMemDC, COLORONCOLOR); // SetStretchBltMode call itself takes 0.003ms
-			// low quality stretching -- looks terrible
+			// low quality scaling -- looks terrible
+	        SetStretchBltMode (hMemDC, COLORONCOLOR); // the SetStretchBltMode call itself takes 0.003ms
 			// COLORONCOLOR took 92ms for 1920x1080 -> 1000x1000, 69ms/80ms for 1920x1080 -> 500x500 aero
 			// 20 ms 1920x1080 -> 500x500 without aero
-			 // LODO can we get better results with better speed? the default is sooo ugly.
+			// LODO can we get better results with good speed? it is sooo ugly.
     	}
 		else
 		{
@@ -608,9 +609,11 @@ void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFin
 			// high quality stretching
 			// HALFTONE took 160ms for 1920x1080 -> 1000x1000, 107ms/120ms for 1920x1080 -> 1000x1000
 			// 50 ms 1920x1080 -> 500x500 without aero
+			SetBrushOrgEx(hMemDC, 0, 0, 0); // MSDN says I should call this after using HALFTONE
 		}
 	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
 	}
+	//GdiFlush();
 
 	//LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
@@ -622,6 +625,7 @@ int CPushPinDesktop::getNegotiatedFinalWidth() {
 }
 
 int CPushPinDesktop::getNegotiatedFinalHeight() {
+	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them a smaller one
     int iImageHeight = m_rScreen.bottom - m_rScreen.top;
 	ASSERT(iImageHeight > 0);
 	return iImageHeight;

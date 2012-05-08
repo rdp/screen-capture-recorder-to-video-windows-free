@@ -115,7 +115,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 		p.x -= iconinfo.xHotspot; // align mouse, I guess...
 		p.y -= iconinfo.yHotspot;
 
-		// avoid some memory leak or other
+		// avoid some memory leak or other...
 		if (iconinfo.hbmMask) {
 			::DeleteObject(iconinfo.hbmMask);
 		}
@@ -125,7 +125,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	}
 	
 	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
-	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes 0.125 ms
+	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
 }
 
 // partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
