@@ -1,3 +1,7 @@
+0.6.3 5/8/12
+
+bump virtual audio version
+
 0.6.2 4/27/12
 
 fix for i420 color output looking grey :P

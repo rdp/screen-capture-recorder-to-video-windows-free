@@ -1,5 +1,5 @@
 #define AppVer "0.3.4"
-#define AppName "Screen Capturer Recorder Just DirectShow Device Only"
+#define AppName "Screen Capturer Recorder DirectShow Device Only"
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
@@ -23,4 +23,3 @@ OutputDir=releases
 Name: {group}\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\ChangeLog; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Uninstall; Filename: {uninstallexe}
-Name: {group}\configure\re-register capture device after install msvcr100; Filename: regsvr32; WorkingDir: {app}; Parameters: PushDesktop.ax
