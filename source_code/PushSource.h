@@ -109,7 +109,7 @@ protected:
 	boolean m_bDeDupe;
 	int m_millisToSleepBeforePollForChanges;
 	HWND m_iHwndToTrack;
-    void CopyScreenToDataBlock(HDC hScrDc, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
+    void CopyScreenToDataBlock(HDC hScrDc, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
 	void doJustBitBlt(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
 	void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
 

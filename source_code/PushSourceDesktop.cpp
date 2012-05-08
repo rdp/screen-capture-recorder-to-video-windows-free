@@ -14,6 +14,7 @@
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger! can evaluate "a" twice.
 
 DWORD globalStart; // for some debug performance benchmarking
+int countMissed = 0;
 
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
@@ -114,10 +115,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 #endif
 }
 
-int countMissed = 0;
-
-// This is where we insert the DIB bits into the video stream.
-// FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
 	__int64 startThisRound = StartCounter();
@@ -146,10 +143,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	boolean gotNew = false;
 	while(!gotNew) {
 
-      CopyScreenToDataBlock(hScrDc, &m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
+      CopyScreenToDataBlock(hScrDc, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
-	  // pSample->AddRef(); // causes it to hang, so for now create our own copies
-
 	  if(m_bDeDupe) {
 			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // took desktop:  10ms for 640x1152, still 100 fps uh guess...
 			  Sleep(m_millisToSleepBeforePollForChanges);
@@ -517,7 +512,7 @@ STDMETHODIMP CPushSourceDesktop::Stop(){
 	return hr;
 }
 
-void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
+void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
@@ -525,25 +520,26 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 	int         iFinalHeight = getCaptureDesiredFinalHeight();
 	int         iFinalWidth  = getCaptureDesiredFinalWidth();
 	
-    ASSERT(!IsRectEmpty(lpRect)); // that would be unexpected
+    ASSERT(!IsRectEmpty(&m_rScreen)); // that would be unexpected
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 	
-    hMemDC = CreateCompatibleDC(hScrDC); //  0.02ms Anything else to reuse?
+    hMemDC = CreateCompatibleDC(hScrDC); //  0.02ms Anything else to reuse, this one's pretty fast...?
+
     // determine points of where to grab from it, though I think we control these with m_rScreen
-    nX  = lpRect->left;
-    nY  = lpRect->top;
+    nX  = m_rScreen.left;
+    nY  = m_rScreen.top;
 
 	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
-	// ASSERT(lpRect->right - lpRect->left == iFinalWidth);
-	// ASSERT(lpRect->bottom - lpRect->top == iFinalHeight);
+	// ASSERT(m_rScreen.bottom - m_rScreen.top == iFinalHeight);
+	// ASSERT(m_rScreen.right - m_rScreen.left == iFinalWidth);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
 	doJustBitBlt(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalWidth, iFinalHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC, lpRect, hScrDC, m_iHwndToTrack);
+	AddMouse(hMemDC, &m_rScreen, hScrDC, m_iHwndToTrack);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture...whatever this even means...	
@@ -554,23 +550,23 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, LPRECT lpRect, BYTE *pDa
 
 	if(m_bConvertToI420) {
 		tweakableHeader.bmiHeader.biBitCount = 32;
-		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
 		tweakableHeader.bmiHeader.biCompression = BI_RGB;
-		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion to i420 after...
+		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion from i420...
+		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
 	}
 	
 	if(m_bConvertToI420) {
-		doDIBits(hScrDC, hRawBitmap2, getNegotiatedFinalHeight(), pOldData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
-	    //  memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
-		// TODO smarter conversion/memcpy's around here [?]
+		// copy it to a temporary buffer first
+		doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pOldData, &tweakableHeader);
+	    // memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
+		// TODO smarter conversion/memcpy's here [?]
 		rgb32_to_i420(iFinalWidth, iFinalHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
-	  doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pData, &tweakableHeader); // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject then, but also does conversions.
+	  doDIBits(hScrDC, hRawBitmap2, iFinalHeight, pData, &tweakableHeader);
 	}
 
     // clean up
     DeleteDC(hMemDC);
-
 }
 
 void CPushPinDesktop::doJustBitBlt(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
@@ -648,12 +644,10 @@ int CPushPinDesktop::getCaptureDesiredFinalHeight(){
 }
 
 void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader) {
-    // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
 	__int64 start = StartCounter();
 
-	// this seems to be the only way to actually get data out of an HBITMAP [?] LODO ask if you can access the bits directly for a memcpy :)
-
-    GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS); // here's probably where we might lose some speed...maybe elsewhere too...also this makes a bitmap for us tho...
+    // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
+    GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS);  // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject, but also does conversions [?]
 	
 	//LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }
