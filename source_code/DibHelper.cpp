@@ -17,6 +17,7 @@
 // #pragma comment(lib,"dwmapi.lib")  // ?
 #include <dwmapi.h>
 
+extern int show_performance;
 
 void logToFile(char *log_this) {
     FILE *f;
@@ -125,7 +126,8 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	}
 	
 	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
-	//LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
+	if(show_performance)
+	  LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
 }
 
 // partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html

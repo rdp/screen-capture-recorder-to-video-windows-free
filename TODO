@@ -9,6 +9,8 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   
 == all never ==
 
+LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
+
 check if libswscale would be "faster" than using windows' own resizing methods. Yikes if it is LOL.
 
 multi thread so that it can do BitBlt while "the other one" is doing memcpy etc. LOL

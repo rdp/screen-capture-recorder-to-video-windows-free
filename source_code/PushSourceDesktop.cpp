@@ -16,6 +16,12 @@
 DWORD globalStart; // for some debug performance benchmarking
 int countMissed = 0;
 
+#ifdef _DEBUG 
+  int show_performance = 1;
+#else
+  int show_performance = 0;
+#endif
+
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child/pin"), phr, pFilter, L"Capture"),
@@ -176,7 +182,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	    previousFrameEndTime = endFrame;
 	    
 	} else {
-	  LocalOutput("it missed a frame--can't keep up %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
+	  if(show_performance)
+	    LocalOutput("it missed a frame--can't keep up %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
@@ -372,7 +379,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
       pmt->SetSubtype(&SubTypeGUID);
 	}
 
-
     return NOERROR;
 
 } // GetMediaType
@@ -382,7 +388,7 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
 
 	// assume 0 means not set...negative ignore :)
-	 // TODO no overflows, that's a bad value too... they crash it, I think! [position youtube too far bottom right, run it...]
+	// TODO no overflows, that's a bad value too... they cause a crash, I think! [position youtube too far bottom right, track it...]
 	int old_x = m_rScreen.left;
 	int old_y = m_rScreen.top;
 
@@ -398,23 +404,26 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 		m_rScreen.bottom = m_rScreen.top + m_iCaptureConfigHeight;
 	  }
 	}
-    wchar_t out[1000];
-	swprintf(out, 1000, L"new screen pos from reg: %d %d\n", config_start_x, config_start_y);
-	LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start)); // 0.416880ms
-	LocalOutput(out);
+
+	if(show_performance) {
+      wchar_t out[1000];
+	  swprintf(out, 1000, L"new screen pos from reg: %d %d\n", config_start_x, config_start_y);
+	  LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start)); // takes 0.416880ms (2000 fps)
+	  LocalOutput(out);
+	}
 }
 
 CPushPinDesktop::~CPushPinDesktop()
 {   
-	// They *should* call this method...
+	// They *should* call this...VLC does at least, correctly.
 
-    // Release the device context
+    // Release the device context stuff
 	::ReleaseDC(NULL, hScrDc);
-    DeleteDC(hScrDc);
+    ::DeleteDC(hScrDc);
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
 
 	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d this one (%dx%d)  %.02f ave fps, negotiated fps %.06f, frame missed %d", 
+	swprintf(out, L"done frame! total frames: %d (%dx%d)  %.02f ave fps, negotiated fps %.06f, frame missed %d", 
 		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), m_fFpsSinceBeginningOfTime, GetFps(), countMissed);
 	set_config_string_setting(L"last_run_performance", out);
 
@@ -549,17 +558,17 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	memcpy(&tweakableHeader, pHeader, sizeof(BITMAPINFO));
 
 	if(m_bConvertToI420) {
-		tweakableHeader.bmiHeader.biBitCount = 32;
-		tweakableHeader.bmiHeader.biCompression = BI_RGB;
-		tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion from i420...
-		tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
+	  tweakableHeader.bmiHeader.biBitCount = 32;
+	  tweakableHeader.bmiHeader.biCompression = BI_RGB;
+	  tweakableHeader.bmiHeader.biHeight = -tweakableHeader.bmiHeader.biHeight; // prevent upside down conversion from i420...
+	  tweakableHeader.bmiHeader.biSizeImage = GetBitmapSize(&tweakableHeader.bmiHeader);
 	}
 	
 	if(m_bConvertToI420) {
 		// copy it to a temporary buffer first
 		doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pOldData, &tweakableHeader);
 	    // memcpy(/* dest */ pOldData, pData, pSample->GetSize()); // 12.8ms for 1920x1080 desktop
-		// TODO smarter conversion/memcpy's here [?]
+		// TODO smarter conversion/memcpy's here [?] we could combine scaling with rgb32_to_i420 for instance...
 		rgb32_to_i420(iFinalStretchWidth, iFinalStretchHeight, (const char *) pOldData, (char *) pData);// 36.8ms for 1920x1080 desktop	
 	} else {
 	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
@@ -591,8 +600,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 
 	   // Bit block transfer from screen our compatible memory DC.	Apparently this is faster than stretching.
        BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered (transparent) windows in non-aero I guess (which happens to include the mouse, but we do that elsewhere)
-	   // 9.3 ms 1920x1080 -> 1920x1080
-	   // LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
+	   // 9.3 ms 1920x1080 -> 1920x1080 (100 fps) (11 ms? 14? random?)
 	}
 	else {
 		if (m_iStretchMode == 0)
@@ -613,9 +621,10 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 		}
 	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
 	}
-	GdiFlush();
+	//GdiFlush();
 
-	//LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
+	if(show_performance)
+	  LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
@@ -625,7 +634,7 @@ int CPushPinDesktop::getNegotiatedFinalWidth() {
 }
 
 int CPushPinDesktop::getNegotiatedFinalHeight() {
-	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them a smaller one
+	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them an even smaller setting...
     int iImageHeight = m_rScreen.bottom - m_rScreen.top;
 	ASSERT(iImageHeight > 0);
 	return iImageHeight;
@@ -643,7 +652,7 @@ int CPushPinDesktop::getCaptureDesiredFinalHeight(){
 	if(m_iStretchToThisConfigHeight > 0) {
 		return m_iStretchToThisConfigHeight;
 	} else {
-		return m_iCaptureConfigHeight; // defaults to full/config
+		return m_iCaptureConfigHeight; // defaults to full/config static
 	}
 }
 
@@ -653,5 +662,6 @@ void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLi
     // Copy the bitmap data into the provided BYTE buffer, in the right format I guess.
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS);  // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject, but also does conversions [?]
 	
-	//LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // takes 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
+	if(show_performance)
+	  LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // took 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }
