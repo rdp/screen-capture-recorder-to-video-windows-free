@@ -1,3 +1,32 @@
+= broadcasting =
+
+
+ffmpeg -y -loglevel warning -f dshow -i video="screen-capture-recorder" -vf crop=690:388:136:0 -r 30 -s 962x388 -threads 2 -vcodec libx264 -vpre baseline -vpre my_ffpreset -f flv rtmp://<amazon_wowza_server>/live/myStream.sdp
+
+Here is my ffmpeg preset (libx264-my_ffpreset.ffpreset):
+coder=1
+flags2=+wpred+dct8x8
+level=31
+maxrate=1200000
+bufsize=200000
+wpredp=0
+g=60
+refs=1
+subq=3
+trellis=0
+bf=0
+rc_lookahead=0
+
+I use a web-page with jwplayer to display the video at several sites.
+Amazon wowza server doing the copying of 1 input video stream to several
+output video streams.
+
+I have also tweaked the Amazon wowza server a little to get little delay/
+latency for streaming the video.
+
+there's also a VLC log from somewhere...we really need some helper/GUI for this this is nuts...
+also is ffmpeg better at "capturing for ps3ms" than VLC? broadcasting/streaming?
+
 = tearing =
 
 http://www.mail-archive.com/realbasic-nug@lists.realsoftware.com/msg27760.html saw it
