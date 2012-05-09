@@ -7,8 +7,9 @@ It also includes a free, general purpose, open source directshow desktop/screen 
 You can use this with any (directshow compatible) program to capture or stream, like VLC.
 
 It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
-  see https://github.com/rdp/virtual-audio-capture-grabber-device
-  and some helper utilities for both.
+  see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of the audio device
+
+It also includes helper utilities for recording/broadcasting both.
 
 == Installation ==
 
@@ -60,10 +61,11 @@ use Flash Media Live Encoder, to some flash server.
 
 "I can confirm also that VLC is very nice for everything but real-time
 steaming video, since it has a 1-second or more video delay" (use ffmpeg instead?)
+VLC may not work well with "variable rate input sources" like this one, but it might work ok for you.
 
 ffplay to say it nicely: sucks big time.  The image quality is horrible, pixelated.
 
-VLC can receive a UDP stream and look good: 
+VLC can receive a UDP stream and look better than ffplay: 
 vnc -vvv udp://127.0.0.1:1234
 
 == Configuration ==

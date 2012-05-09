@@ -45,6 +45,8 @@ CAPTUREBLT apparently helps? or just one?
 
 disable the batch limit maybe?
 
+see also http://betterlogic.com/roger/2012/05/using-bitblt-for-screen-capture-causes-tearing
+
 = with adjust timestamp etc.=
 
 Seems to *need* --live-caching=3000
@@ -52,6 +54,7 @@ Seems to *need* --live-caching=3000
 http://forum.videolan.org/viewtopic.php?f=4&t=99906 related
 
 12 resets in 40K frames.
+
 
 = latest way, cool recatch =
 
