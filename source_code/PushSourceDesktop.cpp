@@ -224,10 +224,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	swprintf(out, L"done frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
 		m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
 		/* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
-#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
+//#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	LocalOutput(out);
-	set_config_string_setting(L"frame_out", out);
-#endif
+	set_config_string_setting(L"frame_stats", out);
+//#endif
     return S_OK;
 }
 
