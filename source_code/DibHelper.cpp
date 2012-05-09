@@ -89,8 +89,8 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually callin
 // 	__int64 start = StartCounter();
 // ...
 // long double elapsed = GetCounterSinceStartMillis(start)
-// printf("took %.020Lf ms", elapsed);
-// or to debug: printf("start %I64d end %I64d took %.020Lf ms", start, StartCounter(), elapsed);
+// printf("took %.020Lf ms", elapsed); // or just use a float and %f or %.02f etc.
+// or to debug the method call itself: printf("start %I64d end %I64d took %.02Lf ms", start, StartCounter(), elapsed); 
 
 
 void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
@@ -127,7 +127,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	
 	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
 	if(show_performance)
-	  LocalOutput("add mouse took %.020Lf ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
+	  LocalOutput("add mouse took %.02f ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
 }
 
 // partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
@@ -210,9 +210,9 @@ HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
 	  RegCloseKey(hKey);  // not sure if this could still be NULL...possibly though
 
 	return i;
-
 }
 
+// some VISTA hacks
 
 typedef HRESULT (WINAPI * DwmIsCompositionEnabledFunction)(__out BOOL* isEnabled);
 typedef HRESULT (WINAPI * DwmGetWindowAttributeFunction) (

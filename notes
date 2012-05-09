@@ -29,6 +29,8 @@ also is ffmpeg better at "capturing for ps3ms" than VLC? broadcasting/streaming?
 
 = tearing =
 
+fix tearing in VLC windowed: http://forum.videolan.org/viewtopic.php?f=14&t=60736&start=0 LOL
+
 http://www.mail-archive.com/realbasic-nug@lists.realsoftware.com/msg27760.html saw it
 http://www.tomshardware.com/forum/131420-33-vertical-sync-windows “graphics acceleration slider”
 take out the mouse snapshot?
@@ -532,32 +534,4 @@ utvideo is the "best" lossless they say...http://www.videohelp.com/tools/Ut_Vide
   
 MSU lossless codec is abandoned and not developed nor supported anymore. It was never even close to realtime
   except it appears to be hmm...
-Xvid with search options at 0, no B frames, and constant quality 1 or 2 is very fast, even with one core. You can specify it use just intra (I) frames, but it wouldn't be slow decoding with P-frames.
-imho, Fastest visually lossless codec is Cineform wavelet :) [not free]
-   Cineform isn't in this test. It's not cheap, but it DOES let you capture 10 bit 4:2:2 1080p24 in real time to a single drive
-ArithYUV 
-YLC (YUY2 Lossless Codec version 0.25
-
-http://www.compression.ru/video/codec_comparison/lossless_codecs_2007_en.html
-  FFV1 max and fast seems like the next best "lossless" options.
-  
-TODO try out camstudio lossless too what size is it?
-  does it have a lossy option?  If so how does that compare to all other lossy options ffmpeg has? oh well LOL
-
-Lagarith clearly beats relatively fast codecs both by compression ratio and fps. http://compression.ru/video/codec_comparison/pdf/msu_lossless_codecs_comparison_2007_eng.pdf
-
-HUFFYUV did 34fps
-Uncompressed did 24fps
-Aware Wavelet did 48fps
-
-CorePNG
-
-teeny window, 10 fps blacky:
-  doDIBits 38% cpu
-  memcpy 5%
-  
- big window, 10 fps
-   ffmpeg main 20%
-   
-   61 % diBits
-   14 % memcpy
+Xvid with search options at 0, no B frames, and constant quality 1 or 2 is very fast, even with one core. You can specify it use just

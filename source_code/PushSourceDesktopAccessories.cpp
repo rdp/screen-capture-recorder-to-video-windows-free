@@ -66,7 +66,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 	}
 
     if(pvi == NULL)
-        return E_INVALIDARG;
+        return E_INVALIDARG; // ??
 
 	if(m_bFormatAlreadySet) {
 		// then it must be the same as our current...see SetFormat msdn
@@ -78,17 +78,19 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 	}
 
     // Check if the image width & height have changed
+	// except that we accept any width and height these days, plus negotiated height/width may not have been setup yet [ffplay for instance doesn't call setFormat before this, or at least didn't use to].
+	/*
     if(    pvi->bmiHeader.biWidth != getNegotiatedFinalWidth() || 
        pvi->bmiHeader.biHeight != getNegotiatedFinalHeight())
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image		
         return E_INVALIDARG;
-    }
+    }*/
 
     // Don't accept formats with negative height, which would cause the desktop
     // image to be displayed upside down.
-	// also reject 0's that would be weird.
+	// also reject 0's, that would be weird.
     if (pvi->bmiHeader.biHeight <= 0)
         return E_INVALIDARG;
 
@@ -279,7 +281,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 	
 		m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC can specify this, for instance.
-		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen it gets setup right here]
+		m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen is negotiated right here]
 		m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
 
 		// do this check after setting width so that that check'll pass

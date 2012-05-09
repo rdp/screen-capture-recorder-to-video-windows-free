@@ -115,7 +115,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  LocalOutput(out); // warmup for the below debug
 	  __int64 measureDebugOutputSpeed = StartCounter();
 	  LocalOutput(out);
-	  LocalOutput("writing a large-ish debug itself took: %.020Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
+	  LocalOutput("writing a large-ish debug itself took: %.0Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
 	  // does this work with flash?
 	  set_config_string_setting(L"last_init_config_was", out);
 #endif
@@ -283,8 +283,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 	if(iPosition == 0) {
 		// pass it our "preferred" which is 16 bits...I guess...haven't really researched it, but do want it to have a consistent default.
 		iPosition = 3;
-			// 32 -> 24 (2): getdibits took 2.251000ms
-			// 32 -> 32 (1): getdibits took 2.916480ms
+			// 32 -> 24 (2): getdibits took 2.251ms
+			// 32 -> 32 (1): getdibits took 2.916ms
 			// except those numbers might be misleading in terms of total speed...hmm...
 	}
     switch(iPosition)
@@ -408,7 +408,7 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	if(show_performance) {
       wchar_t out[1000];
 	  swprintf(out, 1000, L"new screen pos from reg: %d %d\n", config_start_x, config_start_y);
-	  LocalOutput("[re]readCurrentPosition (including swprintf call) took %fms", GetCounterSinceStartMillis(start)); // takes 0.416880ms (2000 fps)
+	  LocalOutput("[re]readCurrentPosition (including swprintf call) took %.02fms", GetCounterSinceStartMillis(start)); // takes 0.42ms (2000 fps)
 	  LocalOutput(out);
 	}
 }
@@ -624,18 +624,18 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 	//GdiFlush();
 
 	if(show_performance)
-	  LocalOutput("%s took %.020Lf ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
+	  LocalOutput("%s took %.02f ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
-    int iImageWidth  = m_rScreen.right - m_rScreen.left;
+    int iImageWidth  = (int) m_rScreen.right - m_rScreen.left;
 	ASSERT(iImageWidth > 0);
 	return iImageWidth;
 }
 
 int CPushPinDesktop::getNegotiatedFinalHeight() {
 	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them an even smaller setting...
-    int iImageHeight = m_rScreen.bottom - m_rScreen.top;
+    int iImageHeight = (int) m_rScreen.bottom - m_rScreen.top;
 	ASSERT(iImageHeight > 0);
 	return iImageHeight;
 }
@@ -663,5 +663,5 @@ void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLi
     GetDIBits(hScrDC, hRawBitmap, 0, nHeightScanLines, pData, pHeader, DIB_RGB_COLORS);  // just copies raw bits to pData, I guess, from an HBITMAP handle. "like" GetObject, but also does conversions [?]
 	
 	if(show_performance)
-	  LocalOutput("doDiBits took %fms", GetCounterSinceStartMillis(start)); // took 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
+	  LocalOutput("doDiBits took %.02fms", GetCounterSinceStartMillis(start)); // took 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }

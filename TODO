@@ -9,6 +9,8 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   
 == all never ==
 
+implement the virtualdub "oh it is so fast and nice opengl screen capture with resize on the GPU" LOL if it's even possible these days...
+
 LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
 
 check if libswscale would be "faster" than using windows' own resizing methods. Yikes if it is LOL.
@@ -234,79 +236,4 @@ make so it can stream, too :P
   plus just audio streaming even...
 
 bounty lagarith ffmpeg [?]
-  bounty windows codecs ffmpeg [?] libavcodec?
-
-super spiffy "jruby.exe" installer, if that's faster at all
-  splash screen?
-
-can show arbitrary mouse [transparent?] circle?
-
-can follow mouse
-
-can make mouse yellow
-
-can make mouse yellow "sometimes"
-
-@camstudio: the transparent fella is suh-weet.
-
-log stats to the registry on exit... [+ jruby can read them to display...]
-
-audio: instructions "just use your mic" or "pipe a bit of your mic back through line in, and use line in/virtual-audio-capturer"
-  or allow it to have several channels for now...sure :P
-    and eventually umm...fix ffmpeg to allow for it?
-
-remember directory
-  use a cooler looking file selector
-  
-auto-minimize to tray, stop on unminimize
-  tell CamStudio
-
-can include two audio, separate tracks
-
-can do audio mixed
-
-actually use it. playon competitor?
-  auto skype/google+ recorder :)
-  can use the default record device in...XP
-
-warn them if they appear slow...
-
-
-complain that this appears to cache?
-$ ffplay  -f dshow  -i video="screen-capture-recorder"
-ffplay version N-32726-ga254452, Copyright (c) 2003-2011 the FFmpeg developers
-  built on Sep 19 2011 19:49:13 with gcc 4.6.1
-  configuration: --enable-gpl --enable-version3 --enable-runtime-cpudetect --enable-avisynth --enable-bzlib --enable-frei0r --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libfreetype --enable-libgsm --enable-libmp3lame --enable-libopenjpeg --enable-librtmp --enable-libschroedinger --enable-libspeex --enable-libtheora --enable-libvo-aacenc --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxavs --enable-libxvid --enable-zlib
-  libavutil    51. 16. 1 / 51. 16. 1
-  libavcodec   53. 16. 0 / 53. 16. 0
-  libavformat  53. 12. 0 / 53. 12. 0
-  libavdevice  53.  4. 0 / 53.  4. 0
-  libavfilter   2. 43. 2 /  2. 43. 2
-  libswscale    2.  1. 0 /  2.  1. 0
-  libpostproc  51.  2. 0 / 51.  2. 0
-[dshow @ 03546320] Estimating duration from bitrate, this may be inaccurate
-
-
-== speedup ==
-
-  it defaults to 24 bits [maybe wrongly?]
-
-  can I live with aero wasn't bitblt getting like 800fps *with* aero?
-  threading the input [?] (a bit complicated because of the "only if it's changed" mantra)
-    more efficient by skipping an extra copy (we're already pretty fast though...)
-  memcpy? 
-    faster memcpy? loop?
-  ideal: dual-threaded, and when it comes by you say "ok, use this copy already prepared" LOL
-    test speed of from DESKTOP versus HWND. (possibly add to Bitblt [?])
-
-== other ==
-
-separate settings per program that will capture from us? Kind of weird...
-  
-rename "like camstudio" or the like/propaganda
-
-shearing (?) compared to itself upscreened...
-
-== never ==
-can i use camstudio's captions adder?
-rename the device itself 64 bit, include both :P (and with audio)
+  bounty 
