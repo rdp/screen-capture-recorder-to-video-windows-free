@@ -15,6 +15,8 @@
 
 DWORD globalStart; // for some debug performance benchmarking
 int countMissed = 0;
+long fastestRoundMillis = 1000000;
+long sumMillisTook = 0;
 
 #ifdef _DEBUG 
   int show_performance = 1;
@@ -44,6 +46,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     hScrDc = GetDC(m_iHwndToTrack);
 	m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT(hScrDc != 0);
+	
+	GdiSetBatchLimit(1); // disable any GDI...just in case this helps anybody...
 
     // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
@@ -107,19 +111,19 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
 
 
-#ifdef _DEBUG 
-	  wchar_t out[1000];
-	  swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dtop %db %dl %dr %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
-		  getNegotiatedFinalHeight(), getNegotiatedFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
+    wchar_t out[1000];
+	swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dx%d (%dtop %db %dl %dr) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
+	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
 
-	  LocalOutput(out); // warmup for the below debug
-	  __int64 measureDebugOutputSpeed = StartCounter();
-	  LocalOutput(out);
-	  LocalOutput("writing a large-ish debug itself took: %.0Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
-	  // does this work with flash?
-	  set_config_string_setting(L"last_init_config_was", out);
-#endif
+	LocalOutput(out); // warmup for the below debug :)
+	__int64 measureDebugOutputSpeed = StartCounter();
+	LocalOutput(out);
+	LocalOutput("writing a large-ish debug itself took: %.0Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
+	// does this work with flash?
+	set_config_string_setting(L"last_init_config_was", out);
 }
+
+wchar_t out[1000];
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
@@ -166,6 +170,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	}
 	// capture how long it took before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
+	fastestRoundMillis = min(millisThisRoundTook, fastestRoundMillis); // keep stats :)
+	sumMillisTook += millisThisRoundTook;
 
 	CRefTime now;
 	CRefTime endFrame;
@@ -213,13 +219,14 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
-#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
+    // the swprintf costs like 0.04ms (25000 fps LOL)
 	m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d this one (%dx%d) took: %.02Lfms, %.02f ave fps (theoretical max fps %.02f, negotiated fps %.06f), frame missed %d", 
-		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook, GetFps(), countMissed);
+	swprintf(out, L"done frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
+		m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
+		/* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
+#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	LocalOutput(out);
-	set_config_string_setting(L"debug_out", out);
+	set_config_string_setting(L"frame_out", out);
 #endif
     return S_OK;
 }
@@ -227,162 +234,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 float CPushPinDesktop::GetFps() {
 	return (float) (UNITS / m_rtFrameLength);
 }
-
-enum FourCC { FOURCC_NONE = 0, FOURCC_I420 = 100, FOURCC_YUY2 = 101, FOURCC_RGB32 = 102 };// from http://www.conaito.com/docus/voip-video-evo-sdk-capi/group__videocapture.html
-//
-// GetMediaType
-//
-// Prefer 5 formats - 8, 16 (*2), 24 or 32 bits per pixel
-//
-// Prefered types should be ordered by quality, with zero as highest quality.
-// Therefore, iPosition =
-//      0    Return a 24bit mediatype "as the default" since I guessed it might be faster though who knows
-//      1    Return a 24bit mediatype
-//      2    Return 16bit RGB565
-//      3    Return a 16bit mediatype (rgb555)
-//      4    Return 8 bit palettised format
-//      >4   Invalid
-// except that we changed the orderings a bit...
-//
-HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDIA_TYPE basically == CMediaType
-{
-    CheckPointer(pmt, E_POINTER);
-    CAutoLock cAutoLock(m_pFilter->pStateLock());
-	if(m_bFormatAlreadySet) {
-		// you can only have one option, buddy, if setFormat already called. (see SetFormat's msdn)
-		if(iPosition != 0)
-          return E_INVALIDARG;
-		VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
-
-		// Set() copies these in for us pvi->bmiHeader.biSizeImage  = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
-        // pmt->SetSampleSize(pvi->bmiHeader.biSizeImage);
-		// nobody uses sample size anyway :P
-
-		pmt->Set(m_mt);
-		VIDEOINFOHEADER *pVih1 = (VIDEOINFOHEADER*) m_mt.pbFormat;
-		VIDEOINFO *pviHere = (VIDEOINFO  *) pmt->pbFormat;
-		return S_OK;
-	}
-
-	// do we ever even get past here? hmm
-
-    if(iPosition < 0)
-        return E_INVALIDARG;
-
-    // Have we run out of types?
-    if(iPosition > 6)
-        return VFW_S_NO_MORE_ITEMS;
-
-    VIDEOINFO *pvi = (VIDEOINFO *) pmt->AllocFormatBuffer(sizeof(VIDEOINFO));
-    if(NULL == pvi)
-        return(E_OUTOFMEMORY);
-
-    // Initialize the VideoInfo structure before configuring its members
-    ZeroMemory(pvi, sizeof(VIDEOINFO));
-
-	if(iPosition == 0) {
-		// pass it our "preferred" which is 16 bits...I guess...haven't really researched it, but do want it to have a consistent default.
-		iPosition = 3;
-			// 32 -> 24 (2): getdibits took 2.251ms
-			// 32 -> 32 (1): getdibits took 2.916ms
-			// except those numbers might be misleading in terms of total speed...hmm...
-	}
-    switch(iPosition)
-    {
-        case 1:
-        {    
-            // 32bit format
-
-            // Since we use RGB888 (the default for 32 bit), there is
-            // no reason to use BI_BITFIELDS to specify the RGB
-            // masks [sometimes even if you don't have enough bits you don't need to anyway?]
-			// Also, not everything supports BI_BITFIELDS ...
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 32;
-            break;
-        }
-
-        case 2:
-        {   // Return our 24bit format, same as above comments
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 24;
-            break;
-        }
-
-        case 3:
-        {       
-            // 16 bit per pixel RGB565 BI_BITFIELDS
-
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
-
-			pvi->bmiHeader.biCompression = BI_BITFIELDS;
-			pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
-
-        case 4:
-        {   // 16 bits per pixel RGB555
-
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
-
-            // LODO ??? need? not need? BI_BITFIELDS? Or is this the default so we don't need it? Or do we need a different type that doesn't specify BI_BITFIELDS?
-			pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
-
-        case 5:
-        {   // 8 bit palettised
-
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 8;
-            pvi->bmiHeader.biClrUsed     = iPALETTE_COLORS;
-            break;
-        }
-		case 6:
-		{ // the i420 freak-o
-               pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
-               pvi->bmiHeader.biBitCount    = 12;
-			   pvi->bmiHeader.biSizeImage = (getCaptureDesiredFinalWidth()*getCaptureDesiredFinalHeight()*3)/2; 
-			   pmt->SetSubtype(&WMMEDIASUBTYPE_I420);
-			   break;
-		}
-    }
-
-    // Now adjust some parameters that are the same for all formats
-    pvi->bmiHeader.biSize       = sizeof(BITMAPINFOHEADER);
-    pvi->bmiHeader.biWidth      = getCaptureDesiredFinalWidth();
-    pvi->bmiHeader.biHeight     = getCaptureDesiredFinalHeight();
-    pvi->bmiHeader.biPlanes     = 1;
-	if(pvi->bmiHeader.biSizeImage == 0)
-      pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
-    pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the above size
-
-	pvi->bmiHeader.biClrImportant = 0;
-	pvi->AvgTimePerFrame = m_rtFrameLength; // from our config or default
-
-    SetRectEmpty(&(pvi->rcSource)); // we want the whole image area rendered.
-    SetRectEmpty(&(pvi->rcTarget)); // no particular destination rectangle
-
-    pmt->SetType(&MEDIATYPE_Video);
-    pmt->SetFormatType(&FORMAT_VideoInfo);
-    pmt->SetTemporalCompression(FALSE);
-
-    // Work out the GUID for the subtype from the header info.
-	if(*pmt->Subtype() == GUID_NULL) {
-      const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
-      pmt->SetSubtype(&SubTypeGUID);
-	}
-
-    return NOERROR;
-
-} // GetMediaType
-
 
 void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	__int64 start = StartCounter();
@@ -421,10 +272,6 @@ CPushPinDesktop::~CPushPinDesktop()
 	::ReleaseDC(NULL, hScrDc);
     ::DeleteDC(hScrDc);
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
-
-	wchar_t out[1000];
-	swprintf(out, L"done frame! total frames: %d (%dx%d)  %.02f ave fps, negotiated fps %.06f, frame missed %d", 
-		m_iFrameNumber, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), m_fFpsSinceBeginningOfTime, GetFps(), countMissed);
 	set_config_string_setting(L"last_run_performance", out);
 
     if (hRawBitmap)
@@ -434,91 +281,6 @@ CPushPinDesktop::~CPushPinDesktop()
 		free(pOldData);
 		pOldData = NULL;
 	}
-}
-
-// according to msdn...
-HRESULT CPushSourceDesktop::GetState(DWORD dw, FILTER_STATE *pState)
-{
-    CheckPointer(pState, E_POINTER);
-    *pState = m_State;
-    if (m_State == State_Paused)
-        return VFW_S_CANT_CUE;
-    else
-        return S_OK;
-}
-
-HRESULT CPushPinDesktop::QueryInterface(REFIID riid, void **ppv)
-{   
-    // Standard OLE stuff, needed for capture source
-    if(riid == _uuidof(IAMStreamConfig))
-        *ppv = (IAMStreamConfig*)this;
-    else if(riid == _uuidof(IKsPropertySet))
-        *ppv = (IKsPropertySet*)this;
-    else
-        return CSourceStream::QueryInterface(riid, ppv);
-
-    AddRef(); // avoid interlocked decrement error... // I think
-    return S_OK;
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////
-// IKsPropertySet
-//////////////////////////////////////////////////////////////////////////
-
-
-HRESULT CPushPinDesktop::Set(REFGUID guidPropSet, DWORD dwID, void *pInstanceData, 
-                        DWORD cbInstanceData, void *pPropData, DWORD cbPropData)
-{
-	// Set: we don't have any specific properties to set...that we advertise yet anyway, and who would use them anyway?
-    return E_NOTIMPL;
-}
-
-// Get: Return the pin category (our only property). 
-HRESULT CPushPinDesktop::Get(
-    REFGUID guidPropSet,   // Which property set.
-    DWORD dwPropID,        // Which property in that set.
-    void *pInstanceData,   // Instance data (ignore).
-    DWORD cbInstanceData,  // Size of the instance data (ignore).
-    void *pPropData,       // Buffer to receive the property data.
-    DWORD cbPropData,      // Size of the buffer.
-    DWORD *pcbReturned     // Return the size of the property.
-)
-{
-    if (guidPropSet != AMPROPSETID_Pin)             return E_PROP_SET_UNSUPPORTED;
-    if (dwPropID != AMPROPERTY_PIN_CATEGORY)        return E_PROP_ID_UNSUPPORTED;
-    if (pPropData == NULL && pcbReturned == NULL)   return E_POINTER;
-    
-    if (pcbReturned) *pcbReturned = sizeof(GUID);
-    if (pPropData == NULL)          return S_OK; // Caller just wants to know the size. 
-    if (cbPropData < sizeof(GUID))  return E_UNEXPECTED;// The buffer is too small.
-        
-    *(GUID *)pPropData = PIN_CATEGORY_CAPTURE; // PIN_CATEGORY_PREVIEW ?
-    return S_OK;
-}
-
-// QuerySupported: Query whether the pin supports the specified property.
-HRESULT CPushPinDesktop::QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport)
-{
-    if (guidPropSet != AMPROPSETID_Pin) return E_PROP_SET_UNSUPPORTED;
-    if (dwPropID != AMPROPERTY_PIN_CATEGORY) return E_PROP_ID_UNSUPPORTED;
-    // We support getting this property, but not setting it.
-    if (pTypeSupport) *pTypeSupport = KSPROPERTY_SUPPORT_GET; 
-    return S_OK;
-}
-
-STDMETHODIMP CPushSourceDesktop::Stop(){
-
-	CAutoLock filterLock(m_pLock);
-
-	//Default implementation
-	HRESULT hr = CBaseFilter::Stop();
-
-	//Reset pin resources
-	m_pPin->m_iFrameNumber = 0;
-
-	return hr;
 }
 
 void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
@@ -621,14 +383,13 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 		}
 	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
 	}
-	//GdiFlush();
 
 	if(show_performance)
 	  LocalOutput("%s took %.02f ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
-    int iImageWidth  = (int) m_rScreen.right - m_rScreen.left;
+    int iImageWidth  = m_rScreen.right - m_rScreen.left;
 	ASSERT(iImageWidth > 0);
 	return iImageWidth;
 }
@@ -665,3 +426,103 @@ void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLi
 	if(show_performance)
 	  LocalOutput("doDiBits took %.02fms", GetCounterSinceStartMillis(start)); // took 1.1/3.8ms total, so this brings us down to 80fps compared to max 251...but for larger things might make more difference...
 }
+
+
+//
+// DecideBufferSize
+//
+// This will always be called after the format has been sucessfully
+// negotiated (this is negotiatebuffersize). So we have a look at m_mt to see what size image we agreed.
+// Then we can ask for buffers of the correct size to contain them.
+//
+HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
+                                      ALLOCATOR_PROPERTIES *pProperties)
+{
+    CheckPointer(pAlloc,E_POINTER);
+    CheckPointer(pProperties,E_POINTER);
+
+    CAutoLock cAutoLock(m_pFilter->pStateLock());
+    HRESULT hr = NOERROR;
+
+    VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
+	BITMAPINFOHEADER header = pvi->bmiHeader;
+	ASSERT(header.biPlanes == 1); // sanity check
+	// ASSERT(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?]
+	// now try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
+	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
+	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
+	
+	int bytesPerLine;
+	// there may be a windows method that would do this for us...GetBitmapSize(&header); but might be too small for VLC? LODO try it :)
+	// some pasted code...
+	int bytesPerPixel = (header.biBitCount/8);
+	if(m_bConvertToI420) {
+	  bytesPerPixel = 32/8; // we convert from a 32 bit to i420, so need more space in this case
+	}
+
+    bytesPerLine = header.biWidth * bytesPerPixel;
+    /* round up to a dword boundary */
+    if (bytesPerLine & 0x0003) 
+    {
+      bytesPerLine |= 0x0003;
+      ++bytesPerLine;
+    }
+
+	ASSERT(header.biHeight > 0); // sanity check
+	ASSERT(header.biWidth > 0); // sanity check
+	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
+	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
+	int bitmapSize = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
+	pProperties->cbBuffer = bitmapSize;
+	//pProperties->cbBuffer = max(pProperties->cbBuffer, m_mt.GetSampleSize()); // didn't help anything
+	if(m_bConvertToI420) {
+	  pProperties->cbBuffer = header.biHeight * header.biWidth*3/2; // necessary to prevent an "out of memory" error for FMLE. Yikes. Oh wow yikes.
+	}
+
+    pProperties->cBuffers = 1; // 2 here doesn't seem to help the crashes...
+
+    // Ask the allocator to reserve us some sample memory. NOTE: the function
+    // can succeed (return NOERROR) but still not have allocated the
+    // memory that we requested, so we must check we got whatever we wanted.
+    ALLOCATOR_PROPERTIES Actual;
+    hr = pAlloc->SetProperties(pProperties,&Actual);
+    if(FAILED(hr))
+    {
+        return hr;
+    }
+
+    // Is this allocator unsuitable?
+    if(Actual.cbBuffer < pProperties->cbBuffer)
+    {
+        return E_FAIL;
+    }
+
+	// now some "once per run" setups
+	
+	// LODO reset aer with each run...somehow...somehow...Stop method or something...
+	OSVERSIONINFOEX version;
+    ZeroMemory(&version, sizeof(OSVERSIONINFOEX));
+    version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((LPOSVERSIONINFO)&version);
+	if(version.dwMajorVersion >= 6) { // meaning vista +
+	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
+	    turnAeroOn(false);
+	  else
+	    turnAeroOn(true);
+	}
+	
+	if(pOldData) {
+		free(pOldData);
+		pOldData = NULL;
+	}
+    pOldData = (BYTE *) malloc(max(pProperties->cbBuffer*pProperties->cBuffers, bitmapSize)); // we convert from a 32 bit to i420, so need more space, hence max
+    memset(pOldData, 0, pProperties->cbBuffer*pProperties->cBuffers); // reset it just in case :P	
+	
+    // create a bitmap compatible with the screen DC
+	if(hRawBitmap)
+		DeleteObject (hRawBitmap);
+	hRawBitmap = CreateCompatibleBitmap(hScrDc, getNegotiatedFinalWidth(), getNegotiatedFinalHeight());
+
+    return NOERROR;
+
+} // DecideBufferSize

@@ -70,14 +70,14 @@ void WarmupCounter()
     PCFreqMillis = (long double(li.QuadPart))/1000.0;
 }
 
-__int64 StartCounter()
+__int64 StartCounter() // costs 0.0041 ms to do a "start and get" of these...pretty cheap
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
     return (__int64) li.QuadPart;
 }
 
-long double GetCounterSinceStartMillis(__int64 sinceThisTime) // actually calling this call takes about 0.01 ms itself...
+long double GetCounterSinceStartMillis(__int64 sinceThisTime) // see above for some timing
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
