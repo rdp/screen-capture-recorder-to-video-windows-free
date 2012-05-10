@@ -4,9 +4,9 @@
 ; AppId === AppName by default BTW
 
 [Run]
+Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.029.ax
-Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
