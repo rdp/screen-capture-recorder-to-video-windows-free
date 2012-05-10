@@ -6,10 +6,7 @@ It also includes some helper "record your screen capture" and setup utilities.
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
 You can use this with any (directshow compatible) program to capture or stream, like VLC.
 
-It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
-  see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of the audio device
-
-It also includes helper utilities for recording/broadcasting both.
+It also includes helper utilities for recording/broadcasting.
 
 == Installation ==
 
@@ -19,6 +16,11 @@ Download installer and run, from
     (sorry the files  sourceforge: github limits their disk usage space and I'm hitting up against the limit)
 
  NB that if you install the 64 bit device, you'll need to install the MSVC 2010 64 bit runtime first : http://www.microsoft.com/en-us/download/details.aspx?id=14632
+
+== Audio capture ==
+
+It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
+  see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of the audio device
 
 == Usage ==
 
