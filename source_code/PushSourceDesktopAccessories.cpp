@@ -95,9 +95,9 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 // SetMediaType
 //
 // Called when a media type is agreed between filters (i.e. they call GetMediaType+GetStreamCaps/ienumtypes I guess till they find one they like, then they call SetMediaType).
-// all this after calling SetFormat, if they even do, I guess...
+// all this after calling Set Format, if they even do, I guess...
 // pMediaType is assumed to have passed CheckMediaType "already" and be good to go...
-// except WFMLE sends us a junk type, so we check it anyway LODO do we? Or is it the other method SetFormat that they call in vain? Or it first?
+// except WFMLE sends us a junk type, so we check it anyway LODO do we? Or is it the other method Set Format that they call in vain? Or it first?
 HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -108,7 +108,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
     if(SUCCEEDED(hr))
     {
-        VIDEOINFO * pvi = (VIDEOINFO *) m_mt.Format();
+        VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
         if (pvi == NULL)
             return E_UNEXPECTED;
 
@@ -138,7 +138,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 		LocalOutput("bitcount requested/negotiated: %d\n", pvi->bmiHeader.biBitCount);
     
       // The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
-	  if(pvi->AvgTimePerFrame) // or should SetFormat accept this? hmm...
+	  if(pvi->AvgTimePerFrame) // or should Set Format accept this? hmm...
 	    m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC command line can specify this, for instance...
 	  // also setup scaling here, as WFMLE and ffplay and VLC all get here...
 	  m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen is negotiated right here]
@@ -159,7 +159,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 	// I *think* it can go back and forth, then.  You can call GetStreamCaps to enumerate, then call
 	// SetFormat, then later calls to GetMediaType/GetStreamCaps/EnumMediatypes will all "have" to just give this one
-	// though theoretically they could also call EnumMediaTypes, then SetMediaType, and not call SetFormat
+	// though theoretically they could also call EnumMediaTypes, then Set MediaType, and not call SetFormat
 	// does flash call both? what order for flash/ffmpeg/vlc calling both?
 	// LODO update msdn
 
@@ -190,7 +190,7 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 
 		// ignore other things like cropping requests for now...
 
-		// now save it away...for being able to re-offer it later. We could use SetMediaType but we're just being lazy and re-using m_mt for many things I guess
+		// now save it away...for being able to re-offer it later. We could use Set MediaType but we're just being lazy and re-using m_mt for many things I guess
 	    m_mt = *pmt;  
 
 		// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
