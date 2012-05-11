@@ -1,6 +1,6 @@
-#define AppVer "0.6.4beta"
-; fix ffplay resize bug, cleanup some dshow code, add debug/benchmarking
-#define AppName "Screen Capturer Recorder"
+#define AppVer "0.6.4"
+
+#define AppName "Screen Capturer Recorder 32-bit"
 ; AppId === AppName by default BTW
 
 [Run]

@@ -9,9 +9,10 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   
 == all never ==
 
-I may "need" to do some phreaky d3d screen capture to get it be fast enough with aero windows 8.  Hope not though. (I hope it lets me capture more quickly...)
+check if uscreencapture uses some direct3d funky fella
+  is direct3d funky even faster? huh? is this just for games? I can't imagine it working for XP...
 
-implement the virtualdub "oh it is so fast and nice opengl screen capture with resize on the GPU" LOL if it's even possible these days...
+I may "need" to do some phreaky d3d screen capture to get it be fast enough with aero windows 8.  Hope not though. (I hope it lets me capture more quickly...)
 
 LODO can I somehow BitBlt into the graphics card to save speed somehow? Or negotiate it so that pData points straight into the gpu?
 

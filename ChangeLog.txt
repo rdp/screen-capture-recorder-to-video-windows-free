@@ -1,3 +1,7 @@
+0.6.4
+
+better installer, "scaling" registry settings are said to work now.
+; fix ffplay resize bug, cleanup some dshow code, add debug/benchmarking
 0.6.3 5/8/12
 
 bump virtual audio version
