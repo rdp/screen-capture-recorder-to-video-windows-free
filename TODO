@@ -2,14 +2,23 @@
 
 == maybe ==
 
-a stop button for recording
+test vcam with expression encoder, fresh install?
+
+== maybe ==
+
+a start, stop button for recording, just call ffmpeg...
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
-  
-== all never ==
+
 virtualdub has wrong/messed up fps? huh?
 
-check if uscreencapture uses some direct3d funky fella
+an option for CAPTUREBLT "capture transparent windows in non aero"
+
+== all never ==
+
+figure out how to start ffmpeg "instantaneously" or "restart it" or something, anything, to speedup start time yikes. (make it smaller?)
+
+check if uscreencapture uses some direct3d funky capture fella
   is direct3d funky even faster? huh? is this just for games? I can't imagine it working for XP...
 
 I may "need" to do some phreaky d3d screen capture to get it be fast enough with aero windows 8.  Hope not though. (I hope it lets me capture more quickly...)
@@ -22,11 +31,12 @@ multi thread so that it can do BitBlt while "the other one" is doing memcpy etc.
 
 advertise mine on google results for "stream desktop to tv" LOL
 
-an "easy screencast to your TV" button LOL
+test in google plus
 
 fix the tearing/shearing bug?
   just log the emails I saw on it
   that one "famous email" and then one other saw it...
+  ask them why CAPTUREBLT might help...
 
 better...reg names [explicit, with default]
 TODO: beat 15 fps in windows 7/8/ask about it msdn etc. too

@@ -1,4 +1,4 @@
-#define AppVer "0.6.4"
+#define AppVer "0.6.5"
 
 #define AppName "Screen Capturer Recorder 32-bit"
 ; AppId === AppName by default BTW
@@ -6,11 +6,11 @@
 [Run]
 Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s PushDesktop.ax
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.029.ax
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.030.ax
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u PushDesktop.ax
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.029.ax
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.030.ax
 
 [Files]
 Source: source_code\Win32\Release\PushDesktop.ax; DestDir: {app}

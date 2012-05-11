@@ -1,3 +1,7 @@
+0.6.5
+
+better audio sniffer, hopefully
+
 0.6.4
 
 better installer, "scaling" registry settings are said to work now.
