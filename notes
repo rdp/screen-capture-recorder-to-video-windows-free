@@ -47,6 +47,12 @@ disable the batch limit maybe?
 
 see also http://betterlogic.com/roger/2012/05/using-bitblt-for-screen-capture-causes-tearing
 
+CAPTUREBLT on windows 7 (sans aero) doesn't seem to slow things down a bit.
+  also on XP, seems faster even [?]
+  even with VLC playing...hmm...
+  
+  can I reproduce it causing "extra" tearing?
+  
 = with adjust timestamp etc.=
 
 Seems to *need* --live-caching=3000
