@@ -6,7 +6,6 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
-
 #include <strsafe.h>
 
 /*

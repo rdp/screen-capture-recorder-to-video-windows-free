@@ -42,20 +42,33 @@ class SetupScreenTrackerParams
     raise "unknown name #{name}" unless Settings.include?(name)
   end
   
+  def convert_from_dword_to_int out
+		  if out > (1<<31) # underflow? like 4294967288 for -1, or maybe i should just disallow negatives?
+  	        p 'warning, got a negative, may not be expected...'
+            # convert to a ruby negative
+  	        out -= (1<<32)
+		  end
+		  out
+  end
+  
+  def convert_from_int_to_dword out
+    if out < 0
+	  out += (1<<32)
+	end
+	out
+  end
+  
   # will return nil if not set in the registry...or if set to "default" value in the registry, which is 0
   def read_single_setting name
     with_reg do
       name = name.to_s # allow for name to be a symbol
       assert_valid_name(name)
       out = @screen_reg[name] rescue nil # could be a string or dword
-  	  if out && out.is_a?(Numeric) && out > (1<<31) # underflow? like 4294967288 for -1, or maybe i should just disallow negatives?
-  	    p 'warning, got a negative, may not be expected...'
-        # convert to a ruby negative
-  	    out -= (1<<32)
-  	  end
-      if out
-	    out = out.to_i
-	  end
+  	  if out 
+	    if out.is_a?(Fixnum)
+     	  out = convert_from_dword_to_int out
+  	    end
+      end
 	  out
     end
   end
@@ -63,7 +76,7 @@ class SetupScreenTrackerParams
   def all_current_values
     out = {}
     for name in Settings
-      out[name] = read_single_setting(name) # value might be just nil...
+      out[name] = read_single_setting(name) # which might be just nil...
     end
     out
   end
@@ -81,4 +94,10 @@ class SetupScreenTrackerParams
     end
   end
   
+end
+
+if $0 == __FILE__
+  incoming = Integer(ARGV[0])
+  p SetupScreenTrackerParams.new.convert_from_dword_to_int incoming
+  p SetupScreenTrackerParams.new.convert_from_int_to_dword incoming
 end

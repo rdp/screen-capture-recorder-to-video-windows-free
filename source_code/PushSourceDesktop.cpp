@@ -108,16 +108,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
 
-
     wchar_t out[1000];
 	swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dx%d (%dtop %db %dl %dr) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
 	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
 
-	LocalOutput(out); // warmup for the below debug :)
+	LocalOutput(L"warmup the debugging message system");
 	__int64 measureDebugOutputSpeed = StartCounter();
 	LocalOutput(out);
-	LocalOutput("writing a large-ish debug itself took: %.0Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
-	// does this work with flash?
+	LocalOutput("writing a large-ish debug itself took: %.02Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
 	set_config_string_setting(L"last_init_config_was", out);
 }
 
@@ -125,6 +123,8 @@ wchar_t out[1000];
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
+	//LocalOutput("called fillbuffer"); Encoder 4 does *not* get here.
+
 	__int64 startThisRound = StartCounter();
 	BYTE *pData;
 
@@ -204,7 +204,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
     
 	// LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
-    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+    //pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless seemingly
 
 	if(fullyStarted) {

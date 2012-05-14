@@ -2,7 +2,6 @@
 
 == maybe ==
 
-test vcam with expression encoder, fresh install?
 
 == maybe ==
 
@@ -12,9 +11,19 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
 
 virtualdub has wrong/messed up fps? huh?
 
-an option for CAPTUREBLT "capture transparent windows in non aero"
+an option for CAPTUREBLT "capture transparent windows in non aero" ...
+
+test vcam/pushsource with expression encoder, fresh install? vm?
+
+repro "tearing", repro CAPTUREBLT helping, ask msdn
+
+add an option "select your vcodec" for recording...sure.
 
 == all never ==
+
+only download/install MSVCRT if absent.
+
+@VLC "make it more reliable for streaming asynchronous non standard incoming stuff, plz?"
 
 figure out how to start ffmpeg "instantaneously" or "restart it" or something, anything, to speedup start time yikes. (make it smaller?)
 
