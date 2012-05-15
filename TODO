@@ -11,15 +11,17 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
 
 virtualdub has wrong/messed up fps? huh?
 
-an option for CAPTUREBLT "capture transparent windows in non aero" ...
-
 test vcam/pushsource with expression encoder, fresh install? vm?
-
-repro "tearing", repro CAPTUREBLT helping, ask msdn
 
 add an option "select your vcodec" for recording...sure.
 
+avisynth wrapper with "just" a hard coded pin types for A/V. For now. yikezers!
+
 == all never ==
+
+an option for CAPTUREBLT "capture transparent windows in non aero" ...
+
+repro "tearing", repro CAPTUREBLT helping, ask msdn
 
 only download/install MSVCRT if absent.
 
