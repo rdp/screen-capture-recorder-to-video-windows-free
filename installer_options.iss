@@ -40,4 +40,4 @@ Name: {group}\Release Notes; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Display current capture settings; Filename: {app}\configuration_setup_utility\display_current_settings.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
 Name: {group}\Broadcast\setup local audio streaming server; Filename: {app}\configuration_setup_utility\run_broadcast_audio_server.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
 Name: {group}\Broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\rerun_audio_server.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: 
-Name: {group}\Uninstall {#AppName}; Filename: {uninstallexe}
+Name: {group}\configure\Uninstall {#AppName}; Filename: {uninstallexe}
