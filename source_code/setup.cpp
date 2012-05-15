@@ -123,7 +123,8 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.dwMerit = MERIT_DO_NOT_USE;
                 rf2.cPins = 1;
                 rf2.rgPins = &sudOutputPinDesktop;
-                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"screen-capture-recorder-pin1", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
+				// this is the name that actually shows up in VLC et al. weird
+                hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"screen-capture-recorder", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
             }
             else
             {
