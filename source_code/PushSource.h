@@ -97,7 +97,7 @@ protected:
 	HDC hScrDc;
 	HBITMAP     hRawBitmap;
 
-	//CCritSec m_cSharedState;            // Protects our internal state
+	//CCritSec m_cSharedState;            // Protects our internal state use CAutoLock cAutoLock(m_pFilter->pStateLock()); instead
 
 	bool m_bFormatAlreadySet;
 	bool m_bConvertToI420;

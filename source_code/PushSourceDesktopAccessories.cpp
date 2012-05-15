@@ -193,12 +193,6 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 		// now save it away...for being able to re-offer it later. We could use Set MediaType but we're just being lazy and re-using m_mt for many things I guess
 	    m_mt = *pmt;  
 
-		// The frame rate at which your filter should produce data is determined by the AvgTimePerFrame field of VIDEOINFOHEADER
-	    if(pvi->AvgTimePerFrame)
-	      m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC command line can specify this, for instance...
-	    // also setup scaling here, as WFMLE and ffplay and VLC all get here...
-	    m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen is negotiated right here]
-	    m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
 	}
 
     IPin* pin;
@@ -523,8 +517,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pvi->bmiHeader.biWidth      = getCaptureDesiredFinalWidth();
     pvi->bmiHeader.biHeight     = getCaptureDesiredFinalHeight();
     pvi->bmiHeader.biPlanes     = 1;
-	if(pvi->bmiHeader.biSizeImage == 0)
-      pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
+	pvi->bmiHeader.biSizeImage = GetBitmapSize(&pvi->bmiHeader); // calculates the size for us, after we gave it the width and everything else we already chucked into it
     pmt->SetSampleSize(pvi->bmiHeader.biSizeImage); // use the above size
 
 	pvi->bmiHeader.biClrImportant = 0;

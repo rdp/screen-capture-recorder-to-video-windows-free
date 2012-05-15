@@ -77,7 +77,7 @@ By default, it captures the "full screen" of the main desktop monitor (all windo
 To configure it differently, run the provided "configuration setup utilities" or 
 adjust registry settings before starting a run (advanced users only):
 
-HKEY_CURRENT_USER\Software\os_screen_capture
+HKEY_CURRENT_USER\Software\screen-capture-recorder
 
 with DWORD keys respected of start_x ... (see the file configuration_setup_utility\setup_screen_tracker_params.rb for a full list)
   

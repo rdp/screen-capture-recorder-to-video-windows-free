@@ -85,7 +85,7 @@ class SetupScreenTrackerParams
   
   def with_reg
     raise 'double screen reg?' if @screen_reg # unexpected
-    @screen_reg = Win32::Registry::HKEY_CURRENT_USER.create "Software\\os_screen_capture" # LODO .keys fails?
+    @screen_reg = Win32::Registry::HKEY_CURRENT_USER.create "Software\\screen-capture-recorder" # LODO report: .keys method fails?
     begin
       yield
     ensure
