@@ -1,1 +1,1 @@
-regsvr32  %~dp0\PushDesktop.ax
+regsvr32  %~dp0\screen-capture-recorder.dll
