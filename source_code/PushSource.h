@@ -100,7 +100,7 @@ protected:
 
 	bool m_bFormatAlreadySet;
 	bool m_bConvertToI420;
-	int m_iScreenBitDepth;
+	//int m_iScreenBitDepth;
 
 	float GetFps();
 

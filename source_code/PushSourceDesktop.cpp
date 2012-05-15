@@ -44,7 +44,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
     hScrDc = GetDC(m_iHwndToTrack);
-	m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
+	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT(hScrDc != 0);
 	
     // Get the dimensions of the main desktop window as the default
