@@ -89,8 +89,9 @@ protected:
 	int m_iCaptureConfigWidth;
 	int m_iCaptureConfigHeight;
 
-    CMediaType m_MediaType;
-    CImageDisplay m_Display;            // Figures out our media type for us
+    //CMediaType m_MediaType;
+    //CImageDisplay m_Display;            // Figures out our media type for us
+	
 	CPushSourceDesktop* m_pParent;
 
 	HDC hScrDc;
