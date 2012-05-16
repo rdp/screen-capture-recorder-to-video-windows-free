@@ -27,7 +27,6 @@ long sumMillisTook = 0;
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child/pin"), phr, pFilter, L"Capture"),
-        m_FramesWritten(0),
 		m_bReReadRegistry(0),
 		m_bDeDupe(0),
         m_iFrameNumber(0),
