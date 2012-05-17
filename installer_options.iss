@@ -28,7 +28,7 @@ AppVerName={#AppVer}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayName={#AppName} uninstall
-OutputBaseFilename=setup {#AppName} v{#AppVer}
+OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
 [Icons]

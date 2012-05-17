@@ -169,6 +169,7 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
     
   if ( i != ERROR_SUCCESS)
   {
+	  // assume we don't have to close the key
     return default;
   } else {
 	DWORD dwVal;

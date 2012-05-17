@@ -185,17 +185,22 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	    previousFrameEndTime = endFrame;
 	    
 	} else {
-	  if(show_performance)
-	    LocalOutput("it missed a frame--can't keep up %d", countMissed++); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
+		// if there's no reference clock, it will "always" miss a frame
+	  if(show_performance) {
+		  if(now == 0) 
+			  LocalOutput("probable none reference clock, streaming fastly");
+		  else
+	          LocalOutput("it missed a frame--can't keep up %d %llu %llu", countMissed++, now, previousFrameEndTime); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
+	  }
 	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
 	  //LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
-	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I need a long long cast?
+	  if(now > (previousFrameEndTime - (long long) m_rtFrameLength)) { // do I even need a long long cast?
 		// let it pretend and try to catch up, it's not quite a frame behind
         previousFrameEndTime = previousFrameEndTime + m_rtFrameLength;
 	  } else {
-		endFrame = now + m_rtFrameLength/2; // ?? seems to work...I guess...
+		endFrame = now + m_rtFrameLength/2; // ?? seems to not hurt, at least...I guess
 		previousFrameEndTime = endFrame;
 	  }
 	    
