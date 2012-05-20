@@ -15,15 +15,18 @@ if ARGV[0].in? ['-h', '--help']
   exit 0
 end
 
+require 'os'
+
+if OS.doze?
 require 'win32/registry'
 
-vlc_loc = nil
+vlc_dir = nil # more like vlc_dir
 for key in [Win32::Registry::HKEY_LOCAL_MACHINE, Win32::Registry::HKEY_CURRENT_USER]
   for subkey in ['Software\\VideoLAN\\VLC', 'Software\Wow6432Node\\VideoLAN\\VLC'] # allow for 64-bit java, 32-bit VLC [yipers oh my]
-    break if vlc_loc
+    break if vlc_dir
     begin
       reg = key.open(subkey)
-      if vlc_loc = reg['InstallDir']
+      if vlc_dir = reg['InstallDir']
         #p 'success', key, subkey
       end
     rescue => e
@@ -33,14 +36,16 @@ for key in [Win32::Registry::HKEY_LOCAL_MACHINE, Win32::Registry::HKEY_CURRENT_U
     end
   end
 end
-
-if !vlc_loc
+if !vlc_dir
   SwingHelpers.show_blocking_message_dialog 'unable to determine where VLC is installed, using default [might not work]'
-  vlc_loc = "c:\\program files\\videolan\\vlc"
+  vlc_dir = "c:\\program files\\videolan\\vlc"
 end
-ENV['PATH'] = vlc_loc + ';' + ENV['PATH']
 
+else
+  vlc_dir = "/Users/rogerdpack/Downloads/VLC.app/Contents/MacOS"
+end
 
+ENV['PATH'] = vlc_dir + ';' + ENV['PATH']
 
 def is_port_open port
  begin
@@ -68,21 +73,26 @@ if ARGV[0] == "--redo-with-last-run"
   # lodo, port check might be poor, if we ever have it variable
   old_ip = LocalStorage['ip_previously_selected']
   SwingHelpers.show_blocking_message_dialog "ip address may have changed, or it was never configured yet\nPlease rerun original audio broadcaster config, and go through all step completely to set it up." unless old_ip.in? local_ip_addrs 
-  assert (c=LocalStorage['last_version']).present?
+  c = LocalStorage['last_version']
+  assert c.present?
   Thread.new { system c + " --qt-start-minimized" }
   dialog = SwingHelpers.show_blocking_message_dialog "started vlc server minimized...access remotely via #{LocalStorage['url_to_access_it']}"
   exit 0
 end
 
-
-require 'ffmpeg_helpers'
-names = FfmpegHelpers.enumerate_directshow_devices[:audio]
-SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
-name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
+if OS.doze?
+  require 'ffmpeg_helpers'
+  names = FfmpegHelpers.enumerate_directshow_devices[:audio]
+  SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
+  name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
+  name = "dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\""
+else
+  name = "qtsound://"
+end
 
 popup = SwingHelpers.show_non_blocking_message_dialog 'starting audio server...'
 vlc_thread = Thread.new {
-  c =%!vlc dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\" --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}#{extension}}" ! # --qt-start-minimized  
+  c =%!vlc #{name} --sout "#transcode{acodec=mp3,ab=128}:standard{access=http,mux=raw,dst=:#{port}#{extension}}" ! # --qt-start-minimized  
   print c
   LocalStorage['last_version'] = c
   system c # we let this go forever
