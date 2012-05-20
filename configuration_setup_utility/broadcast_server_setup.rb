@@ -20,7 +20,7 @@ require 'os'
 if OS.doze?
 require 'win32/registry'
 
-vlc_dir = nil # more like vlc_dir
+vlc_dir = nil
 for key in [Win32::Registry::HKEY_LOCAL_MACHINE, Win32::Registry::HKEY_CURRENT_USER]
   for subkey in ['Software\\VideoLAN\\VLC', 'Software\Wow6432Node\\VideoLAN\\VLC'] # allow for 64-bit java, 32-bit VLC [yipers oh my]
     break if vlc_dir
@@ -45,8 +45,7 @@ else
   vlc_dir = "/Users/rogerdpack/Downloads/VLC.app/Contents/MacOS"
 end
 
-ENV['PATH'] = vlc_dir + ';' + ENV['PATH']
-
+ENV['PATH'] = vlc_dir + File::PATH_SEPARATOR + ENV['PATH']
 def is_port_open port
  begin
   require 'socket'
@@ -124,7 +123,7 @@ def play_sound_and_capture_and_test_playback ip_addr_to_listen_on, port
   p = PlayAudio.new 'alerts.wav' # 5s long
   p.start
 
-  c ="ffmpeg.exe -t 2 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\""
+  c ="ffmpeg -t 2 -y -i http://#{ip_addr_to_listen_on}:#{port}/go.mp3 \"#{out}\""
   system c
   p.stop
 
