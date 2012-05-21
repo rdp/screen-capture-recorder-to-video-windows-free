@@ -1,5 +1,6 @@
  ------------Record Control--------------------------------------------
- |  [Setup Preferences:preferences] [Start Current:start] [Stop:stop] 
+ |  [Start Recording:start] [Stop:stop] [Setup Preferences:preferences] 
+ |  <<Video name:video_name>> <<Audio name:audio_name>>
  |  <<Record To Dir:record_to_dir_text>>
- |  [Reveal Saved Files Dir:reveal_save_to_dir]
+ |  [Reveal...:reveal_save_to_dir]
  ---------------------------------------------------------------------

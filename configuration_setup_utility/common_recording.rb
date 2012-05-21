@@ -28,7 +28,7 @@ def choose_devices
   end
   
   if original_video_device == 'screen-capture-recorder'
-    SwingHelpers.show_blocking_message_dialog "you can setup lots of parameters [like frames per second, size] for the screen capture recorder\n in its separatesetup configuration utility"
+    SwingHelpers.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
   end
 
   [audio_device, video_device] 
