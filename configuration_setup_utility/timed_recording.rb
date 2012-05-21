@@ -8,15 +8,9 @@ require 'jruby-swing-helpers/drive_info'
 require 'setup_screen_tracker_params'
 require 'fileutils'
 
-if !File.exist?(ENV['windir'] + "\\system32\\msvcr100.dll")
-  SwingHelpers.show_blocking_message_dialog "warning--you don't appear to have the Microsoft visual studio 2010 runtime DLL's installed, please install them first and then run the \"re-register device\" command."
-  SwingHelpers.open_url_to_view_it_non_blocking "http://www.microsoft.com/download/en/details.aspx?id=5555"
-  exit 1
-end
-
 require 'ffmpeg_helpers'
 videos = FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1} + ['none'] # put ours in front :)
-original_video_device=video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or none").go_selected_value
+original_video_device=video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or none to record audio only").go_selected_value
 if video_device == 'none'
   video_device = nil
 else
