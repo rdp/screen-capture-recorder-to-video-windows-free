@@ -8,9 +8,10 @@ module FfmpegHelpers
     enum = `#{ffmpeg_list_command}`
     unless enum.present?
       p 'failed', enum
-      out = '2nd try' + `#{ffmpeg_list_command}`
+	  enum = `#{ffmpeg_list_command}`
+      out = '2nd try resulted in :' + enum
       p out
-      raise out # jruby???
+      #raise out # jruby and MRI both get here???? LODO...
     end
 
     audio = enum.split('DirectShow')[2]
