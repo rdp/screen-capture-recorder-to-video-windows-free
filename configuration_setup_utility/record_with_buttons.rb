@@ -4,6 +4,7 @@ require 'jruby-swing-helpers/parse_template.rb'
 require 'jruby-swing-helpers/storage.rb'
 
 frame = ParseTemplate.parse_file 'record_buttons.template'
+
 storage = Storage.new('record_with_buttons')
 @storage = storage
 require 'tmpdir'
@@ -18,14 +19,24 @@ elements = frame.elements
 elements['record_to_dir_text'].text += " " + current_storage_dir
 
 elements['reveal_save_to_dir'].on_clicked {
-  SwingHelpers.show_in_explorer current_storage_dir
+  SwingHelpers.show_in_explorer get_old_files.last
 }
 
-elements['stop'].disable # default
+elements['stop'].disable # default disable
 
-old_files = Dir[current_storage_dir + '/*.{wav,mp4}']
-old_files = ["0"] if old_files.empty?
-next_number = old_files.map{ |f| f =~ /(\d+)/; $1.to_i}.sort.last + 1
+def get_old_files
+  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']
+  if old_files.empty?
+    old_files = [current_storage_dir + "/0.fak"]
+	require 'fileutils'
+	FileUtils.touch old_files[0] # so 'reveal in explorer' can work
+  end
+  old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
+  old_files
+ end
+  
+numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
+next_number = numbered.last + 1
 
 elements['start'].on_clicked {
  if @current_process
@@ -36,7 +47,8 @@ elements['start'].on_clicked {
    else
      ext = '.mp3'
    end
-   c = "ffmpeg -y #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } -vcodec huffyuv \"#{current_storage_dir}/#{next_number+=1}#{ext}\""
+   @next_filename = "#{current_storage_dir}/#{next_number+=1}#{ext}"
+   c = "ffmpeg #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } -vcodec huffyuv \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    elements['stop'].enable
@@ -51,6 +63,9 @@ elements['stop'].on_clicked {
 	@current_process = nil
     elements['start'].enable
 	elements['stop'].disable
+	elements['last_file_written'].text= 'wrote file' + File.basename(@next_filename)
+	puts # pass the ffmpeg stuff
+	puts 'done writing'
   else
     raise 'unexpected2?'
   end
