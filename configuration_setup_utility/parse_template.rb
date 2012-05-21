@@ -54,7 +54,8 @@ module ParseTemplate
 		  end
 		  button = JButton.new text
           button.set_location(current_x, current_y)
-		  current_x += button.preferred_size.width # doesn't have a 'real' size yet...I guess...yikes
+		  button.set_bounds(current_x, current_y, 100, 20)
+		  current_x += 100 + 5 # doesn't have a 'real' size yet...I guess...yikes
           frame.panel.add button
           frame.buttons[name] = button		  
 		}

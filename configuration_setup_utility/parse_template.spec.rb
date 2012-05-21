@@ -22,10 +22,9 @@ describe ParseTemplate do
    assert frame.buttons['preferences'].text == "new text"
    frame.buttons['preferences'].location.x.should_not == frame.buttons['start'].location.x
    frame.buttons['preferences'].location.y.should == frame.buttons['start'].location.y
-   frame.get_size.x.should be > 0
-   frame.get_size.y.should be > 0
+   frame.get_size.height.should be > 0
+   frame.get_size.width.should be > 0
    frame.show
-   frame.visible=true
   end
 
 end
