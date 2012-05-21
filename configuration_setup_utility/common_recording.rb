@@ -41,5 +41,5 @@ def combine_devices_for_ffmpeg_input audio_device, video_device
  if video_device
    video_device="video=\"#{video_device}\""
  end
- "-f dshow -i #{[audio_device,video_device].join(':')}"
+ "-f dshow -i #{[audio_device,video_device].compact.join(':')}"
 end

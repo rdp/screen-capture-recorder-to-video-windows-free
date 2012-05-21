@@ -1,4 +1,5 @@
 require 'common_recording.rb'
+
 require 'jruby-swing-helpers/parse_template.rb'
 require 'jruby-swing-helpers/storage.rb'
 
@@ -8,6 +9,10 @@ storage = Storage.new('record_with_buttons')
 require 'tmpdir'
 storage['save_to_dir'] ||= Dir.tmpdir
 
+def current_storage_dir
+  @storage['save_to_dir']
+end
+
 elements = frame.elements
 
 elements['record_to_dir_text'].text += " " + current_storage_dir
@@ -16,38 +21,38 @@ elements['reveal_save_to_dir'].on_clicked {
   SwingHelpers.show_in_explorer current_storage_dir
 }
 
-elements['stop'].disable
+elements['stop'].disable # default
 
-old_number = Dir[current_storage_dir + '/*.{wav,mp4}'].map{ |f| f =~ /(\d+)/; $1.to_i}.sort.last + 1
-
-def current_storage_dir
-  @storage['save_to_dir']
-end
+old_files = Dir[current_storage_dir + '/*.{wav,mp4}']
+old_files = ["0"] if old_files.empty?
+next_number = old_files.map{ |f| f =~ /(\d+)/; $1.to_i}.sort.last + 1
 
 elements['start'].on_clicked {
  if @current_process
    raise 'unexpected'
  else
-   # TODO ffmpeg
    if storage['video_name']
      ext = '.mp4'
    else
      ext = '.mp3'
    end
-   "ffmpeg -f dshow  -vcodec huffyuv #{current_storage_dir}/#{old_number+=1}.#{ext}"
-   @current_process = open("|", "w")
+   c = "ffmpeg -y #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } -vcodec huffyuv \"#{current_storage_dir}/#{next_number+=1}#{ext}\""
+   puts 'running', c
+   @current_process = IO.popen(c, "w") # jruby friendly :P
    elements['stop'].enable
+   elements['start'].disable
  end
 }
 
 elements['stop'].on_clicked {
   if @current_process
-    @current_process.print 'q'
+    @current_process.print 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
 	@current_process.close
 	@current_process = nil
     elements['start'].enable
+	elements['stop'].disable
   else
-    raise 'unexpected2'
+    raise 'unexpected2?'
   end
 }
 
