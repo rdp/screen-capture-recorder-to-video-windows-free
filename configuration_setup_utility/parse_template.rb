@@ -31,6 +31,7 @@ module ParseTemplate
  # => ["", "[ a ]", " ", "[ b ]"]	
     frame = JFramer.new
 	current_y = 10
+	max_x = 100
     got.each_line{|l|
 	  current_x = 10
 	  if got =~ /\s*[-]+([\w ]+)[-]+\s*$/ # ----(a Title)---
@@ -41,6 +42,7 @@ module ParseTemplate
 	  # >> "|  [Setup Preferences:preferences] [Start:start] [Stop:stop] |" .scan  /\[(.*?)\]/
 	  # => [["Setup Preferences:preferences"], ["Start:start"], ["Stop:stop"]]
       if got =~ button_line_regex
+	    current_y += 25
         got.scan(button_line_regex).each{|name|
 		  # name is like ["Setup Preferences:preferences"]
 		  name = name[0]
@@ -58,7 +60,9 @@ module ParseTemplate
 		}
 	    
 	  end
+	  max_x = [max_x, current_x].max
 	}
+	frame.set_size max_x+15, current_y+15
 	frame
   end
 
