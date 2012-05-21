@@ -45,7 +45,7 @@ module ParseTemplate
 		  else
 		    text = name
 		  end
-		  button = JButton.new text
+		  button = javax.swing.JButton.new text
           button.tool_tip = text
           button.set_bounds(44, 33, 35, 23) # TODO test
           frame.panel.add button
