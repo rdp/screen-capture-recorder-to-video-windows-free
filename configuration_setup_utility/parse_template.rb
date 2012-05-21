@@ -40,6 +40,7 @@ module ParseTemplate
 	  button_line_regex = /\[(.*?)\]/
 	  # >> "|  [Setup Preferences:preferences] [Start:start] [Stop:stop] |" .scan  /\[(.*?)\]/
 	  # => [["Setup Preferences:preferences"], ["Start:start"], ["Stop:stop"]]
+	  _dbg
       if got =~ button_line_regex
         got.scan(button_line_regex).each{|name|
 		  # name is like ["Setup Preferences:preferences"]
@@ -51,7 +52,7 @@ module ParseTemplate
 		    text = name
 		  end
 		  button = JButton.new text
-          button.set_bounds(current_x, current_y, button.width, button.height) # TODO test size/placement
+          button.set_bounds(current_x, current_y, button.width, button.height)
 		  current_x += button.width
           frame.panel.add button
           frame.buttons << button		  
