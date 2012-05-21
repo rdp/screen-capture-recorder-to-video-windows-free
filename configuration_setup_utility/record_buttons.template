@@ -1,5 +1,5 @@
  ------------Record Control--------------------------------------------
- |  [Start Recording:start] [Stop:stop] [Setup Preferences:preferences] 
+ |  [Start Recording:start] [Stop:stop] [Options:preferences] 
  |  <<Video name:video_name>> <<Audio name:audio_name>>
  |  <<Record To Dir:record_to_dir_text>>
  |  [Reveal...:reveal_save_to_dir]

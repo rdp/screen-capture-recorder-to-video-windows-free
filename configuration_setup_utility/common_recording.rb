@@ -11,7 +11,7 @@ def choose_devices
   if video_device == 'none'
     video_device = nil
   else
-    video_device="-f dshow -i video=\"#{video_device}\""
+    # stay same
   end
 
   audios = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == 'virtual-audio-capturer' ? 0 : 1}
@@ -19,7 +19,7 @@ def choose_devices
   if audio_device == 'none'
     audio_device = nil 
   else
-    audio_device="-f dshow -i audio=\"#{audio_device}\""
+    # stay same
   end
   
   unless audio_device || video_device
@@ -34,3 +34,12 @@ def choose_devices
   [audio_device, video_device] 
 end
 
+def combine_devices_for_ffmpeg_input audio_device, video_device
+ if audio_device
+   audio_device="audio=\"#{audio_device}\""
+ end
+ if video_device
+   video_device="video=\"#{video_device}\""
+ end
+ "-f dshow -i #{[audio_device,video_device].join(':')}"
+end

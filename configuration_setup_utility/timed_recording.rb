@@ -34,9 +34,10 @@ SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will star
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "ffmpeg -y #{[video_device, audio_device].compact.join(' ')} -t #{seconds} -vcodec huffyuv \"#{file}\"" # LODO report qtrle no video
+c = "ffmpeg -y #{combine_devices_for_ffmpeg_input(audio_device, video_device)} -t #{seconds} -vcodec huffyuv \"#{file}\"" # LODO report qtrle no video
 puts c
 system c
-p 'revealing file...'
+puts # get past any ffmpeg output
+puts 'revealing file...'
 SwingHelpers.show_in_explorer file
 p 'done'
