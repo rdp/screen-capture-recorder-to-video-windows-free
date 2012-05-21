@@ -9,7 +9,7 @@ module ParseTemplate
     def initialize 
       super()
       @panel = JPanel.new
-      @buttons = []
+      @buttons = {}
       @panel.set_layout nil
       add @panel # why can't I just slap these down? panel? huh?
 	  #show
@@ -40,7 +40,6 @@ module ParseTemplate
 	  button_line_regex = /\[(.*?)\]/
 	  # >> "|  [Setup Preferences:preferences] [Start:start] [Stop:stop] |" .scan  /\[(.*?)\]/
 	  # => [["Setup Preferences:preferences"], ["Start:start"], ["Stop:stop"]]
-	  _dbg
       if got =~ button_line_regex
         got.scan(button_line_regex).each{|name|
 		  # name is like ["Setup Preferences:preferences"]
@@ -52,10 +51,10 @@ module ParseTemplate
 		    text = name
 		  end
 		  button = JButton.new text
-          button.set_bounds(current_x, current_y, button.width, button.height)
-		  current_x += button.width
+          button.set_location(current_x, current_y)
+		  current_x += button.preferred_size.width # doesn't have a 'real' size yet...I guess...yikes
           frame.panel.add button
-          frame.buttons << button		  
+          frame.buttons[name] = button		  
 		}
 	    
 	  end

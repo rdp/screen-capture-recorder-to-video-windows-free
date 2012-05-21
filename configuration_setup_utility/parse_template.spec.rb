@@ -13,16 +13,16 @@ describe ParseTemplate do
 	frame.get_title.should == "A Title"
   end
   
-  it "should parse button lines" do
+  it "should parse button only lines" do
    frame = parse_string "|  [Setup Preferences:preferences] [Start:start] [Stop:stop] |"
    assert frame.buttons.length == 3
-   frame.buttons[0].text.should == "Setup Preferences"
-   assert frame.buttons[1].text == "Start"
-   # introspect name?
-   frame.buttons[0].text = "new text" 
-   assert frame.buttons[0].text == "new text"
-   frame.buttons[0].location.x.should_not == frame.buttons[1].location.x
-   frame.buttons[0].location.y.should == frame.buttons[1].location.y
+   frame.buttons['preferences'].text.should == "Setup Preferences"
+   assert frame.buttons['start'].text == "Start"
+   frame.buttons['preferences'].text = "new text" 
+   assert frame.buttons['preferences'].text == "new text"
+   frame.buttons['preferences'].location.x.should_not == frame.buttons['start'].location.x
+   frame.buttons['preferences'].location.y.should == frame.buttons['start'].location.y
+#   frame.show
   end
 
 end
