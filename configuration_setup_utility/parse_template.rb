@@ -2,11 +2,13 @@ require 'java'
 
 module ParseTemplate
 
-  class JFramer < javax.swing.JFrame
+  include_package 'javax.swing'; [JFrame, JPanel, JButton]
+  
+  class JFramer < JFrame
     
     def initialize 
       super()
-      @panel = javax.swing.JPanel.new
+      @panel = JPanel.new
       @buttons = []
       @panel.set_layout nil
       add @panel # why can't I just slap these down? panel? huh?
@@ -45,7 +47,7 @@ module ParseTemplate
 		  else
 		    text = name
 		  end
-		  button = javax.swing.JButton.new text
+		  button = JButton.new text
           button.tool_tip = text
           button.set_bounds(44, 33, 35, 23) # TODO test
           frame.panel.add button
