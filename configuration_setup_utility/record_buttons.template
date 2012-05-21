@@ -1,3 +1,5 @@
- ------------Record Control--------------------------------------------------
- |  [Setup Preferences:preferences] [Start Current:start] [Stop:stop] |
+ ------------Record Control--------------------------------------------
+ |  [Setup Preferences:preferences] [Start Current:start] [Stop:stop] 
+ |  <<Record To Dir:record_to_dir_text>>
+ |  [Reveal Saved Files Dir:reveal_save_to_dir]
  ---------------------------------------------------------------------

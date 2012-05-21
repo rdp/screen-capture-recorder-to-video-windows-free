@@ -2,14 +2,11 @@ require 'add_vendored_gems_to_load_path'
 
 require 'jruby-swing-helpers/swing_helpers'
 include SwingHelpers
-require 'jruby-swing-helpers/drive_info'
-require 'setup_screen_tracker_params'
-require 'fileutils'
-
 require 'ffmpeg_helpers'
 
+
 def choose_devices
-  videos = FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1} + ['none'] # put none in front :)
+  videos = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1}  # put none in front :)
   original_video_device=video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or \"none\" to record audio only").go_selected_value
   if video_device == 'none'
     video_device = nil
