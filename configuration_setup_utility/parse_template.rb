@@ -1,17 +1,34 @@
 require 'java'
 
-class ParseTemplate
+module ParseTemplate
 
+  class JFramer < javax.swing.JFrame
+    
+    def initialize 
+      super()
+      @panel = javax.swing.JPanel.new
+      @buttons = []
+      @panel.set_layout nil
+      add @panel # why can't I just slap these down? panel? huh?
+	  show
+	end 
+	attr_accessor :buttons
+	attr_accessor :panel
+  end
+  
   def self.parse_filename filename
     parse_string File.read(filename)
   end
+  
+  #       happy = Font.new("Tahoma", Font::PLAIN, 11)
+
   
   # returns a jframe that "matches" whatever you put  
   def self.parse_string string
     got = string
  #>>"[ a ] [ b ]".split(/(\[.*?\])/)
  # => ["", "[ a ]", " ", "[ b ]"]	
-    frame = java.awt.Frame.new
+    frame = JFramer.new
     got.each_line{|l|
 	  if got =~ /\s*[-]+([\w ]+)[-]+\s*$/ # ----(a Title)---
 	    frame.set_title $1
@@ -28,12 +45,16 @@ class ParseTemplate
 		  else
 		    text = name
 		  end
-		  
+		  button = JButton.new text
+          button.tool_tip = text
+          button.set_bounds(44, 33, 35, 23) # TODO test
+          frame.panel.add button
+          frame.buttons << button		  
 		}
 	    
 	  end
 	}
 	frame
   end
-  
+
 end
