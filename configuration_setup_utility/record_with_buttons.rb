@@ -18,13 +18,13 @@ elements = frame.elements
 
 @elements = elements
 
-
 elements['reveal_save_to_dir'].on_clicked {
   last_filename = get_old_files.last
-  if !File.exist? last_filename
-    SwingHelpers.show_in_explorer current_storage_dir	
-  else
+  if last_filename
     SwingHelpers.show_in_explorer last_filename
+  else
+	SwingHelpers.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to, in explorer"
+    SwingHelpers.show_in_explorer current_storage_dir	
   end
 }
 
