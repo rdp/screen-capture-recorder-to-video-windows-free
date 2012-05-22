@@ -84,11 +84,11 @@ end
 setup_device_text elements, storage
 
 elements['preferences'].on_clicked {
-  
   audio, video = choose_devices
   storage['video_name'] = video
   storage['audio_name'] = audio
   setup_device_text elements, storage
+  @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
 }
 
 if(!storage['video_name'] && !storage['audio_name'])
