@@ -1,5 +1,5 @@
- ------------Record Control--------------------------------------------
- |  [Start Recording:start] [Stop:stop] [Reveal last recording:reveal_save_to_dir] [Options:preferences] 
- |  <<:video_name,150>> <<:audio_name,150>>
- |  <<Record To Dir currently: :record_to_dir_text>> <<:last_file_written,15>>
- ---------------------------------------------------------------------
+ ------------Record Control--------------------------------------------------------------------------------
+ |  [Start Recording:start] [Stop:stop] [Reveal last recording:reveal_save_to_dir] [Options:preferences]   |
+ |  <<:video_name,150>>              <<:audio_name,150>>                                                   |
+ |  <<Record To Dir currently: :record_to_dir_text>> <<:last_file_written,15>>                             |
+ ----------------------------------------------------------------------------------------------------------
