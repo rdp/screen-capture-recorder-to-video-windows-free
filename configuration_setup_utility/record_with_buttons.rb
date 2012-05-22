@@ -16,43 +16,56 @@ end
 
 elements = frame.elements
 
-elements['record_to_dir_text'].text += " " + current_storage_dir
+@elements = elements
+
 
 elements['reveal_save_to_dir'].on_clicked {
-  SwingHelpers.show_in_explorer get_old_files.last
+  last_filename = get_old_files.last
+  if !File.exist? last_filename
+    SwingHelpers.show_in_explorer current_storage_dir	
+  else
+    SwingHelpers.show_in_explorer last_filename
+  end
 }
 
-elements['stop'].disable # default disable
-
 def get_old_files
-  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']
-  if old_files.empty?
-    old_files = [current_storage_dir + "/0.fak"]
-	require 'fileutils'
-	FileUtils.touch old_files[0] # so 'reveal in explorer' can work
-  end
+  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']  
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
   old_files
- end
-  
-numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
-next_number = numbered.last + 1
+end
+
+def setup_ui
+  numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
+  @next_number = (numbered.last || 0) + 1
+  if @storage['video_name']
+   ext = '.mp4'
+  else
+   ext = '.mp3'
+  end
+  @next_filename = "#{current_storage_dir}/#{@next_number}#{ext}"
+  @elements['next_file_written'].text= 'Next file to write to: ' + File.basename(@next_filename) # TODO .original_text :P
+  @elements['record_to_dir_text'].text = "Record To Dir currently: " + current_storage_dir
+  if(@current_process)
+    @elements['stop'].enable 
+	@elements['start'].disable
+	@elements['start'].text = "Recording!"
+  else
+    @elements['stop'].disable
+	@elements['start'].enable
+	@elements['start'].text = "Start Recording"
+  end
+end
+
+setup_ui
 
 elements['start'].on_clicked {
  if @current_process
    raise 'unexpected'
  else
-   if storage['video_name']
-     ext = '.mp4'
-   else
-     ext = '.mp3'
-   end
-   @next_filename = "#{current_storage_dir}/#{next_number+=1}#{ext}"
    c = "ffmpeg #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } -vcodec huffyuv \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
-   elements['stop'].enable
-   elements['start'].disable
+   setup_ui
  end
 }
 
@@ -61,11 +74,9 @@ elements['stop'].on_clicked {
     @current_process.print 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
 	@current_process.close
 	@current_process = nil
-    elements['start'].enable
-	elements['stop'].disable
-	elements['last_file_written'].text= 'wrote file' + File.basename(@next_filename)
-	puts # pass the ffmpeg stuff
+	puts # pass the ffmpeg stuff, hopefully
 	puts 'done writing'
+	setup_ui
   else
     raise 'unexpected2?'
   end
@@ -89,6 +100,7 @@ elements['preferences'].on_clicked {
   storage['audio_name'] = audio
   setup_device_text elements, storage
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
+  setup_ui
 }
 
 if(!storage['video_name'] && !storage['audio_name'])
