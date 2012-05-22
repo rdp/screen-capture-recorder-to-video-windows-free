@@ -1,6 +1,6 @@
 require 'add_vendored_gems_to_load_path'
 
-require 'jruby-swing-helpers/swing_helpers'
+require File.dirname(__FILE__) + '/jruby-swing-helpers/swing_helpers'
 include SwingHelpers
 require 'ffmpeg_helpers'
 
