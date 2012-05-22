@@ -1,4 +1,3 @@
-puts 'loading...'
 require 'add_vendored_gems_to_load_path'
 require 'java'
 require 'jruby-swing-helpers/swing_helpers'

@@ -1,5 +1,3 @@
-puts 'loading...'
-
 require 'common_recording.rb'
 require 'fileutils'
 require 'jruby-swing-helpers/drive_info'

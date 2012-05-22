@@ -1,5 +1,4 @@
-<<<<<<< HEAD
- ------------Record Control------------------------------------------------------------------------------
+ ------------Recording Control----------------------------------------------------------------------------
  |  [Start Recording:start] [Stop:stop] [Show last recording:reveal_save_to_dir] [Options:preferences]   |
  |  <<:video_name,250>>                <<:audio_name,250>>                                               |              
  |  <<Record To Dir currently: :record_to_dir_text,250>> <<:next_file_written,175>>                      |

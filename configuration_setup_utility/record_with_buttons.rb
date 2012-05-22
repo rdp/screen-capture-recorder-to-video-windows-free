@@ -43,7 +43,7 @@ def setup_ui
    ext = '.mp3'
   end
   @next_filename = "#{current_storage_dir}/#{@next_number}#{ext}"
-  @elements['next_file_written'].text= 'Next file to write to: ' + File.basename(@next_filename) # TODO .original_text :P
+  @elements['next_file_written'].text= 'Next file will write to: ' + File.basename(@next_filename) # TODO .original_text :P
   @elements['record_to_dir_text'].text = "Record To Dir currently: " + current_storage_dir
   if(@current_process)
     @elements['stop'].enable 
