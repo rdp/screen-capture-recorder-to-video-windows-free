@@ -16,7 +16,6 @@ def choose_devices
   if video_device == 'none'
     video_device = nil
   else
-    fps = 
     # stay same
   end
 
