@@ -4,6 +4,8 @@ include avisynth, and some scripts
 
 == maybe ==
 
+make jruby startup faster LOL
+
 a start, stop button for recording, just call ffmpeg...
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P

@@ -104,7 +104,7 @@ elements['preferences'].on_clicked {
 }
 
 if(!storage['video_name'] && !storage['audio_name'])
-  elements['preferences'].simulate_click
+  elements['preferences'].simulate_click # setup preferences once
 end
 
 frame.show
