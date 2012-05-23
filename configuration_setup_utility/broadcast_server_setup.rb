@@ -1,12 +1,15 @@
 require 'add_vendored_gems_to_load_path'
 require 'java'
-require 'jruby-swing-helpers/swing_helpers'
-require 'jruby-swing-helpers/play_audio'
-require 'jruby-swing-helpers/ruby_clip'
+
+$: << 'jruby-swing-helpers/lib'
+require 'swing_helpers'
+require 'play_audio'
+require 'ruby_clip'
+require 'storage'
+
+# and others
 require 'tempfile'
 require 'sane'
-require 'jruby-swing-helpers/storage'
-include SwingHelpers
 LocalStorage = Storage.new('server_setup')
 
 if ARGV[0].in? ['-h', '--help']
