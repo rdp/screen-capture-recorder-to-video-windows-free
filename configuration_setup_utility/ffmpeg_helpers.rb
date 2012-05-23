@@ -21,4 +21,9 @@ module FfmpegHelpers
     video_names = video.scan(/"([^"]+)"/).map{|matches| matches[0]}
     {:audio => audio_names, :video => video_names}
   end
+  
+  def self.warmup_ffmpeg_so_itll_be_disk_cached 
+    ffmpeg_list_command = "ffmpeg.exe -list_devices true -f dshow -i dummy 2>&1"
+    enum = `#{ffmpeg_list_command}`
+  end
 end

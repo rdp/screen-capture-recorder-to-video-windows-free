@@ -31,7 +31,6 @@ elements['reveal_save_to_dir'].on_clicked {
 def get_old_files
   old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']  
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
-  p old_files
   old_files
 end
 
@@ -99,6 +98,8 @@ if(!storage['video_name'] && !storage['audio_name'])
   else
     elements['preferences'].simulate_click # setup preferences once
   end 
+else
+  Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime friendly LOL
 end
 
 setup_ui # init :)
