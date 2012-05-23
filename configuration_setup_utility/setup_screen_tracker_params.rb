@@ -73,14 +73,6 @@ class SetupScreenTrackerParams
     end
   end
   
-  def all_current_values
-    out = {}
-    for name in Settings
-      out[name] = read_single_setting(name) # which might be just nil...
-    end
-    out
-  end
-  
   private
   
   def with_reg

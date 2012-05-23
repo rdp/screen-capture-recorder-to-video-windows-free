@@ -19,8 +19,7 @@ class WindowResize
     f.add button
     setter_getter = SetupScreenTrackerParams.new
     button.add_action_listener {|e|
-      setter_getter.re_init
-      got = {:start_x => f.get_location.x, :start_y => f.get_location.y, :width => f.get_size.width, :height => f.get_size.height}
+      got = {:start_x => f.get_location.x, :start_y => f.get_location.y, :capture_width => f.get_size.width, :capture_height => f.get_size.height}
       for key, setting in got
   	    for name, factor in {'mplayer/ffmpeg' => 2, 'vlc' => 4} # my guess is 4 is safe for VLC, 8 might be needed though
           if setting % factor != 0 and [:width, :height].include?(key)
@@ -34,9 +33,9 @@ class WindowResize
       SwingHelpers.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
       f.dispose
   }
-  current_values = setter_getter.all_current_values
-	width = current_values['width'] || 200
-	height = current_values['height'] || 200
+  
+	width = setter_getter.read_single_setting('capture_width') || 300
+	height = setter_getter.read_single_setting('capture_height') || 200
 	min_val = 35
 	if(width < min_val) 
 	  SwingHelpers.show_blocking_message_dialog 'previous width too small, using default size '+ min_val.to_s
@@ -48,7 +47,7 @@ class WindowResize
 	 end
 	 
     f.set_size(width, height)
-    f.set_location(current_values['start_x'] || 0, current_values['start_y'] || 0)
+    f.set_location(setter_getter.read_single_setting('start_x') || 0, setter_getter.read_single_setting('start_y') || 0)
     AWTUtilities.set_window_opacity(f, 0.7)
   	f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE) # instead of hang when they click the "X" [LODO warn?]
     f.show
