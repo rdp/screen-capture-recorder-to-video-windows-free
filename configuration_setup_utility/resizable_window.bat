@@ -1,1 +1,0 @@
-javaw -jar jruby-complete-1.6.4.jar window_resize.rb
