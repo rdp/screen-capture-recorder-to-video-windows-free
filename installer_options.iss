@@ -1,5 +1,5 @@
-#define AppVer "0.6.6pre"
-; 0.6.6: audio icon rename, aesthetic
+#define AppVer "0.6.6"
+
 
 #define AppName "Screen Capturer Recorder 32-bit"
 ; AppId === AppName by default BTW

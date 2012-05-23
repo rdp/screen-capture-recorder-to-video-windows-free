@@ -1,3 +1,7 @@
+0.6.6
+
+ audio icon rename, aesthetic, newer better ffmpeg
+
 0.6.5
 
 better audio sniffer, hopefully
