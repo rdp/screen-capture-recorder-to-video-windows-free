@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/jruby-swing-helpers/swing_helpers'
 include SwingHelpers
 require 'ffmpeg_helpers'
 
+VirtualAudioDeviceName = 'virtual-audio-capturer'
 
 def choose_devices
   videos = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1}  # put none in front :)
@@ -14,7 +15,7 @@ def choose_devices
     # stay same
   end
 
-  audios = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == 'virtual-audio-capturer' ? 0 : 1}
+  audios = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == VirtualAudioDeviceName ? 0 : 1}
   audio_device = DropDownSelector.new(nil, audios, "Select audio device to capture, or none").go_selected_value
   if audio_device == 'none'
     audio_device = nil 

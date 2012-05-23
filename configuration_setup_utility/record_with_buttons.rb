@@ -104,7 +104,12 @@ elements['preferences'].on_clicked {
 }
 
 if(!storage['video_name'] && !storage['audio_name'])
-  elements['preferences'].simulate_click # setup preferences once
+  if ARGV[0] == '--just-audio-default' && FfmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
+    storage['audio_name'] = VirtualAudioDeviceName
+  else
+    elements['preferences'].simulate_click # setup preferences once
+  end 
 end
 
+setup_ui
 frame.show
