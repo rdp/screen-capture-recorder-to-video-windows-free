@@ -54,9 +54,8 @@ def setup_ui
 	@elements['start'].enable
 	@elements['start'].text = "Start Recording"
   end
+  setup_device_text @elements, @storage
 end
-
-setup_ui
 
 elements['start'].on_clicked {
  if @current_process
@@ -98,7 +97,6 @@ elements['preferences'].on_clicked {
   audio, video = choose_devices
   storage['video_name'] = video
   storage['audio_name'] = audio
-  setup_device_text elements, storage
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
   setup_ui
 }
