@@ -1,8 +1,11 @@
+require 'java'
 require 'add_vendored_gems_to_load_path'
 
 require File.dirname(__FILE__) + '/jruby-swing-helpers/swing_helpers'
 include SwingHelpers
 require 'ffmpeg_helpers'
+splash = java.awt.SplashScreen.splash_screen
+splash.close if splash # close it early'ish...
 
 VirtualAudioDeviceName = 'virtual-audio-capturer'
 

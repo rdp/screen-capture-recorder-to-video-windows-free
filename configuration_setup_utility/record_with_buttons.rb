@@ -4,7 +4,7 @@ require 'jruby-swing-helpers/parse_template.rb'
 require 'jruby-swing-helpers/storage.rb'
 
 frame = ParseTemplate.parse_file 'record_buttons.template'
-
+@frame = frame
 storage = Storage.new('record_with_buttons')
 @storage = storage
 require 'tmpdir'
@@ -31,20 +31,18 @@ elements['reveal_save_to_dir'].on_clicked {
 def get_old_files
   old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']  
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
+  p old_files
   old_files
 end
 
 def setup_ui
   numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
-  @next_number = (numbered.last || 0) + 1
-  if @storage['video_name']
-   ext = '.mp4'
-  else
-   ext = '.mp3'
-  end
-  @next_filename = "#{current_storage_dir}/#{@next_number}#{ext}"
-  @elements['next_file_written'].text= 'Next file will write to: ' + File.basename(@next_filename) # TODO .original_text :P
-  @elements['record_to_dir_text'].text = "Record To Dir currently: " + current_storage_dir
+  @next_number = (numbered[-1] || 0) + 1
+  ext = @storage['current_ext_sans_dot']
+  @next_filename = "#{current_storage_dir}/#{@next_number}.#{ext}"
+  device_names = [@storage['video_name'], @storage['audio_name']].compact.join(',')
+  next_filename = File.basename(get_old_files[-1] || @next_filename)
+  @frame.title = 'Recorded to: ' + File.basename(File.dirname(@next_filename)) + '/' + next_filename + " #{device_names}"
   if(@current_process)
     @elements['stop'].enable 
 	@elements['start'].disable
@@ -54,7 +52,6 @@ def setup_ui
 	@elements['start'].enable
 	@elements['start'].text = "Start Recording"
   end
-  setup_device_text @elements, @storage
 end
 
 elements['start'].on_clicked {
@@ -81,22 +78,16 @@ elements['stop'].on_clicked {
   end
 }
 
-def setup_device_text elements, storage
-  for type in ['video_name', 'audio_name']
-    if storage[type]
-	  elements[type].text = "Current device: #{storage[type]}"
-	else
-	  elements[type].text = ""
-	end
-  end
-end
-
-setup_device_text elements, storage
-
 elements['preferences'].on_clicked {
   audio, video = choose_devices
   storage['video_name'] = video
   storage['audio_name'] = audio
+  if audio && !video
+    @storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'wav'], "Select audio Save type").go_selected_value
+  else
+    @storage['current_ext_sans_dot'] = 'mp4'
+  end
+    
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
   setup_ui
 }
@@ -104,10 +95,12 @@ elements['preferences'].on_clicked {
 if(!storage['video_name'] && !storage['audio_name'])
   if ARGV[0] == '--just-audio-default' && FfmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
     storage['audio_name'] = VirtualAudioDeviceName
+	@storage['current_ext_sans_dot'] = 'mp3'
   else
     elements['preferences'].simulate_click # setup preferences once
   end 
 end
 
-setup_ui
+setup_ui # init :)
+
 frame.show
