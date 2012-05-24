@@ -1,4 +1,4 @@
-#define AppVer "0.6.7"
+#define AppVer "0.6.8"
 
 #define AppName "Screen Capturer Recorder 32-bit"
 ; AppId === AppName by default BTW
@@ -35,7 +35,7 @@ OutputDir=releases
 Name: {group}\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\Release Notes; Filename: {app}\ChangeLog.txt
 Name: {group}\Record\record screen and or audio using current settings for a variable number of seconds; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: timed_recording.rb; Flags: runminimized
-;Name: {group}\Record\Record by clicking a start button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
+Name: {group}\Record\Record by clicking a start button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
 Name: {group}\configure\configure by setting specific screen capture numbers; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: setup_via_numbers.rb; Flags: runminimized
 Name: {group}\configure\benchmark your machines screen capture speed; Filename: {app}\BltTest.exe; WorkingDir: {app}
 Name: {group}\configure\configure by resizing a transparent window; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: window_resize.rb; Flags: runminimized

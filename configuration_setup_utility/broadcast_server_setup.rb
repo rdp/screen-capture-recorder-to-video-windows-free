@@ -3,6 +3,7 @@ require 'java'
 
 $: << 'jruby-swing-helpers/lib'
 require 'swing_helpers'
+include SwingHelpers # DropDownSelector
 require 'play_audio'
 require 'ruby_clip'
 require 'storage'

@@ -5,7 +5,7 @@ splash = java.awt.SplashScreen.splash_screen
 splash.close if splash # close it early'ish...not sure how this looks on slower computers...
 
 require File.dirname(__FILE__) + '/jruby-swing-helpers/lib/swing_helpers'
-include SwingHelpers
+include SwingHelpers # DropDownSelector
 require 'ffmpeg_helpers'
 
 VirtualAudioDeviceName = 'virtual-audio-capturer'
