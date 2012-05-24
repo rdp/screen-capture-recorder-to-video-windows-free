@@ -35,7 +35,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         //m_nCurrentBitDepth(32), // negotiated later...
 		m_pParent(pFilter),
 		m_bFormatAlreadySet(false),
-		hRawBitmap(NULL)
+		hRawBitmap(NULL),
+		m_bUseCaptureBlt(false)
 {
 
     // Get the device context of the main display, just to get some metrics for it...
@@ -85,12 +86,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 	m_iCaptureConfigHeight = m_rScreen.bottom - m_rScreen.top;
-	ASSERT(m_iCaptureConfigHeight > 0);	
+	ASSERT(m_iCaptureConfigHeight > 0);
 
 	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0);
 	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0);
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
 	ASSERT(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
+
+	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_with_mouse_blink_only_non_aero_if_1"), 0);
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
@@ -352,6 +355,10 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 	if(m_iHwndToTrack != NULL)
 		ASSERT(notNeedStretching); // we don't support HWND plus scaling...hmm... LODO move assertion LODO implement this (low prio since they probably are just needing that window, not with scaling too [?])
 
+    int captureType = SRCCOPY;
+	if(m_bUseCaptureBlt)
+	  captureType = captureType | CAPTUREBLT; // CAPTUREBLT here [last param] is for layered (transparent) windows in non-aero I guess (which happens to include the mouse, but we do that elsewhere)
+
 	if (notNeedStretching) {
 
 	  if(m_iHwndToTrack != NULL) {
@@ -365,7 +372,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
       }
 
 	   // Bit block transfer from screen our compatible memory DC.	Apparently this is faster than stretching.
-       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY); // CAPTUREBLT here [last param] is for layered (transparent) windows in non-aero I guess (which happens to include the mouse, but we do that elsewhere)
+       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, captureType);
 	   // 9.3 ms 1920x1080 -> 1920x1080 (100 fps) (11 ms? 14? random?)
 	}
 	else {
@@ -385,7 +392,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 			// 50 ms 1920x1080 -> 500x500 without aero
 			SetBrushOrgEx(hMemDC, 0, 0, 0); // MSDN says I should call this after using HALFTONE
 		}
-	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, SRCCOPY);
+	    StretchBlt(hMemDC, 0, 0, iFinalWidth, iFinalHeight, hScrDC, nX, nY, nWidth, nHeight, captureType);
 	}
 
 	if(show_performance)
