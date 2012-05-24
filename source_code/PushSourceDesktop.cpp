@@ -205,11 +205,13 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  }
 	    
 	}
+
 	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
-    
-	// LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
-    //pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
-	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); //useless seemingly
+
+	//LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
+
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
 
 	if(fullyStarted) {
       m_iFrameNumber++;
