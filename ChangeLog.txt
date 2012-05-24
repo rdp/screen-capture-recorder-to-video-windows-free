@@ -1,3 +1,5 @@
+0.6.8
+
   add icon for recording with start/stop button
 
 0.6.7
