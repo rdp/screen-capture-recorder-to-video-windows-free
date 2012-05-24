@@ -36,7 +36,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_pParent(pFilter),
 		m_bFormatAlreadySet(false),
 		hRawBitmap(NULL),
-		m_bUseCaptureBlt(false)
+		m_bUseCaptureBlt(false),
+		previousFrameEndTime(0)
 {
 
     // Get the device context of the main display, just to get some metrics for it...
@@ -93,7 +94,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
 	ASSERT(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
 
-	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_with_mouse_blink_only_non_aero_if_1"), 0);
+	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_with_mouse_blink_only_non_aero_if_1"), 0) == 1;
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
@@ -213,7 +214,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	//LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
 
-    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+    // pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
 
 	if(fullyStarted) {

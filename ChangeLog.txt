@@ -1,7 +1,8 @@
+  add icon for recording with start/stop button
+
 0.6.7
 
   fix fatal bug of not marking things (oops),
-  add icon for recording with start/stop button
   add parameter for if you want to use CAPTUREBLT and blink your mouse
 
 0.6.6
