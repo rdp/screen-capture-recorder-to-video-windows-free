@@ -214,7 +214,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	//LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
 
-    // pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
+    pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
 
 	if(fullyStarted) {
