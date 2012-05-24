@@ -2,13 +2,10 @@
 
 include avisynth, and the one demo script LOL.
 
-fix record for video
-
 == maybe ==
 
-make jruby startup faster LOL
+saving to a slow disk I don't think it can keep up, audio gets messed?
 
-a start, stop button for recording, just call ffmpeg...
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
 
@@ -18,11 +15,9 @@ test vcam/pushsource with expression encoder, fresh install? vm?
 
 add an option "select your vcodec" for recording...sure.
 
-avisynth wrapper with "just" a hard coded pin types for A/V. For now. yikezers!
-
 == all never ==
 
-an option for CAPTUREBLT "capture transparent windows in non aero" ...
+make jruby startup faster LOL
 
 repro "tearing", repro CAPTUREBLT helping, ask msdn
 
