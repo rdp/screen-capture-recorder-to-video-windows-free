@@ -15,7 +15,7 @@ def do_command_line
     received = given_from_command_line = ARGV.shift
     unless received
       require 'java' # jruby only for getting user input...
-      require 'jruby-swing-helpers/swing_helpers'
+      require 'jruby-swing-helpers/lib/swing_helpers'
       previous_setting ||= ''
       received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
       raise 'cancelled...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
@@ -39,7 +39,7 @@ def do_command_line
       begin
 	    # allow MRI to use it [?]
         require 'java'
-        require 'jruby-swing-helpers/swing_helpers'
+        require 'jruby-swing-helpers/lib/swing_helpers'
         SwingHelpers.show_blocking_message_dialog warning
       rescue LoadError => allow_mri_for_setting_from_cli
       end

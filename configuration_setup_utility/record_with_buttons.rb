@@ -1,7 +1,7 @@
 require 'common_recording.rb'
 
-require 'jruby-swing-helpers/parse_template.rb'
-require 'jruby-swing-helpers/storage.rb'
+require 'jruby-swing-helpers/lib/parse_template.rb'
+require 'jruby-swing-helpers/lib/storage.rb'
 
 frame = ParseTemplate.parse_file 'record_buttons.template'
 @frame = frame
@@ -30,6 +30,7 @@ elements['reveal_save_to_dir'].on_clicked {
 
 def get_old_files
   old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']  
+  old_files.select!{|f| File.basename(f) =~ /^\d+\..../}
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
   old_files
 end
@@ -102,6 +103,7 @@ else
   Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime friendly LOL
 end
 
+p 'init'
 setup_ui # init :)
 
 frame.show

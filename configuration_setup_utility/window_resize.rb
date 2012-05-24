@@ -1,6 +1,6 @@
 require './add_vendored_gems_to_load_path.rb'
-require 'jruby-swing-helpers/mouse'
-require 'jruby-swing-helpers/swing_helpers'
+require 'jruby-swing-helpers/lib/mouse'
+require 'jruby-swing-helpers/lib/swing_helpers'
 require 'setup_screen_tracker_params'
 require 'java'
 

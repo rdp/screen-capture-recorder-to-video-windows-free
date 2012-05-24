@@ -1,6 +1,6 @@
 require 'common_recording.rb'
 require 'fileutils'
-require 'jruby-swing-helpers/drive_info'
+require 'jruby-swing-helpers/lib/drive_info'
  
 audio_device, video_device = choose_devices
 
