@@ -29,7 +29,7 @@ elements['reveal_save_to_dir'].on_clicked {
 }
 
 def get_old_files
-  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mp3,mpg}']  
+  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mkv,mp3,mpg}']  
   old_files.select!{|f| File.basename(f) =~ /^\d+\..../}
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
   old_files
@@ -37,12 +37,12 @@ end
 
 def setup_ui
   numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
-  @next_number = (numbered[-1] || 0) + 1
+  next_number = (numbered[-1] || 0) + 1
   ext = @storage['current_ext_sans_dot']
-  @next_filename = "#{current_storage_dir}/#{@next_number}.#{ext}"
+  @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   device_names = [@storage['video_name'], @storage['audio_name']].compact.join(',')
-  next_filename = File.basename(get_old_files[-1] || @next_filename)
-  @frame.title = 'Recorded to: ' + File.basename(File.dirname(@next_filename)) + '/' + next_filename + " #{device_names}"
+  next_file_basename = File.basename(get_old_files[-1] || @next_filename)
+  @frame.title = 'Recorded to: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " #{device_names}"
   if(@current_process)
     @elements['stop'].enable 
 	@elements['start'].disable
@@ -58,7 +58,12 @@ elements['start'].on_clicked {
  if @current_process
    raise 'unexpected'
  else
-   c = "ffmpeg #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } -vcodec huffyuv \"#{@next_filename}\""
+   if storage['video_name']
+     codecs = "-vcodec huffyuv -acodec ac3"
+   else
+     codecs = "" # let it auto-select the audio codec
+   end
+   c = "ffmpeg #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    setup_ui
@@ -83,9 +88,9 @@ elements['preferences'].on_clicked {
   storage['video_name'] = video
   storage['audio_name'] = audio
   if audio && !video
-    @storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'wav'], "Select audio Save type").go_selected_value
+    @storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "Select audio Save as type").go_selected_value
   else
-    @storage['current_ext_sans_dot'] = 'mp4'
+    @storage['current_ext_sans_dot'] = 'mkv'
   end
     
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
@@ -103,7 +108,6 @@ else
   Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime friendly LOL
 end
 
-p 'init'
 setup_ui # init :)
 
 frame.show
