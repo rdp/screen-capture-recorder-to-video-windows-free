@@ -1,11 +1,11 @@
 = todo =
 
 can select video codec then muxer (sans comparison)
-
+  "1080p"
+  
 mouse scaling is broken. Which is weird, but makes sense.
 
 == maybe ==
-
 
 compare all video codecs for movie, screencast LOL
 

@@ -13,19 +13,19 @@ It also includes helper utilities for recording/broadcasting.
 Download installer and run, from 
 
   https://sourceforge.net/projects/screencapturer/files
-    (sorry the files  sourceforge: github limits their disk usage space and I'm hitting up against the limit)
+    (sorry the files are on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
 
  NB that if you install the 64 bit device, you'll need to install the MSVC 2010 64 bit runtime first : http://www.microsoft.com/en-us/download/details.aspx?id=14632
 
 == Audio capture ==
 
 It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
-  see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of the audio device
+  see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of that audio capture device.
 
 == Usage ==
 
 Use some helper programs provided in 
- Start menu -> Programs -> Screen Capture Recorder -> XXX
+ Start menu -> Programs -> Screen Capture Recorder -> record/broadcast/XXX
 
 Or use any 3rd party program that can read from a Directshow Capture Device (ex: VLC).
 
@@ -48,43 +48,42 @@ The audio device name can be other dshow audio devices, as well.
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your 
 input source with that graphedit filename specified.
 
-gstreamer works, as well:
+gstreamer works, as well, ex:
 
   $ gst-launch.exe dshowvideosrc device-name=screen-capture-recorder ! ffmpegcolorspace ! directdrawsink
 
 I've even had Skype accidentally use it, thinking it was my webcam.
 Let me know if you want an easier way made for it for anything.
 
-
 == Streaming ==
 
 You can stream using it with ffmpeg (to an rtmp server) or to UDP, or use VLC (itself as a server, or VLC to an rtmp server) or
-use Flash Media Live Encoder, to some flash server.
+use Flash Media Live Encoder, to another flash server.
 
 "I can confirm also that VLC is very nice for everything but real-time
-steaming video, since it has a 1-second or more video delay" (use ffmpeg instead?)
-VLC may not work well with "variable rate input sources" like this one, but it might work ok for you.
+steaming video, since it has a 1-second or more video delay" (use ffmpeg instead perhaps?)
+VLC may not work well with "variable rate input sources" like this one, too, but it might work ok for your purposes, you can try it.
 
-ffplay to say it nicely: sucks big time.  The image quality is horrible, pixelated.
+ffplay to say it nicely: sucks.  The image quality is horrible, pixelated.
 
 VLC can receive a UDP stream and look better than ffplay: 
 vnc -vvv udp://127.0.0.1:1234
 
 == Configuration ==
 
-By default, it captures the "full screen" of the main desktop monitor (all windows, overlapping, there).
+By default, it captures the "full screen" of the main desktop monitor (all windows, overlapping, from there, with aero if vista+, without transparent windows if non aero).
 
-To configure it differently, run the provided "configuration setup utilities" or 
+To configure it differently, run the provided "configuration setup utilities/shortcuts" or 
 adjust registry settings before starting a run (advanced users only):
 
 HKEY_CURRENT_USER\Software\screen-capture-recorder
 
 with DWORD keys respected of start_x ... (see the file configuration_setup_utility\setup_screen_tracker_params.rb for a full list)
   
-ex: see incoming.reg (though NB that those values are in hex, so editing that file is a bit tedious--
-I just use regedit or the accompanying script utilities).  
+ex: see configuration_setup_utility\incoming.reg file (though NB that those values are in hex, so editing that file is a bit tedious--
+I always just use regedit or the accompanying script utilities and don't edit it by hand).  
 
-To "reset" a value delete its key.
+To "reset" a value delete its key entirely.
 
 == Trouble shooting/Feedback/Questions ==
 
