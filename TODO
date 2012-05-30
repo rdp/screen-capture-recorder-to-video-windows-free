@@ -4,10 +4,13 @@ mouse scaling is broken. Which is weird, but makes sense.
 
 can select video codec (any?) then muxer
   huffyuv vs. qtrle?
-  "1080p"
+  "1080p" x264 presets, since they degrade nicely and *everybody* 
+   -vcodec libx264 -s hd720 -preset ultrafast
   sigh
 
 == maybe ==
+
+post processor codec to use LOL
 
 real web page
 
@@ -15,9 +18,17 @@ compare all video codecs for movies, screencast LOL
 
 virtualdub has wrong/messed up fps? huh?
 
-include option "window within a window?" then tell them to ask me
+include option "window within a window?" then tell them to ask me to implement it
 
 == never ==
+
+compare ffmpeg -s hd720 to my own local rescaling of the thing...
+
+make i420 come from 16 bit for added speed LOL.
+
+fix ffmpeg doesn't have optimized yuv420p to rgb24 (bounty)
+
+fix "stop after timing" button stuff, probably just do it local.
 
 "stream to destination" LOL
 

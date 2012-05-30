@@ -69,7 +69,7 @@ elements['start'].on_clicked {
 	 puts "TODO stop time invokes stop button, perhaps, or join, or the like"
    end
 
-   c = "ffmpeg #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""# -threads 0
+   c = "ffmpeg  -threads 0 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    setup_ui
