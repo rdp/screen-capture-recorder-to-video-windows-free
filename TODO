@@ -1,8 +1,9 @@
 = todo =
 
-include avisynth, and the one demo script LOL.
 
 == maybe ==
+
+include avisynth, and its one demo script LOL.
 
 saving to a slow disk I don't think it can keep up, audio gets messed?
 
@@ -11,11 +12,11 @@ determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
 
 virtualdub has wrong/messed up fps? huh?
 
+== all never ==
+
 test vcam/pushsource with expression encoder, fresh install? vm?
 
-add an option "select your vcodec" for recording...sure.
-
-== all never ==
+can capture several video incoming streams, too, in case you want to capture webcam (as a separate video stream whoa!)
 
 make jruby startup faster LOL
 
