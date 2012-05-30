@@ -1,17 +1,17 @@
 = todo =
 
-can select video codec then muxer (sans comparison)
-  "1080p"
-  
 mouse scaling is broken. Which is weird, but makes sense.
 
-real web page
+can select video codec (any?) then muxer
+  huffyuv vs. qtrle?
+  "1080p"
+  sigh
 
 == maybe ==
 
-compare all video codecs for movies, screencast LOL
+real web page
 
-saving to a slow disk I don't think it can keep up, audio gets messed?
+compare all video codecs for movies, screencast LOL
 
 virtualdub has wrong/messed up fps? huh?
 
@@ -19,9 +19,14 @@ include option "window within a window?" then tell them to ask me
 
 == never ==
 
+"stream to destination" LOL
+
+saving to a slow disk I don't think it can keep up, audio gets messed?
+  also does audio get out of sync?
+  fix all these LOL
+
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
-
 
 include avisynth, and its one demo script LOL.
 
