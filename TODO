@@ -5,20 +5,25 @@ can select video codec then muxer (sans comparison)
   
 mouse scaling is broken. Which is weird, but makes sense.
 
+real web page
+
 == maybe ==
 
-compare all video codecs for movie, screencast LOL
-
-include avisynth, and its one demo script LOL.
+compare all video codecs for movies, screencast LOL
 
 saving to a slow disk I don't think it can keep up, audio gets messed?
+
+virtualdub has wrong/messed up fps? huh?
+
+include option "window within a window?" then tell them to ask me
+
+== never ==
 
 determine if getDIBIts gives you them in "bmp 0x003" format [to i420 method?]
   check if i420 works on divisible by 2, but not 4.  And doesn't cause a diagonal line :P
 
-virtualdub has wrong/messed up fps? huh?
 
-== all never ==
+include avisynth, and its one demo script LOL.
 
 test vcam/pushsource with expression encoder, fresh install? vm?
 
