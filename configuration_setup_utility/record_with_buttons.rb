@@ -29,7 +29,7 @@ elements['reveal_save_to_dir'].on_clicked {
 }
 
 def get_old_files
-  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mkv,ac3,mp3,mpg}']  
+  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mkv,ac3,mp3,mpg,mov}']  
   old_files.select!{|f| File.basename(f) =~ /^\d+\..../}
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
   old_files
@@ -59,7 +59,7 @@ elements['start'].on_clicked {
    raise 'unexpected'
  else
    if storage['video_name']
-     codecs = "-vcodec huffyuv -acodec ac3"
+     codecs = "-vcodec qtrle -acodec ac3"
    else
      codecs = "" # let it auto-select the audio codec
    end
@@ -90,7 +90,7 @@ elements['preferences'].on_clicked {
   if audio && !video
     @storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "Select audio Save as type").go_selected_value
   else
-    @storage['current_ext_sans_dot'] = 'mkv'
+    @storage['current_ext_sans_dot'] = 'mov'
   end
     
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
