@@ -9,9 +9,10 @@ include SwingHelpers # DropDownSelector
 require 'ffmpeg_helpers'
 
 VirtualAudioDeviceName = 'virtual-audio-capturer'
+ScreenCapturerDeviceName = 'screen-capture-recorder' 
 
 def choose_devices
-  videos = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == 'screen-capture-recorder' ? 0 : 1}  # put none in front :)
+  videos = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == ScreenCapturerDeviceName ? 0 : 1}  # put none in front :)
   original_video_device=video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or \"none\" to record audio only").go_selected_value
   if video_device == 'none'
     video_device = nil
@@ -32,7 +33,7 @@ def choose_devices
    exit 1
   end
   
-  if original_video_device == 'screen-capture-recorder'
+  if original_video_device == ScreenCapturerDeviceName
     SwingHelpers.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
   end
 
