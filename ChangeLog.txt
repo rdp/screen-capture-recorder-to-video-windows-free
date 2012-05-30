@@ -1,3 +1,7 @@
+0.7.0
+
+  default to qtrle for the recordings, much more efficient yikes
+
 0.6.8
 
   add icon for recording with start/stop button

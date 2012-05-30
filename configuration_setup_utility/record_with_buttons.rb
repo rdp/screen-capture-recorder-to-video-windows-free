@@ -61,9 +61,9 @@ elements['start'].on_clicked {
    if storage['video_name']
      codecs = "-vcodec qtrle -acodec ac3"
    else
-     codecs = "" # let it auto-select the audio codec
+     codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
-   c = "ffmpeg #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg -threads 0 #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    setup_ui

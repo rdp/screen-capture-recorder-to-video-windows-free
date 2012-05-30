@@ -7,7 +7,7 @@ audio_device, video_device = choose_devices
 # choose a filename 'before hand' [lame-o, I know]
 
 if video_device
-    possible_extensions = ['avi', 'mpg']
+    possible_extensions = ['mov']
 else
     possible_extensions = ['mp3', 'wav']
 end
@@ -32,7 +32,7 @@ SwingHelpers.show_blocking_message_dialog "the recording (#{seconds}s) will star
 #got = JOptionPane.show_select_buttons_prompt 'Select start to start', :yes => "start", :no => "stop"
 #raise unless got == :yes
 
-c = "ffmpeg -y #{combine_devices_for_ffmpeg_input(audio_device, video_device)} -t #{seconds} -vcodec huffyuv \"#{file}\"" # LODO report qtrle no video
+c = "ffmpeg -y #{combine_devices_for_ffmpeg_input(audio_device, video_device)} -t #{seconds} -vcodec qtrle \"#{file}\""
 puts c
 system c
 puts # get past any ffmpeg output
