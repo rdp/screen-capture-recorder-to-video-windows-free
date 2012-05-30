@@ -78,7 +78,7 @@ adjust registry settings before starting a run (advanced users only):
 
 HKEY_CURRENT_USER\Software\screen-capture-recorder
 
-with DWORD keys respected of start_x ... (see the file configuration_setup_utility\setup_screen_tracker_params.rb for a full list)
+with DWORD keys respected of start_x etc ... (see the file configuration_setup_utility\setup_screen_tracker_params.rb for the full list of registry options)
   
 ex: see configuration_setup_utility\incoming.reg file (though NB that those values are in hex, so editing that file is a bit tedious--
 I always just use regedit or the accompanying script utilities and don't edit it by hand).  
