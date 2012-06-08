@@ -100,7 +100,7 @@ elements['preferences'].on_clicked {
     @storage['current_ext_sans_dot'] = 'mov'
   end
   
-  stop_time = SwingHelpers.get_user_input "Automatically stop the recording after a certain number maximum of seconds (leave blank for continue till stop button)", @storage[stop_time]
+  stop_time = SwingHelpers.get_user_input "Automatically stop the recording after a certain number maximum of seconds (leave blank for continue till stop button)", @storage[stop_time], true
   @storage['stop_time'] = stop_time
     
   @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
