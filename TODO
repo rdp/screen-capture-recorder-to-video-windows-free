@@ -1,14 +1,16 @@
 = todo =
 
-mouse scaling is broken. Which is weird, but makes sense.
+mouse scaling is broken with "auto-scaling". Which makes sense.
 
 can select video codec (any?) then muxer
   huffyuv vs. qtrle?
   "1080p" x264 presets, since they degrade nicely and *everybody* 
    -vcodec libx264 -s hd720 -preset ultrafast
-  sigh
+    just output sizes I guess...
 
 == maybe ==
+
+de-dupe: uses crc32 or something *faster* (adler, murmurhash) :P
 
 post processor codec to use LOL
 
