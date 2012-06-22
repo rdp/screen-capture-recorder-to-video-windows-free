@@ -1,28 +1,39 @@
 = todo =
 
+"sensible defaults" (just mine uh guess)
+
+the "set them up elsewise" -> prompt "do you want to set them up" that works LOL.
+  and should come right after selecting video dropdown...
+
 mouse scaling is broken with "auto-scaling". Which makes sense.
 
 can select video codec (any?) then muxer
   huffyuv vs. qtrle?
   "1080p" x264 presets, since they degrade nicely and *everybody* 
    -vcodec libx264 -s hd720 -preset ultrafast
-    just output sizes I guess...
+    just output sizes I guess, for this one...
+
+the README is *way* too verbose.
+
+"recorded to" only after they've *recorded* something...
+  also there's a V in there.
+  "recorded to: 20.mp3, from: screen-capture-recorder"
 
 == maybe ==
 
-de-dupe: uses crc32 or something *faster* (adler, murmurhash) :P
+"input sizes" prompt (if/once ffmpeg supports pix_fmt, them too)
 
-post processor codec to use LOL
+de-dupe: uses crc32 or something *faster* (adler, murmurhash) :P
 
 real web page
 
-compare all video codecs for movies, screencast LOL
+compare all video codecs for movies, screencast somehow LOL.
 
 virtualdub has wrong/messed up fps? huh?
 
-include option "window within a window?" then tell them to ask me to implement it
-
 == never ==
+
+include option "window within a window?" then tell them to ask me to implement it LOL
 
 compare ffmpeg -s hd720 to my own local rescaling of the thing...
 
