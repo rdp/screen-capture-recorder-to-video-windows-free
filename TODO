@@ -31,6 +31,8 @@ needs at least an option to minimize on record.
 
 == maybe ==
 
+should output command to console, check that ffmpeg doesn't just immediately fail LOL
+
 "stop on restore" I guess.  pre restore?
 
 experiment with streaming to justin, ustream
