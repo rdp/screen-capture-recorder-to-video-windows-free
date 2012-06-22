@@ -24,7 +24,14 @@ the README is *way* too verbose.
 
 options "show capture window before recording?"
 
+
+title needs to say "recording to [file] x..."
+
+needs at least an option to minimize on record.
+
 == maybe ==
+
+"stop on restore" I guess.  pre restore?
 
 experiment with streaming to justin, ustream
 
