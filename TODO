@@ -26,6 +26,10 @@ options "show capture window before recording?"
 
 == maybe ==
 
+experiment with streaming to justin, ustream
+
+add arcadia screen marker, make it an option to turn on/off.
+
 a "show preview" option, with simple SDL out
 
 "input sizes" prompt (if/once ffmpeg supports pix_fmt, them too)
