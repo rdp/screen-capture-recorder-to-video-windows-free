@@ -1,5 +1,8 @@
 = todo =
 
+that's guy's "sweet gui"
+  also an option of "broadcast it to a location"?
+
 "sensible defaults" (just mine uh guess)
 
 the "set them up elsewise" -> prompt "do you want to set them up" that works LOL.
@@ -19,7 +22,11 @@ the README is *way* too verbose.
   also there's a V in there.
   "recorded to: 20.mp3, from: screen-capture-recorder"
 
+options "show capture window before recording?"
+
 == maybe ==
+
+a "show preview" option, with simple SDL out
 
 "input sizes" prompt (if/once ffmpeg supports pix_fmt, them too)
 
@@ -30,6 +37,8 @@ real web page
 compare all video codecs for movies, screencast somehow LOL.
 
 virtualdub has wrong/messed up fps? huh?
+
+fix ffmpeg to actually *work* with audio LOL
 
 == never ==
 
