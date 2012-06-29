@@ -24,7 +24,6 @@ the README is *way* too verbose.
 
 options "show capture window before recording?"
 
-
 title needs to say "recording to [file] x..."
 
 needs at least an option to minimize on record.
