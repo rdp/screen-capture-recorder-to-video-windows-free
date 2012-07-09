@@ -1,6 +1,6 @@
 0.7.0
 
-  default to qtrle for the recordings, much more efficient yikes
+  default to qtrle for the video codec for all recordings, much more efficient for screen captures, though still not efficient enough somehow...
 
 0.6.8
 
