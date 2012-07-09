@@ -30,6 +30,8 @@ needs at least an option to minimize on record.
 
 == maybe ==
 
+DX10 et al input
+
 should output command to console, check that ffmpeg doesn't just immediately fail LOL
 
 "stop on restore" I guess.  pre restore?
