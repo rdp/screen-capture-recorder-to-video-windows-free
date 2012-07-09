@@ -3,7 +3,7 @@
 that's guy's "sweet gui"
   also an option of "broadcast it to a location"?
 
-"sensible defaults" (just mine uh guess)
+"sensible defaults" (just mine uh guess, for video)
 
 the "set them up elsewise" -> prompt "do you want to set them up" that works LOL.
   and should come right after selecting video dropdown...
@@ -28,17 +28,17 @@ title needs to say "recording to [file] x..."
 
 needs at least an option to minimize on record.
 
+bundle 64 bit with it
+
 == maybe ==
 
 DX10 et al input
 
 should output command to console, check that ffmpeg doesn't just immediately fail LOL
 
-"stop on restore" I guess.  pre restore?
+"stop on restore" I guess. pre restore?
 
 experiment with streaming to justin, ustream
-
-add arcadia screen marker, make it an option to turn on/off.
 
 a "show preview" option, with simple SDL out
 
@@ -54,7 +54,11 @@ virtualdub has wrong/messed up fps? huh?
 
 fix ffmpeg to actually *work* with audio LOL
 
+a "make mouse fantabulous" option [?]
+
 == never ==
+
+add arcadia screen marker, make it an option to turn on/off.
 
 include option "window within a window?" then tell them to ask me to implement it LOL
 
