@@ -1,25 +1,28 @@
-#define AppVer "0.7.0"
+#define AppVer "0.8.0"
+; includes 64 bit by default
+; TODO 64 bit audio, redistr.
 
-#define AppName "Screen Capturer Recorder 32-bit"
+#define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
 
 [Run]
 Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 RunTime...
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.030.ax; MinVersion: 0,6.0.6000
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder-x64.dll; Check: IsWin64
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.030.ax; MinVersion: 0,6.0.6000
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder-x64.dll; Check: IsWin64
 
 [Files]
 Source: source_code\Win32\Release\screen-capture-recorder.dll; DestDir: {app}
+Source: source_code\x64\releasex64\screen-capture-recorder-x64.dll; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
-Source: vendor\*.ax; DestDir: {app}\vendor
-;Source: vendor\*.dll; DestDir: {app}\vendor
 Source: vendor\vcredist_x86.exe; DestDir: {app}\vendor
 
 [Setup]
