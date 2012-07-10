@@ -17,7 +17,7 @@ def do_command_line
       require 'java' # jruby only for getting user input...
       require 'jruby-swing-helpers/lib/swing_helpers'
       previous_setting ||= ''
-      received = SwingHelpers.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
+      received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
       raise 'cancelled...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
     end
     if received == '' # allow "empty" input to mean "reset this"
@@ -40,7 +40,7 @@ def do_command_line
 	    # allow MRI to use it [?]
         require 'java'
         require 'jruby-swing-helpers/lib/swing_helpers'
-        SwingHelpers.show_blocking_message_dialog warning
+        SimpleGuiCreator.show_blocking_message_dialog warning
       rescue LoadError => allow_mri_for_setting_from_cli
       end
     end

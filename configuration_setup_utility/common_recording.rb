@@ -4,9 +4,10 @@ require 'add_vendored_gems_to_load_path'
 splash = java.awt.SplashScreen.splash_screen
 splash.close if splash # close it early'ish...not sure how this looks on slower computers...
 
-require File.dirname(__FILE__) + '/jruby-swing-helpers/lib/swing_helpers'
-include SwingHelpers # DropDownSelector
-require 'ffmpeg_helpers'
+require 'jruby-swing-helpers/lib/simple_gui_creator'
+
+include SimpleGuiCreator # ::DropDownSelector, etc.
+require 'ffmpeg_helpers' # local file
 
 VirtualAudioDeviceName = 'virtual-audio-capturer'
 ScreenCapturerDeviceName = 'screen-capture-recorder' 
@@ -29,12 +30,12 @@ def choose_devices
   end
   
   unless audio_device || video_device
-   SwingHelpers.show_blocking_message_dialog('must select at least one')
+   SimpleGuiCreator.show_blocking_message_dialog('must select at least one')
    exit 1
   end
   
   if original_video_device == ScreenCapturerDeviceName
-    SwingHelpers.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
+    SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
   end
 
   [audio_device, video_device] 

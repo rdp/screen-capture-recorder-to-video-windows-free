@@ -1,9 +1,6 @@
 require 'common_recording.rb'
 
-require 'jruby-swing-helpers/lib/parse_template.rb'
-require 'jruby-swing-helpers/lib/storage.rb'
-
-frame = ParseTemplate.parse_file 'record_buttons.template'
+frame = ParseTemplate.new.parse_setup_filename 'template.record_buttons'
 @frame = frame
 storage = Storage.new('record_with_buttons')
 @storage = storage
@@ -18,13 +15,13 @@ elements = frame.elements
 
 @elements = elements
 
-elements['reveal_save_to_dir'].on_clicked {
+elements[:reveal_save_to_dir].on_clicked {
   last_filename = get_old_files.last
   if last_filename
-    SwingHelpers.show_in_explorer last_filename
+    SimpleGuiCreator.show_in_explorer last_filename
   else
-	SwingHelpers.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to"
-    SwingHelpers.show_in_explorer current_storage_dir	
+	  SimpleGuiCreator.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to"
+    SimpleGuiCreator.show_in_explorer current_storage_dir	
   end
 }
 
@@ -40,21 +37,21 @@ def setup_ui
   next_number = (numbered[-1] || 0) + 1
   ext = @storage['current_ext_sans_dot']
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
-  device_names = [@storage['video_name'], @storage['audio_name']].compact.map{|name| name[0..10]}.join(', ')
+  device_names = [@storage['video_name'], @storage['audio_name']].compact.map{|name| name[0..7]}.join(', ')
   next_file_basename = File.basename(get_old_files[-1] || @next_filename)
-  @frame.title = 'Record to: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " #{device_names}..."
+  @frame.title = 'Record next: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
   if(@current_process)
-    @elements['stop'].enable 
-	@elements['start'].disable
-	@elements['start'].text = "Recording!"
+    @elements[:stop].enable 
+	  @elements[:start].disable
+	  @elements[:start].text = "Recording!"
   else
-    @elements['stop'].disable
-	@elements['start'].enable
-	@elements['start'].text = "Start Recording"
+    @elements[:stop].disable
+	  @elements[:start].text = "Start Recording"
+	  @elements[:start].enable
   end
 end
 
-elements['start'].on_clicked {
+elements[:start].on_clicked {
  if @current_process
    raise 'unexpected'
  else
@@ -76,7 +73,7 @@ elements['start'].on_clicked {
  end
 }
 
-elements['stop'].on_clicked {
+elements[:stop].on_clicked {
   if @current_process
     @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
 	# #close might kill ffmpeg?
@@ -90,7 +87,7 @@ elements['stop'].on_clicked {
   end
 }
 
-elements['preferences'].on_clicked {
+elements[:preferences].on_clicked {
   audio, video = choose_devices
   storage['video_name'] = video
   storage['audio_name'] = audio
@@ -100,10 +97,10 @@ elements['preferences'].on_clicked {
     @storage['current_ext_sans_dot'] = 'mov'
   end
   
-  stop_time = SwingHelpers.get_user_input "Automatically stop the recording after a certain number maximum of seconds (leave blank for continue till stop button)", @storage[stop_time], true
+  stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number maximum of seconds (leave blank for continue till stop button)", @storage[stop_time], true
   @storage['stop_time'] = stop_time
     
-  @storage['save_to_dir'] = SwingHelpers.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
+  @storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
   setup_ui
 }
 
@@ -127,7 +124,7 @@ if(!storage['video_name'] && !storage['audio_name'])
 	  need_help = true
 	end
   end  
-  elements['preferences'].simulate_click if need_help
+  elements[:preferences].simulate_click if need_help
   
 else
   Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime friendly LOL

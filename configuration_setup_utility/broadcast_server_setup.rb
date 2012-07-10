@@ -2,11 +2,9 @@ require 'add_vendored_gems_to_load_path'
 require 'java'
 
 $: << 'jruby-swing-helpers/lib'
-require 'swing_helpers'
+require 'simple_gui_creator'
+SwingHelpers = SimpleGuiCreator
 include SwingHelpers # DropDownSelector
-require 'play_audio'
-require 'ruby_clip'
-require 'storage'
 
 # and others
 require 'tempfile'
