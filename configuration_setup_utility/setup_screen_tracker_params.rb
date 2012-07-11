@@ -90,6 +90,7 @@ class SetupScreenTrackerParams
 end
 
 if $0 == __FILE__
+  p 'normally you dont want to run this file!'
   incoming = Integer(ARGV[0])
   p SetupScreenTrackerParams.new.convert_from_dword_to_int incoming
   p SetupScreenTrackerParams.new.convert_from_int_to_dword incoming

@@ -7,7 +7,7 @@ def do_command_line
   for type in SetupScreenTrackerParams::Settings
     p type
     previous_setting = setter.read_single_setting type
-	p 'previous', previous_setting
+	  p 'previous', previous_setting
     if ARGV.index('--just-display-current-settings') || ARGV.index('--just')
       puts "#{type}=#{previous_setting}"
       next
@@ -15,7 +15,7 @@ def do_command_line
     received = given_from_command_line = ARGV.shift
     unless received
       require 'java' # jruby only for getting user input...
-      require 'jruby-swing-helpers/lib/swing_helpers'
+      require 'jruby-swing-helpers/lib/simple_gui_creator'
       previous_setting ||= ''
       received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
       raise 'cancelled...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...

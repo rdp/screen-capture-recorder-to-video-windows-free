@@ -1,8 +1,6 @@
 require './add_vendored_gems_to_load_path.rb'
-require 'jruby-swing-helpers/lib/mouse'
-require 'jruby-swing-helpers/lib/swing_helpers'
+require 'jruby-swing-helpers/lib/simple_gui_creator'
 require 'setup_screen_tracker_params'
-require 'java'
 
 class WindowResize
   
@@ -14,7 +12,7 @@ class WindowResize
   
     f = JFrame.new
     f.bring_to_front
-    SwingHelpers.show_blocking_message_dialog "resize the next window to be directly over your desired area, then click in the middle to save"
+    SimpleGuiCreator.show_blocking_message_dialog "resize the next window to be directly over your desired area, then click in the middle to save"
     button = JButton.new('CLICK HERE WHEN DONE TO SET')
     f.add button
     setter_getter = SetupScreenTrackerParams.new
@@ -23,14 +21,14 @@ class WindowResize
       for key, setting in got
   	    for name, factor in {'mplayer/ffmpeg' => 2, 'vlc' => 4} # my guess is 4 is safe for VLC, 8 might be needed though
           if setting % factor != 0 and [:width, :height].include?(key)
-            SwingHelpers.show_blocking_message_dialog "warning #{key} is not divisible by #{factor}, which won't record for #{name}\nso rounding it up for you..."
+            SimpleGuiCreator.show_blocking_message_dialog "warning #{key} is not divisible by #{factor}, which won't record for #{name}\nso rounding it up for you..."
             setting = (setting/factor*factor) + factor # round up phew!
 		        got[key] = setting # for the english output at the end
           end
         end
         setter_getter.set_single_setting key, setting
       end
-      SwingHelpers.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
+      SimpleGuiCreator.show_blocking_message_dialog 'done setting them to match that window. Details:' + "\n" + got.inspect
       f.dispose
   }
   
@@ -38,11 +36,11 @@ class WindowResize
 	height = setter_getter.read_single_setting('capture_height') || 200
 	min_val = 35
 	if(width < min_val) 
-	  SwingHelpers.show_blocking_message_dialog 'previous width too small, using default size '+ min_val.to_s
+	  SimpleGuiCreator.show_blocking_message_dialog 'previous width too small, using default size '+ min_val.to_s
 	  width = min_val
 	 end
 	 if height < min_val
-	  SwingHelpers.show_blocking_message_dialog 'previous height too small, using default size ' + min_val.to_s
+	  SimpleGuiCreator.show_blocking_message_dialog 'previous height too small, using default size ' + min_val.to_s
 	  height = min_val
 	 end
 	 
