@@ -20,7 +20,7 @@ class WindowResize
       got = {:start_x => f.get_location.x, :start_y => f.get_location.y, :capture_width => f.get_size.width, :capture_height => f.get_size.height}
       for key, setting in got
   	    for name, factor in {'mplayer/ffmpeg' => 2, 'vlc' => 4} # my guess is 4 is safe for VLC, 8 might be needed though
-          if setting % factor != 0 and [:width, :height].include?(key)
+          if setting % factor != 0 and [:capture_width, :capture_height].include?(key)
             SimpleGuiCreator.show_blocking_message_dialog "warning #{key} is not divisible by #{factor}, which won't record for #{name}\nso rounding it up for you..."
             setting = (setting/factor*factor) + factor # round up phew!
 		        got[key] = setting # for the english output at the end

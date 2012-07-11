@@ -39,7 +39,7 @@ def setup_ui
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   device_names = [@storage['video_name'], @storage['audio_name']].compact.map{|name| name[0..7]}.join(', ')
   next_file_basename = File.basename(get_old_files[-1] || @next_filename)
-  @frame.title = 'Next: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
+  @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
   if(@current_process)
     @elements[:stop].enable 
 	  @elements[:start].disable
@@ -61,7 +61,7 @@ elements[:start].on_clicked {
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
    stop_time = @storage['stop_time']
-   if stop_time
+   if stop_time.present?
      stop_time = "-t #{stop_time}"
 	   #puts "TODO stop time invokes stop button, perhaps, or join, or the like"
    end
