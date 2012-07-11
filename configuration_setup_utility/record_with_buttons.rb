@@ -39,7 +39,7 @@ def setup_ui
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   device_names = [@storage['video_name'], @storage['audio_name']].compact.map{|name| name[0..7]}.join(', ')
   next_file_basename = File.basename(get_old_files[-1] || @next_filename)
-  @frame.title = 'Record next: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
+  @frame.title = 'Next: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
   if(@current_process)
     @elements[:stop].enable 
 	  @elements[:start].disable
@@ -63,10 +63,10 @@ elements[:start].on_clicked {
    stop_time = @storage['stop_time']
    if stop_time
      stop_time = "-t #{stop_time}"
-	 puts "TODO stop time invokes stop button, perhaps, or join, or the like"
+	   #puts "TODO stop time invokes stop button, perhaps, or join, or the like"
    end
 
-   c = "ffmpeg  -threads 0 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    setup_ui
