@@ -439,11 +439,11 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     ZeroMemory(pvi, sizeof(VIDEOINFO));
 
 	if(iPosition == 0) {
-		// pass it our "preferred" which is 16 bits...I guess...haven't really researched it, but do want it to have a consistent default.
-		iPosition = 3;
+		// pass it our "preferred" which is 24 bits, since 16 is "poor quality" (really, it is), and I...think/guess that 24 is faster overall.
+		iPosition = 2;
 			// 32 -> 24 (2): getdibits took 2.251ms
 			// 32 -> 32 (1): getdibits took 2.916ms
-			// except those numbers might be misleading in terms of total speed...hmm...
+			// except those particular numbers might be misleading in terms of total speed...hmm...
 	}
     switch(iPosition)
     {
