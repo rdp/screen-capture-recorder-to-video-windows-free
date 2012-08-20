@@ -2,6 +2,8 @@ require 'common_recording.rb'
 require 'thread'
 
 frame = ParseTemplate.new.parse_setup_filename 'template.record_buttons'
+frame.elements[:start].disable
+frame.elements[:stop].disable
 @frame = frame
 storage = Storage.new('record_with_buttons')
 @storage = storage
@@ -58,7 +60,19 @@ elements[:start].on_clicked {
  if @current_process
    raise 'unexpected double run?'
  else
-   if storage['video_name']
+   if @storage['show_transparent_window_first']
+     require 'window_resize'
+     @elements[:start].disable
+     window = WindowResize.go false
+     window.after_closed { start_recording_with_current_settings }
+   else
+     start_recording_with_current_settings
+   end
+ end
+}
+
+def start_recording_with_current_settings
+   if @storage['video_name']
      codecs = "-vcodec qtrle -acodec ac3"
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
@@ -68,7 +82,7 @@ elements[:start].on_clicked {
      stop_time = "-t #{stop_time}"     
    end
 
-   c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input @storage['audio_name'], @storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
@@ -86,9 +100,7 @@ elements[:start].on_clicked {
      }
    end
    setup_ui
- end
-}
-
+end
 
 elements[:stop].on_clicked {
   process_input_mutex.synchronize {
@@ -98,7 +110,10 @@ elements[:stop].on_clicked {
       # @current_process.close
       @current_process = nil
       puts # pass the ffmpeg stuff, hopefully
-      puts 'done writing'
+      puts "done writing #{@next_filename}"
+      if @storage['reveal_files_after_each_recording'] 
+        SimpleGuiCreator.show_in_explorer @next_filename
+      end
       setup_ui # re-load the buttons
     else
       # could be they had a timed recording, and clicked stop
@@ -116,10 +131,23 @@ elements[:preferences].on_clicked {
     @storage['current_ext_sans_dot'] = 'mov'
   end
   
-  stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number maximum of seconds (leave blank for continue till stop button)", @storage[stop_time], true
+  stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", @storage[stop_time], true
   @storage['stop_time'] = stop_time
     
   @storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
+  
+  if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
+    @storage['show_transparent_window_first'] = true
+  else
+    @storage['show_transparent_window_first'] = false
+  end
+
+  if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files after recording them?") == :yes
+    @storage['reveal_files_after_each_recording'] = true
+  else
+    @storage['reveal_files_after_each_recording'] = false
+  end
+  
   setup_ui
 }
 
