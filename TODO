@@ -1,7 +1,5 @@
 = todo =
 
-re-use explorer windows
-
 that's guy's "sweet gui"
   also an option of "broadcast it to a location"?
 
@@ -24,13 +22,11 @@ the README is *way* too verbose.
   also there's a V in there.
   "recorded to: 20.mp3, from: screen-capture-recorder"
 
-title needs to say "recording to [file] x..."
-
 needs at least an option to minimize on record.
 
-bundle 64 bit with it
-
 == maybe ==
+
+re-use explorer windows
 
 DX10 et al input
 
