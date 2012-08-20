@@ -41,12 +41,12 @@ def choose_devices
   [audio_device, video_device] 
 end
 
-def combine_devices_for_ffmpeg_input audio_device, video_device
+def combine_devices_for_ffmpeg_input audio_device, video_device # NB not for ffplay input!! won't work with ffplay
  if audio_device
-   audio_device="audio=\"#{audio_device}\""
+   audio_device="-f dshow -i audio=\"#{audio_device}\""
  end
  if video_device
-   video_device="video=\"#{video_device}\""
+   video_device="-f dshow -i video=\"#{video_device}\""
  end
- "-f dshow -i #{[audio_device,video_device].compact.join(':')}"
+ "#{video_device} #{audio_device}"
 end

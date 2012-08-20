@@ -1,4 +1,5 @@
 require 'common_recording.rb'
+require 'thread'
 
 frame = ParseTemplate.new.parse_setup_filename 'template.record_buttons'
 @frame = frame
@@ -20,7 +21,7 @@ elements[:reveal_save_to_dir].on_clicked {
   if last_filename
     SimpleGuiCreator.show_in_explorer last_filename
   else
-	  SimpleGuiCreator.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to"
+    SimpleGuiCreator.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to"
     SimpleGuiCreator.show_in_explorer current_storage_dir	
   end
 }
@@ -42,18 +43,20 @@ def setup_ui
   @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
   if(@current_process)
     @elements[:stop].enable 
-	  @elements[:start].disable
-	  @elements[:start].text = "Recording!"
+    @elements[:start].disable
+    @elements[:start].text = "Recording!"
   else
     @elements[:stop].disable
-	  @elements[:start].text = "Start Recording"
-	  @elements[:start].enable
+    @elements[:start].text = "Start Recording"
+    @elements[:start].enable
   end
 end
 
+process_input_mutex = Mutex.new
+
 elements[:start].on_clicked {
  if @current_process
-   raise 'unexpected'
+   raise 'unexpected double run?'
  else
    if storage['video_name']
      codecs = "-vcodec qtrle -acodec ac3"
@@ -62,29 +65,44 @@ elements[:start].on_clicked {
    end
    stop_time = @storage['stop_time']
    if stop_time.present?
-     stop_time = "-t #{stop_time}"
-	   #puts "TODO stop time invokes stop button, perhaps, or join, or the like"
+     stop_time = "-t #{stop_time}"     
    end
 
    c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
+   if stop_time.present?
+     Thread.new { 
+       while(@current_process)
+         sleep 0.5 
+          begin
+           process_input_mutex.synchronize { @current_process.puts "a" if @current_process }
+         rescue IOError => e
+           puts 'process stopped' # one way or the other...
+           elements[:stop].simulate_click
+         end
+       end
+     }
+   end
    setup_ui
  end
 }
 
+
 elements[:stop].on_clicked {
-  if @current_process
-    @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
-	# #close might kill ffmpeg?
-	# @current_process.close
-	@current_process = nil
-	puts # pass the ffmpeg stuff, hopefully
-	puts 'done writing'
-	setup_ui
-  else
-    raise 'unexpected2?'
-  end
+  process_input_mutex.synchronize {
+    if @current_process
+      # .close might "just kill" ffmpeg, so tell it to shutdown gracfully
+      @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
+      # @current_process.close
+      @current_process = nil
+      puts # pass the ffmpeg stuff, hopefully
+      puts 'done writing'
+      setup_ui # re-load the buttons
+    else
+      # could be they had a timed recording, and clicked stop
+    end
+  }
 }
 
 elements[:preferences].on_clicked {
@@ -110,7 +128,7 @@ if(!storage['video_name'] && !storage['audio_name'])
   if FfmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
     # a reasonable default :P
     storage['audio_name'] = VirtualAudioDeviceName
-	@storage['current_ext_sans_dot'] = 'mp3'
+    @storage['current_ext_sans_dot'] = 'mp3'
   else
     need_help = true
   end
@@ -119,17 +137,17 @@ if(!storage['video_name'] && !storage['audio_name'])
   if ARGV[0] != '--just-audio-default'
     if FfmpegHelpers.enumerate_directshow_devices[:video].include?(ScreenCapturerDeviceName)
       storage['video_name'] = ScreenCapturerDeviceName
-	  @storage['current_ext_sans_dot'] = 'mov'	  
-	else
-	  need_help = true
-	end
+      @storage['current_ext_sans_dot'] = 'mov'	  
+    else
+      need_help = true
+    end
   end  
   elements[:preferences].simulate_click if need_help
   
 else
-  Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime friendly LOL
+  Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime startup fast LOL
 end
 
-setup_ui # init :)
+setup_ui # init the disabled status of the buttons :)
 
 frame.show
