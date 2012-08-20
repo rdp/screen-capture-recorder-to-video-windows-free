@@ -69,6 +69,7 @@ elements[:start].on_clicked {
    end
 
    c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    if stop_time.present?

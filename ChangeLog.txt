@@ -1,3 +1,7 @@
+0.8.2
+
+ fix virtual audio "too high PTS" bug. I hope.
+
 0.8.1
 
  default to 24 bits (oops, 16 was faster but worse? Who'd uh thunk.)

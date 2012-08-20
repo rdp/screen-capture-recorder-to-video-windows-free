@@ -1,4 +1,4 @@
-#define AppVer "0.8.1"
+#define AppVer "0.8.2"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -8,15 +8,15 @@ Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec
 Filename: {app}\vendor\vcredist_x64.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing 2010 64 bit RunTime...; MinVersion: 0,6.0.6000; Check: IsWin64
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder-x64.dll; Check: IsWin64
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.034.dll; MinVersion: 0,6.0.6000
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer-x64.034.dll; MinVersion: 0,6.0.6000; Check: IsWin64
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.036.dll; MinVersion: 0,6.0.6000
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer-x64.036.dll; MinVersion: 0,6.0.6000; Check: IsWin64
 
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder-x64.dll; Check: IsWin64
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.034.dll; MinVersion: 0,6.0.6000
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer-x64.034.dll; MinVersion: 0,6.0.6000; Check: IsWin64
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.036.dll; MinVersion: 0,6.0.6000
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer-x64.036.dll; MinVersion: 0,6.0.6000; Check: IsWin64
 
 [Files]
 Source: source_code\Win32\Release\screen-capture-recorder.dll; DestDir: {app}
