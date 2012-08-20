@@ -71,6 +71,13 @@ elements[:start].on_clicked {
  end
 }
 
+@frame.after_closed {
+ if @current_process
+   SimpleGuiCreator.show_blocking_message_dialog "an ffmpeg instance was left running, closing it..."
+   elements[:stop].simulate_click # just in case :P
+ end
+}
+
 def start_recording_with_current_settings
    if @storage['video_name']
      codecs = "-vcodec qtrle -acodec ac3"
@@ -100,6 +107,7 @@ def start_recording_with_current_settings
      }
    end
    setup_ui
+   @frame.title = "Recording to #{File.basename @next_filename}"
 end
 
 elements[:stop].on_clicked {

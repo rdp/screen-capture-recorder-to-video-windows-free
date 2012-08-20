@@ -1,5 +1,7 @@
 = todo =
 
+re-use explorer windows
+
 that's guy's "sweet gui"
   also an option of "broadcast it to a location"?
 
@@ -21,8 +23,6 @@ the README is *way* too verbose.
 "recorded to" only after they've *recorded* something...
   also there's a V in there.
   "recorded to: 20.mp3, from: screen-capture-recorder"
-
-options "show capture window before recording?"
 
 title needs to say "recording to [file] x..."
 
