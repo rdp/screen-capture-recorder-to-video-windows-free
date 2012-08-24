@@ -32,21 +32,20 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         m_iFrameNumber(0),
 		pOldData(NULL),
 		m_bConvertToI420(false),
-        //m_nCurrentBitDepth(32), // negotiated later...
 		m_pParent(pFilter),
 		m_bFormatAlreadySet(false),
 		hRawBitmap(NULL),
 		m_bUseCaptureBlt(false),
 		previousFrameEndTime(0)
 {
-
+	IsEqualGUID(FORMAT_WaveFormatEx, FORMAT_WaveFormatEx);
     // Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
     hScrDc = GetDC(m_iHwndToTrack);
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
-	ASSERT(hScrDc != 0);
+	ASSERT(hScrDc != 0); // failure...
 	
     // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
@@ -126,7 +125,7 @@ wchar_t out[1000];
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-	//LocalOutput("called fillbuffer"); Encoder 4 does *not* get here.
+	LocalOutput("video frame requested");
 
 	__int64 startThisRound = StartCounter();
 	BYTE *pData;
@@ -177,10 +176,11 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CRefTime now;
 	CRefTime endFrame;
     CSourceStream::m_pFilter->StreamTime(now);
-
+	LocalOutput("now is %llu , previousframeend %llu", now, previousFrameEndTime);
     // wait until we "should" send this frame out...
 	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also boot strap time ignore it :P
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
+		  LocalOutput("sleeping because %llu < %llu", now, previousFrameEndTime);
 		  Sleep(1);
           CSourceStream::m_pFilter->StreamTime(now);
 		}
@@ -228,8 +228,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
     // the swprintf costs like 0.04ms (25000 fps LOL)
-	m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
-	swprintf(out, L"done frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
+	double m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
+	swprintf(out, L"done video frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
 		m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
 		/* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
 #ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
@@ -534,7 +534,17 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	if(hRawBitmap)
 		DeleteObject (hRawBitmap);
 	hRawBitmap = CreateCompatibleBitmap(hScrDc, getNegotiatedFinalWidth(), getNegotiatedFinalHeight());
+	
+	previousFrameEndTime = 0; // reset
+	m_iFrameNumber = 0;
 
     return NOERROR;
-
 } // DecideBufferSize
+
+
+HRESULT CPushPinDesktop::OnThreadCreate() {
+	LocalOutput("PSD on thread create");
+	previousFrameEndTime = 0; // reset <sigh> dunno if this helps FME which sometimes had inconsistencies, or not
+	m_iFrameNumber = 0;
+	return S_OK;
+}

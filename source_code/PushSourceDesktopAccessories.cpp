@@ -51,7 +51,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 		)
     {
 		if(SubType2 == WMMEDIASUBTYPE_I420) { // 30323449-0000-0010-8000-00AA00389B71 MEDIASUBTYPE_I420 == WMMEDIASUBTYPE_I420
-			if(pvi->bmiHeader.biBitCount == 12) { // biCompression 808596553
+			if(pvi->bmiHeader.biBitCount == 12) { // biCompression 808596553 == 0x30323449
 				// 12 is correct for i420 -- WFMLE uses this, VLC *can* also use it, too
 			}else {
 			  return E_INVALIDARG;
@@ -125,7 +125,6 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
             case 32:    // RGB32
                 // Save the current media type and bit depth
                 //m_MediaType = *pMediaType; // use SetMediaType above instead
-                //m_nCurrentBitDepth = pvi->bmiHeader.biBitCount;
                 hr = S_OK;
                 break;
 
@@ -168,20 +167,19 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
 	// NULL means reset to default type...
 	if(pmt != NULL)
 	{
-		if(pmt->formattype != FORMAT_VideoInfo)  // same as {CLSID_KsDataTypeHandlerVideo} 
+		if(pmt->formattype != FORMAT_VideoInfo)  // FORMAT_VideoInfo == {CLSID_KsDataTypeHandlerVideo} 
 			return E_FAIL;
 	
 		// LODO I should do more here...http://msdn.microsoft.com/en-us/library/dd319788.aspx I guess [meh]
 	    // LODO should fail if we're already streaming... [?]
 
+		if(CheckMediaType((CMediaType *) pmt) != S_OK) {
+			return E_FAIL; // just in case :P [FME...]
+		}
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 
-		if(CheckMediaType((CMediaType *) pmt) != S_OK) {
-			return E_FAIL; // just in case :P [did skype get here once?]
-		}
-		
         // for FMLE's benefit, only accept a setFormat of our "final" width [force setting via registry I guess, otherwise it only shows 80x60 whoa!]	    
-		// flash media live encoder uses setFormat to determine widths [?] and then only displays the smallest? oh man that is messed up
+		// flash media live encoder uses setFormat to determine widths [?] and then only displays the smallest? huh?
         if( pvi->bmiHeader.biWidth != getCaptureDesiredFinalWidth() || 
            pvi->bmiHeader.biHeight != getCaptureDesiredFinalHeight())
         {
@@ -503,8 +501,8 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             break;
         }
 		case 6:
-		{ // the i420 freak-o
-               pvi->bmiHeader.biCompression = FOURCC_I420; // who knows if this is right LOL
+		{ // the i420 freak-o added just for FME's benefit...
+               pvi->bmiHeader.biCompression = 0x30323449; // => ASCII "I420" is apparently right here...
                pvi->bmiHeader.biBitCount    = 12;
 			   pvi->bmiHeader.biSizeImage = (getCaptureDesiredFinalWidth()*getCaptureDesiredFinalHeight()*3)/2; 
 			   pmt->SetSubtype(&WMMEDIASUBTYPE_I420);
