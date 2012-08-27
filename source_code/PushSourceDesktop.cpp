@@ -122,6 +122,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 }
 
 wchar_t out[1000];
+#include <ddraw.h>
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
@@ -149,10 +150,15 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	FILTER_STATE myState;
 	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 	bool fullyStarted = myState == State_Running;
-	
+	IDirectDraw *dDrawInstance;
+	DirectDrawCreate(NULL, &dDrawInstance, NULL);
+	IDirectDraw7 *dDraw7Instance;
+	dDrawInstance->QueryInterface(IID_IDirectDraw7, (LPVOID *) &dDraw7Instance);
+    dDrawInstance->WaitForVerticalBlank(DDWAITVB_BLOCKEND,  NULL); // might poll?
+    dDrawInstance->Release(); // QueryInterface did an addRef on it...
+    dDrawInstance = NULL;
 	boolean gotNew = false;
 	while(!gotNew) {
-
       CopyScreenToDataBlock(hScrDc, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
 	  if(m_bDeDupe) {
@@ -164,7 +170,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 			  // LODO memcmp and memcpy in the same loop LOL.
 			}
 	  } else {
-		// it's always new for everyone else!
+		// it's always new for the normal case of "give me another one!"
 	    gotNew = true;
 	  }
 	}
