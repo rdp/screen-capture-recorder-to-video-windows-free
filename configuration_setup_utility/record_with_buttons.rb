@@ -80,7 +80,7 @@ elements[:start].on_clicked {
 
 def start_recording_with_current_settings
    if @storage['video_name']
-     codecs = "-vcodec qtrle -acodec ac3"
+     codecs = "-vcodec libx264 -preset ultrafast -acodec ac3" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
@@ -89,7 +89,7 @@ def start_recording_with_current_settings
      stop_time = "-t #{stop_time}"     
    end
 
-   c = "ffmpeg -threads 1 #{stop_time} #{combine_devices_for_ffmpeg_input @storage['audio_name'], @storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg #{stop_time} #{combine_devices_for_ffmpeg_input @storage['audio_name'], @storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
@@ -136,7 +136,7 @@ elements[:preferences].on_clicked {
   if audio && !video
     @storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "Select audio Save as type").go_selected_value
   else
-    @storage['current_ext_sans_dot'] = 'mov'
+    @storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
   end
   
   stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", @storage[stop_time], true
@@ -174,7 +174,7 @@ if(!storage['video_name'] && !storage['audio_name'])
   if ARGV[0] != '--just-audio-default'
     if FfmpegHelpers.enumerate_directshow_devices[:video].include?(ScreenCapturerDeviceName)
       storage['video_name'] = ScreenCapturerDeviceName
-      @storage['current_ext_sans_dot'] = 'mov'	  
+      @storage['current_ext_sans_dot'] = 'mp4'  
     else
       need_help = true
     end

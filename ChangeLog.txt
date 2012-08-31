@@ -1,3 +1,9 @@
+0.8.4
+
+  some stability fixes when restarting it in the same process.
+  comes with a virtual audio that is updated to hopefully allow for 5.1 input
+  not use .mov container format for video, as it apparently needed stable incoming frame rates.
+
 0.8.3
 
  fix virtual audio "too high PTS" bug. I hope.
