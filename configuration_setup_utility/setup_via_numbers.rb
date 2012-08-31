@@ -7,10 +7,11 @@ def do_command_line
   for type in SetupScreenTrackerParams::Settings
     p type
     previous_setting = setter.read_single_setting type
-	  p 'previous', previous_setting
     if ARGV.index('--just-display-current-settings') || ARGV.index('--just')
       puts "#{type}=#{previous_setting}"
       next
+    else
+      p "previously had been set to \/", previous_setting
     end
     received = given_from_command_line = ARGV.shift
     unless received
