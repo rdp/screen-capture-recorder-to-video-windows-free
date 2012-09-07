@@ -1,3 +1,7 @@
+0.8.5
+
+  possibly the same fixes as 0.8.4 (name i420 better at least is here now)...
+
 0.8.4
 
   some stability fixes when restarting it in the same process.

@@ -16,8 +16,6 @@ can select video codec (any?) then muxer
    -vcodec libx264 -s hd720 -preset ultrafast
     just output sizes I guess, for this one...
 
-the README is *way* too verbose.
-
 "recorded to" only after they've *recorded* something...
   also there's a V in there.
   "recorded to: 20.mp3, from: screen-capture-recorder"
@@ -27,6 +25,8 @@ needs at least an option to minimize on record.
 make it as fast as VCH DH or whatever it is (57 to 43 %)...might not be easy LOL
 
 == maybe ==
+
+better explorer icon for all jruby apps :)
 
 re-use explorer windows
 
