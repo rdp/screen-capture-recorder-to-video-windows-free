@@ -1,5 +1,7 @@
 = todo =
 
+use a saner location than "temp"
+
 that's guy's "sweet gui"
   also an option of "broadcast it to a location"?
 
@@ -25,6 +27,10 @@ needs at least an option to minimize on record.
 make it as fast as VCH DH or whatever it is (57 to 43 %)...might not be easy LOL
 
 == maybe ==
+
+it should check to see when it actually starts recording...
+new button "record with window" to UI...
+
 why did it jump in size recently?
 
 better explorer icon for all jruby apps :)
