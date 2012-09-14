@@ -1,8 +1,10 @@
 require 'add_vendored_gems_to_load_path'
+p $:
 require 'java'
 
-$: << 'jruby-swing-helpers/lib'
 require 'simple_gui_creator'
+p $LOADED_FEATURES
+Storage
 SwingHelpers = SimpleGuiCreator
 include SwingHelpers # DropDownSelector
 

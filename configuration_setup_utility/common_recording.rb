@@ -7,7 +7,7 @@ splash.close if splash # close it early'ish...not sure how this looks on slower 
 require 'jruby-swing-helpers/lib/simple_gui_creator'
 
 include SimpleGuiCreator # ::DropDownSelector, etc.
-require 'ffmpeg_helpers' # local file
+require 'ffmpeg_helpers'
 
 VirtualAudioDeviceName = 'virtual-audio-capturer'
 ScreenCapturerDeviceName = 'screen-capture-recorder' 
