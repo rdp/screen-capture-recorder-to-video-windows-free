@@ -1,3 +1,13 @@
+= D3D recording =
+
+Taksi seems to hook the Present methods...
+  maybe I can borrow some of their code?
+
+There is also a straight "get the D3D front buffer" method...which might not work with aero enabled, apparently?
+
+
+= =
+
 http://ffmpeg.org/pipermail/ffmpeg-user/2012-January/004147.html discusses fast capture codecs
 
 = encoder 4 =
