@@ -1,11 +1,12 @@
 = todo =
 
-use a saner location than "temp"
+use a saner default location than "temp" "my movies"?
 
 that's guy's "sweet gui"
   also an option of "broadcast it to a location"?
 
 "sensible defaults" (just mine uh guess, for video)
+  don't I already have some?
 
 the "set them up elsewise" -> prompt "do you want to set them up" that works LOL.
   and should come right after selecting video dropdown...
@@ -26,11 +27,15 @@ needs at least an option to minimize on record.
 
 make it as fast as VCH DH or whatever it is (57 to 43 %)...might not be easy LOL
 
-display url on daemonize audio broadcaster
+display url on minimize audio broadcaster
 
-it should always show the "next" filename...
+title should always show the "next" filename...
 
 prompt "do you want to limit the recording to a certain amount of time?"
+
+just one window with all the options and their respective drop boxes next to them. 
+
+make myself into an FFsplit competitor :)
 
 == maybe ==
 
@@ -38,14 +43,12 @@ test it with google hangouts
 
 configure "per exe"
 
-make myself into an FFsplit competitor :)
-
 it should check to see when it actually starts recording...
 new button "record with window" to UI...
 
 why did it jump in size recently?
 
-better explorer icon for all jruby apps :)
+better explorer icon for all apps
 
 re-use explorer windows
 
@@ -53,7 +56,7 @@ DX10 et al input
 
 should output command to console, check that ffmpeg doesn't just immediately fail LOL
 
-"stop on restore" I guess. pre restore?
+"stop on restore" option I guess. pre restore hook?
 
 experiment with streaming to justin, ustream
 
