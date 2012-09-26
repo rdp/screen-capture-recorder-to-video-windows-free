@@ -60,7 +60,7 @@ elements[:start].on_clicked {
  if @current_process
    raise 'unexpected double run?'
  else
-   if @storage['show_transparent_window_first']
+   if @storage['video_name'] && @storage['show_transparent_window_first'] # don't display window if not recording video
      require 'window_resize'
      @elements[:start].disable
      window = WindowResize.go false
@@ -144,10 +144,12 @@ elements[:preferences].on_clicked {
     
   @storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
   
-  if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
-    @storage['show_transparent_window_first'] = true
-  else
-    @storage['show_transparent_window_first'] = false
+  if storage['video_name'] # don't prompt if they're audio only
+    if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
+      @storage['show_transparent_window_first'] = true
+    else
+      @storage['show_transparent_window_first'] = false
+    end
   end
 
   if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files after recording them?") == :yes
