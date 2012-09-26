@@ -34,6 +34,8 @@ prompt "do you want to limit the recording to a certain amount of time?"
 
 == maybe ==
 
+configure "per exe"
+
 make myself into an FFsplit competitor :)
 
 it should check to see when it actually starts recording...
