@@ -93,8 +93,7 @@ def start_recording_with_current_settings
    puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
-   if stop_time.present?
-     Thread.new { 
+   Thread.new { 
        while(@current_process)
          sleep 0.5 
           begin
@@ -104,8 +103,7 @@ def start_recording_with_current_settings
            elements[:stop].simulate_click
          end
        end
-     }
-   end
+   }
    setup_ui
    @frame.title = "Recording to #{File.basename @next_filename}"
 end
@@ -113,7 +111,7 @@ end
 elements[:stop].on_clicked {
   process_input_mutex.synchronize {
     if @current_process
-      # .close might "just kill" ffmpeg, so tell it to shutdown gracfully
+      # .close might "just kill" ffmpeg, and skip trailers in certain muxes, so tell it to shutdown gracfully
       @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
       # @current_process.close
       @current_process = nil
@@ -152,7 +150,7 @@ elements[:preferences].on_clicked {
     end
   end
 
-  if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files after recording them?") == :yes
+  if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
     @storage['reveal_files_after_each_recording'] = true
   else
     @storage['reveal_files_after_each_recording'] = false
