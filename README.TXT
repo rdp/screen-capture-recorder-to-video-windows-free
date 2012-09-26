@@ -77,7 +77,7 @@ To "reset" a value delete its key entirely.
 
 == Trouble shooting/Feedback/Questions ==
 
-it's too slow!
+it's too slow! (ex: 15 fps)
   Run the "benchmark your capture speed" utility to see how slow your system can capture.
   A few things that can help: if you're on vista+
     turn off aero display manager (esp. if you have dual monitors, this can help).
@@ -107,13 +107,18 @@ capture frequency.
 Setting force_max_fps to greater than 30 also allows you to get fps greater than 30.  It "enables" them,
 by giving it a higher max default.  I didn't think people would normally care/want them so there you have.
 
+Skype users: NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
+http://betterlogic.com/roger/2012/04/skype-directshow-device-just-shows-circles-for-the-preview-capture/
+
 Other feedback/problems/questions ping me roger-projects@googlegroups.com or browse the mailing list: http://groups.google.com/group/roger-projects
 
 ==  Redistribution ==
 
-You have to register the devicemanually (regsvr32 PushDesktop.ax, may require administrator rights) as part of your install.
+You can redistribute this.
+If you do, you may just need to give them the file PushDesktop.dll
+If you do, you have to register the device (regsvr32 PushDesktop.ax, may require administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
-in the same dir as your exe) for the dll to work/install, in case end users don't have it installed, in that case).
+in the same dir as your exe) for the dll to work/install, in case end users don't have it installed).
 
 == Code/Future work/Attributions ==
 
