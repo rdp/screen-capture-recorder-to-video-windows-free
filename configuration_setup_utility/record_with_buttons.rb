@@ -54,7 +54,11 @@ def setup_ui
   end
 end
 
-process_input_mutex = Mutex.new
+@process_input_mutex = Mutex.new
+
+def process_input_mutex
+  @process_input_mutex
+end
 
 elements[:start].on_clicked {
  if @current_process
