@@ -77,7 +77,7 @@ elements[:start].on_clicked {
 
 @frame.after_closed {
  if @current_process
-   SimpleGuiCreator.show_blocking_message_dialog "an ffmpeg instance was left running, closing it..."
+   SimpleGuiCreator.show_blocking_message_dialog "an ffmpeg instance was left running, will close it for you..."
    elements[:stop].simulate_click # just in case :P
  end
 }
@@ -98,18 +98,29 @@ def start_recording_with_current_settings
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 
-       while(@current_process)
-         sleep 0.5 
-          begin
-           process_input_mutex.synchronize { @current_process.puts "a" if @current_process }
-         rescue IOError => e
-           puts 'process stopped' # one way or the other...
-           elements[:stop].simulate_click
-         end
-       end
+     # handle early outs...
+     wait_until_current_process_exits
+	 @elements[:stop].simulate_click
    }
    setup_ui
    @frame.title = "Recording to #{File.basename @next_filename}"
+end
+
+def wait_until_current_process_exits
+       still_alive = true
+       while still_alive
+         sleep 0.2 
+         begin
+		   if !@current_process # this smells funny...
+		     still_alive = false
+		   else
+             Process.kill Signal.list['EXIT'], @current_process.pid
+		   end
+         rescue Errno::EPERM => e
+           puts 'process stopped' # one way or the other...          
+		   still_alive = false
+         end
+       end
 end
 
 elements[:stop].on_clicked {
@@ -117,8 +128,9 @@ elements[:stop].on_clicked {
     if @current_process
       # .close might "just kill" ffmpeg, and skip trailers in certain muxes, so tell it to shutdown gracfully
       @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
+	  wait_until_current_process_exits	  
+	  @current_process = nil
       # @current_process.close
-      @current_process = nil
       puts # pass the ffmpeg stuff, hopefully
       puts "done writing #{@next_filename}"
       if @storage['reveal_files_after_each_recording'] 

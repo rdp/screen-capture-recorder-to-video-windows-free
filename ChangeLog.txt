@@ -1,3 +1,7 @@
+0.8.6
+
+  bump virtual audio and "GUI wrapper" code, which now accomodates dshow devices with spaces in it.
+
 0.8.5
 
   possibly the same fixes as 0.8.4 (name i420 better at least is here now)...
