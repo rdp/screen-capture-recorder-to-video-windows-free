@@ -8,5 +8,4 @@ $: << 'jruby-swing-helpers/lib'
 $: << 'jruby-swing-helpers/lib/simple_gui_creator' # for ffmpeg_helpers, which we don't auto-add
 
 # use vendored ffmpeg
-ENV['PATH'] = File.dirname(__FILE__) + '\vendor\ffmpeg\bin;' + ENV['PATH']
-
+ENV['PATH'] = File.expand_path(File.dirname(__FILE__)) + '\vendor\ffmpeg\bin;' + ENV['PATH']
