@@ -1,3 +1,7 @@
+0.8.7
+
+  actually work with ffmpeg again on jdk7, also close right
+
 0.8.6
 
   bump virtual audio and "GUI wrapper" code, which now accomodates dshow devices with spaces in it.
