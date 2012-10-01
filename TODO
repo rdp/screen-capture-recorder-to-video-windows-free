@@ -41,6 +41,8 @@ use google code, not sourceforge (and audio too)
 
 == maybe ==
 
+smaller download somehow, 30MB seems extreme...
+
 test it with google hangouts
 
 configure "per exe"
@@ -50,11 +52,11 @@ new button "record with window" to UI...
 
 why did it jump in size recently?
 
-better explorer icon for all apps
+better icon for all apps
 
 re-use explorer windows
 
-DX10 et al input
+DX10 et al input taksi
 
 should output command to console, check that ffmpeg doesn't just immediately fail LOL
 
@@ -63,6 +65,7 @@ should output command to console, check that ffmpeg doesn't just immediately fai
 experiment with streaming to justin, ustream
 
 a "show preview" option, with simple SDL out
+  fix it within FFmpeg
 
 "input sizes" prompt (if/once ffmpeg supports pix_fmt, them too)
 
