@@ -83,6 +83,9 @@ a "make mouse fantabulous" option [?]
 
 == never ==
 
+somehow tie into a mirror driver for insta change detection, or something like that...
+  better polling mechanism?
+  
 add self to skype app store (and record easily skype...)
 
 add arcadia screen marker, make it an option to turn on/off.
@@ -92,8 +95,6 @@ include option "window within a window?" then tell them to ask me to implement i
 compare ffmpeg -s hd720 to my own local rescaling of the thing...
 
 make i420 come from 16 bit for added speed LOL.
-
-fix ffmpeg doesn't have optimized yuv420p to rgb24 (bounty)
 
 fix "stop after timing" button stuff, probably just do it local.
 
