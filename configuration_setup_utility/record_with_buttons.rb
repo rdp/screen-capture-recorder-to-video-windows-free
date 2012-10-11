@@ -1,3 +1,4 @@
+# coding: UTF-8
 require 'common_recording.rb'
 require 'thread'
 
@@ -5,12 +6,16 @@ frame = ParseTemplate.new.parse_setup_filename 'template.record_buttons'
 frame.elements[:start].disable
 frame.elements[:stop].disable
 @frame = frame
+
 @storage = Storage.new('record_with_buttons')
 def storage
   @storage
 end
+
 require 'tmpdir'
 storage['save_to_dir'] ||= Dir.tmpdir
+
+storage.set_default('record_to_file', true)
 
 def current_storage_dir
   @storage['save_to_dir']
@@ -166,13 +171,37 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   " #{video_device || 'none selected'} :video_name" [Select video device:select_new_video]
   " #{audio_device || 'none selected'} :audio_name" [Select audio device:select_new_audio]
-  "Stop recording after this many seconds: #{storage['stop_time']}" [ Click to set :stop_time_button]
-  [ Set options like directories :options_button]
-  [ Close :close]  
+  "Stop recording after this many seconds: #{storage['stop_time']}:" [ Click to set :stop_time_button]
+  "Save to file:" [✓:record_to_file]
+  "Stream to url:" [✓:stream_to_url_checkbox] "#{storage[:url_stream]}" [ Set url : set_stream_url ]
+  [ Set options (directories, etc.) :options_button]
+  [ Close :close] 
   EOL
+  print template
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
+  if storage['record_to_file']
+    frame.elements[:record_to_file].set_checked!
+  end
+  frame.elements[:record_to_file].on_clicked { |new_value|
+    storage['record_to_file'] = new_value
+	reset_options_frame
+  }
+  if storage['should_stream_to_url']
+    frame.elements[:stream_to_url_checkbox].set_checked!
+  end
+  frame.elements[:stream_to_url_checkbox].on_clicked {|new_value|
+    storage['should_stream_to_url'] = new_value
+    reset_options_frame
+  }
+  
+  frame.elements[:set_stream_url].on_clicked {
+    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live.justin.tv/app/live_XXXXXX", storage[:url_stream], true
+    storage[:url_stream] = stream_url
+	reset_options_frame
+  }
+  
   frame.elements[:select_new_video].on_clicked {
     choose_video
 	reset_options_frame
@@ -185,7 +214,7 @@ elements[:preferences].on_clicked {
   frame.elements[:close].on_clicked { frame.close }
 
   frame.elements[:stop_time_button].on_clicked {  
-    stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage[stop_time], true
+    stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage['stop_time'], true
     storage['stop_time'] = stop_time
 	reset_options_frame
   }
@@ -288,3 +317,4 @@ end
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
 frame.show
+frame.elements[:preferences].click!
