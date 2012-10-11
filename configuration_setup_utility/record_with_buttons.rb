@@ -163,8 +163,9 @@ end
 
 elements[:preferences].on_clicked {
   template = <<-EOL
-  " #{video_device} :video_name" [Select video device:select_new_video]
-  " #{audio_device} :audio_name" [Select audio device:select_new_audio]
+  ------------ Recording Options -------------
+  " #{video_device || 'none selected'} :video_name" [Select video device:select_new_video]
+  " #{audio_device || 'none selected'} :audio_name" [Select audio device:select_new_audio]
   "Stop recording after this many seconds: #{storage['stop_time']}" [ Click to set :stop_time_button]
   [ Set options like directories :options_button]
   [ Close :close]  
@@ -278,7 +279,7 @@ end
 
 def choose_extension
   if audio_device && !video_device
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "Select audio Save as type").go_selected_value
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else
     storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
   end
