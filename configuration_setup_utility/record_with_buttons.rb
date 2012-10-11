@@ -171,13 +171,13 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   " #{video_device || 'none selected'} :video_name" [Select video device:select_new_video]
   " #{audio_device || 'none selected'} :audio_name" [Select audio device:select_new_audio]
-  "Stop recording after this many seconds: #{storage['stop_time']}:" [ Click to set :stop_time_button]
+  "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Save to file:" [✓:record_to_file]
-  "Stream to url:" [✓:stream_to_url_checkbox] "#{storage[:url_stream]}" [ Set url : set_stream_url ]
+  "Stream to url:" [✓:stream_to_url_checkbox] 
+  "#{storage[:url_stream] || '      none'}:width=250" [ Set streaming url : set_stream_url ]
   [ Set options (directories, etc.) :options_button]
-  [ Close :close] 
+  [ Close :close]
   EOL
-  print template
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
@@ -317,4 +317,3 @@ end
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
 frame.show
-frame.elements[:preferences].click!
