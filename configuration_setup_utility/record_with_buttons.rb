@@ -51,8 +51,8 @@ def setup_ui
   next_number = (numbered[-1] || 0) + 1
   ext = storage['current_ext_sans_dot']
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
-  device_names = [storage['video_name'], storage['audio_name']].compact.map{|name| name[0..7]}.join(', ')
-  next_file_basename = File.basename(get_old_files[-1] || @next_filename)
+  device_names = [video_device, audio_device].compact.map{|name| name[0..7]}.join(', ')
+  next_file_basename = File.basename(@next_filename)
   @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
   if(@current_process)
     elements[:stop].enable 
@@ -162,7 +162,7 @@ elements[:stop].on_clicked {
 
 def reset_options_frame
   @options_frame.close
-  setup_ui
+  setup_ui # reset the main frame too :)
   elements[:preferences].click!
 end
 
@@ -173,8 +173,7 @@ elements[:preferences].on_clicked {
   " #{audio_device || 'none selected'} :audio_name" [Select audio device:select_new_audio]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Save to file:" [✓:record_to_file]
-  "Stream to url:" [✓:stream_to_url_checkbox] 
-  "#{storage[:url_stream] || '      none'}:width=250" [ Set streaming url : set_stream_url ]
+  "Stream to url:" [✓:stream_to_url_checkbox]   "#{storage[:url_stream] || '      none'}:width=250" [ Change streaming url : set_stream_url ]
   [ Set options (directories, etc.) :options_button]
   [ Close :close]
   EOL
@@ -197,7 +196,7 @@ elements[:preferences].on_clicked {
   }
   
   frame.elements[:set_stream_url].on_clicked {
-    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live.justin.tv/app/live_XXXXXX", storage[:url_stream], true
+    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live....", storage[:url_stream], true
     storage[:url_stream] = stream_url
 	reset_options_frame
   }
