@@ -1,3 +1,11 @@
+0.25.5: Add Object#try2, like
+  'a'.try2.some_method
+  
+0.25.4: repackage to avoid duplicate files on windows
+0.25.3: Add String#last
+0.25.1 : Add absent present? method [oops]
+0.25.0 : add Array#sample, try to add sanity to release numberings, since the ones previous seemed bworked ?
+
 0.24.6 : add present?
 
 0.23.6 add Socket.get_host_ips, remove dependency on andand until I need it again.

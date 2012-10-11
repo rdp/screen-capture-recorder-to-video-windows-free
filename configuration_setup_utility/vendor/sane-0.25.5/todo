@@ -1,0 +1,3 @@
+take out some junk here, that I rarely use!
+
+what I do use: require_relative, array#select!, try2 (?), OS, present?, blank?, include?, *sometimes* the socket stuff.  Maybe make it its own require :P

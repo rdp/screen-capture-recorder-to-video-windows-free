@@ -58,14 +58,13 @@ end
 # taken from http://oldrcrs.rubypal.com/rcr/show/309
 
 module Kernel
-  BASE_DIR = Dir.getwd
+  #  BASE_DIR = Dir.getwd
   
   def __DIR__
-    dir = (/^(.+)?:\d+/ =~ caller[0]) ? File.expand_path(File.dirname($1), BASE_DIR) : nil
-    dir += '/' if dir
+    dir = (/^(.+)?:\d+/ =~ caller[0]) ? File.expand_path(File.dirname($1), Dir.pwd) : nil
     dir
   end unless defined?(__DIR__)
-  # deemed too unfriendly since it would
+  # below deemed too unfriendly since it would
   # seem to imply that _file__ also exists
   # alias __dir__ __DIR__ unless defined?(__dir__)
 end

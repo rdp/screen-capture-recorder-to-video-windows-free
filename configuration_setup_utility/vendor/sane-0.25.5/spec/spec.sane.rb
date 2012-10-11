@@ -1,6 +1,7 @@
+raise 'must be in spec dir' unless File.basename(Dir.pwd) == 'spec'
 $:.unshift File.expand_path('../lib')
 require 'rubygems'
-require File.dirname(__FILE__) + '/../lib/sane'
+require File.dirname(__FILE__) + '/../lib/sane.rb'
 begin
   require 'spec/autorun' 
 rescue LoadError
@@ -198,4 +199,21 @@ describe Sane do
     assert !(nil.present?)
   end
   
+  it 'should have Array#sample' do
+    [2].sample.should == 2  
+  end
+  
+  it 'should have String#last' do
+    'abc'.last(2).should == 'bc'
+	  'abc'.last(3).should == 'abc'
+	  'abc'.last(1).should == 'c'
+	  'abc'.last(0).should == '' # this is feeling weird now...
+	  'abc'.last(44).should == 'abc'
+  end
+  
+  it "should have a try2 method" do
+    'a'.try2.gsub(/a/, 'b').should == 'b'
+    nil.try2.gsub(/a/, 'b').should == nil
+    proc { false.try2.gsub(/a/, 'b')}.should raise_exception(NoMethodError) # why would you want try on false? huh?
+  end
 end
