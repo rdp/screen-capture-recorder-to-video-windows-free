@@ -51,9 +51,17 @@ def setup_ui
   next_number = (numbered[-1] || 0) + 1
   ext = storage['current_ext_sans_dot']
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
-  device_names = [video_device, audio_device].compact.map{|name| name[0..7]}.join(', ')
+  device_names = [video_device, audio_device].compact
+  if device_names.length == 2
+    orig_names = device_names
+    device_names = device_names.map{|name| name[0..7]}.join(', ') + "..."
+  else
+    # leave as is...
+	device_names = device_names[0]
+  end
+  
   next_file_basename = File.basename(@next_filename)
-  @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}..."
+  @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}"
   if(@current_process)
     elements[:stop].enable 
     elements[:start].disable
