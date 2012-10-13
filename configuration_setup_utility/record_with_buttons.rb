@@ -174,17 +174,30 @@ def reset_options_frame
   elements[:preferences].click!
 end
 
+def remove_quotes string
+  string.gsub('"', '')
+end
+
+def shorten string
+  if string
+    string[0..20] + '...'
+  else
+    string
+  end
+end
+
 elements[:preferences].on_clicked {
   template = <<-EOL
   ------------ Recording Options -------------
-  " #{video_device || 'none selected'} :video_name" [Select video device:select_new_video]
-  " #{audio_device || 'none selected'} :audio_name" [Select audio device:select_new_audio]
-  "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
+  [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
+  [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
   "Save to file:" [✓:record_to_file]
-  "Stream to url:" [✓:stream_to_url_checkbox]   "#{storage[:url_stream] || '      none'}:width=250" [ Change streaming url : set_stream_url ]
+  "Stream to url:" [✓:stream_to_url_checkbox]   "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
+  "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   [ Set options (directories, etc.) :options_button]
   [ Close :close]
   EOL
+  print template
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
@@ -202,6 +215,9 @@ elements[:preferences].on_clicked {
     storage['should_stream_to_url'] = new_value
     reset_options_frame
   }
+  if !storage[:url_stream]
+    frame.elements[:stream_to_url_checkbox].disable!
+  end
   
   frame.elements[:set_stream_url].on_clicked {
     stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live....", storage[:url_stream], true
@@ -324,3 +340,4 @@ end
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
 frame.show
+elements[:preferences].click! if ARGV[0] == '--options'
