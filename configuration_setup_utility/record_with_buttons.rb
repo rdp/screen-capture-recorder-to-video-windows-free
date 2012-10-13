@@ -137,7 +137,7 @@ def start_recording_with_current_settings
    end
 
    if storage['video_name']
-     codecs = "-vcodec libx264 -pix_fmt yuv420p #{resolution} -preset ultrafast -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+     codecs = "-vcodec libx264 -pix_fmt yuv420p #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
@@ -147,7 +147,7 @@ def start_recording_with_current_settings
    end
    
 
-   c = "ffmpeg -loglevel panic #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i -"
+   c = "ffmpeg -loglevel panic #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f flv - | ffmpeg -f flv -i -"
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
      puts "writing to #{@next_filename}"
