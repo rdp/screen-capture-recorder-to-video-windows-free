@@ -131,39 +131,23 @@ def start_recording_with_current_settings
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
+   
    stop_time = storage['stop_time']
    if stop_time.present?
      stop_time = "-t #{stop_time}"     
    end
 
-   c = "ffmpeg #{stop_time} #{combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
    puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 
-     # handle early outs...
-     wait_until_current_process_exits
+     # handle potential early outs...
+     FFmpegHelpers.wait_for_ffmpeg_close @current_process
 	 elements[:stop].simulate_click
    }
    setup_ui
    @frame.title = "Recording to #{File.basename @next_filename}"
-end
-
-def wait_until_current_process_exits
-       still_alive = true
-       while still_alive
-         sleep 0.2 
-         begin
-		   if !@current_process # this smells funny...
-		     still_alive = false
-		   else
-             Process.kill Signal.list['EXIT'], @current_process.pid
-		   end
-         rescue Errno::EPERM => e
-           puts 'process stopped' # one way or the other...          
-		   still_alive = false
-         end
-       end
 end
 
 elements[:stop].on_clicked {
@@ -171,7 +155,7 @@ elements[:stop].on_clicked {
     if @current_process
       # .close might "just kill" ffmpeg, and skip trailers in certain muxes, so tell it to shutdown gracfully
       @current_process.puts 'q' rescue nil # can fail, meaning I guess ffmpeg already exited...
-	  wait_until_current_process_exits	  
+	  FFmpegHelpers.wait_for_ffmpeg_close @current_process	  
 	  @current_process = nil
       # @current_process.close
       puts # pass the ffmpeg stuff, hopefully
@@ -285,7 +269,7 @@ def bootstrap_devices
 if(!video_device && !audio_device)
 
   need_help = false
-  if FfmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
+  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
     # a reasonable default :P
     storage['audio_name'] = VirtualAudioDeviceName
     storage['current_ext_sans_dot'] = 'mp3'
@@ -295,7 +279,7 @@ if(!video_device && !audio_device)
   
   # *my* preferred defaults :P
   if ARGV[0] != '--just-audio-default'
-    if FfmpegHelpers.enumerate_directshow_devices[:video].include?(ScreenCapturerDeviceName)
+    if FFmpegHelpers.enumerate_directshow_devices[:video].include?(ScreenCapturerDeviceName)
       storage['video_name'] = ScreenCapturerDeviceName
       storage['current_ext_sans_dot'] = 'mp4'  
     else
@@ -305,13 +289,13 @@ if(!video_device && !audio_device)
   elements[:preferences].simulate_click if need_help
   
 else
-  Thread.new { FfmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime startup fast LOL
+  Thread.new { FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime startup fast LOL
 end
 
 end
 
 def choose_video
-  videos = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == ScreenCapturerDeviceName ? 0 : 1}  # put none in front :)
+  videos = ['none'] + FFmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == ScreenCapturerDeviceName ? 0 : 1}  # put none in front :)
   original_video_device = video_device 
   video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or \"none\" to record audio only").go_selected_value
   if video_device == 'none'
@@ -328,7 +312,7 @@ def choose_video
 end
 
 def choose_audio  
-  audios = ['none'] + FfmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == VirtualAudioDeviceName ? 0 : 1}
+  audios = ['none'] + FFmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == VirtualAudioDeviceName ? 0 : 1}
   audio_device = DropDownSelector.new(nil, audios, "Select audio device to capture, or none").go_selected_value
   if audio_device == 'none'
     audio_device = nil 
