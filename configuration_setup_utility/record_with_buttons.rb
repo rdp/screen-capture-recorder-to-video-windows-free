@@ -115,14 +115,14 @@ elements[:start].on_clicked {
 @frame.after_closed {
  if @current_process
    SimpleGuiCreator.show_blocking_message_dialog "an ffmpeg instance was left running, will close it for you..."
-   elements[:stop].simulate_click # just in case :P
+   elements[:stop].click! # just in case :P
  end
 }
 
 def start_recording_with_current_settings
 
    unless storage['video_name'] || storage['audio_name']
-     SimpleGuiCreator.show_blocking_message_dialog('must select at least one')
+     SimpleGuiCreator.show_blocking_message_dialog('must select at least one') # just in case...
      return
    end
 
@@ -137,14 +137,14 @@ def start_recording_with_current_settings
      stop_time = "-t #{stop_time}"     
    end
 
-   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} \"#{@next_filename}\""
+   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i - -acodec copy -vcodec copy \"#{@next_filename}\""
    puts "writing to #{@next_filename}"
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 
      # handle potential early outs...
      FFmpegHelpers.wait_for_ffmpeg_close @current_process
-	 elements[:stop].simulate_click
+	 elements[:stop].click!
    }
    setup_ui
    @frame.title = "Recording to #{File.basename @next_filename}"
