@@ -15,7 +15,7 @@ end
 require 'tmpdir'
 storage['save_to_dir'] ||= Dir.tmpdir
 
-storage.set_default('record_to_file', true)
+storage.set_default('should_record_to_file', true)
 
 def current_storage_dir
   @storage['save_to_dir']
@@ -46,6 +46,14 @@ def get_old_files
   old_files
 end
 
+def should_stream?
+  storage['should_stream'] && storage[:url_stream].present?
+end
+
+def should_save_file?
+  storage['should_record_to_file']
+end
+
 def setup_ui
   numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
   next_number = (numbered[-1] || 0) + 1
@@ -61,7 +69,11 @@ def setup_ui
   end
   
   next_file_basename = File.basename(@next_filename)
-  @frame.title = 'To: ' + File.basename(File.dirname(@next_filename)) + '/' + next_file_basename + " from #{device_names}"
+  @frame.title = 'To: ' 
+  @frame.title += File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
+  @frame.title += ", " + shorten(storage[:url_stream]) if should_stream?
+  
+  @frame.title += " from #{device_names}"
   if(@current_process)
     elements[:stop].enable 
     elements[:start].disable
@@ -71,6 +83,12 @@ def setup_ui
     elements[:start].text = "Start Recording"
     elements[:start].enable
   end
+  if !should_save_file? && !should_stream?
+    elements[:stop].disable
+    elements[:start].text = "Set options!"
+    elements[:start].disable
+  end
+  
 end
 
 @process_input_mutex = Mutex.new
@@ -201,18 +219,18 @@ elements[:preferences].on_clicked {
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
-  if storage['record_to_file']
+  if storage['should_record_to_file']
     frame.elements[:record_to_file].set_checked!
   end
   frame.elements[:record_to_file].on_clicked { |new_value|
-    storage['record_to_file'] = new_value
+    storage['should_record_to_file'] = new_value
 	reset_options_frame
   }
-  if storage['should_stream_to_url']
+  if storage['should_stream']
     frame.elements[:stream_to_url_checkbox].set_checked!
   end
   frame.elements[:stream_to_url_checkbox].on_clicked {|new_value|
-    storage['should_stream_to_url'] = new_value
+    storage['should_stream'] = new_value
     reset_options_frame
   }
   if !storage[:url_stream]
