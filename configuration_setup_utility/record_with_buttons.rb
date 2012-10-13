@@ -147,7 +147,7 @@ def start_recording_with_current_settings
    end
    
 
-   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i -"
+   c = "ffmpeg -loglevel panic #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i -"
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
      puts "writing to #{@next_filename}"
