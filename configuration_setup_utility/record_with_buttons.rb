@@ -206,10 +206,9 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file" 
+  [✓:record_to_file] "Save to file"   [ Set options (directories, etc.) :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  [ Set options (directories, etc.) :options_button]
   [ Close :close]
   EOL
   print template
@@ -259,14 +258,6 @@ elements[:preferences].on_clicked {
 
   frame.elements[:options_button].on_clicked {  
     storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
-  
-    if storage['video_name'] # don't prompt if they're audio only
-      if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
-        storage['show_transparent_window_first'] = true
-      else
-        storage['show_transparent_window_first'] = false
-      end
-    end
 
     if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
       storage['reveal_files_after_each_recording'] = true
@@ -320,7 +311,13 @@ def choose_video
   
   if video_device == ScreenCapturerDeviceName
     SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
+      if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
+        storage['show_transparent_window_first'] = true
+      else
+        storage['show_transparent_window_first'] = false
+      end
   end
+  
   choose_extension
 end
 
