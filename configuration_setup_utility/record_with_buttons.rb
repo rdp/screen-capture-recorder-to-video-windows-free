@@ -127,7 +127,7 @@ def start_recording_with_current_settings
    end
 
    if storage['video_name']
-     codecs = "-vcodec libx264 -preset ultrafast -acodec ac3" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+     codecs = "-vcodec libx264 -pix_fmt yuv420p -preset ultrafast -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
@@ -137,8 +137,15 @@ def start_recording_with_current_settings
      stop_time = "-t #{stop_time}"     
    end
 
-   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i - -acodec copy -vcodec copy \"#{@next_filename}\""
-   puts "writing to #{@next_filename}"
+   c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i -"
+   if should_save_file?	 
+	 c += " -c copy \"#{@next_filename}\""
+     puts "writing to #{@next_filename}"
+   end
+   if should_stream?
+     c += " -c copy -f flv #{storage[:url_stream]}"
+	 puts 'streaming...'
+   end
    puts 'running', c
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 
@@ -193,8 +200,8 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
-  "Save to file:" [✓:record_to_file]
-  "Stream to url:" [✓:stream_to_url_checkbox]   "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
+  [✓:record_to_file] "Save to file" 
+  [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   [ Set options (directories, etc.) :options_button]
   [ Close :close]
