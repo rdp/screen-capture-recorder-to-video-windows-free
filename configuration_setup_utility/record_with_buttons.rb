@@ -54,11 +54,7 @@ def should_save_file?
   storage['should_record_to_file']
 end
 
-def setup_ui
-  numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
-  next_number = (numbered[-1] || 0) + 1
-  ext = storage['current_ext_sans_dot']
-  @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
+def get_title
   device_names = [video_device, audio_device].compact
   if device_names.length == 2
     orig_names = device_names
@@ -67,20 +63,30 @@ def setup_ui
     # leave as is...
 	device_names = device_names[0]
   end
+  title = 'To: '
+  destinos = []
+    next_file_basename = File.basename(@next_filename)
+  destinos << File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
+  destinos << storage[:url_stream].split(':')[0] if should_stream?
+  title += destinos.join(', ')
+  title += " from #{device_names}"
+end
+
+def setup_ui
+  numbered = get_old_files.map{ |f| f =~ /(\d+)\....$/; $1.to_i}
+  next_number = (numbered[-1] || 0) + 1
+  ext = storage['current_ext_sans_dot']
+  @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   
-  next_file_basename = File.basename(@next_filename)
-  @frame.title = 'To: ' 
-  @frame.title += File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
-  @frame.title += ", " + shorten(storage[:url_stream]) if should_stream?
+  @frame.title = get_title
   
-  @frame.title += " from #{device_names}"
   if(@current_process)
     elements[:stop].enable 
     elements[:start].disable
     elements[:start].text = "Recording!"
   else
     elements[:stop].disable
-    elements[:start].text = "Start Recording"
+    elements[:start].text = "Start!"
     elements[:start].enable
   end
   if !should_save_file? && !should_stream?
@@ -154,7 +160,7 @@ def start_recording_with_current_settings
 	 elements[:stop].click!
    }
    setup_ui
-   @frame.title = "Recording to #{File.basename @next_filename}"
+   @frame.title = "Recording " + get_title
 end
 
 elements[:stop].on_clicked {
