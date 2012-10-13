@@ -131,17 +131,21 @@ def start_recording_with_current_settings
      SimpleGuiCreator.show_blocking_message_dialog('must select at least one') # just in case...
      return
    end
+   
+   if storage['resolution'].present?
+     resolution = "-s #{storage['resolution']}"
+   end
 
    if storage['video_name']
-     codecs = "-vcodec libx264 -pix_fmt yuv420p -preset ultrafast -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+     codecs = "-vcodec libx264 -pix_fmt yuv420p #{resolution} -preset ultrafast -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
    end
    
-   stop_time = storage['stop_time']
-   if stop_time.present?
-     stop_time = "-t #{stop_time}"     
+   if storage['stop_time'].present?
+     stop_time = "-t #{storage['stop_time']}"     
    end
+   
 
    c = "ffmpeg #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f mpegts - | ffmpeg -f mpegts -i -"
    if should_save_file?	 
@@ -206,9 +210,10 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file"   [ Set options (directories, etc.) :options_button]
+  [✓:record_to_file] "Save to file"   [ Set options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
+  "Current record resolution: #{storage['resolution'] || 'native'} :fake" [Change :change_resolution]
   [ Close :close]
   EOL
   print template
@@ -245,6 +250,12 @@ elements[:preferences].on_clicked {
   }  
   frame.elements[:select_new_audio].on_clicked {
     choose_audio
+	reset_options_frame
+  }
+  
+  frame.elements[:change_resolution].on_clicked { 
+    storage['resolution'] = DropDownSelector.new(nil, ['native', 'vga', 'svga', 'hd480', 'hd720', 'hd1080'], "Select resolution").go_selected_value
+    storage['resolution'] = nil if storage['resolution']  == 'native' # :)
 	reset_options_frame
   }
   

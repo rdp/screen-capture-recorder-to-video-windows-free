@@ -41,6 +41,7 @@ use google code, not sourceforge (and audio too)
 
 == maybe ==
 
+ffmpeg  -s vga -f dshow -i video="screen-capture-recorder" fails?
 compare speeds with, without pipe...
   with super cacheing pre-pipe LOL
 
