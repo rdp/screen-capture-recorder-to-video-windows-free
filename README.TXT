@@ -1,12 +1,11 @@
-This program allows one to "record" your desktop, or even stream it, with the help of VLC.
+This program allows one to "record" your desktop, or even stream it!
 
-It also includes some helper "record your screen capture" and setup utilities.
+It includes some helper "record your screen capture/stream it" and setup utilities.
   In order to use those you'll want/need the java JRE installed on your system first.
 
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
-You can use this with any (directshow compatible) program to capture or stream, like VLC.
 
-It also includes helper utilities for recording/broadcasting.
+You can use this with any (directshow compatible) program to capture or stream, like VLC, etc.
 
 == Installation ==
 
@@ -14,12 +13,10 @@ Download installer and run, from
 
   https://sourceforge.net/projects/screencapturer/files
     (sorry the files are on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
-
- NB that if you install the 64 bit device, you'll need to install the MSVC 2010 64 bit runtime first : http://www.microsoft.com/en-us/download/details.aspx?id=14632
-
+	
 == Audio capture ==
 
-It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista.
+It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista--any sound card!
   see https://github.com/rdp/virtual-audio-capture-grabber-device for info/troubleshooting of that audio capture device.
 
 == Usage ==
@@ -31,7 +28,7 @@ Or use any 3rd party program that can read from a Directshow Capture Device (ex:
 
 VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
 
-ffmpeg example (requires ffmpeg 32 bit -- 64 bit is available upon request):
+ffmpeg example (requires ffmpeg 32 bit):
 
   $ ffplay -f dshow -i video="screen-capture-recorder"
 
@@ -41,9 +38,9 @@ or
 
 or combine it with recording "what you hear" audio [vista/windows 7] (using ffmpeg in this example):
 
-  $ ffplay -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" # this example gives feedback be careful...
+  $ ffmpeg -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" yo.mp4
   
-The audio device name can be other dshow audio devices, as well.
+The audio device name can be any other dshow audio devices, as well.
 
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your 
 input source with that graphedit filename specified.
@@ -55,10 +52,6 @@ gstreamer works, as well, ex:
 I've even had Skype accidentally use it, thinking it was my webcam.
 Let me know if you want an easier way made for it for anything.
 
-== Streaming ==
-
-See http://ffmpeg.org/trac/ffmpeg/wiki/StreamingGuide
-
 == Configuration ==
 
 By default, it captures the "full screen" of the main desktop monitor (all windows, overlapping, from there, with aero if vista+, without transparent windows if non aero).
@@ -68,12 +61,12 @@ adjust registry settings before starting a run (advanced users only):
 
 HKEY_CURRENT_USER\Software\screen-capture-recorder
 
-with DWORD keys respected of start_x etc ... (see the file configuration_setup_utility\setup_screen_tracker_params.rb for the full list of registry options)
+with DWORD keys respected of start_x etc ... (see the bundled file configuration_setup_utility\setup_screen_tracker_params.rb for the full list of registry options)
   
 ex: see configuration_setup_utility\incoming.reg file (though NB that those values are in hex, so editing that file is a bit tedious--
 I always just use regedit or the accompanying script utilities and don't edit it by hand).  
 
-To "reset" a value delete its key entirely.
+To "reset" a value delete its key.
 
 == Trouble shooting/Feedback/Questions ==
 

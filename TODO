@@ -49,14 +49,14 @@ can capture 5.1 [?]
 
 == maybe ==
 
+assert that regsvr32 works...
+
 multiple...devices that show up like "skype recorder" "full screen"
   I suppose they'd have to detect, track hwnd's wouldn't they?
 
 in the options window, show the volume level of various ones, and pictures snapshots for video...
 
 ffmpeg  -s vga -f dshow -i video="screen-capture-recorder" fails?
-compare speeds with, without pipe...
-  with super cacheing pre-pipe LOL
 
 research streaming to youtube/google plus...
 
