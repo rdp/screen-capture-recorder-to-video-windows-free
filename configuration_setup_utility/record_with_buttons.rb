@@ -146,19 +146,22 @@ def start_recording_with_current_settings just_preview = false
      stop_time = "-t #{storage['stop_time']}"     
    end
    
+   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs}"
    if just_preview
      # doesn't take audio, lame...
 	 if !storage['video_name']
 	    SimpleGuiCreator.show_blocking_message_dialog('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
         return
 	 end
-     c = "ffmpeg #{FFmpegHelpers.combine_devices_for_ffmpeg_input nil, storage['video_name'] } -pix_fmt yuv420p -f sdl \"preview\"" # couldn't get multiple dshow, -f flv to work... lodo try with lavfi...maybe?
+	 # lessen volume in case of feedback...
+	 # analyzeduration 0 to make it pop up quicker...
+     c = "ffmpeg #{ffmpeg_commands} -af volume=0.75 -f mpegts - | ffplay -analyzeduration 0 -f mpegts -" # couldn't get multiple dshow, -f flv to work... lodo try ffplay with lavfi...maybe?
 	 puts c
 	 system c
+	 puts 'done preview' # clear screen...
 	 return
    end
    
-   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs}"
    c = "ffmpeg -loglevel panic #{stop_time} #{ffmpeg_commands} -f flv - | ffmpeg -f flv -i -"
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
@@ -226,7 +229,7 @@ elements[:preferences].on_clicked {
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
-  [Snapshot Preview current settings:preview]
+  [Preview current settings:preview]
   [ Close Options Window :close]
   EOL
   #print template
