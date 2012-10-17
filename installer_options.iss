@@ -1,4 +1,4 @@
-#define AppVer "0.8.7"
+#define AppVer "0.9.0"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -11,7 +11,7 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder-x6
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer.039.dll; MinVersion: 0,6.0.6000
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer-x64.039.dll; MinVersion: 0,6.0.6000; Check: IsWin64
 
-; TODO clear registry, prefs :)
+; TODO clear registry, prefs on uninstall :)
 
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder.dll
@@ -40,7 +40,7 @@ OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
 [Icons]
-Name: {group}\Record\Record video or audio or both; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
+Name: {group}\Record\Record or Stream video or audio; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
 Name: {group}\configure\Release Notes; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Readme; Filename: {app}\README.TXT
 Name: {group}\configure\configure by setting specific screen capture numbers; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: setup_via_numbers.rb; Flags: runminimized

@@ -125,7 +125,7 @@ elements[:start].on_clicked {
  end
 }
 
-def start_recording_with_current_settings
+def start_recording_with_current_settings just_preview = false
 
    unless storage['video_name'] || storage['audio_name']
      SimpleGuiCreator.show_blocking_message_dialog('must select at least one') # just in case...
@@ -146,8 +146,16 @@ def start_recording_with_current_settings
      stop_time = "-t #{storage['stop_time']}"     
    end
    
-
-   c = "ffmpeg -loglevel panic #{stop_time} #{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs} -f flv - | ffmpeg -f flv -i -"
+   if just_preview
+     # doesn't take audio, lame...
+     c = "ffmpeg #{FFmpegHelpers.combine_devices_for_ffmpeg_input nil, storage['video_name'] } -pix_fmt yuv420p -f sdl \"preview\"" # couldn't get multiple dshow, -f flv to work... lodo try with lavfi...maybe?
+	 puts c
+	 system c
+	 return
+   end
+   
+   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs}"
+   c = "ffmpeg -loglevel panic #{stop_time} #{ffmpeg_commands} -f flv - | ffmpeg -f flv -i -"
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
      puts "writing to #{@next_filename}"
@@ -214,6 +222,7 @@ elements[:preferences].on_clicked {
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
+  [Snapshot Preview current settings:preview]
   [ Close Options Window :close]
   EOL
   #print template
@@ -242,6 +251,10 @@ elements[:preferences].on_clicked {
     stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live....", storage[:url_stream], true
     storage[:url_stream] = stream_url
 	reset_options_frame
+  }
+  
+  frame.elements[:preview].on_clicked {
+    start_recording_with_current_settings true
   }
   
   frame.elements[:select_new_video].on_clicked {
