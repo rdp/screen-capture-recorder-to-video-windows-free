@@ -211,12 +211,12 @@ elements[:preferences].on_clicked {
   [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"   [ Set options :options_button]
-  [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'no url specified!'}:fake_name" [ Change streaming url : set_stream_url ]
+  [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  "Current record resolution: #{storage['resolution'] || 'native'} :fake" [Change :change_resolution]
-  [ Close :close]
+  "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
+  [ Close Options Window :close]
   EOL
-  print template
+  #print template
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame

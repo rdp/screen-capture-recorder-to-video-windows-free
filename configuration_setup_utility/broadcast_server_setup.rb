@@ -84,7 +84,7 @@ end
 
 if OS.doze?
   require 'ffmpeg_helpers'
-  names = FfmpegHelpers.enumerate_directshow_devices[:audio]
+  names = FFmpegHelpers.enumerate_directshow_devices[:audio]
   SwingHelpers.show_blocking_message_dialog "You will first be prompted for the audio device you wish to capture and stream.\nFor Vista/Windows 7 users:\n    choose virtual-audio-capturer\nFor XP:\n    you'll need to configure your recording device to record stereo mix (a.k.a waveout mix or record what you hear). Google it and set it up first."
   name = DropDownSelector.new(nil, names, "Select audio device to capture and stream").go_selected_value
   name = "dshow:// :dshow-vdev=none :dshow-adev=\"#{name}\""
