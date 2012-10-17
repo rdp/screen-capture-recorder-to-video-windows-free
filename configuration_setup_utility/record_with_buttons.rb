@@ -229,7 +229,7 @@ elements[:preferences].on_clicked {
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
-  [Preview current settings:preview]
+  [Preview current settings:preview] "a rough preview of how the recording will look"
   [ Close Options Window :close]
   EOL
   #print template
