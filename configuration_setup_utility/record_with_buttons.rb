@@ -128,7 +128,7 @@ elements[:start].on_clicked {
 def start_recording_with_current_settings just_preview = false
 
    unless storage['video_name'] || storage['audio_name']
-     SimpleGuiCreator.show_blocking_message_dialog('must select at least one') # just in case...
+     SimpleGuiCreator.show_blocking_message_dialog('must select at least one of video or audio') # just in case...
      return
    end
    
@@ -148,6 +148,10 @@ def start_recording_with_current_settings just_preview = false
    
    if just_preview
      # doesn't take audio, lame...
+	 if !storage['video_name']
+	    SimpleGuiCreator.show_blocking_message_dialog('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
+        return
+	 end
      c = "ffmpeg #{FFmpegHelpers.combine_devices_for_ffmpeg_input nil, storage['video_name'] } -pix_fmt yuv420p -f sdl \"preview\"" # couldn't get multiple dshow, -f flv to work... lodo try with lavfi...maybe?
 	 puts c
 	 system c
