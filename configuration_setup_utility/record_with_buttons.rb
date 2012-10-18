@@ -139,7 +139,10 @@ def start_recording_with_current_settings just_preview = false
    if storage['video_name']
      codecs = "-vcodec libx264 -pix_fmt yuv420p #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
-     codecs = "" # let it auto-select the audio codec based on @next_filename. Weird, I know.
+     prefix_to_acodec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
+     audio_type = prefix_to_acodec[storage['current_ext_sans_dot']]
+	 raise 'unknown prefix?' unless audio_type
+     codecs = audio_type
    end
    
    if storage['stop_time'].present?
@@ -155,18 +158,20 @@ def start_recording_with_current_settings just_preview = false
 	 end
 	 # lessen volume in case of feedback...
 	 # analyzeduration 0 to make it pop up quicker...
-     c = "ffmpeg #{ffmpeg_commands} -af volume=0.75 -f mpegts - | ffplay -analyzeduration 0 -f mpegts -" # couldn't get multiple dshow, -f flv to work... lodo try ffplay with lavfi...maybe?
+     c = "ffmpeg #{ffmpeg_commands} -af volume=0.75 -f flv - | ffplay -analyzeduration 0 -f flv -" # couldn't get multiple dshow, -f flv to work... lodo try ffplay with lavfi...maybe?
 	 puts c
 	 system c
 	 puts 'done preview' # clear screen...
 	 return
    end
    
-   c = "ffmpeg -loglevel panic #{stop_time} #{ffmpeg_commands} -f flv - | ffmpeg -f flv -i -"
+   c = "ffmpeg -loglevel panic #{stop_time} #{ffmpeg_commands} -f mpegts - | ffmpeg -f mpegts -i -"
+   
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
      puts "writing to #{@next_filename}"
    end
+   
    if should_stream?
      c += " -c copy -f flv #{storage[:url_stream]}"
 	 puts 'streaming...'
@@ -374,7 +379,7 @@ end
 
 def choose_extension
   if audio_device && !video_device
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['ac3', 'mp3', 'wav'], "You are set to record only audio--Select audio Save as type").go_selected_value
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac', 'wav'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else
     storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
   end
