@@ -49,7 +49,9 @@ can capture 5.1 [?]
 
 == maybe ==
 
-assert that regsvr32 works...
+the 'q' message might be going to the wrong process [?] and resulting in too early of termination?
+
+installer: assert that regsvr32 works...
 
 multiple...devices that show up like "skype recorder" "full screen"
   I suppose they'd have to detect, track hwnd's wouldn't they?
