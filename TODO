@@ -1,6 +1,11 @@
 = todo =
 
-use a saner default location than "temp" "my movies"?
+use a saner default location than "temp" *"my movies"(*?
+
+easier configure the screen capture recorder somehow...
+  also does it need the "resize to 2" for ffmpeg
+
+prompt if want to name files after recording
 
 check if devices *exist* when you come up...
 
@@ -50,6 +55,9 @@ can capture multiple audio "into 1"
 can capture 5.1 [?]
 
 == maybe ==
+
+some way to tell if the audio device you choose is actually working/the right mic ...
+  or checkboxes to record all of them LOL
 
 the 'q' message might be going to the wrong process [?] and resulting in too early of termination?
 
