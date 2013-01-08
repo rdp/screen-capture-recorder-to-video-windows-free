@@ -1,16 +1,21 @@
 = todo =
 
+add a checkbox "show window popup?" next to video device
+
+show your options as a hard coded string there
+
+double check that the devices actually work, not even "just listed" (show_options?)?
+
+= maybe, some actually maybe LOL =
+
+allow setting fps?
+
 use a saner default location than "temp" *"my movies"(*?
 
 easier configure the screen capture recorder somehow...
   also does it need the "resize to 2" for ffmpeg
 
 prompt if want to name files after recording
-
-check if devices *exist* when you come up...
-
-that's guy's "sweet gui"
-  also an option of "broadcast it to a location"?
 
 "sensible defaults" (just mine uh guess, for video)
   don't I already have some?
