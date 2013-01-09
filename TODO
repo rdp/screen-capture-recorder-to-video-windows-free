@@ -1,6 +1,6 @@
 = todo =
 
-add a checkbox "show window popup?" next to video device
+add a checkbox "show window popup?" next to video device if screen recorder
 
 show your options as a hard coded string there
 
@@ -8,14 +8,22 @@ double check that the devices actually work, not even "just listed" (show_option
 
 = maybe, some actually maybe LOL =
 
+"after this many seconds max"
+
 allow setting fps?
 
-use a saner default location than "temp" *"my movies"(*?
+make the main window transparent?
+
+use a saner default location than "temp" 
+  "my movies" instead, and with a better name than 1.mp4, like 'screen-capture-recording-1.mp4'
+
+minimize to tray on start? (before start uh guess)
+  later with a way to know when actual recording begins, so you can turn the icon green at that point?
 
 easier configure the screen capture recorder somehow...
   also does it need the "resize to 2" for ffmpeg
 
-prompt if want to name files after recording
+prompt if want to name files after recording/settings
 
 "sensible defaults" (just mine uh guess, for video)
   don't I already have some?
