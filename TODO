@@ -8,6 +8,19 @@ double check that the devices actually work, not even "just listed" (show_option
 
 = maybe, some actually maybe LOL =
 
+better text on "set window" transparent big button
+  also a new button to set it, just within the options config window uh guess?
+  or rename the 'start' button to 'set window then start' yeah that's the ticket
+
+the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
+  do I even really need it anymore/currently?
+    if yes, a checkbox 'automatically resize this thing!' would be nice :)
+
+optional "surrounding window" to know when/what it's recording...
+  without being able to move it, for now :)
+
+optional preview while recording?
+
 "after this many seconds max"
 
 allow setting fps?
