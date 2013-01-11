@@ -2,14 +2,19 @@
 
 add a checkbox "show window popup?" next to video device if screen recorder
 
-show your options as a hard coded string there
+show your options as a hard coded string there somewhere
 
 double check that the devices actually work, not even "just listed" (show_options?)?
 
 = maybe, some actually maybe LOL =
 
+add a one time "set the rectangle" button in the options window [?]
+
+show a prompt "saved" before refreshing options window
+
 real icon, upper left [yikes!]
 
+it should detect early out ffmpeg's
 
 say "recorded x" forever after recording it, so it knows it didn't abandon anything
 
