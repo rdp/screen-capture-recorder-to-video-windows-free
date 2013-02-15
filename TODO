@@ -1,5 +1,7 @@
 = todo =
 
+fix odd widths for VLC (and complain to ffmpeg?)
+
 add a checkbox "show window popup?" next to video device if screen recorder
 
 show your options as a hard coded string there somewhere
