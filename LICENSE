@@ -1,3 +1,6 @@
 Contact me about a (free) open source license.
 Basically I can release the code under "some license", but it cannot be GPL, or so I'm told.
-http://social.msdn.microsoft.com/Forums/en-US/windowsdirectshowdevelopment/thread/a3e8f60b-39e4-4621-837b-50a9a9a469b7/
+http://social.msdn.microsoft.com/Forums/en-US/windowsdirectshowdevelopment/thread/a3e8f60b-39e4-4621-837b-50a9a9a469b7
+Since you're just calling into a DLL, it might still be compatible with GPL licensed programs, 
+as long as they just call the DLL.
+See also Redistribution section in the README.
