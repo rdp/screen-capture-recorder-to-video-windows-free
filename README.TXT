@@ -107,11 +107,15 @@ Other feedback/problems/questions ping me roger-projects@googlegroups.com or bro
 
 ==  Redistribution ==
 
-You can redistribute this.
-If you do, you may just need to give them the file PushDesktop.dll
-If you do, you have to register the device (regsvr32 PushDesktop.ax, may require administrator rights) as part of your install.
+You can redistribute this.  See file LICENSE.TXT.
+If you do, you may just need to distribute for instance the file PushDesktop.dll
+If you do, you have to register this device, via registering its dll 
+(like $ regsvr32 PushDesktop.dll--may require administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
 in the same dir as your exe) for the dll to work/install, in case end users don't have it installed).
+If you change it and redistribute it, you may want to change the GUID's, so that it won't clash if
+somebody also installs this software.
+See also https://github.com/rdp/screen-capture-recorder-to-video-windows-free/issues/17
 
 == Code/Future work/Attributions ==
 
