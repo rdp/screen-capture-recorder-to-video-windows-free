@@ -19,7 +19,7 @@ def do_command_line
       require 'jruby-swing-helpers/lib/simple_gui_creator'
       previous_setting ||= ''
       received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
-      raise 'cancelled...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
+      raise 'cancelled [#{received}]...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
     end
     if received == '' # allow "empty" input to mean "reset this"
       setter.delete_single_setting type
