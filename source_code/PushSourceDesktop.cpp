@@ -343,10 +343,26 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
       rgb32_to_i420(iFinalStretchWidth, iFinalStretchHeight, (const char *) pOldData, (char *) pData);// took 36.8ms for 1920x1080 desktop	
 	} else {
 	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
+	  int bitCount = tweakableHeader.bmiHeader.biBitCount;
+	  int stride = (iFinalStretchWidth * (bitCount / 8)) % 4; // see if lines have some padding at the end...
+	  //int stride2 = (tweakableHeader.bmiHeader.biWidth * (tweakableHeader.bmiHeader.biBitCount / 8) + 3) & ~3; // ??
+	  if(stride > 0) {
+		  stride = 4 - stride; // they round up to 4 word boundary
+		  // don't need to copy the first line :P
+		  int lineSizeBytes = iFinalStretchWidth*(bitCount/8);
+		  int lineSizeTotal = lineSizeBytes + stride;
+		  for(int line = 1; line < iFinalStretchHeight; line++) {
+			  //*dst, *src, size
+			  // memmove required since these overlap...
+			  memmove(&pData[line*lineSizeBytes], &pData[line*lineSizeTotal], lineSizeBytes);
+		  }
+	  }
 	}
 
     // clean up
     DeleteDC(hMemDC);
+
+
 }
 
 void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
@@ -384,7 +400,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 	        SetStretchBltMode (hMemDC, COLORONCOLOR); // the SetStretchBltMode call itself takes 0.003ms
 			// COLORONCOLOR took 92ms for 1920x1080 -> 1000x1000, 69ms/80ms for 1920x1080 -> 500x500 aero
 			// 20 ms 1920x1080 -> 500x500 without aero
-			// LODO can we get better results with good speed? it is sooo ugly.
+			// LODO can we get better results with good speed? it is sooo ugly!
     	}
 		else
 		{
@@ -399,6 +415,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 
 	if(show_performance)
 	  LocalOutput("%s took %.02f ms", notNeedStretching ? "bitblt" : "stretchblt", GetCounterSinceStartMillis(start));
+
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
@@ -474,7 +491,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	}
 
     bytesPerLine = header.biWidth * bytesPerPixel;
-    /* round up to a dword boundary */
+    /* round up to a dword boundary for stride */
     if (bytesPerLine & 0x0003) 
     {
       bytesPerLine |= 0x0003;
