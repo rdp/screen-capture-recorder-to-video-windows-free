@@ -12,6 +12,11 @@ transfer from ffmpeg list has some, to here...
 
 make a "skype compat." button
 
+does mplayer work with odds in stride?
+  update scripts to not be so aggressive?
+  
+do scripts start/stop? what about audio?
+
 = maybe, some actually maybe LOL =
 
 test i420 with like non divisible by 2's...also non divisible by 4's?
