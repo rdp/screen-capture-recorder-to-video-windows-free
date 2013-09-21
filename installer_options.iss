@@ -50,3 +50,6 @@ Name: {group}\configure\Display current capture settings; Filename: {app}\config
 Name: {group}\configure\Uninstall {#AppName}; Filename: {uninstallexe}
 Name: {group}\Record\audio broadcast\setup local audio broadcast streaming server; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
 Name: {group}\Record\audio broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
+
+[Languages]
+Name: fr; MessagesFile: compiler:Languages\French.isl; 
