@@ -53,3 +53,5 @@ Name: {group}\Record\audio broadcast\restart local audio streaming server with s
 
 [Languages]
 Name: fr; MessagesFile: compiler:Languages\French.isl; 
+Name: de; MessagesFile: compiler:Languages\German.isl; 
+Name: "en"; MessagesFile: "compiler:Default.isl"
