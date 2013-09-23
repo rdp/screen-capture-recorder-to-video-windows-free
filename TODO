@@ -10,13 +10,16 @@ double check that the devices actually work, not even "just listed" (show_option
 
 transfer from ffmpeg list has some, to here...
 
-make a "skype compat." button
+make a "skype compat." button? config? pin?
 
 does mplayer work with odds in stride?
   update scripts to not be so aggressive?
   
 do scripts start/stop? what about audio?
 
+find out who is right about strides, if vlc is not, log them a bug :)
+  maybe that one .avi file from that one roundup 1901 libav.org
+  
 = maybe, some actually maybe LOL =
 
 flash doesn't see it? skype doesn't? new pin? hmm...
