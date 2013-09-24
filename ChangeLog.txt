@@ -1,3 +1,7 @@
+0.9.3
+  hopefully work with VLC when the width*bit depth doesn't add up to an even multiple of 4.
+  Haven't determined yet if this is VLC's bug or not, but it was causing it to come in like a diagonal blurred image...
+
 0.9.2
   hopefully a working release of 0.9.1
 
