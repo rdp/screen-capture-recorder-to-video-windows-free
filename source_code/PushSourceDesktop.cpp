@@ -343,10 +343,15 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
       rgb32_to_i420(iFinalStretchWidth, iFinalStretchHeight, (const char *) pOldData, (char *) pData);// took 36.8ms for 1920x1080 desktop	
 	} else {
 	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
-	  int bitCount = tweakableHeader.bmiHeader.biBitCount;
-	  int stride = (iFinalStretchWidth * (bitCount / 8)) % 4; // see if lines have some padding at the end...
-	  //int stride2 = (tweakableHeader.bmiHeader.biWidth * (tweakableHeader.bmiHeader.biBitCount / 8) + 3) & ~3; // ??
-	  if(stride > 0) {
+
+	  // check if we're on vlc work around for odd pixel widths and 24 bit...<sigh>
+	  wchar_t buffer[MAX_PATH + 1]; // on the stack
+	  GetModuleFileName(NULL, buffer, MAX_PATH);
+	  if(wcsstr(buffer, L"vlc.exe") > 0) {
+	    int bitCount = tweakableHeader.bmiHeader.biBitCount;
+	    int stride = (iFinalStretchWidth * (bitCount / 8)) % 4; // see if lines have some padding at the end...
+	    //int stride2 = (tweakableHeader.bmiHeader.biWidth * (tweakableHeader.bmiHeader.biBitCount / 8) + 3) & ~3; // ??
+	    if(stride > 0) {
 		  stride = 4 - stride; // they round up to 4 word boundary
 		  // don't need to copy the first line :P
 		  int lineSizeBytes = iFinalStretchWidth*(bitCount/8);
@@ -356,6 +361,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 			  // memmove required since these overlap...
 			  memmove(&pData[line*lineSizeBytes], &pData[line*lineSizeTotal], lineSizeBytes);
 		  }
+	    }
 	  }
 	}
 
