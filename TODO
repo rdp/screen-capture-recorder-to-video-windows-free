@@ -1,4 +1,4 @@
-= todo =
+= todo maybe =
 
 fix odd widths for VLC (and complain to ffmpeg?)
 
@@ -21,6 +21,10 @@ find out who is right about strides, if vlc is not, log them a bug :)
   maybe that one .avi file from that one roundup 1901 libav.org
   
 = maybe, some actually maybe LOL =
+
+@VLC: you can't stream such and such? whatever pierre couldn't do, or something like it?
+  do I need to still round up by 4's? what about 32 bit? hmm...
+  do I need to complain to vlc?
 
 somebody asked for an OS X version, did they? gdigrab maybe?
 
