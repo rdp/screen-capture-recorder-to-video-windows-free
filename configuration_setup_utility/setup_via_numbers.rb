@@ -5,7 +5,6 @@ require 'add_vendored_gems_to_load_path.rb' # for swinghelpers' sane
 def do_command_line
   setter = SetupScreenTrackerParams.new
   for type in SetupScreenTrackerParams::Settings
-    p type
     previous_setting = setter.read_single_setting type
     if ARGV.index('--just-display-current-settings') || ARGV.index('--just')
       puts "#{type}=#{previous_setting}"
@@ -19,9 +18,8 @@ def do_command_line
       require 'jruby-swing-helpers/lib/simple_gui_creator'
       previous_setting ||= ''
       received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
-      raise 'cancelled [#{received}]...remaining settings have not been changed, but previous ones to this one were...' unless received # it should at least be the empty string...
     end
-    if received == '' # allow "empty" input to mean "reset this"
+    if received == nil # allow "empty" input to mean "reset this"
       setter.delete_single_setting type
       p 'deleted ' + type.to_s
       next
