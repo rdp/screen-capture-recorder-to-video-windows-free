@@ -1,6 +1,8 @@
+# TODO: end ffmpeg on exit yikes!
+
 template=
 %!-------------Stream Desktop--------------
-"Enter your output streaming url, like udp://236.0.0.1:2000:fake_name"
+"Enter your output streaming url, like udp://236.0.0.1:2000:fake_name (mplayer will receive from the same address)"
 [udp://:stream_url,width=700, height=20px]
 [                                        ]
 [Start/Stop:start_stop_button] "status:status_text,width=50chars"

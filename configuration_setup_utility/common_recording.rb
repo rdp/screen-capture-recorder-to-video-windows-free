@@ -1,5 +1,5 @@
 require 'java'
-require 'add_vendored_gems_to_load_path'
+require 'add_vendored_gems_to_load_path' # also sets up FFmpeg bin dir to PATH
 
 splash = java.awt.SplashScreen.splash_screen
 splash.close if splash # close it early'ish...not sure how this looks on slower computers...
