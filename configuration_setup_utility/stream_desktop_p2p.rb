@@ -1,12 +1,12 @@
 template=
 %!-------------Stream Desktop--------------
-"Output url, like udp://236.0.0.1:2000:name"
+"Output url, like udp://236.0.0.1:2000:"
 [udp://:stream_url,width=700, height=20px]
 [                                        ]
-[Start/Stop:start_stop_button] "status:status_text"
+[Start/Stop:start_stop_button] "status:status_text,width=50chars"
 !
 
-# XXXheight=1char should work here...
+# XXX height=1char should work better here...sigh
 
 puts template
 require 'common_recording.rb'
