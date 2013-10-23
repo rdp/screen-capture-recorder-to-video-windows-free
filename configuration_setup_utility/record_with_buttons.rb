@@ -165,7 +165,8 @@ def start_recording_with_current_settings just_preview = false
 	 return
    end
    
-   c = "ffmpeg -loglevel panic #{stop_time} #{ffmpeg_commands} -f mpegts - | ffmpeg -f mpegts -i -"
+   # panic here causes us to not see useful x264 error messages...
+   c = "ffmpeg -loglevel info #{stop_time} #{ffmpeg_commands} -f mpegts - | ffmpeg -f mpegts -i -"
    
    if should_save_file?	 
 	 c += " -c copy \"#{@next_filename}\""
