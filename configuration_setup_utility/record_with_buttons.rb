@@ -7,7 +7,7 @@ frame.elements[:start].disable
 frame.elements[:stop].disable
 @frame = frame
 
-@storage = Storage.new('record_with_buttons')
+@storage = Storage.new('record_with_buttons_v2') # bump this when stored settings change LOL
 def storage
   @storage
 end
@@ -55,7 +55,7 @@ def should_save_file?
 end
 
 def get_title
-  device_names = [video_device, audio_device].compact
+  device_names = [video_device, audio_device].map{|name, idx| name}.compact
   if device_names.length == 2
     orig_names = device_names
     device_names = device_names.map{|name| name[0..7]}.join(', ') + "..."
@@ -174,13 +174,13 @@ def start_recording_with_current_settings just_preview = false
    
    if should_stream?
      c += " -c copy -f flv #{storage[:url_stream]}"
-	 puts 'streaming...'
+	 puts "streaming..."
    end
-   puts 'running', c
+   puts "about to run #{c}"
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 
      # handle potential early outs...
-     FFmpegHelpers.wait_for_ffmpeg_close @current_process
+     FFmpegHelpers.wait_for_ffmpeg_close @current_process # won't raise, no second parameter XXX catch raise
 	 elements[:stop].click!
    }
    setup_ui
@@ -228,8 +228,8 @@ end
 elements[:preferences].on_clicked {
   template = <<-EOL
   ------------ Recording Options -------------
-  [Select video device:select_new_video] " #{remove_quotes(video_device || 'none selected')} :video_name"
-  [Select audio device:select_new_audio] " #{remove_quotes(audio_device || 'none selected')} :audio_name" 
+  [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
+  [Select audio device:select_new_audio] " #{remove_quotes(audio_device_name_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"   [ Set options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
@@ -306,65 +306,64 @@ elements[:preferences].on_clicked {
 
 def bootstrap_devices
 
-if(!video_device && !audio_device)
+	if(!video_device && !audio_device)
 
-  need_help = false
-  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?(VirtualAudioDeviceName)
-    # a reasonable default :P
-    storage['audio_name'] = VirtualAudioDeviceName
-    storage['current_ext_sans_dot'] = 'mp3'
-  else
-    need_help = true
-  end
-  
-  # *my* preferred defaults :P
-  if ARGV[0] != '--just-audio-default'
-    if FFmpegHelpers.enumerate_directshow_devices[:video].include?(ScreenCapturerDeviceName)
-      storage['video_name'] = ScreenCapturerDeviceName
-      storage['current_ext_sans_dot'] = 'mp4'  
-    else
-      need_help = true
-    end
-  end  
-  elements[:preferences].simulate_click if need_help
-  
-else
-  Thread.new { FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached } # why not? my fake attempt at making ffmpeg realtime startup fast LOL
+	  need_help = false
+	  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?([VirtualAudioDeviceName, 0])
+		# a reasonable default :P
+		storage['audio_name'] = VirtualAudioDeviceName
+		storage['current_ext_sans_dot'] = 'mp3'
+	  else
+		need_help = true
+	  end
+	  
+	  # *my* preferred defaults :P
+	  if ARGV[0] != '--just-audio-default'
+		if FFmpegHelpers.enumerate_directshow_devices[:video].include?([ScreenCapturerDeviceName, 0])
+		  storage['video_name'] = ScreenCapturerDeviceName
+		  storage['current_ext_sans_dot'] = 'mp4'  
+		else
+		  need_help = true
+		end
+	  end
+	  elements[:preferences].simulate_click if need_help
+	  
+	else
+	  FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached # why not? my fake attempt at making ffmpeg realtime startup fast LOL
+	end
+
 end
 
+def choose_media type
+  # put virtuals at top of the list :)
+  # XXX put currently selected at top?
+  audios = ['none'] + FFmpegHelpers.enumerate_directshow_devices[type].sort_by{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}.map{|name, idx| name}
+  idx = DropDownSelector.new(nil, audios, "Select #{type} device to capture, or none").go_selected_idx
+  if idx == 0
+    device = nil # reset to none
+  else
+    device = FFmpegHelpers.enumerate_directshow_devices[type][idx - 2]    
+  end
+  device
 end
 
 def choose_video
-  videos = ['none'] + FFmpegHelpers.enumerate_directshow_devices[:video].sort_by{|name| name == ScreenCapturerDeviceName ? 0 : 1}  # put none in front :)
-  original_video_device = video_device 
-  video_device = DropDownSelector.new(nil, videos, "Select video device to capture, or \"none\" to record audio only").go_selected_value
-  if video_device == 'none'
-    video_device = nil
-  else
-    # stay same
-  end
+  video_device = choose_media :video  
   storage['video_name'] = video_device
   
-  if video_device == ScreenCapturerDeviceName
+  if video_device_name_or_nil == ScreenCapturerDeviceName
     SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
       if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
         storage['show_transparent_window_first'] = true
       else
         storage['show_transparent_window_first'] = false
       end
-  end
-  
+  end  
   choose_extension
 end
 
-def choose_audio  
-  audios = ['none'] + FFmpegHelpers.enumerate_directshow_devices[:audio].sort_by{|name| name == VirtualAudioDeviceName ? 0 : 1}
-  audio_device = DropDownSelector.new(nil, audios, "Select audio device to capture, or none").go_selected_value
-  if audio_device == 'none'
-    audio_device = nil 
-  else
-    # stay same
-  end
+def choose_audio
+  audio_device = choose_media :audio
   storage['audio_name'] = audio_device
   choose_extension
 end
@@ -375,6 +374,14 @@ end
 
 def video_device 
   storage['video_name']
+end
+
+def audio_device_name_or_nil
+  storage['audio_name'] ? storage['audio_name'][0] : nil
+end
+
+def video_device_name_or_nil
+  storage['video_name'] ? storage['video_name'][0] : nil
 end
 
 def choose_extension
