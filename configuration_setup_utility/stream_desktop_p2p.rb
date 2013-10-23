@@ -1,6 +1,6 @@
 template=
 %!-------------Stream Desktop--------------
-"Output url, like udp://236.0.0.1:2000:"
+"Enter your output streaming url, like udp://236.0.0.1:2000:fake_name"
 [udp://:stream_url,width=700, height=20px]
 [                                        ]
 [Start/Stop:start_stop_button] "status:status_text,width=50chars"
@@ -16,7 +16,7 @@ require 'common_recording.rb'
 @frame = ParseTemplate.new.parse_setup_string template
 @frame.elements[:start_stop_button].on_clicked {
   if @status == :stopped
-     c = "ffmpeg -f dshow  -framerate 5 -i video=screen-capture-recorder -vf scale=1280:720 -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -qp 10 -g 30 -f mpegts #{frame.elements[:stream_url].text}"
+     c = "ffmpeg -f dshow  -framerate 5 -i video=screen-capture-recorder -vf scale=1280:720 -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -qp 10 -g 30 -f mpegts #{@frame.elements[:stream_url].text.strip}"
 	   puts "starting #{c}"
 	   @current_process = IO.popen(c, "w") # jruby friendly :P
 	   Thread.new { 
@@ -37,10 +37,4 @@ def update_ui
   @frame.elements[:status_text].text="status:#{@status}" 
 end
 
-update_ui
-
-# XXX
-#%!
-#-------------Stream Desktop--------------
-#"Output url, like udp://236.0.0.1:2000"
-# should not have an extra blank line at the top...
+update_ui # init
