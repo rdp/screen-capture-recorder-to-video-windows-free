@@ -1,3 +1,7 @@
+0.9.4
+  add broadcast streaming from your desktop option.
+  bump virtual audio version to 0.4.1 [possibly more win8 friendly]
+
 0.9.3
   hopefully work with VLC when the width*bit depth doesn't add up to an even multiple of 4.
   Haven't determined yet if this is VLC's bug or not, but it was causing it to come in like a diagonal blurred image...
