@@ -16,6 +16,7 @@ require 'tmpdir'
 storage['save_to_dir'] ||= Dir.tmpdir
 
 storage.set_default('should_record_to_file', true)
+storage.set_default('reveal_files_after_each_recording', true) # otherwise it confuses the heck out of me...what's it doing? huh wuh? 
 
 def current_storage_dir
   @storage['save_to_dir']
@@ -63,9 +64,9 @@ def get_title
     # leave as is...
 	device_names = device_names[0]
   end
-  title = 'To: '
+  title = 'Recording to: '
   destinos = []
-    next_file_basename = File.basename(@next_filename)
+  next_file_basename = File.basename(@next_filename)
   destinos << File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
   destinos << storage[:url_stream].split(':')[0] if should_stream?
   title += destinos.join(', ')
@@ -311,24 +312,23 @@ def bootstrap_devices
 
 	  need_help = false
 	  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?([VirtualAudioDeviceName, 0])
-		# a reasonable default :P
-		storage['audio_name'] = VirtualAudioDeviceName
+		# some reasonable defaults :P
+		storage['audio_name'] = [VirtualAudioDeviceName, 0]
 		storage['current_ext_sans_dot'] = 'mp3'
 	  else
 		need_help = true
 	  end
 	  
-	  # *my* preferred defaults :P
+	  # *my* preferred defaults for combined video/audio :)
 	  if ARGV[0] != '--just-audio-default'
 		if FFmpegHelpers.enumerate_directshow_devices[:video].include?([ScreenCapturerDeviceName, 0])
-		  storage['video_name'] = ScreenCapturerDeviceName
+		  storage['video_name'] = [ScreenCapturerDeviceName, 0]
 		  storage['current_ext_sans_dot'] = 'mp4'  
 		else
 		  need_help = true
 		end
 	  end
 	  elements[:preferences].simulate_click if need_help
-	  
 	else
 	  FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached # why not? my fake attempt at making ffmpeg realtime startup fast LOL
 	end
