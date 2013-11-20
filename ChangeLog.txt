@@ -1,3 +1,6 @@
+0.9.6
+  more p2p streaming options
+
 0.9.5
   minor ui improvements
 
