@@ -9,9 +9,14 @@ template=
 " mplayer -demuxer +mpegts -framedrop -benchmark udp://236.0.0.1:2000:"
 [udp://localhost:2000:stream_url,width=700, height=20px]
 [                                                      ]
-[Start/Stop:start_stop_button] "status:status_text,width=50chars"
-!
+ "status:status_text,width=50chars"
 
+ [Start/Stop Normal:start_stop_button]
+ [Start/Stop no q setting:start_no_q]
+ [Start/Stop no q all iframes:start_all_iframes]
+
+ !
+# XXX TODO NATIVEs
 # XXX height=1char should work better here...sigh
 
 puts template
@@ -22,10 +27,28 @@ require 'common_recording.rb'
 
 @frame = ParseTemplate.new.parse_setup_string template
 @frame.elements[:stream_url].text=@storage['stream_to_url']
-@frame.elements[:start_stop_button].on_clicked {
-  if @status == :stopped
-       extra_options="-qp 10 -g 30"
-      #s extra_options="-g 30"
+{:start_stop_button => "-qp 10 -g 30", :start_no_q => "-g 30", :start_all_iframes => "-g 1"}.each{|button_name, extra_options|
+  @frame.elements[button_name].on_clicked {
+   start_stop_ffmpeg extra_options
+  }
+}
+
+def update_ui  
+  @frame.elements[:status_text].text="status:#{@status}" 
+end
+
+update_ui # init
+
+@frame.after_closed {
+  if @status == :running
+    SimpleGuiCreator.show_blocking_message_dialog "warning, shutting down without stopping streaming, which means you'll have to kill ffmpeg manually"
+   end
+   @storage['stream_to_url']=@frame.elements[:stream_url].text
+
+}
+
+def start_stop_ffmpeg extra_options
+ if @status == :stopped  
        c = "ffmpeg -f dshow  -framerate 5 -i video=screen-capture-recorder -vf scale=1280:720 -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast #{extra_options} -f mpegts #{@frame.elements[:stream_url].text.strip}"
 	   puts "starting #{c}"
 	   @current_process = IO.popen(c, "w") # jruby friendly :P
@@ -41,18 +64,4 @@ require 'common_recording.rb'
     # already running, send it a quit command, let it clean itself up
     @current_process.puts 'q' rescue nil
   end
-}
-
-def update_ui  
-  @frame.elements[:status_text].text="status:#{@status}" 
 end
-
-update_ui # init
-
-@frame.after_closed {
-  if @status == :running
-    SimpleGuiCreator.show_blocking_message_dialog "warning, shutting down streaming with window closing"
-   end
-   @storage['stream_to_url']=@frame.elements[:stream_url].text
-
-}
