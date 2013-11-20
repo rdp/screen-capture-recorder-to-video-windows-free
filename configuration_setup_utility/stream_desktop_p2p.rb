@@ -35,11 +35,11 @@ require 'common_recording.rb'
 }
 
 @frame.elements[:start_all_raw].on_clicked {
-  start_stop_ffmpeg "", "-vcodec copy"
+  start_stop_ffmpeg "", "-vcodec copy" # no need for -g here... :)
 }
 
 @frame.elements[:start_all_high_fps].on_clicked {
-  start_stop_ffmpeg "", nil, 25
+  start_stop_ffmpeg "-g 30 -qp 10", nil, 25
 }
 
 
