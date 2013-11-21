@@ -22,6 +22,8 @@ can read from an ini file
 
 = maybe, some actually maybe LOL =
 
+could make dedupe cooler, possibly by taking 8-bit snapshots first and md5'ing those to know if changes have happened "anywhere"
+
 is there an alternative to Bitblt that works in FF flash?
 
 add the "super fast windows 8 grabber"
