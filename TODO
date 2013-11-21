@@ -2,36 +2,32 @@
 
 transfer from ffmpeg list some todo's, to here...and vice versa?
 
-make a "skype compat." button? config? pin?
-
-do scripts start/stop? what about audio?
-
-find out who is right about strides, if vlc is not, log them a bug :)
-  maybe that one .avi file from that one roundup 1901 libav.org
-
 the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
   do I even really need it anymore/currently?
     if yes, a checkbox 'automatically resize this thing!' would be nice :)
   do I need them anymore, really?  can vlc at least...like...stream it?
   does mplayer work with odds in stride?
     update scripts to not be so aggressive in adding it to multiple of 8?
+  flash dies with odd numbers, at least...that's prolly good nuff then, just round up to 2 for now, prolly not even tell them...
 
 can read from an ini file
+
+obs interface?
 	
 = maybe, some actually maybe LOL =
 
 is there an alternative to Bitblt that works in FF flash?
 
-add the "super fast windows 8 grabber"
-
-is there a "notify me" option in win 8, for decreasing latency?
+add the "super fast windows 8 grabber" ?
+  is there a "notify me" option in win 8, for decreasing latency?
 
 doesn't work with skype
 
 doesn't work with google plus hangouts? huh wuh?
 
 could make dedupe cooler, possibly by taking 8-bit snapshots first and md5'ing those to know if changes have happened "anywhere"
-
+  nobody uses it tho, and an ffmpeg dedupe might be better...
+  
 @VLC: you can't stream such and such? whatever pierre couldn't do, or something like it?
   do I need to still round up by 4's? what about 32 bit? hmm...
   do I need to complain to vlc?
