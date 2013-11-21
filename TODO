@@ -1,34 +1,32 @@
 = todo maybe =
 
-fix odd widths for VLC (and complain to ffmpeg?)
-
-add a checkbox "show window popup?" next to video device if screen recorder
-
-show your options as a hard coded string there somewhere
-
-double check that the devices actually work, not even "just listed" (show_options?)?
-
-transfer from ffmpeg list has some, to here...
+transfer from ffmpeg list some todo's, to here...and vice versa?
 
 make a "skype compat." button? config? pin?
 
-does mplayer work with odds in stride?
-  update scripts to not be so aggressive?
-  
 do scripts start/stop? what about audio?
 
 find out who is right about strides, if vlc is not, log them a bug :)
   maybe that one .avi file from that one roundup 1901 libav.org
+
+the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
+  do I even really need it anymore/currently?
+    if yes, a checkbox 'automatically resize this thing!' would be nice :)
+  do I need them anymore, really?  can vlc at least...like...stream it?
+  does mplayer work with odds in stride?
+    update scripts to not be so aggressive in adding it to multiple of 8?
   
 = maybe, some actually maybe LOL =
+
+doesn't work with skype
+
+doesn't work with google plus hangouts? huh wuh?
 
 @VLC: you can't stream such and such? whatever pierre couldn't do, or something like it?
   do I need to still round up by 4's? what about 32 bit? hmm...
   do I need to complain to vlc?
 
-somebody asked for an OS X version, did they? gdigrab maybe?
-
-flash doesn't see it? skype doesn't? new pin? hmm...
+somebody asked for an OS X version, did they? gdigrab maybe, in ffmpeg, keep the same gui?
 
 test i420 with like non divisible by 2's...also non divisible by 4's?
 
@@ -38,26 +36,11 @@ some "save your config, have multiple, can switch"
 counteract this: comments on http://msdn.microsoft.com/en-us/library/dd144879(v=vs.85).aspx
   even for i420 LOL
 
-VLC refuses it if I request 100x100? my problem, or theirs? ffmpeg too?
-
-add a one time "set the rectangle" button in the options window [?]
-
-show a prompt "saved" before refreshing options window
+VLC refuses it if I request a hxw of 100x100? my problem, or theirs? ffmpeg too?
 
 real icon, upper left [yikes!]
 
 it should detect early out ffmpeg's
-
-say "recorded x" forever after recording it, so it knows it didn't abandon anything
-
-better text on "set window" transparent big button
-  also a new button to set it, just within the options config window uh guess?
-  or rename the 'start' button to 'set window then start' yeah that's the ticket
-  show the transparent icon while they're about to click start
-
-the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
-  do I even really need it anymore/currently?
-    if yes, a checkbox 'automatically resize this thing!' would be nice :)
 
 optional "surrounding window" to know when/what it's recording...
   without being able to move it, for now :)
