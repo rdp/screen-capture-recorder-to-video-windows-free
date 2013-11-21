@@ -1,6 +1,9 @@
 = todo maybe =
 
 fix odd widths for VLC (and complain to ffmpeg?)
+  was there a complaint somewhere else, though, too?  maybe just 32-bit default for now...
+  
+in flash in browser it seems to get the wrong sizes...?
 
 add a checkbox "show window popup?" next to video device if screen recorder
 
@@ -14,12 +17,7 @@ make a "skype compat." button? config? pin?
 
 does mplayer work with odds in stride?
   update scripts to not be so aggressive?
-  
-do scripts start/stop? what about audio?
 
-find out who is right about strides, if vlc is not, log them a bug :)
-  maybe that one .avi file from that one roundup 1901 libav.org
-  
 = maybe, some actually maybe LOL =
 
 @VLC: you can't stream such and such? whatever pierre couldn't do, or something like it?
