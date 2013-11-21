@@ -1,5 +1,6 @@
 0.9.6
-  more p2p streaming options
+  more p2p streaming available options
+  default to 32-bit instead of 24-bit, in case it is more compatible (though barely slower) with some systems [vlc, too]
 
 0.9.5
   minor ui improvements

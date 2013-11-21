@@ -81,23 +81,26 @@ it's too slow! (ex: 15 fps)
     10ms without aero), so you can see the relative cost it adds [!]
 	There's also a registry setting to have it turned off "automatically"
 	I have only been able to get max 15 fps when capturing aero [ping me if you want me to look into improving this somewhat, I have some ideas...]
+it's too slow! (ex: 50 fps)
   disabling or enabling "hardware acceleration" for the desktop might help, too, or setting it to one stop above none
-  try switching from 32 to 16 bit output (the filter), and/or your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
+  try switching from 32 to 24 bit or 16 bit input (from this), and/or switching your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
 
 Note that if your output is, say, going to be 10 fps "actually used" in the end, ex:
-$ ffmpeg -f dshow -i video=video-capture-recorder yo.mp4 -r 10 # output file is only 10 fps.
+$ ffmpeg -f dshow -i video=video-capture-recorder -r 10 yo.mp4 -r 10 # output file is only 10 fps
 
 Then to save cpu, a "good" application will also instruct the "source fps" to be 10 fps
+$ ffmpeg -r 10 -f dshow -i video=video-capture-recorder -r 10 yo.mp4 # input and output are set to 10
+
 that they pass on to this filter, and everybody's in 10 fps and hopefully happy, and cpu is saved.
 ex: vlc.exe dshow:// ... :dshow-fps=10
 vlc then passes this in to SetFormat after negotiation, and the device accepts it, and feeds you at 10 fps.
 
-Some "bad" directshow applications don't pass this in.
+Some "bad" directshow applications don't pass this parameter in.  Most can.
 So there may be a case where it is wasting cpu somehow, by capturing too many or the like.
-So for those programs, you'll want to set the force_max_fps parameter, which will limit its
+So for those programs, you'll want to set the max fps parameter, which will limit its
 capture frequency.
 
-Setting force_max_fps to greater than 30 also allows you to get fps greater than 30.  It "enables" them,
+Setting max fps to greater than 30 also allows you to get fps greater than 30 (the default max).  It "enables" them,
 by giving it a higher max default.  I didn't think people would normally care/want them so there you have.
 
 Skype users: NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
