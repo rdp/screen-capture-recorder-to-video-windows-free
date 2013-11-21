@@ -15,12 +15,22 @@ the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4
   do I need them anymore, really?  can vlc at least...like...stream it?
   does mplayer work with odds in stride?
     update scripts to not be so aggressive in adding it to multiple of 8?
-  
+
+can read from an ini file
+	
 = maybe, some actually maybe LOL =
+
+is there an alternative to Bitblt that works in FF flash?
+
+add the "super fast windows 8 grabber"
+
+is there a "notify me" option in win 8, for decreasing latency?
 
 doesn't work with skype
 
 doesn't work with google plus hangouts? huh wuh?
+
+could make dedupe cooler, possibly by taking 8-bit snapshots first and md5'ing those to know if changes have happened "anywhere"
 
 @VLC: you can't stream such and such? whatever pierre couldn't do, or something like it?
   do I need to still round up by 4's? what about 32 bit? hmm...
