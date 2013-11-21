@@ -344,7 +344,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	} else {
 	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
 
-	  // check if we're on vlc work around for odd pixel widths and 24 bit...<sigh>
+	  // if we're on vlc work around for odd pixel widths and 24 bit...<sigh>, like a width of 134 breaks vlc with 24bit. wow.
 	  wchar_t buffer[MAX_PATH + 1]; // on the stack
 	  GetModuleFileName(NULL, buffer, MAX_PATH);
 	  if(wcsstr(buffer, L"vlc.exe") > 0) {

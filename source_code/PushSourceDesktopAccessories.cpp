@@ -438,10 +438,12 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
 
 	if(iPosition == 0) {
 		// pass it our "preferred" which is 24 bits, since 16 is "poor quality" (really, it is), and I...think/guess that 24 is faster overall.
-		iPosition = 2;
+		 // iPosition = 2; // 24 bit
+		// actually, just use 32 since it's more compatible, for now...too much fear...
+		iPosition = 1; // 32 bit   I once saw a freaky line in skype, too, so until I investigate, err on the side of compatibility...
 			// 32 -> 24 (2): getdibits took 2.251ms
 			// 32 -> 32 (1): getdibits took 2.916ms
-			// except those particular numbers might be misleading in terms of total speed...hmm...
+			// except those particular numbers might be misleading in terms of total speed...hmm...though if FFmpeg can use assembly to convert it, it might be a real speedup
 	}
     switch(iPosition)
     {
