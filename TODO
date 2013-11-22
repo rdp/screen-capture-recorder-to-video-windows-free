@@ -70,6 +70,11 @@ easier configure the screen capture recorder somehow...
 
 prompt if want to name files after recording/settings
 
+test my screen capture "with dual monitor in several positions" to see if it ever captures just black...or lookup that one bug report about it where it captured scrambled data?
+  possible fix: enumerate and capture all monitors
+  
+do I want the default to be all monitors?
+  
 "sensible defaults" (just mine uh guess, for video)
   don't I already have some?
 
