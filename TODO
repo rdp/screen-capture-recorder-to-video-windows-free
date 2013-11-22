@@ -1,7 +1,5 @@
 = todo maybe =
 
-transfer from ffmpeg list some todo's, to here...and vice versa?
-
 the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
   do I even really need it anymore/currently?
     if yes, a checkbox 'automatically resize this thing!' would be nice :)
@@ -15,6 +13,8 @@ can read from an ini file
 obs interface?
 	
 = maybe, some actually maybe LOL =
+
+transfer from ffmpeg list some todo's, to here...and vice versa?
 
 is there an alternative to Bitblt that works in FF flash?
 

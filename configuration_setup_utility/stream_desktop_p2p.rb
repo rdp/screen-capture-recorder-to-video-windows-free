@@ -3,10 +3,10 @@
 template=
 %!-------------Stream Desktop--------------
 "Enter your output streaming url, like udp://236.0.0.1:2000 (mplayer will receive from the same address):"
-"   udp://hostname:port:fake_name"
-"   or for multicast something like udp://236.0.0.1:2000:"
-"  You can receive the stream via some player, ex::"
-" mplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000:"
+"   udp://specific_hostname:port:fake_ui_name"
+"   or for multicast something like udp://236.0.0.1:2000:fake_ui_name2"
+"  You can receive the stream via some player, ex:"
+" mplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000:fake_ui_name3"
 [udp://localhost:2000:stream_url,width=700, height=20px]
 [                                                      ]
  "status:status_text,width=50chars"
