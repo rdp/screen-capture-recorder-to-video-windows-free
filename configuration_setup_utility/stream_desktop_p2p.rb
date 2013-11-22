@@ -11,11 +11,13 @@ template=
 [                                                      ]
  "status:status_text,width=50chars"
 
- [Start/Stop Normal:start_stop_button]
- [Start/Stop variable q setting:start_no_q]
+ [Start/Stop Normal (5 fps):start_stop_button]
+ [Start/Stop variable q:start_no_q]
  [Start/Stop variable q more iframes:start_all_iframes]
  [Start/Stop all raw:start_all_raw]
- [Start/Stop Normal high fps:start_all_high_fps]
+ [Start/Stop Normal 25 fps:start_all_25_fps]
+ [Start/Stop Normal 15 fps:start_all_15_fps]
+ [Start/Stop Normal 10 fps:start_all_10_fps]
 
  !
 # XXX height=1char should work better here...sigh
@@ -38,8 +40,10 @@ require 'common_recording.rb'
   start_stop_ffmpeg "", "-vcodec copy" # no need for -g here... :)
 }
 
-@frame.elements[:start_all_high_fps].on_clicked {
-  start_stop_ffmpeg "-g 30 -qp 10", nil, 25
+{:start_all_25_fps => 25, :start_all_15_fps => 15, :start_all_10_fps => 10}.each{|button_name, fps|
+  @frame.elements[button_name].on_clicked {
+    start_stop_ffmpeg "-g 30 -qp 10", nil, fps
+  }
 }
 
 
