@@ -220,10 +220,10 @@ def remove_quotes string
 end
 
 def shorten string
-  if string
+  if string && string.size > 0
     string[0..20] + '...'
   else
-    string
+    ""
   end
 end
 
@@ -233,32 +233,42 @@ elements[:preferences].on_clicked {
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device_name_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"   [ Set options :options_button]
-  [✓:stream_to_url_checkbox] "Stream to url:"  "#{shorten(storage[:url_stream]) || 'Specify url first!'}:fake_name" [ Set streaming url : set_stream_url ]
+  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
   [Preview current settings:preview] "a rough preview of how the recording will look"
   [ Close Options Window :close]
   EOL
-  #print template
+  print template
+  # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
   if storage['should_record_to_file']
     frame.elements[:record_to_file].set_checked!
+  else
+    frame.elements[:record_to_file].set_unchecked!
   end
   frame.elements[:record_to_file].on_clicked { |new_value|
     storage['should_record_to_file'] = new_value
 	reset_options_frame
   }
+  
   if storage['should_stream']
     frame.elements[:stream_to_url_checkbox].set_checked!
+  else
+    frame.elements[:stream_to_url_checkbox].set_unchecked!
   end
   frame.elements[:stream_to_url_checkbox].on_clicked {|new_value|
     storage['should_stream'] = new_value
     reset_options_frame
   }
-  if !storage[:url_stream]
-    frame.elements[:stream_to_url_checkbox].disable!
+  
+  if !storage[:url_stream].present?
+    frame.elements[:stream_to_url_checkbox].set_unchecked!
+    frame.elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...
+  else
+    frame.elements[:url_stream_text].text = shorten(storage[:url_stream])
   end
   
   frame.elements[:set_stream_url].on_clicked {
@@ -274,7 +284,8 @@ elements[:preferences].on_clicked {
   frame.elements[:select_new_video].on_clicked {
     choose_video
 	reset_options_frame
-  }  
+  }
+  
   frame.elements[:select_new_audio].on_clicked {
     choose_audio
 	reset_options_frame
