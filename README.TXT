@@ -142,3 +142,10 @@ The included speed test utility was originally from http://stereopsis.com/blttes
 (bitblt is quite hardware dependent, so I'm told, so it's good to be able to test its speed).
 
 FFMpeg binaries are also included, see their site for licensing details/source: http://ffmpeg.org
+
+== Related ==
+
+http://obsproject.com is open source, doesn't use FFmpeg but might work for you.  May even capture DirectX woot.
+http://www.ffsplit.com is not open source, but does capture/stream desktop using FFmpeg.
+http://camstudio.org is open source and free, but requires you to just use your local codecs installed in your windows
+  system, and has some usability issues, which is why I even started this project in the first place :)
