@@ -92,7 +92,7 @@ def setup_ui
   end
   if !should_save_file? && !should_stream?
     elements[:stop].disable
-    elements[:start].text = "Set options!"
+    elements[:start].text = "Set options 1st!"
     elements[:start].disable
   end
   
@@ -138,7 +138,10 @@ def start_recording_with_current_settings just_preview = false
    end
 
    if storage['video_name']
-     codecs = "-vcodec libx264 -pix_fmt yuv420p #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+     pixel_type = "yuv420p"
+    # pixel_type = "yuv444p"
+	 
+     codecs = "-vcodec libx264 -pix_fmt #{pixel_type} #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      prefix_to_acodec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
      audio_type = prefix_to_acodec[storage['current_ext_sans_dot']]
@@ -232,7 +235,7 @@ elements[:preferences].on_clicked {
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   [Select audio device:select_new_audio] " #{remove_quotes(audio_device_name_or_nil || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file"   [ Set options :options_button]
+  [✓:record_to_file] "Save to file"   [ Set file options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
