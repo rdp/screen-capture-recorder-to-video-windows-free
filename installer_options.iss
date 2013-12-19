@@ -1,4 +1,4 @@
-#define AppVer "0.9.7beta"
+#define AppVer "0.9.7beta2"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -51,7 +51,7 @@ Name: {group}\configure\Uninstall {#AppName}; Filename: {uninstallexe}
 Name: {group}\use\Record\Record or Stream video or audio by clicking a button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
 Name: {group}\use\broadcast\setup local audio broadcast streaming server; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
 Name: {group}\use\broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
-Name: {group}\use\broadcast\stream desktop p2p; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
+Name: {group}\use\broadcast\stream desktop local LAN; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
  
 
 [Languages]
