@@ -1,10 +1,9 @@
-# TODO: end ffmpeg on exit
-
 template=
 %!-------------Stream Desktop--------------
 "Enter your output streaming url, like udp://236.0.0.1:2000 (mplayer will receive from the same address):"
 "   udp://specific_hostname:port:fake_ui_name"
 "   or for multicast something like udp://236.0.0.1:2000:fake_ui_name2"
+"   or more exotic options FFmpeg accepts, like udp://236.0.0.1:2000?pkt_size=500:fake_ui_name4"
 "  You can receive the stream via some player, ex:"
 " mplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000:fake_ui_name3"
 [udp://localhost:2000:stream_url,width=700, height=20px]
@@ -55,7 +54,8 @@ update_ui # init
 
 @frame.after_closed {
   if @status == :running
-    SimpleGuiCreator.show_blocking_message_dialog "warning, shutting down without stopping streaming, which means you'll have to kill ffmpeg manually"
+    SimpleGuiCreator.show_blocking_message_dialog "warning, shutting down without stopping streamingso we will kill ffmpeg now"
+	start_stop_ffmpeg nil
    end
    @storage['stream_to_url'] = @frame.elements[:stream_url].text
 
@@ -77,7 +77,7 @@ def start_stop_ffmpeg extra_options, vcodec=nil, framerate = 5
 	   }
   else
     puts "stopping running ffmpeg"
-    # already running, send it a quit command, let it clean itself up
+    # already running, send it a quit command, let it clean itself up [should I pause here?]
     @current_process.puts 'q' rescue nil
   end
 end
