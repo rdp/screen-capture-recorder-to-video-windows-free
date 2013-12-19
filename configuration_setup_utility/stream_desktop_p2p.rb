@@ -8,8 +8,8 @@ template=
 "   or more exotic options FFmpeg accepts, like udp://236.0.0.1:2000?pkt_size=500:fake_ui_name4"
 "  You can receive the stream via some player, ex:"
 " mplayer #{mplayer_options} ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000:fake_ui_name3"
-[udp://localhost:2000:stream_url,width=600, height=1char]
-                                                      
+[udp://localhost:2000:stream_url,width=600, height=20px]
+[                                                      ]
  "status:status_text,width=50chars"
 
  [Start/Stop Normal (5 fps):start_stop_button]
@@ -22,7 +22,9 @@ template=
  [launch mplayer receiver:launch_mplayer] "After you start streaming"
 
  !
-# XXX height=1char should work better here...sigh
+# XXX height=1char should work here, but it doesn't quite enough...sigh
+#     XXX editable=true
+# XXX not need fake_ui_name...
 
 puts template
 require 'common_recording.rb'
