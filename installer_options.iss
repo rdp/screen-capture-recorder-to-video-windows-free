@@ -1,4 +1,4 @@
-#define AppVer "0.9.7test"
+#define AppVer "0.9.7beta"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -24,6 +24,7 @@ Source: source_code\Win32\Release\screen-capture-recorder.dll; DestDir: {app}
 Source: source_code\x64\releasex64\screen-capture-recorder-x64.dll; DestDir: {app}
 Source: README.TXT; DestDir: {app}; Flags: isreadme
 Source: ChangeLog.txt; DestDir: {app}
+; includes vendor/ffmpeg et al
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
 Source: vendor\vcredist_*.exe; DestDir: {app}\vendor
