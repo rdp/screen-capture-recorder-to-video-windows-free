@@ -10,15 +10,16 @@ template=
 " mplayer #{mplayer_options} ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000:fake_ui_name3"
 [udp://localhost:2000:stream_url,width=600, height=20px]
 [                                                      ]
- "status:status_text,width=50chars"
+ "status:status_text,width=100chars" 
 
- [Start/Stop Normal (5 fps):start_stop_button]
- [Start/Stop variable q:start_no_q]
- [Start/Stop variable q more iframes:start_all_iframes]
- [Start/Stop all raw:start_all_raw]
- [Start/Stop Normal 25 fps:start_all_25_fps]
- [Start/Stop Normal 15 fps:start_all_15_fps]
- [Start/Stop Normal 10 fps:start_all_10_fps]
+ [Start Normal (5 fps):start_stop_button]
+ [Start variable q:start_no_q]
+ [Start variable q more iframes:start_all_iframes]
+ [Start all raw:start_all_raw]
+ [Start Normal 25 fps:start_all_25_fps]
+ [Start Normal 15 fps:start_all_15_fps]
+ [Start Normal 10 fps:start_all_10_fps]
+ [Stop Streaming:stop_streaming]
  [launch mplayer receiver:launch_mplayer] "After you start streaming"
 
  !
@@ -51,16 +52,25 @@ require 'common_recording.rb'
 }
 
 @frame.elements[:launch_mplayer].on_clicked {
-  c = "mplayer.exe #{mplayer_options} ffmpeg://#{get_current_url}?fifo_size=100000"
+  # buffer size is kernel's SO_RECVBUF size, set to 64k by default, probably doesn't matter here anyway...
+  # fifo_size
+  fifo_size=10_000_000/188 # docs say to pass it in divided by 188...
+  c = "mplayer.exe #{mplayer_options} ffmpeg://#{get_current_url.split('?')[0]}?fifo_size=#{fifo_size}&buffer_size=1000000"
   puts "running #{c}"
   Thread.new { 
 	system(c) # hangs if no streaming has started...	
   }
 }
 
+@current_style=''
+
 def update_ui  
-  @frame.elements[:status_text].text="status:#{@status}" 
-  # don't mess with launch_mplayer here in case run on different box
+  if @status == :running
+    @frame.elements[:status_text].text="status:#{@status} #{@current_style}"
+  else
+    @frame.elements[:status_text].text="status:#{@status}"
+  end
+  # don't mess with launch_mplayer grey'ing out here in case run on different box
 end
 
 update_ui # init
@@ -68,7 +78,7 @@ update_ui # init
 @frame.after_closed {
   if @status == :running
     SimpleGuiCreator.show_blocking_message_dialog "warning, shutting down without stopping streamingso we will kill ffmpeg now"
-	start_stop_ffmpeg nil
+	stop_ffmpeg
    end
    @storage['stream_to_url'] = @frame.elements[:stream_url].text
 
@@ -78,6 +88,10 @@ def get_current_url
   @frame.elements[:stream_url].text.strip
 end
 
+@frame.elements[:stop_streaming].on_clicked {
+  stop_ffmpeg
+}
+
 def start_stop_ffmpeg extra_options, vcodec=nil, framerate = 5
  vcodec ||= "-vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast"
  if @status == :stopped  
@@ -86,6 +100,7 @@ def start_stop_ffmpeg extra_options, vcodec=nil, framerate = 5
 	   @current_process = IO.popen(c, "w") # jruby friendly :P
 	   Thread.new { 
 		 @status = :running
+		 @current_style = "framerate #{framerate}"
 		 update_ui
 		 # handle potential early outs...
 		 FFmpegHelpers.wait_for_ffmpeg_close @current_process # won't raise, no second parameter XXX catch raise
@@ -93,8 +108,12 @@ def start_stop_ffmpeg extra_options, vcodec=nil, framerate = 5
 		 update_ui
 	   }
   else
+    stop_ffmpeg
+  end
+end
+
+def stop_ffmpeg
     puts "stopping running ffmpeg"
     # already running, send it a quit command, let it clean itself up [should I pause here?]
     @current_process.puts 'q' rescue nil
-  end
 end
