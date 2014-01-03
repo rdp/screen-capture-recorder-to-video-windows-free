@@ -7,7 +7,7 @@ template=
 "   or for multicast something like udp://236.0.0.1:2000:fake_ui_name2"
 "   or more exotic options FFmpeg accepts, like udp://236.0.0.1:2000?pkt_size=500:fake_ui_name4"
 "  You can receive the stream via some player, ex:"
-" mplayer #{mplayer_options} ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000:fake_ui_name3"
+" mplayer #{mplayer_options} ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000:fake_ui_name3"
 [udp://localhost:2000:stream_url,width=600, height=20px]
 [                                                      ]
  "status:status_text,width=100chars" 
@@ -66,7 +66,7 @@ require 'common_recording.rb'
 
 def update_ui  
   if @status == :running
-    @frame.elements[:status_text].text="status:#{@status} #{@current_style}"
+    @frame.elements[:status_text].text="status:#{@status} #{@current_style} #{get_current_url}"
   else
     @frame.elements[:status_text].text="status:#{@status}"
   end
