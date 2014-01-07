@@ -8,13 +8,18 @@ the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4
     update scripts to not be so aggressive in adding it to multiple of 8?
   flash dies with odd numbers, at least...that's prolly good nuff then, just round up to 2 for now, prolly not even tell them...
 
+pull the piping stuff so that it can save to .wav again, report to ffmpeg, replace with just a query prompt :)
+
 can read from an ini file
 
-obs interface?
-	
 = maybe, some actually maybe LOL =
 
+add changes from ffmpeg's setting working one gdi-grab :)
+
+obs interface
+
 record directx boxes too LOL.  hmm...
+  adding the windows 8 "thingermajigger" might be enough instead...good nuff for me?
 
 make downloads from my "real fast server"
 
