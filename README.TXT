@@ -85,6 +85,10 @@ it's too slow! (ex: 50 fps)
   disabling or enabling "hardware acceleration" for the desktop might help, too, or setting it to one stop above none
   try switching from 32 to 24 bit or 16 bit input (from this), and/or switching your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
 
+It starts making the computer sluggish after awhile.
+  Make sure you have enough RAM available (virtualbox is known to hog some without telling you).  Also disable aero if possible.
+  
+  
 Note that if your output is, say, going to be 10 fps "actually used" in the end, ex:
 $ ffmpeg -f dshow -i video=video-capture-recorder -r 10 yo.mp4 -r 10 # output file is only 10 fps
 
