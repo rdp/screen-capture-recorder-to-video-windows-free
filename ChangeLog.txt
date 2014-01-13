@@ -1,6 +1,7 @@
 0.9.7,8
   include a patched mplayer to make p2p streaming drop less [phew!]
   GUI cleanups for p2p streaming
+  disable wav for now (buggy)
 
 0.9.6
   more p2p streaming available options
