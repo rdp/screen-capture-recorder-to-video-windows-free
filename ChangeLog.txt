@@ -1,4 +1,8 @@
-0.9.7,8
+0.10.0
+  add option to not display mouse
+  rename the bitblt _non_aero_causes_mouse_shutter
+
+0.9.{7,8}
   include a patched mplayer to make p2p streaming drop less [phew!]
   GUI cleanups for p2p streaming
   disable wav for now (buggy)
