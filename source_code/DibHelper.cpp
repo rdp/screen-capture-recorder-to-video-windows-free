@@ -176,13 +176,10 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
 	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
 	RegCloseKey(hKey); // done with that
 	if (FAILED(hr)) {
+      // key doesn't exist in the reg at all...
 	  return default;
 	} else {
-		if(dwVal == NOT_SET_IN_REGISTRY) {
-			return default;
-		} else {
-	      return dwVal;
-		}
+      return dwVal;
 	}
   }
  

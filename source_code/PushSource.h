@@ -99,6 +99,7 @@ protected:
 	bool m_bFormatAlreadySet;
 	bool m_bConvertToI420;
 	bool m_bUseCaptureBlt;
+	bool m_bCaptureMouse;
 	//int m_iScreenBitDepth;
 
 	float GetFps();

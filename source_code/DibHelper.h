@@ -12,8 +12,6 @@
 void LocalOutput(const char *str, ...);
 void LocalOutput(const wchar_t *str, ...);
 
-#define NOT_SET_IN_REGISTRY 0 // match ruby file
-
 /* DIB macros */
 #define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
 #define RECTWIDTH(lpRect)   ((lpRect)->right - (lpRect)->left)

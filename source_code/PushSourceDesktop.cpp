@@ -92,7 +92,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
 	ASSERT(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
 
-	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_with_mouse_blink_only_non_aero_if_1"), 0) == 1;
+	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker"), 0) == 1;
+	m_bCaptureMouse = read_config_setting(TEXT("capture_mouse_default_1"), 1) == 1;
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
@@ -317,7 +318,8 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 
 	doJustBitBltOrScaling(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalStretchWidth, iFinalStretchHeight, hScrDC, nX, nY);
 
-	AddMouse(hMemDC, &m_rScreen, hScrDC, m_iHwndToTrack);
+	if(m_bCaptureMouse) 
+	  AddMouse(hMemDC, &m_rScreen, hScrDC, m_iHwndToTrack);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture...whatever this even means...	

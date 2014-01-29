@@ -9,9 +9,10 @@ class SetupScreenTrackerParams
   Settings = ['capture_height', 'capture_width', 'start_x', 'start_y', 'default_max_fps', 
     'stretch_to_width', 'stretch_to_height',  'stretch_mode_high_quality_if_1',
 	'hwnd_to_track', 'disable_aero_for_vista_plus_if_1', 
-	'track_new_x_y_coords_each_frame_if_1', 
+	'track_new_x_y_coords_each_frame_if_1',
+    'capture_mouse_default_1',	
 	'dedup_if_1', 'millis_to_sleep_between_poll_for_dedupe_changes',
-	'capture_transparent_windows_with_mouse_blink_only_non_aero_if_1']
+	'capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker']
  
    def delete_single_setting name
     with_reg do
@@ -44,12 +45,12 @@ class SetupScreenTrackerParams
   end
   
   def convert_from_dword_to_int out
-		  if out > (1<<31) # underflow? like 4294967288 for -1, or maybe i should just disallow negatives?
-  	        p 'warning, got a negative, may not be expected...'
-            # convert to a ruby negative
-  	        out -= (1<<32)
-		  end
-		  out
+	if out > (1<<31) # appears to underflow? like 4294967288 for -1, or maybe i should just disallow negatives?
+  	  p 'warning, got a negative, may not be expected...'
+      # convert to a ruby negative
+  	  out -= (1<<32)
+	end
+	out
   end
   
   def convert_from_int_to_dword out
