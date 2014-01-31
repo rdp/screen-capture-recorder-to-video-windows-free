@@ -1,6 +1,10 @@
 0.10.0
-  add option to not display mouse
-  rename the bitblt _non_aero_causes_mouse_shutter
+  add option to not display mouse (capture_mouse_default_1)
+  breaking change:
+  rename the bitblt setting
+    from capture_transparent_windows_with_mouse_blink_only_non_aero_if_1 to 
+    capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker
+
 
 0.9.{7,8}
   include a patched mplayer to make p2p streaming drop less [phew!]
