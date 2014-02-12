@@ -7,7 +7,7 @@ frame.elements[:start].disable
 frame.elements[:stop].disable
 @frame = frame
 
-@storage = Storage.new('record_with_buttons_v2') # bump this when stored settings change LOL
+@storage = Storage.new('record_with_buttons_v6') # bump this when stored settings format changes :)
 def storage
   @storage
 end
@@ -352,12 +352,14 @@ end
 def choose_media type
   # put virtuals at top of the list :)
   # XXX put currently selected at top?
-  audios = ['none'] + FFmpegHelpers.enumerate_directshow_devices[type].sort_by{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}.map{|name, idx| name}
-  idx = DropDownSelector.new(nil, audios, "Select #{type} device to capture, or none").go_selected_idx
+  media_options = FFmpegHelpers.enumerate_directshow_devices[type]
+  media_options.sort_by!{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}
+  names = ['none'] + media_options.map{|name, idx| name}
+  idx = DropDownSelector.new(nil, names, "Select #{type} device to capture, or none").go_selected_idx
   if idx == 0
     device = nil # reset to none
   else
-    device = FFmpegHelpers.enumerate_directshow_devices[type][idx - 2]    
+    device = media_options[idx - 1]    
   end
   device
 end
