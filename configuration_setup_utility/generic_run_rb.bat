@@ -11,7 +11,7 @@
 @call java -version > NUL 2>&1 || echo you need to install java JRE first please install it from java.com then run again && java -version && pause && GOTO INSTALL_JAVA
 
 @rem success path
-@java -splash:audio.jpg -jar jruby-complete-1.6.4.jar --1.8 %*
+@java -splash:audio.jpg -jar jruby-complete-1.6.4.jar --1.9 %*
 
 @GOTO DONE
 

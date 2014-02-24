@@ -353,7 +353,8 @@ def choose_media type
   # put virtuals at top of the list :)
   # XXX put currently selected at top?
   media_options = FFmpegHelpers.enumerate_directshow_devices[type]
-  media_options.sort_by!{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}
+  # no sort_by! in 1.9 mode TODO chagned generic_run_rb.bat to 1.9 :)
+  media_options = media_options.sort_by{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}
   names = ['none'] + media_options.map{|name, idx| name}
   idx = DropDownSelector.new(nil, names, "Select #{type} device to capture, or none").go_selected_idx
   if idx == 0
