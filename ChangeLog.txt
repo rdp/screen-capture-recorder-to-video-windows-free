@@ -1,3 +1,9 @@
+0.10.2
+  hopefully fix start bug introduced in 0.10.1 
+  
+0.10.1
+  fix UI to make options actually selectable
+
 0.10.0
   add option to not display mouse (capture_mouse_default_1)
   breaking change:
