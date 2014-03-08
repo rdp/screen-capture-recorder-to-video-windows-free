@@ -68,7 +68,7 @@ I always just use regedit or the accompanying script utilities and don't edit it
 
 To "reset" a value delete its key.
 
-== Trouble shooting/Feedback/Questions ==
+== Trouble shooting ==
 
 it's too slow! (ex: 15 fps)
   Run the "benchmark your capture speed" utility to see how slow your system can capture.
@@ -110,7 +110,10 @@ by giving it a higher max default.  I didn't think people would normally care/wa
 Skype users: NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
 http://betterlogic.com/roger/2012/04/skype-directshow-device-just-shows-circles-for-the-preview-capture/
 
+== Feedback/Question ==
+
 Other feedback/problems/questions ping me roger-projects@googlegroups.com or browse the mailing list: http://groups.google.com/group/roger-projects
+Or submit to our uservoice: http://rdp.uservoice.com
 
 ==  Redistribution ==
 
