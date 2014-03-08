@@ -14,6 +14,8 @@ pull the piping stuff so that it can save to .wav again, report to ffmpeg, repla
 
 can read from an ini file
 
+some todo's may be on the "ffmpeg possible improvements for moi" spreadsheet...
+
 = maybe, some actually maybe LOL =
 
 implement stuff from ffmpeg, try it out too :)
