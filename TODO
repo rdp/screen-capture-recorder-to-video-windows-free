@@ -470,8 +470,10 @@ it should display 30 pins, one for each fps  :P
   convenient to save cpu in certain situations, slightly more cross program-zy ease
   at least I think ffmpeg would use this, possibly vlc too?
 
-make so it can stream, too :P
-  plus just audio streaming even...
-
 bounty lagarith ffmpeg [?]
-  bounty 
+
+Mouse highlighting.
+Active window tracking (with automatic pan & zoom). The filter tracks the active window and smoothly adjusts the capture area for a more dynamic presentation experience.
+Automatic background fill for inactive areas. The area behind an active window can be filled with color to focus more attention on the active windows.
+High-quality real-time window scaling.Multi-display configurations support.
+Overalapped window capturing.
