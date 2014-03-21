@@ -59,12 +59,12 @@ def get_title
   device_names = [video_device, audio_device].map{|name, idx| name}.compact
   if device_names.length == 2
     orig_names = device_names
-    device_names = device_names.map{|name| name[0..7]}.join(', ') + "..."
+    device_names = device_names.map{|name| name.size > 7 ? name[0..7] + "..." : name}.join(', ')
   else
     # leave as is...
 	device_names = device_names[0]
   end
-  title = 'Recording to: '
+  title = 'Will record to: '
   destinos = []
   next_file_basename = File.basename(@next_filename)
   destinos << File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
@@ -111,7 +111,7 @@ elements[:start].on_clicked {
    if video_device && storage['show_transparent_window_first'] # don't display window if not recording video
      require 'window_resize'
      elements[:start].disable
-     window = WindowResize.go false
+     window = WindowResize.go false, false, 'CLICK HERE WHEN READY TO START RECORDING'
      window.after_closed { start_recording_with_current_settings }
    else
      start_recording_with_current_settings
@@ -215,7 +215,8 @@ elements[:stop].on_clicked {
 def reset_options_frame
   @options_frame.close
   setup_ui # reset the main frame too :)
-  elements[:preferences].click!
+  # don't show options frame still, it just feels so annoying...
+  # elements[:preferences].click!
 end
 
 def remove_quotes string
@@ -371,7 +372,7 @@ def choose_video
   
   if video_device_name_or_nil == ScreenCapturerDeviceName
     SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
-      if SimpleGuiCreator.show_select_buttons_prompt("Would you like to display a resizable setup window before each recording?") == :yes
+      if SimpleGuiCreator.show_select_buttons_prompt("screen capture recorder: Would you like to display a resizable setup window before each recording?") == :yes
         storage['show_transparent_window_first'] = true
       else
         storage['show_transparent_window_first'] = false
