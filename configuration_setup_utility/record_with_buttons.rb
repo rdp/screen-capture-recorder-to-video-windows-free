@@ -203,12 +203,14 @@ elements[:stop].on_clicked {
       puts # pass the ffmpeg stuff, hopefully
       puts "done writing #{@next_filename}"
       if storage['reveal_files_after_each_recording'] 
-        SimpleGuiCreator.show_in_explorer @next_filename
-      end
-      setup_ui # re-load the buttons
+	    if File.exist? @next_filename
+          SimpleGuiCreator.show_in_explorer(@next_filename)
+		end
+      end      
     else
       # could be they had a timed recording, and clicked stop
     end
+	setup_ui # refresh in case error occurred somehow...
   }
 }
 

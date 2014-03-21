@@ -11,8 +11,6 @@ class WindowResize
     JFrame.setDefaultLookAndFeelDecorated(true); # allow full window transparency for jdk 7
   
     f = JFrame.new
-    f.bring_to_front
-	f.setAlwaysOnTop true # don't want to lose this in other windows...at least it bugged me once :P
     if display_instruction_message_prompt
       SimpleGuiCreator.show_blocking_message_dialog "resize the next window to be directly over your desired area, then click in the middle to save"
     end
@@ -58,6 +56,8 @@ class WindowResize
     AWTUtilities.set_window_opacity(f, 0.7)
     f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE) # instead of hang when they click the "X" [LODO warn?]
     f.show
+    f.bring_to_front
+	f.setAlwaysOnTop true # don't want to lose this in other windows...at least it bugged me once :P
     f
   end
   
