@@ -1,3 +1,6 @@
+0.10.x
+  some ui friendlinesses
+
 0.10.2
   hopefully fix start bug introduced in 0.10.1 
   
