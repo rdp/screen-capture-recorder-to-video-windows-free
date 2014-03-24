@@ -1,4 +1,3 @@
-# coding: UTF-8
 require 'common_recording.rb'
 require 'thread'
 
@@ -55,11 +54,23 @@ def should_save_file?
   storage['should_record_to_file']
 end
 
+def shorten string, length_desired=7
+  if string && string.size > 0
+    if(string.size > length_desired)
+      string[0..length_desired] + '...'
+	else
+	  string
+	end
+  else
+    ""
+  end
+end
+
 def get_title
   device_names = [video_device, audio_device].map{|name, idx| name}.compact
   if device_names.length == 2
     orig_names = device_names
-    device_names = device_names.map{|name| name.size > 7 ? name[0..7] + "..." : name}.join(', ')
+    device_names = device_names.map{|name| shorten(name)}.join(', ')
   else
     # leave as is...
 	device_names = device_names[0]
@@ -214,113 +225,9 @@ elements[:stop].on_clicked {
   }
 }
 
-def reset_options_frame
-  @options_frame.close
-  setup_ui # reset the main frame too :)
-  # don't show options frame still, it just feels so annoying...
-  # elements[:preferences].click!
-end
-
-def remove_quotes string
-  string.gsub('"', '')
-end
-
-def shorten string
-  if string && string.size > 0
-    string[0..20] + '...'
-  else
-    ""
-  end
-end
-
 elements[:preferences].on_clicked {
-  template = <<-EOL
-  ------------ Recording Options -------------
-  [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
-  [Select audio device:select_new_audio] " #{remove_quotes(audio_device_name_or_nil || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file"   [ Set file options :options_button]
-  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
-  "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
-  [Preview current settings:preview] "a rough preview of how the recording will look"
-  [ Close Options Window :close]
-  EOL
-  print template
-  # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
-  
-  @options_frame = ParseTemplate.new.parse_setup_string template
-  frame = @options_frame
-  if storage['should_record_to_file']
-    frame.elements[:record_to_file].set_checked!
-  else
-    frame.elements[:record_to_file].set_unchecked!
-  end
-  frame.elements[:record_to_file].on_clicked { |new_value|
-    storage['should_record_to_file'] = new_value
-	reset_options_frame
-  }
-  
-  if storage['should_stream']
-    frame.elements[:stream_to_url_checkbox].set_checked!
-  else
-    frame.elements[:stream_to_url_checkbox].set_unchecked!
-  end
-  frame.elements[:stream_to_url_checkbox].on_clicked {|new_value|
-    storage['should_stream'] = new_value
-    reset_options_frame
-  }
-  
-  if !storage[:url_stream].present?
-    frame.elements[:stream_to_url_checkbox].set_unchecked!
-    frame.elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...
-  else
-    frame.elements[:url_stream_text].text = shorten(storage[:url_stream])
-  end
-  
-  frame.elements[:set_stream_url].on_clicked {
-    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live....", storage[:url_stream], true
-    storage[:url_stream] = stream_url
-	reset_options_frame
-  }
-  
-  frame.elements[:preview].on_clicked {
-    start_recording_with_current_settings true
-  }
-  
-  frame.elements[:select_new_video].on_clicked {
-    choose_video
-	reset_options_frame
-  }
-  
-  frame.elements[:select_new_audio].on_clicked {
-    choose_audio
-	reset_options_frame
-  }
-  
-  frame.elements[:change_resolution].on_clicked { 
-    storage['resolution'] = DropDownSelector.new(nil, ['native', 'vga', 'svga', 'hd480', 'hd720', 'hd1080'], "Select resolution").go_selected_value
-    storage['resolution'] = nil if storage['resolution']  == 'native' # :)
-	reset_options_frame
-  }
-  
-  frame.elements[:close].on_clicked { frame.close }
-
-  frame.elements[:stop_time_button].on_clicked {  
-    stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage['stop_time'], true
-    storage['stop_time'] = stop_time
-	reset_options_frame
-  }
-
-  frame.elements[:options_button].on_clicked {  
-    storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
-
-    if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
-      storage['reveal_files_after_each_recording'] = true
-    else
-      storage['reveal_files_after_each_recording'] = false
-    end
-	reset_options_frame
-  }
+  require './record_with_buttons_options_pane'
+  show_options_frame
 }
 
 def bootstrap_devices
@@ -352,43 +259,6 @@ def bootstrap_devices
 
 end
 
-def choose_media type
-  # put virtuals at top of the list :)
-  # XXX put currently selected at top?
-  media_options = FFmpegHelpers.enumerate_directshow_devices[type]
-  # no sort_by! in 1.9 mode TODO chagned generic_run_rb.bat to 1.9 :)
-  media_options = media_options.sort_by{|name, idx| (name == VirtualAudioDeviceName || name == ScreenCapturerDeviceName) ? 0 : 1}
-  names = ['none'] + media_options.map{|name, idx| name}
-  idx = DropDownSelector.new(nil, names, "Select #{type} device to capture, or none").go_selected_idx
-  if idx == 0
-    device = nil # reset to none
-  else
-    device = media_options[idx - 1]    
-  end
-  device
-end
-
-def choose_video
-  video_device = choose_media :video  
-  storage['video_name'] = video_device
-  
-  if video_device_name_or_nil == ScreenCapturerDeviceName
-    SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
-      if SimpleGuiCreator.show_select_buttons_prompt("screen capture recorder: Would you like to display a resizable setup window before each recording?") == :yes
-        storage['show_transparent_window_first'] = true
-      else
-        storage['show_transparent_window_first'] = false
-      end
-  end  
-  choose_extension
-end
-
-def choose_audio
-  audio_device = choose_media :audio
-  storage['audio_name'] = audio_device
-  choose_extension
-end
-
 def audio_device 
   storage['audio_name']
 end
@@ -403,15 +273,6 @@ end
 
 def video_device_name_or_nil
   storage['video_name'] ? storage['video_name'][0] : nil
-end
-
-def choose_extension
-  if audio_device && !video_device
-    # TODO 'wav' here once it works with solely wav :)
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
-  else
-    storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
-  end
 end
 
 bootstrap_devices
