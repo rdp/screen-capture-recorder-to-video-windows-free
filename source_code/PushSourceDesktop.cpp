@@ -15,7 +15,7 @@
 
 DWORD globalStart; // for some debug performance benchmarking
 int countMissed = 0;
-long fastestRoundMillis = 1000000;
+long fastestRoundMillis = 1000000; // random big number
 long sumMillisTook = 0;
 
 #ifdef _DEBUG 
@@ -42,7 +42,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	globalStart = GetTickCount();
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
-    hScrDc = GetDC(m_iHwndToTrack);
+    hScrDc = GetDC(m_iHwndToTrack); // some value, or 0/NULL
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT(hScrDc != 0); // failure...
 	
@@ -164,11 +164,12 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 			  // LODO memcmp and memcpy in the same loop LOL.
 			}
 	  } else {
-		// it's always new for everyone else!
+		// it's always new for everyone else (the typical case)
 	    gotNew = true;
 	  }
 	}
-	// capture how long it took before we add in our own arbitrary delay to enforce fps...
+
+	// capture some debug stats (how long it took) before we add in our own arbitrary delay to enforce fps...
 	long double millisThisRoundTook = GetCounterSinceStartMillis(startThisRound);
 	fastestRoundMillis = min(millisThisRoundTook, fastestRoundMillis); // keep stats :)
 	sumMillisTook += millisThisRoundTook;
@@ -210,9 +211,8 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	    
 	}
 
-	previousFrameEndTime = max(0, previousFrameEndTime);// avoid startup negatives, which would kill our math on the next loop...
-
-	//LocalOutput("marking frame with timestamps: %llu %llu", now, endFrame);
+	// accomodate for 0 to avoid startup negatives, which would kill our math on the next loop...
+	previousFrameEndTime = max(0, previousFrameEndTime); 
 
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
@@ -227,12 +227,12 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	// only set discontinuous for the first...I think...
 	pSample->SetDiscontinuity(m_iFrameNumber <= 1);
 
+#ifdef _DEBUG
     // the swprintf costs like 0.04ms (25000 fps LOL)
 	double m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	swprintf(out, L"done video frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
 		m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
 		/* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
-#ifdef _DEBUG // probably not worth it but we do hit this a lot...hmm...
 	LocalOutput(out);
 	set_config_string_setting(L"frame_stats", out);
 #endif

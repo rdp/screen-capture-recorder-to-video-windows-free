@@ -40,6 +40,10 @@ UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
+; remove previous versions' icons [lame innosetup, lame]
+[InstallDelete]
+Type: filesandordirs; Name: {group};
+
 [Icons]
 Name: {group}\configure\Release Notes; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Readme; Filename: {app}\README.TXT
