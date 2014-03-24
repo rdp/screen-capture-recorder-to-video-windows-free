@@ -34,7 +34,7 @@ elements[:reveal_save_to_dir].on_clicked {
   if last_filename
     SimpleGuiCreator.show_in_explorer last_filename
   else
-    SimpleGuiCreator.show_blocking_message_dialog "none have been recorded yet, so revealing the directory they will be recorded to"
+    SimpleGuiCreator.show_message "none have been recorded yet, so revealing the directory they will be recorded to"
     SimpleGuiCreator.show_in_explorer current_storage_dir	
   end
 }
@@ -132,7 +132,7 @@ elements[:start].on_clicked {
 
 @frame.after_closed {
  if @current_process
-   SimpleGuiCreator.show_blocking_message_dialog "an ffmpeg instance was left running, will close it for you..."
+   SimpleGuiCreator.show_message "an ffmpeg instance was left running, will close it for you..."
    elements[:stop].click! # just in case :P
  end
 }
@@ -140,7 +140,7 @@ elements[:start].on_clicked {
 def start_recording_with_current_settings just_preview = false
 
    unless storage['video_name'] || storage['audio_name']
-     SimpleGuiCreator.show_blocking_message_dialog('must select at least one of video or audio') # just in case...
+     SimpleGuiCreator.show_message('must select at least one of video or audio') # just in case...
      return
    end
    
@@ -168,7 +168,7 @@ def start_recording_with_current_settings just_preview = false
    if just_preview
      # doesn't take audio, lame...
 	 if !storage['video_name']
-	    SimpleGuiCreator.show_blocking_message_dialog('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
+	    SimpleGuiCreator.show_message('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
         return
 	 end
 	 # lessen volume in case of feedback...

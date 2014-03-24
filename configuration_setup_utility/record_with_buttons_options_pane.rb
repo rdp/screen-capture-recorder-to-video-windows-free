@@ -5,7 +5,7 @@ def reset_options_frame
   @options_frame.close
   # don't show options frame still, it just feels so annoying...
   # elements[:preferences].click!
-  SimpleGuiCreator.show_message "Options saved!"
+  SimpleGuiCreator.show_message "Options saved! You're ready to go..."
   setup_ui # reset the main frame too :)
 end
 
