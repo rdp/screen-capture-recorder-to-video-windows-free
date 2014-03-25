@@ -177,7 +177,6 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CRefTime now;
 	CRefTime endFrame;
     CSourceStream::m_pFilter->StreamTime(now);
-	LocalOutput("now is %llu , previousframeend %llu", now, previousFrameEndTime);
     // wait until we "should" send this frame out...
 	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also boot strap time ignore it :P
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
@@ -216,6 +215,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     pSample->SetTime((REFERENCE_TIME *) &now, (REFERENCE_TIME *) &endFrame);
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
+    LocalOutput("timestamping video packet as %lld -> %lld", now, endFrame);
 
 	if(fullyStarted) {
       m_iFrameNumber++;
