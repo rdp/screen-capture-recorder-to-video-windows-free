@@ -1,5 +1,6 @@
-0.10.x
+0.11.0
   some ui friendlinesses
+  possibly an async fix for this and/or the audio portion
 
 0.10.2
   hopefully fix start bug introduced in 0.10.1 
