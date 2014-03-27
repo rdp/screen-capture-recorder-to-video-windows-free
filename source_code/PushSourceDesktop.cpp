@@ -122,6 +122,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 }
 
 wchar_t out[1000];
+bool ever_started = false;
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
@@ -135,6 +136,21 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  reReadCurrentPosition(1);
 	}
 
+	
+	if(!ever_started) {
+		// allow it to startup until Run is called...so StreamTime can work see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
+		FILTER_STATE myState;
+		CSourceStream::m_pFilter->GetState(INFINITE, &myState);
+		while(myState != State_Running) {
+		  // TODO accomodate for pausing better, we're single run only currently [does VLC do pausing even?]
+		  Sleep(1);
+		  LocalOutput("sleeping till graph running for audio...");
+		  m_pParent->GetState(INFINITE, &myState);	  
+		}
+		ever_started = true;
+	}
+
+
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
 
@@ -143,14 +159,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*) m_mt.pbFormat;
 
-	// for some reason the timings are messed up initially, as there's no start time at all for the first frame (?) we don't start in State_Running ?
-	// race condition?
-	// so don't do some calculations unless we're in State_Running
-	FILTER_STATE myState;
-	CSourceStream::m_pFilter->GetState(INFINITE, &myState);
-	bool fullyStarted = myState == State_Running;
-	
-	boolean gotNew = false;
+	boolean gotNew = false; // dedupe stuff
 	while(!gotNew) {
 
       CopyScreenToDataBlock(hScrDc, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
@@ -176,9 +185,9 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
 	CRefTime now;
 	CRefTime endFrame;
-    CSourceStream::m_pFilter->StreamTime(now);
-    // wait until we "should" send this frame out...
-	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also boot strap time ignore it :P
+	now = 0;
+	CSourceStream::m_pFilter->StreamTime(now);
+	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also at boot strap time to ignore it XXXX can negatives even ever happen anymore though?
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
 		  LocalOutput("sleeping because %llu < %llu", now, previousFrameEndTime);
 		  Sleep(1);
@@ -189,14 +198,14 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	    previousFrameEndTime = endFrame;
 	    
 	} else {
-		// if there's no reference clock, it will "always" miss a frame
+		// if there's no reference clock, it will "always" think it missed a frame
 	  if(show_performance) {
 		  if(now == 0) 
 			  LocalOutput("probable none reference clock, streaming fastly");
 		  else
 	          LocalOutput("it missed a frame--can't keep up %d %llu %llu", countMissed++, now, previousFrameEndTime); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
 	  }
-	  // have to add a bit here, or it will always be "it missed some time" for the next round...forever!
+	  // have to add a bit here, or it will always be "it missed a frame" for the next round...forever!
 	  endFrame = now + m_rtFrameLength;
 	  // most of this stuff I just made up because it "sounded right"
 	  //LocalOutput("checking to see if I can catch up again now: %llu previous end: %llu subtr: %llu %i", now, previousFrameEndTime, previousFrameEndTime - m_rtFrameLength, previousFrameEndTime - m_rtFrameLength);
@@ -217,9 +226,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	//pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
     LocalOutput("timestamping video packet as %lld -> %lld", now, endFrame);
 
-	if(fullyStarted) {
-      m_iFrameNumber++;
-	}
+    m_iFrameNumber++;
 
 	// Set TRUE on every sample for uncompressed frames http://msdn.microsoft.com/en-us/library/windows/desktop/dd407021%28v=vs.85%29.aspx
     pSample->SetSyncPoint(TRUE);
@@ -569,7 +576,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
 
 HRESULT CPushPinDesktop::OnThreadCreate() {
-	LocalOutput("PSD on thread create");
+	LocalOutput("CPushPinDesktop OnThreadCreate");
 	previousFrameEndTime = 0; // reset <sigh> dunno if this helps FME which sometimes had inconsistencies, or not
 	m_iFrameNumber = 0;
 	return S_OK;

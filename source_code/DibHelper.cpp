@@ -29,7 +29,7 @@ void logToFile(char *log_this) {
 // my very own debug output method...
 void LocalOutput(const char *str, ...)
 {
-#ifdef _DEBUG  // avoid in release mode...
+#ifdef _DEBUG  // avoid all in release mode...
   char buf[2048];
   va_list ptr;
   va_start(ptr, str);
@@ -38,6 +38,7 @@ void LocalOutput(const char *str, ...)
   OutputDebugStringA("\n");
   //logToFile(buf); 
   //logToFile("\n");
+  //printf("%s\n", buf);
   va_end(ptr);
 #endif
 }
