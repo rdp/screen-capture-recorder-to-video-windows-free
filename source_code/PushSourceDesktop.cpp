@@ -43,11 +43,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
 	if(m_iHwndToTrack) {
-	  LocalOutput("using specific hwnd: %d", m_iHwndToTrack);
+	  LocalOutput("using specified hwnd: %d", m_iHwndToTrack);
 	  hScrDc = GetDC(m_iHwndToTrack);
 	} else {
 	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0);
-	  if(useForeGroundWindow || 1) {
+	  if(useForeGroundWindow) {
 		LocalOutput("using foreground window %d", GetForegroundWindow());
         hScrDc = GetDC(GetForegroundWindow());
 	  } else {
@@ -563,10 +563,14 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 	GetVersionEx((LPOSVERSIONINFO)&version);
 	if(version.dwMajorVersion >= 6) { // meaning vista +
-	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1)
+	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1) {
+		printf("turning aero off/disabling aero");
 	    turnAeroOn(false);
-	  else
+	  }
+	  else {
+		printf("leaving aero on");
 	    turnAeroOn(true);
+	  }
 	}
 	
 	if(pOldData) {
