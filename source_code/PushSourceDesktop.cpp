@@ -42,7 +42,20 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	globalStart = GetTickCount();
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
-    hScrDc = GetDC(m_iHwndToTrack); // some value, or 0/NULL
+	if(m_iHwndToTrack) {
+	  LocalOutput("using specific hwnd: %d", m_iHwndToTrack);
+	  hScrDc = GetDC(m_iHwndToTrack);
+	} else {
+	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0);
+	  if(useForeGroundWindow || 1) {
+		LocalOutput("using foreground window %d", GetForegroundWindow());
+        hScrDc = GetDC(GetForegroundWindow());
+	  } else {
+        hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
+	    LocalOutput("using the dangerous CreateDC DISPLAY\n");
+	    // danger, this DC is only good as long as this particular thread is still alive...
+	  }
+	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT(hScrDc != 0); // failure...
 	

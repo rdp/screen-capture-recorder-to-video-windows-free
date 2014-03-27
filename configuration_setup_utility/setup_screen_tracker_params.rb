@@ -10,7 +10,8 @@ class SetupScreenTrackerParams
     'stretch_to_width', 'stretch_to_height',  'stretch_mode_high_quality_if_1',
 	'hwnd_to_track', 'disable_aero_for_vista_plus_if_1', 
 	'track_new_x_y_coords_each_frame_if_1',
-    'capture_mouse_default_1',	
+    'capture_mouse_default_1',
+    'capture_foreground_window_if_1',	
 	'dedup_if_1', 'millis_to_sleep_between_poll_for_dedupe_changes',
 	'capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker']
  
