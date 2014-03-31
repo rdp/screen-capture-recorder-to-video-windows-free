@@ -1,6 +1,8 @@
 This program allows one to "record" your desktop, or even stream it!
 
 It includes some helper "record your screen capture/stream it" and setup utilities.
+It also includes a helper (virtual-audio-capturer) to record "what you hear/see on your desktop" for vista+ system.
+
   In order to use those you'll want/need the java JRE installed on your system first.
 
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
