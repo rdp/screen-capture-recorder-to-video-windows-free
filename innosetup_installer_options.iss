@@ -3,6 +3,8 @@
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
 
+; To use this, run it from within virtual ...
+
 [Run]
 Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing MSVC 2010 RunTime...
 Filename: {app}\vendor\vcredist_x64.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing MSVC 2010 64 bit RunTime...; MinVersion: 0,6.0.6000; Check: IsWin64
@@ -16,8 +18,8 @@ Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\audio_sniffer-x64.0
 [UninstallRun]
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u screen-capture-recorder-x64.dll; Check: IsWin64
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.046.dll; MinVersion: 0,6.0.6000
-Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer-x64.046.dll; MinVersion: 0,6.0.6000; Check: IsWin64
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer.dll; MinVersion: 0,6.0.6000
+Filename: regsvr32; WorkingDir: {app}; Parameters: /s /u vendor\audio_sniffer-x64.dll; MinVersion: 0,6.0.6000; Check: IsWin64
 
 [Files]
 Source: source_code\Win32\Release\screen-capture-recorder.dll; DestDir: {app}
@@ -29,6 +31,9 @@ Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_util
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
 Source: vendor\vcredist_*.exe; DestDir: {app}\vendor
 Source: vendor/*.dll; DestDir: {app}\vendor
+; these come from virtual audio capturer...
+Source: ..\source_code\Release\audio_sniffer.dll; DestDir: vendor; DestName: audio_sniffer.dll
+Source: ..\source_code\x64\Release; DestDir: vendor; DestName: audio_sniffer-x64.dll
 
 
 [Setup]
@@ -56,7 +61,6 @@ Name: {group}\use\Record\Record or Stream video or audio by clicking a button; F
 Name: {group}\use\broadcast\setup local audio broadcast streaming server; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
 Name: {group}\use\broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
 Name: {group}\use\broadcast\stream desktop local LAN; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
- 
 
 [Languages]
 Name: fr; MessagesFile: compiler:Languages\French.isl; 
