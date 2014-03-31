@@ -389,8 +389,6 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 
     // clean up
     DeleteDC(hMemDC);
-
-
 }
 
 void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight, int iFinalWidth, int iFinalHeight, HDC hScrDC, int nX, int nY) {
@@ -582,7 +580,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	
     // create a bitmap compatible with the screen DC
 	if(hRawBitmap)
-		DeleteObject (hRawBitmap);
+		DeleteObject (hRawBitmap); // delete the old one in case it exists...
 	hRawBitmap = CreateCompatibleBitmap(hScrDc, getNegotiatedFinalWidth(), getNegotiatedFinalHeight());
 	
 	previousFrameEndTime = 0; // reset
