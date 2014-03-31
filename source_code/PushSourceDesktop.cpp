@@ -51,9 +51,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		LocalOutput("using foreground window %d", GetForegroundWindow());
         hScrDc = GetDC(GetForegroundWindow());
 	  } else {
-        hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
-	    LocalOutput("using the dangerous CreateDC DISPLAY\n");
-	    // danger, this DC is only good as long as this particular thread is still alive...
+        // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
+        // LocalOutput("using the dangerous CreateDC DISPLAY\n");
+	    // danger, CreateDC DC is only good as long as this particular thread is still alive...hmm...is it better for directdraw
+		hScrDc = GetDC(NULL);
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
