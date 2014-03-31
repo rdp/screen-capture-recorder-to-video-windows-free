@@ -6,7 +6,7 @@ frame.elements[:start].disable
 frame.elements[:stop].disable
 @frame = frame
 
-@storage = Storage.new('record_with_buttons_v6') # bump this when stored settings format changes :)
+@storage = Storage.new('record_with_buttons_v7') # bump this when stored settings format changes :)
 def storage
   @storage
 end
@@ -67,8 +67,8 @@ def shorten string, length_desired=7
 end
 
 def get_title
-  device_names = [video_device, audio_device].map{|name, idx| name}.compact
-  if device_names.length == 2
+  device_names = [video_device_name_or_nil, audio_device_names_or_nil]
+  if device_names.length == 2 # too big, truncate
     orig_names = device_names
     device_names = device_names.map{|name| shorten(name)}.join(', ')
   else
@@ -139,7 +139,7 @@ elements[:start].on_clicked {
 
 def start_recording_with_current_settings just_preview = false
 
-   unless storage['video_name'] || storage['audio_name']
+   unless video_device || audio_devices
      SimpleGuiCreator.show_message('must select at least one of video or audio') # just in case...
      return
    end
@@ -164,7 +164,7 @@ def start_recording_with_current_settings just_preview = false
      stop_time = "-t #{storage['stop_time']}"     
    end
    
-   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input storage['audio_name'], storage['video_name'] } #{codecs}"
+   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices, video_device} #{codecs}"
    if just_preview
      # doesn't take audio, lame...
 	 if !storage['video_name']
@@ -230,14 +230,39 @@ elements[:preferences].on_clicked {
   show_options_frame
 }
 
+def audio_devices 
+  devices = storage['audio_names']
+  if(!devices || devices.size == 0)
+    nil
+  else
+    devices
+  end
+end
+
+def video_device 
+  storage['video_name']
+end
+
+def audio_device_names_or_nil
+  if audio_devices
+    audio_devices.map{|device_name, idx| device_name}.join(', ')
+  else
+    nil
+  end
+end
+
+def video_device_name_or_nil
+  storage['video_name'] ? storage['video_name'][0] : nil
+end
+
+
 def bootstrap_devices
-
-	if(!video_device && !audio_device)
-
+	if(!video_device && !audio_devices)
 	  need_help = false
+	  # always do the audio..
 	  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?([VirtualAudioDeviceName, 0])
 		# some reasonable defaults :P
-		storage['audio_name'] = [VirtualAudioDeviceName, 0]
+		storage['audio_names'] = [[VirtualAudioDeviceName, 0]]
 		storage['current_ext_sans_dot'] = 'mp3'
 	  else
 		need_help = true
@@ -252,30 +277,17 @@ def bootstrap_devices
 		  need_help = true
 		end
 	  end
-	  elements[:preferences].simulate_click if need_help
+	  if need_help
+	    elements[:preferences].click!
+	  end
 	else
 	  FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached # why not? my fake attempt at making ffmpeg realtime startup fast LOL
 	end
-
-end
-
-def audio_device 
-  storage['audio_name']
-end
-
-def video_device 
-  storage['video_name']
-end
-
-def audio_device_name_or_nil
-  storage['audio_name'] ? storage['audio_name'][0] : nil
-end
-
-def video_device_name_or_nil
-  storage['video_name'] ? storage['video_name'][0] : nil
+	if ARGV.include?("--show-options")
+	  elements[:preferences].click!
+	end
 end
 
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
-frame.show
 elements[:preferences].click! if ARGV[0] == '--options'

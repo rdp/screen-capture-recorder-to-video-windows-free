@@ -17,7 +17,7 @@ def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
-  [Select audio device:select_new_audio] " #{remove_quotes(audio_device_name_or_nil || 'none selected')} :audio_name" 
+  [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"   [ Set file options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
@@ -69,12 +69,10 @@ def show_options_frame
   
   frame.elements[:select_new_video].on_clicked {
     choose_video
-	reset_options_frame
   }
   
   frame.elements[:select_new_audio].on_clicked {
     choose_audio
-	reset_options_frame
   }
   
   frame.elements[:change_resolution].on_clicked { 
@@ -133,16 +131,51 @@ def choose_video
       end
   end  
   choose_extension
+  reset_options_frame
 end
 
 def choose_audio
-  audio_device = choose_media :audio
-  storage['audio_name'] = audio_device
-  choose_extension
+  #audio_device = choose_media :audio
+  audio_options = FFmpegHelpers.enumerate_directshow_devices[:audio]
+  template = "----Audio Device choice---
+  Select which audio devices to record, if any:"
+  audio_pane = ParseTemplate.new.parse_setup_string template # shows by default
+  audio_options.each_with_index{|(audio_device_name, audio_device_idx), idx|
+    audio_device = [audio_device_name, audio_device_idx]
+    button_name = :"choose_audio_#{idx}"
+    next_line =  "[✓:#{button_name}] \"#{audio_device_name} #{audio_device_idx if audio_device_idx > 1}\""
+	p next_line
+	audio_pane.add_setup_string_at_bottom next_line
+	checkbox =  audio_pane.elements[button_name]
+	checkbox.after_checked {
+	  storage['audio_names'] << audio_device # add it
+	  storage.save!
+	  puts "now #{audio_device_names_or_nil}"
+	}
+	checkbox.after_unchecked {
+	  storage['audio_names'].delete audio_device
+	  storage.save!
+	  puts "now #{audio_device_names_or_nil}"
+	}	
+	if(audio_devices.include? [audio_device_name, audio_device_idx])
+	  checkbox.check!
+	else
+	  checkbox.uncheck!
+	end	  
+  }
+  audio_pane.add_setup_string_at_bottom "[Done selecting audio:done_selecting]" 
+  audio_pane.elements[:done_selecting].on_clicked {
+    audio_pane.close
+  }
+  audio_pane.after_closed {
+    choose_extension
+    reset_options_frame
+  }
+
 end
 
 def choose_extension
-  if audio_device && !video_device
+  if audio_devices && !video_device
     # TODO 'wav' here once it works with solely wav :)
     storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else
