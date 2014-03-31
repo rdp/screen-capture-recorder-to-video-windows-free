@@ -1,6 +1,7 @@
-XXX
-  new parameter capture_foreground_window_if_1
-
+0.11.1
+  new parameter capture_foreground_window_if_1 (captures the HWND of GetForeGroundWindow at startup time)
+  some minro merging with audio
+  
 0.11.0
   some ui friendlinesses
   possibly an async fix for this and/or the audio portion

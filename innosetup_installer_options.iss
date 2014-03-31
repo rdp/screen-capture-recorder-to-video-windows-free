@@ -1,4 +1,4 @@
-#define AppVer "0.11.0"
+#define AppVer "0.11.1"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -48,7 +48,7 @@ OutputDir=releases
 
 ; remove previous versions' icons [lame innosetup, lame]
 [InstallDelete]
-Type: filesandordirs; Name: {group};
+Type: filesandordirs; Name: {group}\*;
 
 [Icons]
 Name: {group}\configure\Release Notes; Filename: {app}\ChangeLog.txt
@@ -58,11 +58,11 @@ Name: {group}\configure\benchmark your machines screen capture speed; Filename: 
 Name: {group}\configure\configure by resizing a transparent window; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: window_resize.rb; Flags: runminimized
 Name: {group}\configure\Display current capture settings; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: setup_via_numbers.rb --just-display-current-settings
 Name: {group}\configure\Uninstall {#AppName}; Filename: {uninstallexe}
-Name: {group}\use\Record\Record or Stream video or audio by clicking a button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
-Name: {group}\use\Record\Record audio by clicking a button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb --just-audio-default; Flags: runminimized
-Name: {group}\use\broadcast\setup local audio broadcast streaming server; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
-Name: {group}\use\broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
-Name: {group}\use\broadcast\stream desktop local LAN; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
+Name: {group}\Record\Record or Stream video and audio; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
+Name: {group}\Record\Record audio by clicking a button; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb --just-audio-default; Flags: runminimized
+Name: {group}\record\broadcast\setup local audio broadcast streaming server; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
+Name: {group}\record\broadcast\restart local audio streaming server with same setup as was run previous; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
+Name: {group}\record\broadcast\stream desktop local LAN; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
 
 [Languages]
 Name: fr; MessagesFile: compiler:Languages\French.isl; 
