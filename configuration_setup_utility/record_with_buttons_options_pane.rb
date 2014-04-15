@@ -17,7 +17,11 @@ ResolutionOptions = {'native input (unscaled)' => nil, 'vga' => '640x480', 'svga
 'PAL' => '768x576', 'hd720' => '1280x720', 'hd1080' => '1980x1080'}	
 
 def resolution_english_string resolution
-  ResolutionOptions.key(resolution) + " (" + resolution + ")"  # works for nil too :)   
+  if resolution
+    ResolutionOptions.key(resolution) + " (" + resolution + ")"
+  else
+    ResolutionOptions.key(resolution) # nothing to add on the end ...
+  end
 end
 
 def current_resolution_english_string
@@ -90,8 +94,6 @@ def show_options_frame
   frame.elements[:change_resolution].on_clicked {
     # want to have our own names here, as requested...  
 	english_names = ResolutionOptions.map{|k, v| resolution_english_string(v)}
-	require 'ruby-debug'
-	debugger
     idx = DropDownSelector.new(nil, english_names, "Select new resolution").go_selected_index
 	resolution = ResolutionOptions.to_a[idx][1] # get the value...hmm...
 	storage['resolution'] =  resolution
