@@ -112,6 +112,9 @@ by giving it a higher max default.  I didn't think people would normally care/wa
 Skype users: NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
 http://betterlogic.com/roger/2012/04/skype-directshow-device-just-shows-circles-for-the-preview-capture/
 
+Q. I can't capture full screen [like starcraft type windows].
+Known limitation, try this thread: https://groups.google.com/forum/#!topic/roger-projects/uxmGV_vW4iY [or pay me a bit of money and I'll create a front end to the excellent OBS project to provide this functionality]
+
 == Feedback/Question ==
 
 Other feedback/problems/questions ping me roger-projects@googlegroups.com or browse the mailing list: http://groups.google.com/group/roger-projects
