@@ -24,10 +24,6 @@ def resolution_english_string resolution
   end
 end
 
-def current_resolution_english_string
-  resolution_english_string storage['resolution']
-end
-
 def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
@@ -36,7 +32,8 @@ def show_options_frame
   [✓:record_to_file] "Save to file"   [ Set file options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  "Current record resolution: #{current_resolution_english_string} :fake" [Change :change_resolution]
+  "Current record resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
+  "Current record video fps: #{storage['fps'] || 'native fps'} :fake2" [Change :change_fps]
   [Preview current settings:preview] "a rough preview of how the recording will look"
   [ Close Options Window :close]
   EOL
@@ -98,6 +95,17 @@ def show_options_frame
 	resolution = ResolutionOptions.to_a[idx][1] # get the value...hmm...
 	storage['resolution'] =  resolution
 	puts 'set it to', resolution
+	reset_options_frame
+  }
+  
+  frame.elements[:change_fps].on_clicked {
+    options = ['default'] + (5..30).step(5).to_a  
+    fps = DropDownSelector.new(nil, options, "Select new resolution").go_selected_value
+    if fps == 'default'
+	  storage['fps'] = nil
+	else
+	  storage['fps'] = fps
+	end
 	reset_options_frame
   }
   
