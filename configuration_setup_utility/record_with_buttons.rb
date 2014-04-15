@@ -147,15 +147,15 @@ def start_recording_with_current_settings just_preview = false
    if storage['resolution'].present?
      resolution = "-s #{storage['resolution']}"
    end
-
+   
    if storage['video_name']
      pixel_type = "yuv420p"
-    # pixel_type = "yuv444p"
-	 
+     # pixel_type = "yuv444p" ?
+	 # just assume mp3 LOL
      codecs = "-vcodec libx264 -pix_fmt #{pixel_type} #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
-     prefix_to_acodec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
-     audio_type = prefix_to_acodec[storage['current_ext_sans_dot']]
+     prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
+     audio_type = prefix_to_audio_codec[storage['current_ext_sans_dot']]
 	 raise 'unknown prefix?' unless audio_type
      codecs = audio_type
    end
@@ -164,14 +164,15 @@ def start_recording_with_current_settings just_preview = false
      stop_time = "-t #{storage['stop_time']}"     
    end
    
-   ffmpeg_commands = "#{FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices, video_device} #{codecs}"
+   ffmpeg_input = FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices, video_device, storage['fps']
+   ffmpeg_commands = "#{ffmpeg_input} #{codecs}"
    if just_preview
      # doesn't take audio, lame...
 	 if !storage['video_name']
 	    SimpleGuiCreator.show_message('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
         return
 	 end
-	 # lessen volume in case of feedback...
+	 # lessen volume in case of feedback during preview...
 	 # analyzeduration 0 to make it pop up quicker...
      c = "ffmpeg #{ffmpeg_commands} -af volume=0.75 -f flv - | ffplay -analyzeduration 0 -f flv -" # couldn't get multiple dshow, -f flv to work... lodo try ffplay with lavfi...maybe?
 	 puts c
