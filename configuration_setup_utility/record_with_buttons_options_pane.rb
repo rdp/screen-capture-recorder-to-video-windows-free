@@ -41,7 +41,7 @@ def show_options_frame
   [Preview current settings:preview] "a rough preview of how the recording will look"
   [ Close Options Window :close]
   EOL
-  print template
+  # print template
   # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
   
   @options_frame = ParseTemplate.new.parse_setup_string template
@@ -104,7 +104,7 @@ def show_options_frame
   
   frame.elements[:change_fps].on_clicked {
     options = [default_fps_string] + (5..30).step(5).to_a  
-    fps = DropDownSelector.new(nil, options, "Select new resolution").go_selected_value
+    fps = DropDownSelector.new(nil, options, "Select new video fps").go_selected_value
     if fps == default_fps_string
 	  storage['fps'] = nil
 	else
@@ -167,18 +167,25 @@ def choose_video
 end
 
 def choose_audio
-  #audio_device = choose_media :audio
-  audio_options = FFmpegHelpers.enumerate_directshow_devices[:audio]
+  all_audio_devices = FFmpegHelpers.enumerate_directshow_devices[:audio]
   template = "----Audio Device choice---
   Select which audio devices to record, if any:"
   audio_pane = ParseTemplate.new.parse_setup_string template # shows by default
-  audio_options.each_with_index{|(audio_device_name, audio_device_idx), idx|
+  # sanity check that some haven't disappeared
+  audio_devices.each{|currently_checked|
+    if !all_audio_devices.contain?(currently_checked)
+	  SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound audio device #{currently_checked[0]}"
+	  storage['audio_names'].delete(currently_checked)
+	  storage.save!
+	end
+  }
+  all_audio_devices.each_with_index{|(audio_device_name, audio_device_idx), idx|
     audio_device = [audio_device_name, audio_device_idx]
     button_name = :"choose_audio_#{idx}"
     next_line =  "[✓:#{button_name}] \"#{audio_device_name} #{audio_device_idx if audio_device_idx > 1}\""
 	p next_line
 	audio_pane.add_setup_string_at_bottom next_line
-	checkbox =  audio_pane.elements[button_name]
+	checkbox = audio_pane.elements[button_name]
 	checkbox.after_checked {
 	  storage['audio_names'] << audio_device # add it
 	  storage.save!
