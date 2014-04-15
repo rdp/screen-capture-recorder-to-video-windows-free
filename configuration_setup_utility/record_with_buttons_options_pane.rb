@@ -13,6 +13,17 @@ def remove_quotes string
   string.gsub('"', '')
 end
 
+ResolutionOptions = {'native input (unscaled)' => nil, 'vga' => '640x480', 'svga' => '800x600', 'xga' => '1024x768',
+'PAL' => '768x576', 'hd720' => '1280x720', 'hd1080' => '1980x1080'}	
+
+def resolution_english_string resolution
+  ResolutionOptions.key(resolution) + " (" + resolution + ")"  # works for nil too :)   
+end
+
+def current_resolution_english_string
+  resolution_english_string storage['resolution']
+end
+
 def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
@@ -21,7 +32,7 @@ def show_options_frame
   [✓:record_to_file] "Save to file"   [ Set file options :options_button]
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  "Current record resolution: #{storage['resolution'] || 'native (input resolution)'} :fake" [Change :change_resolution]
+  "Current record resolution: #{current_resolution_english_string} :fake" [Change :change_resolution]
   [Preview current settings:preview] "a rough preview of how the recording will look"
   [ Close Options Window :close]
   EOL
@@ -75,9 +86,16 @@ def show_options_frame
     choose_audio
   }
   
-  frame.elements[:change_resolution].on_clicked { 
-    storage['resolution'] = DropDownSelector.new(nil, ['native', 'vga', 'svga', 'hd480', 'hd720', 'hd1080'], "Select resolution").go_selected_value
-    storage['resolution'] = nil if storage['resolution']  == 'native' # :)
+  raise unless RUBY_VERSION > '1.9.0' # need ordered hashes here... :)
+  frame.elements[:change_resolution].on_clicked {
+    # want to have our own names here, as requested...  
+	english_names = ResolutionOptions.map{|k, v| resolution_english_string(v)}
+	require 'ruby-debug'
+	debugger
+    idx = DropDownSelector.new(nil, english_names, "Select new resolution").go_selected_index
+	resolution = ResolutionOptions.to_a[idx][1] # get the value...hmm...
+	storage['resolution'] =  resolution
+	puts 'set it to', resolution
 	reset_options_frame
   }
   
