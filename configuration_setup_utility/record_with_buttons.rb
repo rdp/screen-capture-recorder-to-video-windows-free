@@ -67,21 +67,27 @@ def shorten string, length_desired=7
 end
 
 def get_title
-  device_names = [video_device_name_or_nil, audio_device_names_or_nil]
-  if device_names.length == 2 # too big, truncate
+  device_names = [video_device_name_or_nil, audio_device_names_or_nil].compact
+  if device_names.length == 2 # both together is too big, truncate
     orig_names = device_names
     device_names = device_names.map{|name| shorten(name)}.join(', ')
   else
-    # leave as is...
+    # leave as full single device name...
 	device_names = device_names[0]
   end
   title = 'Will record to: '
   destinos = []
   next_file_basename = File.basename(@next_filename)
-  destinos << File.basename(File.dirname(@next_filename)) + '/' + next_file_basename if should_save_file?
-  destinos << storage[:url_stream].split(':')[0] if should_stream?
+  if should_save_file?
+    destinos << File.basename(File.dirname(@next_filename)) + '/' + next_file_basename
+  end
+  if should_stream?
+    destinos << shorten(storage[:url_stream], 10)
+  end
   title += destinos.join(', ')
   title += " from #{device_names}"
+  puts title
+  title
 end
 
 def setup_ui
@@ -183,17 +189,23 @@ def start_recording_with_current_settings just_preview = false
    end
    
    # panic here causes us to not see useful x264 error messages...
-   c = "ffmpeg -loglevel info #{stop_time} #{ffmpeg_commands} -f mpegts - | ffmpeg -f mpegts -i -"
+   c = "ffmpeg -loglevel info #{stop_time} #{ffmpeg_commands} "
    
-   if should_save_file?	 
-	 c += " -c copy \"#{@next_filename}\""
-     puts "writing to #{@next_filename}"
+   if should_save_file? && should_stream?
+	  SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
+	  return
+   end
+
+   if should_save_file?
+	 c += " -f mp4 -c copy \"#{@next_filename}\""
+     puts "writing to file: #{@next_filename}"
    end
    
    if should_stream?
-     c += " -c copy -f mpegts #{storage[:url_stream]}"
+     c += " -f mpegts #{storage[:url_stream]}"
 	 puts "streaming..."
    end
+   
    puts "about to run #{c}"
    @current_process = IO.popen(c, "w") # jruby friendly :P
    Thread.new { 

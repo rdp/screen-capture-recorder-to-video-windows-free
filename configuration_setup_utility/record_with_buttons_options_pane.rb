@@ -6,6 +6,9 @@ def reset_options_frame
     @options_frame.close
 	show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
     # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
+	if should_save_file? && should_stream?
+	  SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
+	end
     setup_ui # reset the main frame too, why not, though we don't have to...
   else
     puts "what, called close twice?" # I've seen this before <sigh>
@@ -84,7 +87,7 @@ def show_options_frame
   end
   frame.elements[:stream_to_url_checkbox].on_clicked { |new_value|
     if @options_frame # XXX rdp what the..>?
-      storage['should_stream'] = new_value
+      storage['should_stream'] = new_value	  
       reset_options_frame
 	else
 	  puts "bad!"
