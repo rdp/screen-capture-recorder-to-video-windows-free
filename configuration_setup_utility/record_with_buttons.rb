@@ -66,7 +66,7 @@ def shorten string, length_desired=7
   end
 end
 
-def get_title
+def get_title_suffix
   device_names = [video_device_name_or_nil, audio_device_names_or_nil].compact
   if device_names.length == 2 # both together is too big, truncate
     orig_names = device_names
@@ -75,7 +75,7 @@ def get_title
     # leave as full single device name...
 	device_names = device_names[0]
   end
-  title = 'Will record to: '
+  title = ''
   destinos = []
   next_file_basename = File.basename(@next_filename)
   if should_save_file?
@@ -96,7 +96,7 @@ def setup_ui
   ext = storage['current_ext_sans_dot']
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   
-  @frame.title = get_title
+  @frame.title = 'Will record to: ' + get_title_suffix
   
   if(@current_process)
     elements[:stop].enable 
@@ -158,7 +158,10 @@ def start_recording_with_current_settings just_preview = false
      pixel_type = "yuv420p" # more compatible...?
      # pixel_type = "yuv444p" # didn't help that one guy...but might be good nonetheless
 	 # just assume mp3 LOL
-     codecs = "-vcodec libx264 -pix_fmt #{pixel_type} #{rescale_to_size} -tune zerolatency -preset ultrafast -vsync vfr -acodec libmp3lame" 
+	 if storage[:tune_latency]
+	   faster_streaming_start = "-g 30 -qp 10 -tune zerolatency" # also has fixed quality...wonder what that means...
+	 end
+     codecs = "-vcodec libx264 #{faster_streaming_start} -pix_fmt #{pixel_type} #{rescale_to_size} -preset ultrafast -vsync vfr -acodec libmp3lame" 
 	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
@@ -171,7 +174,9 @@ def start_recording_with_current_settings just_preview = false
      stop_time = "-t #{storage['stop_time']}"     
    end
    
+   
    ffmpeg_input = FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices, video_device, storage['fps']
+   p "using #{storage['fps']} got ffmpeg_input #{ffmpeg_input}"
    ffmpeg_commands = "#{ffmpeg_input} #{codecs}"
    if just_preview
      # doesn't take audio, lame...
@@ -214,7 +219,7 @@ def start_recording_with_current_settings just_preview = false
 	 elements[:stop].click!
    }
    setup_ui
-   @frame.title = "Recording " + get_title
+   @frame.title = "Recording to " + get_title_suffix
 end
 
 elements[:stop].on_clicked {
