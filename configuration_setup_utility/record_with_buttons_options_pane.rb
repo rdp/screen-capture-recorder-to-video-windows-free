@@ -202,14 +202,6 @@ def choose_audio
   template = "----Audio Device choice---
   Select which audio devices to record, if any:"
   audio_pane = ParseTemplate.new.parse_setup_string template # shows by default
-  # sanity check that some haven't disappeared
-  audio_devices.each{|currently_checked|
-    if !all_audio_devices.contain?(currently_checked)
-	  SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound audio device #{currently_checked[0]}"
-	  storage['audio_names'].delete(currently_checked)
-	  storage.save!
-	end
-  }
   all_audio_devices.each_with_index{|(audio_device_name, audio_device_idx), idx|
     audio_device = [audio_device_name, audio_device_idx]
     button_name = :"choose_audio_#{idx}"
@@ -227,7 +219,7 @@ def choose_audio
 	  storage.save!
 	  puts "now #{audio_device_names_or_nil}"
 	}	
-	if(audio_devices.include? [audio_device_name, audio_device_idx])
+	if((audio_devices_or_nil || []).include? [audio_device_name, audio_device_idx])
 	  checkbox.check!
 	else
 	  checkbox.uncheck!
@@ -245,7 +237,7 @@ def choose_audio
 end
 
 def choose_extension
-  if audio_devices && !video_device
+  if audio_devices_or_nil && !video_device
     # TODO 'wav' here once it works with solely wav :)
     storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else

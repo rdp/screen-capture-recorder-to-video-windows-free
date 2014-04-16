@@ -1,4 +1,4 @@
-#define AppVer "0.12.0"
+#define AppVer "0.12.1beta"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW

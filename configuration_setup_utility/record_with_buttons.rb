@@ -86,7 +86,6 @@ def get_title_suffix
   end
   title += destinos.join(', ')
   title += " from #{device_names}"
-  puts title
   title
 end
 
@@ -145,7 +144,7 @@ elements[:start].on_clicked {
 
 def start_recording_with_current_settings just_preview = false
 
-   unless video_device || audio_devices
+   unless video_device || audio_devices_or_nil
      SimpleGuiCreator.show_message('must select at least one of video or audio') # just in case...
      return
    end
@@ -175,7 +174,7 @@ def start_recording_with_current_settings just_preview = false
    end
    
    
-   ffmpeg_input = FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices, video_device, storage['fps']
+   ffmpeg_input = FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices_or_nil, video_device, storage['fps']
    p "using #{storage['fps']} got ffmpeg_input #{ffmpeg_input}"
    ffmpeg_commands = "#{ffmpeg_input} #{codecs}"
    if just_preview
@@ -249,7 +248,7 @@ elements[:preferences].on_clicked {
   show_options_frame
 }
 
-def audio_devices 
+def audio_devices_or_nil
   devices = storage['audio_names']
   if(!devices || devices.size == 0)
     nil
@@ -263,8 +262,8 @@ def video_device
 end
 
 def audio_device_names_or_nil
-  if audio_devices
-    audio_devices.map{|device_name, idx| device_name}.join(', ')
+  if audio_devices_or_nil
+    audio_devices_or_nil.map{|device_name, idx| device_name}.join(', ')
   else
     nil
   end
@@ -276,7 +275,7 @@ end
 
 
 def bootstrap_devices
-	if(!video_device && !audio_devices)
+	if(!video_device && !audio_devices_or_nil)
 	  need_help = false
 	  # always do the audio..
 	  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?([VirtualAudioDeviceName, 0])
@@ -302,9 +301,23 @@ def bootstrap_devices
 	else
 	  FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached # why not? my fake attempt at making ffmpeg realtime startup fast LOL
 	end
-	if ARGV.include?("--show-options")
-	  elements[:preferences].click!
-	end
+	# sanity check that some audio haven't disappeared/unplugged
+    all_audio_devices = FFmpegHelpers.enumerate_directshow_devices[:audio]
+    (audio_devices_or_nil || []).each{|currently_checked|
+      if !all_audio_devices.contain?(currently_checked)
+	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound audio device #{currently_checked[0]}"
+	    storage['audio_names'].delete(currently_checked)
+	    storage.save!
+	  end
+    }
+	# and video...
+	if storage['video_name']
+	  all_video_devices = FFmpegHelpers.enumerate_directshow_devices[:video]
+	  if !all_video_devices.contain? storage['video_name']
+	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound video device #{storage['video_name']}"
+	    storage['video_name'] = nil
+	  end
+	end	
 end
 
 if ARGV.contain?('-h') || ARGV.contain?('--help')
