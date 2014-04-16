@@ -171,11 +171,9 @@ def start_recording_with_current_settings just_preview = false
    
    if storage['stop_time'].present?
      stop_time = "-t #{storage['stop_time']}"     
-   end
-   
+   end  
    
    ffmpeg_input = FFmpegHelpers.combine_devices_for_ffmpeg_input audio_devices_or_nil, video_device, storage['fps']
-   p "using #{storage['fps']} got ffmpeg_input #{ffmpeg_input}"
    ffmpeg_commands = "#{ffmpeg_input} #{codecs}"
    if just_preview
      # doesn't take audio, lame...

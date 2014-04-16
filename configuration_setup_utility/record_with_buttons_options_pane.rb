@@ -101,14 +101,17 @@ def show_options_frame
   else
     frame.elements[:url_stream_text].text = shorten(storage[:url_stream], 20)	
   end
-  
+  if storage[:tune_latency]
+    frame.elements[:tune_latency].check!
+  else
+    frame.elements[:tune_latency].uncheck!
+  end
   frame.elements[:tune_latency].on_clicked { |new_value|
     if @options_frame # XXX rdp what the..>?
 	  storage[:tune_latency] = new_value	  
 	else
 	  puts "bad3"
-	end
-    
+	end   
   }
   
   frame.elements[:set_stream_url].on_clicked {
