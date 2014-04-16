@@ -36,8 +36,8 @@ def show_options_frame
   ------------ Recording Options -------------
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file"   [ Set file options :options_button]
-  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!:url_stream_text" [ Set streaming url : set_stream_url ]
+  [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set file options :file_options_button]
+  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current record resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
   "Current record video fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
@@ -53,6 +53,7 @@ def show_options_frame
     frame.elements[:record_to_file].set_checked!
   else
     frame.elements[:record_to_file].set_unchecked!
+	frame.elements[:save_to_dir_text].disable! # grey it out
   end
   frame.elements[:record_to_file].on_clicked { |new_value|
     if @options_frame
@@ -62,11 +63,24 @@ def show_options_frame
 	  puts "bad!"
 	end
   }
+  frame.elements[:save_to_dir_text].text = shorten(storage['save_to_dir'], 20) # assume there's always one...	
+  frame.elements[:file_options_button].on_clicked {  
+    storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
+
+    if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
+      storage['reveal_files_after_each_recording'] = true
+    else
+      storage['reveal_files_after_each_recording'] = false
+    end
+	reset_options_frame
+  }
+  
   
   if storage['should_stream']
     frame.elements[:stream_to_url_checkbox].check!
   else
     frame.elements[:stream_to_url_checkbox].uncheck!
+	frame.elements[:url_stream_text].disable! # grey it out
   end
   frame.elements[:stream_to_url_checkbox].on_clicked { |new_value|
     if @options_frame # XXX rdp what the..>?
@@ -78,14 +92,15 @@ def show_options_frame
   }
   
   if !storage[:url_stream].present?
-    frame.elements[:stream_to_url_checkbox].set_unchecked!
-    frame.elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...
+    frame.elements[:stream_to_url_checkbox].uncheck!
+    frame.elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...	
   else
-    frame.elements[:url_stream_text].text = shorten(storage[:url_stream], 20)
+    frame.elements[:url_stream_text].text = shorten(storage[:url_stream], 20)	
   end
   
+  
   frame.elements[:set_stream_url].on_clicked {
-    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000", storage[:url_stream], true
+    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000", storage[:url_stream], false
     storage[:url_stream] = stream_url
 	# TODO audio for receipt latency?
 	puts "receive it like mplayer demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000"
@@ -137,17 +152,6 @@ def show_options_frame
 	reset_options_frame
   }
 
-  frame.elements[:options_button].on_clicked {  
-    storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
-
-    if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
-      storage['reveal_files_after_each_recording'] = true
-    else
-      storage['reveal_files_after_each_recording'] = false
-    end
-	reset_options_frame
-  }
-  
 end
 
 def choose_media type
