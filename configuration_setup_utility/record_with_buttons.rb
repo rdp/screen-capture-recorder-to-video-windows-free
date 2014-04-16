@@ -145,14 +145,15 @@ def start_recording_with_current_settings just_preview = false
    end
    
    if storage['resolution'].present?
-     resolution = "-s #{storage['resolution']}"
+     rescale_to_size = "-s #{storage['resolution']}" # ffmpeg rescale, not input scale selector [XXX]
    end
    
    if storage['video_name']
-     pixel_type = "yuv420p"
-     # pixel_type = "yuv444p" ?
+     pixel_type = "yuv420p" # more compatible...?
+     # pixel_type = "yuv444p" # didn't help that one guy...but might be good nonetheless
 	 # just assume mp3 LOL
-     codecs = "-vcodec libx264 -pix_fmt #{pixel_type} #{resolution} -preset ultrafast -vsync vfr -acodec libmp3lame" # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+     codecs = "-vcodec libx264 -pix_fmt #{pixel_type} #{rescale_to_size} -tune zerolatency -preset ultrafast -vsync vfr -acodec libmp3lame" 
+	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
      audio_type = prefix_to_audio_codec[storage['current_ext_sans_dot']]
@@ -190,7 +191,7 @@ def start_recording_with_current_settings just_preview = false
    end
    
    if should_stream?
-     c += " -c copy -f flv #{storage[:url_stream]}"
+     c += " -c copy -f mpegts #{storage[:url_stream]}"
 	 puts "streaming..."
    end
    puts "about to run #{c}"

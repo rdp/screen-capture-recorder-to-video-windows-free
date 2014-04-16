@@ -2,11 +2,16 @@
 require 'common_recording.rb'
 
 def reset_options_frame
-  @options_frame.close
-  # don't show options frame still, it just feels so annoying...
-  # elements[:preferences].click!
-  SimpleGuiCreator.show_message "Options saved! You're ready to go..."
-  setup_ui # reset the main frame too :)
+  if @options_frame # TODO check this on my desktop what the...
+    @options_frame.close
+	@options_frame = nil
+    # don't show options frame still, it just feels so annoying...
+    # elements[:preferences].click!
+    SimpleGuiCreator.show_message "Options saved! You're ready to go..."
+    setup_ui # reset the main frame too :)
+  else
+    puts "what, called close twice?"
+  end
 end
 
 def remove_quotes string
@@ -52,18 +57,22 @@ def show_options_frame
     frame.elements[:record_to_file].set_unchecked!
   end
   frame.elements[:record_to_file].on_clicked { |new_value|
-    storage['should_record_to_file'] = new_value
-	reset_options_frame
+    if @options_frame
+      storage['should_record_to_file'] = new_value
+	  reset_options_frame
+	end
   }
   
   if storage['should_stream']
-    frame.elements[:stream_to_url_checkbox].set_checked!
+    frame.elements[:stream_to_url_checkbox].check!
   else
-    frame.elements[:stream_to_url_checkbox].set_unchecked!
+    frame.elements[:stream_to_url_checkbox].uncheck!
   end
-  frame.elements[:stream_to_url_checkbox].on_clicked {|new_value|
-    storage['should_stream'] = new_value
-    reset_options_frame
+  frame.elements[:stream_to_url_checkbox].on_clicked { |new_value|
+    if @options_frame # XXX rdp what the..>?
+      storage['should_stream'] = new_value
+      reset_options_frame
+	end
   }
   
   if !storage[:url_stream].present?
@@ -74,8 +83,10 @@ def show_options_frame
   end
   
   frame.elements[:set_stream_url].on_clicked {
-    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like rtmp://live....", storage[:url_stream], true
+    stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000", storage[:url_stream], true
     storage[:url_stream] = stream_url
+	# TODO audio for receipt latency?
+	puts "receive it like mplayer demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000"
 	reset_options_frame
   }
   
@@ -103,7 +114,7 @@ def show_options_frame
   }
   
   frame.elements[:change_fps].on_clicked {
-    options = [default_fps_string] + (5..30).step(5).to_a  
+    options = [default_fps_string] + (5..30).step(5).to_a   # TODO didn't I have code somewhere that enumerated this on the fly? That would be better...
     fps = DropDownSelector.new(nil, options, "Select new video fps").go_selected_value
     if fps == default_fps_string
 	  storage['fps'] = nil
