@@ -4,13 +4,11 @@ require 'common_recording.rb'
 def reset_options_frame
   if @options_frame # TODO check this on my desktop what the...
     @options_frame.close
-	@options_frame = nil
-    # don't show options frame still, it just feels so annoying...
-    # elements[:preferences].click!
-    SimpleGuiCreator.show_message "Options saved! You're ready to go..."
-    setup_ui # reset the main frame too :)
+	show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
+    # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
+    setup_ui # reset the main frame too, why not, though we don't have to...
   else
-    puts "what, called close twice?"
+    puts "what, called close twice?" # I've seen this before <sigh>
   end
 end
 
@@ -60,6 +58,8 @@ def show_options_frame
     if @options_frame
       storage['should_record_to_file'] = new_value
 	  reset_options_frame
+	else
+	  puts "bad!"
 	end
   }
   
@@ -72,6 +72,8 @@ def show_options_frame
     if @options_frame # XXX rdp what the..>?
       storage['should_stream'] = new_value
       reset_options_frame
+	else
+	  puts "bad!"
 	end
   }
   
@@ -124,7 +126,10 @@ def show_options_frame
 	reset_options_frame
   }
   
-  frame.elements[:close].on_clicked { frame.close }
+  frame.elements[:close].on_clicked { 
+    frame.close
+    setup_ui # reset parent	
+  }
 
   frame.elements[:stop_time_button].on_clicked {  
     stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage['stop_time'], true

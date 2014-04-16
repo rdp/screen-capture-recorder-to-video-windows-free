@@ -290,6 +290,10 @@ def bootstrap_devices
 	end
 end
 
+if ARGV.contain?('-h') || ARGV.contain?('--help')
+  puts "--options"
+  exit 1
+end
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
 elements[:preferences].click! if ARGV[0] == '--options'
