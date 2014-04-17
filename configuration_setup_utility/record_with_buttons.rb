@@ -6,6 +6,11 @@ frame.elements[:start].disable
 frame.elements[:stop].disable
 @frame = frame
 
+inno_setup_for_version = File.read('../innosetup_installer_options.iss')
+inno_setup_for_version =~ /AppVer "(.*)"/
+VERSION = $1
+puts "starting version #{VERSION}"
+
 @storage = Storage.new('record_with_buttons_v7') # bump this when stored settings format changes :)
 def storage
   @storage
@@ -85,7 +90,7 @@ def get_title_suffix
     destinos << shorten(storage[:url_stream], 10)
   end
   title += destinos.join(', ')
-  title += " from #{device_names}"
+  title += " from #{device_names} (v.#{VERSION})" # may as well allow them to expand the window and see the version too :)
   title
 end
 
