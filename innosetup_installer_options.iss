@@ -35,7 +35,7 @@ Source: vendor/*.dll; DestDir: {app}\vendor
 ; these come from virtual audio capturer...
 Source: ..\source_code\Release\audio_sniffer.dll; DestDir: vendor\virtual-audio;
 Source: ..\source_code\x64\Release\audio_sniffer-x64.dll; DestDir: vendor\virtual-audio;
-
+Source: innosetup_installer_options.iss; DestDir; {app}
 
 [Setup]
 AppName={#AppName}
