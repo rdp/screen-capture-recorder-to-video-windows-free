@@ -44,8 +44,8 @@ def show_options_frame
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
   [✓:tune_latency] "Tune for low latency"
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
-  "Current record resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
-  "Current record video fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
+  "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
+  "Current video input fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
   [Preview current settings:preview] "a rough preview of how the recording will look"
   EOL
   # print template

@@ -1,4 +1,4 @@
-mplayer_options = "-demuxer +mpegts -framedrop -benchmark"
+mplayer_options = "-demuxer +mpegts -framedrop -benchmark" # -autosync ?
 
 template=
 %!-------------Stream Desktop--------------
