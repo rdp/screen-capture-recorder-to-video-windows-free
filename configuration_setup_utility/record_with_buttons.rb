@@ -170,7 +170,7 @@ def start_recording_with_current_settings just_preview = false
    else
      prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
      audio_type = prefix_to_audio_codec[storage['current_ext_sans_dot']]
-	 raise 'unknown prefix?' unless audio_type
+	 raise 'unknown prefix?' + storage['current_ext_sans_dot'] unless audio_type
      codecs = audio_type
    end
    
@@ -204,7 +204,7 @@ def start_recording_with_current_settings just_preview = false
    end
 
    if should_save_file?
-	 c += " -f mp4 -c copy \"#{@next_filename}\""
+	 c += " -f mp4 \"#{@next_filename}\""
      puts "writing to file: #{@next_filename}"
    end
    
@@ -320,8 +320,20 @@ def bootstrap_devices
 	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound video device #{storage['video_name'][0]}"
 	    storage['video_name'] = nil
 	  end
-	end	
+  	  choose_extension # in case we are audio only now <sigh>
+	end
 end
+
+
+def choose_extension
+  if audio_devices_or_nil && !video_device
+    # TODO 'wav' here once it works with solely wav :)
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
+  else
+    storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
+  end
+end
+
 
 if ARGV.contain?('-h') || ARGV.contain?('--help')
   puts "--options"

@@ -236,14 +236,4 @@ def choose_audio
     choose_extension
     reset_options_frame
   }
-
-end
-
-def choose_extension
-  if audio_devices_or_nil && !video_device
-    # TODO 'wav' here once it works with solely wav :)
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
-  else
-    storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
-  end
 end
