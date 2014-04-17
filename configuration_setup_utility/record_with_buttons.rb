@@ -317,7 +317,7 @@ def bootstrap_devices
 	if storage['video_name']
 	  all_video_devices = FFmpegHelpers.enumerate_directshow_devices[:video]
 	  if !all_video_devices.contain? storage['video_name']
-	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound video device #{storage['video_name']}"
+	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound video device #{storage['video_name'][0]}"
 	    storage['video_name'] = nil
 	  end
 	end	
