@@ -1,18 +1,14 @@
 # coding: UTF-8
 require 'common_recording.rb'
 
-def reset_options_frame
-  if @options_frame # TODO check this on my desktop what the...
-    @options_frame.close
-	show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
-    # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
-	if should_save_file? && should_stream?
-	  SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
-	end
-    setup_ui # reset the main frame too, why not, though we don't have to...
-  else
-    puts "what, called close twice?" # I've seen this before <sigh>
+def reset_options_frame  
+  @options_frame.close
+  show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
+  # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
+  if should_save_file? && should_stream?
+    SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
   end
+  setup_ui # reset the main frame too, why not, though we don't have to...
 end
 
 def remove_quotes string
@@ -60,12 +56,8 @@ def show_options_frame
 	frame.elements[:save_to_dir_text].disable! # grey it out
   end
   frame.elements[:record_to_file].on_clicked { |new_value|
-    if @options_frame
-      storage['should_record_to_file'] = new_value
-	  reset_options_frame
-	else
-	  puts "bad!"
-	end
+    storage['should_record_to_file'] = new_value
+	reset_options_frame
   }
   frame.elements[:save_to_dir_text].text = shorten(storage['save_to_dir'], 20) # assume there's always one...	
   frame.elements[:file_options_button].on_clicked {  
@@ -87,12 +79,8 @@ def show_options_frame
 	frame.elements[:url_stream_text].disable! # grey it out
   end
   frame.elements[:stream_to_url_checkbox].on_clicked { |new_value|
-    if @options_frame # XXX rdp what the..>?
-      storage['should_stream'] = new_value	  
-      reset_options_frame
-	else
-	  puts "bad2!"
-	end
+    storage['should_stream'] = new_value	  
+    reset_options_frame
   }
   
   if !storage[:url_stream].present?
@@ -107,11 +95,8 @@ def show_options_frame
     frame.elements[:tune_latency].uncheck!
   end
   frame.elements[:tune_latency].on_clicked { |new_value|
-    if @options_frame # XXX rdp what the..>?
-	  storage[:tune_latency] = new_value	  
-	else
-	  puts "bad3"
-	end   
+    storage[:tune_latency] = new_value	  
+	reset_options_frame # LODO never have a new one show up :)
   }
   
   frame.elements[:set_stream_url].on_clicked {
