@@ -1,3 +1,7 @@
+0.12.1
+  now setup to stream to udp style hosts
+  fix checkboxes to work now
+  
 0.12.0
   now supports multiple audio simultaneous inputs woot
 
