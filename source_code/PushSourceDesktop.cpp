@@ -5,12 +5,7 @@
 #include "DibHelper.h"
 #include <wmsdkidl.h>
 
-/**********************************************
- *
- *  CPushPinDesktop Class
- *  
- *
- **********************************************/
+
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger! can evaluate "a" twice.
 
 DWORD globalStart; // for some debug performance benchmarking
@@ -58,7 +53,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
-	ASSERT(hScrDc != 0); // failure...
+	ASSERT_RAISE(hScrDc != 0); // failure...
 	
     // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
@@ -70,9 +65,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     reReadCurrentPosition(0);
 
 	int config_width = read_config_setting(TEXT("capture_width"), 0);
-	ASSERT(config_width >= 0); // negatives not allowed...
+	ASSERT_RAISE(config_width >= 0); // negatives not allowed...
 	int config_height = read_config_setting(TEXT("capture_height"), 0);
-	ASSERT(config_height >= 0); // negatives not allowed, if it's set :)
+	ASSERT_RAISE(config_height >= 0); // negatives not allowed, if it's set :)
 
 	if(config_width > 0) {
 		int desired = m_rScreen.left + config_width;
@@ -86,7 +81,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 
 	m_iCaptureConfigWidth = m_rScreen.right - m_rScreen.left;
-	ASSERT(m_iCaptureConfigWidth  > 0);
+	ASSERT_RAISE(m_iCaptureConfigWidth > 0);
 
 	if(config_height > 0) {
 		int desired = m_rScreen.top + config_height;
@@ -99,19 +94,19 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		// leave full screen
 	}
 	m_iCaptureConfigHeight = m_rScreen.bottom - m_rScreen.top;
-	ASSERT(m_iCaptureConfigHeight > 0);
+	ASSERT_RAISE(m_iCaptureConfigHeight > 0);
 
 	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0);
 	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0);
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
-	ASSERT(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
+	ASSERT_RAISE(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
 
 	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker"), 0) == 1;
 	m_bCaptureMouse = read_config_setting(TEXT("capture_mouse_default_1"), 1) == 1;
 
 	// default 30 fps...hmm...
 	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
-	ASSERT(config_max_fps >= 0);	
+	ASSERT_RAISE(config_max_fps > 0);	
 
 	// m_rtFrameLength is also re-negotiated later...
   	m_rtFrameLength = UNITS / config_max_fps; 
@@ -169,7 +164,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     pSample->GetPointer(&pData);
 
     // Make sure that we're still using video format
-    ASSERT(m_mt.formattype == FORMAT_VideoInfo);
+    ASSERT_RAISE(m_mt.formattype == FORMAT_VideoInfo);
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*) m_mt.pbFormat;
 
@@ -320,7 +315,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	int         iFinalStretchHeight = getNegotiatedFinalHeight();
 	int         iFinalStretchWidth  = getNegotiatedFinalWidth();
 	
-    ASSERT(!IsRectEmpty(&m_rScreen)); // that would be unexpected
+    ASSERT_RAISE(!IsRectEmpty(&m_rScreen)); // that would be unexpected
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 	
@@ -331,8 +326,8 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
     nY  = m_rScreen.top;
 
 	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
-	ASSERT(m_rScreen.bottom - m_rScreen.top == iFinalStretchHeight);
-	ASSERT(m_rScreen.right - m_rScreen.left == iFinalStretchWidth);
+	ASSERT_RAISE(m_rScreen.bottom - m_rScreen.top == iFinalStretchHeight);
+	ASSERT_RAISE(m_rScreen.right - m_rScreen.left == iFinalStretchWidth);
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
@@ -398,7 +393,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 	boolean notNeedStretching = (iFinalWidth == nWidth) && (iFinalHeight == nHeight);
 
 	if(m_iHwndToTrack != NULL)
-		ASSERT(notNeedStretching); // we don't support HWND plus scaling...hmm... LODO move assertion LODO implement this (low prio since they probably are just needing that window, not with scaling too [?])
+		ASSERT_RAISE(notNeedStretching); // we don't support HWND plus scaling...hmm... LODO move assertion LODO implement this (low prio since they probably are just needing that window, not with scaling too [?])
 
     int captureType = SRCCOPY;
 	if(m_bUseCaptureBlt)
@@ -447,14 +442,14 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
     int iImageWidth  = m_rScreen.right - m_rScreen.left;
-	ASSERT(iImageWidth > 0);
+	ASSERT_RAISE(iImageWidth > 0);
 	return iImageWidth;
 }
 
 int CPushPinDesktop::getNegotiatedFinalHeight() {
 	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them an even smaller setting...
     int iImageHeight = (int) m_rScreen.bottom - m_rScreen.top;
-	ASSERT(iImageHeight > 0);
+	ASSERT_RAISE(iImageHeight > 0);
 	return iImageHeight;
 }
 
@@ -503,8 +498,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 	BITMAPINFOHEADER header = pvi->bmiHeader;
-	ASSERT(header.biPlanes == 1); // sanity check
-	// ASSERT(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?]
+	ASSERT_RAISE(header.biPlanes == 1); // sanity check
+	// ASSERT_RAISE(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?]
 	// now try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
 	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
@@ -525,8 +520,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
       ++bytesPerLine;
     }
 
-	ASSERT(header.biHeight > 0); // sanity check
-	ASSERT(header.biWidth > 0); // sanity check
+	ASSERT_RAISE(header.biHeight > 0); // sanity check
+	ASSERT_RAISE(header.biWidth > 0); // sanity check
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	int bitmapSize = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;

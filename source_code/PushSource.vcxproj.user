@@ -9,7 +9,7 @@
     <LocalDebuggerCommandArguments>-f dshow -i video=screen-capture-recorder</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommand>ffplay</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\installs\ffmpeg-20121005-git-d9dfe9a-win32-static\bin\ffplay</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments> -f dshow -i video=screen-capture-recorder</LocalDebuggerCommandArguments>

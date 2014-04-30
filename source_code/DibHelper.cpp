@@ -67,7 +67,7 @@ void WarmupCounter()
 {
     LARGE_INTEGER li;
 	BOOL ret = QueryPerformanceFrequency(&li);
-	assert(ret != 0); // only gets run in debug mode LODO
+	ASSERT_RAISE(ret != 0); // only gets run in debug mode LODO
     PCFreqMillis = (long double(li.QuadPart))/1000.0;
 }
 
@@ -82,7 +82,7 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // see above for s
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
-	assert(PCFreqMillis != 0.0); // make sure it's been initialized...
+	ASSERT_RAISE(PCFreqMillis != 0.0); // make sure it's been initialized...this never happens
     return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
 } // LODO do I really need long double here? no really.
 

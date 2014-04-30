@@ -65,3 +65,18 @@ void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere);
 HRESULT turnAeroOn(boolean onOrOff);
 int rgb32_to_i420(int width, int height, const char * src, char * dst);
 int GetTrueScreenDepth(HDC hDC);
+
+#include <stdexcept> // std::invalid_argument
+
+#define ASSERT_RAISE(cond) \
+    do \
+    { \
+        if (!(cond)) \
+        { \
+            const size_t len = 1256;\
+            wchar_t buffer[len] = {};\
+	        _snwprintf_s(buffer, len - 1, L"assert failed, please fix (or report): %s %s %d", TEXT(#cond), TEXT(__FILE__), __LINE__);\
+            MessageBox(NULL, buffer, L"Error", MB_OK);                     \
+			throw std::invalid_argument( "received negative value" );\
+        } \
+    } while(0);

@@ -116,7 +116,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
         {
 		    case 12:     // i420
 			    m_bConvertToI420 = true;
-				ASSERT(!m_bDeDupe); // not compatible with this yet
+				ASSERT_RAISE(!m_bDeDupe); // not compatible with this yet
                 hr = S_OK;
 			    break;
             case 8:     // 8-bit palettized
@@ -130,7 +130,6 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
             default:
                 // We should never agree any other media types
-                ASSERT(FALSE);
                 hr = E_INVALIDARG;
                 break;
         }
