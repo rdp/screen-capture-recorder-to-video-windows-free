@@ -6,7 +6,7 @@ def reset_options_frame
   show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
   # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
   if should_save_file? && should_stream?
-    SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
+    SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added\n[for now, please uncheck one of the file or stream checkboxes]!"	  
   end
   setup_ui # reset the main frame too, why not, though we don't have to...
 end
@@ -36,90 +36,95 @@ def show_options_frame
   [Close Options Window :close]
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
-  [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set file options :file_options_button]
+  [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set directory :set_directory]
+   "             " [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
   [✓:tune_latency] "Tune for low latency"
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
   "Current video input fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
   [Preview current settings:preview] "a rough preview of how the recording will look"
+  [Close Options Window :close2]
   EOL
   # print template
   # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
   
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
+  elements = frame.elements
+  
   if storage['should_record_to_file']
-    frame.elements[:record_to_file].set_checked!
+    elements[:record_to_file].set_checked!
   else
-    frame.elements[:record_to_file].set_unchecked!
-	frame.elements[:save_to_dir_text].disable! # grey it out
+    elements[:record_to_file].set_unchecked!
+	elements[:save_to_dir_text].disable! # grey it out
+	elements[:auto_display_files_text].disable! # same
   end
-  frame.elements[:record_to_file].on_clicked { |new_value|
+  elements[:record_to_file].on_clicked { |new_value|
     storage['should_record_to_file'] = new_value
 	reset_options_frame
   }
-  frame.elements[:save_to_dir_text].text = shorten(storage['save_to_dir'], 20) # assume there's always one...	
-  frame.elements[:file_options_button].on_clicked {  
-    storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
-
-    if SimpleGuiCreator.show_select_buttons_prompt("Would you like to automatically display files in windows explorer after recording them?") == :yes
-      storage['reveal_files_after_each_recording'] = true
-    else
-      storage['reveal_files_after_each_recording'] = false
-    end
+  # doesn't work? storage['reveal_files_after_each_recording'].present?
+  elements[:auto_display_files].set_checked!( storage['reveal_files_after_each_recording'] )
+  elements[:auto_display_files].on_clicked { |new_value|
+    storage['reveal_files_after_each_recording'] = new_value
 	reset_options_frame
   }
   
+  elements[:save_to_dir_text].text = shorten(storage['save_to_dir'], 20) # assume there's always one...	
+  elements[:set_directory].on_clicked {  
+    storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
+	reset_options_frame
+  }  
   
   if storage['should_stream']
-    frame.elements[:stream_to_url_checkbox].check!
+    elements[:stream_to_url_checkbox].check!
   else
-    frame.elements[:stream_to_url_checkbox].uncheck!
-	frame.elements[:url_stream_text].disable! # grey it out
+    elements[:stream_to_url_checkbox].uncheck!
+	elements[:url_stream_text].disable! # grey it out
   end
-  frame.elements[:stream_to_url_checkbox].on_clicked { |new_value|
+  elements[:stream_to_url_checkbox].on_clicked { |new_value|
     storage['should_stream'] = new_value	  
     reset_options_frame
   }
   
   if !storage[:url_stream].present?
-    frame.elements[:stream_to_url_checkbox].uncheck!
-    frame.elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...	
+    elements[:stream_to_url_checkbox].uncheck!
+    elements[:stream_to_url_checkbox].disable! # can't check it if there's nothing to use...	
   else
-    frame.elements[:url_stream_text].text = shorten(storage[:url_stream], 20)	
+    elements[:url_stream_text].text = shorten(storage[:url_stream], 20)	
   end
   if storage[:tune_latency]
-    frame.elements[:tune_latency].check!
+    elements[:tune_latency].check!
   else
-    frame.elements[:tune_latency].uncheck!
+    elements[:tune_latency].uncheck!
   end
-  frame.elements[:tune_latency].on_clicked { |new_value|
+  elements[:tune_latency].on_clicked { |new_value|
     storage[:tune_latency] = new_value	  
 	reset_options_frame # LODO never have a new one show up :)
   }
   
-  frame.elements[:set_stream_url].on_clicked {
+  elements[:set_stream_url].on_clicked {
     stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000 (ping me if you want rtmp added)\nreceive it like \nmplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000\nwith patched mplayer", storage[:url_stream], false
     storage[:url_stream] = stream_url
 	# TODO audio for receipt latency?
 	reset_options_frame
   }
   
-  frame.elements[:preview].on_clicked {
+  elements[:preview].on_clicked {
     start_recording_with_current_settings true
   }
   
-  frame.elements[:select_new_video].on_clicked {
+  elements[:select_new_video].on_clicked {
     choose_video
   }
   
-  frame.elements[:select_new_audio].on_clicked {
+  elements[:select_new_audio].on_clicked {
     choose_audio
   }
   
   raise unless RUBY_VERSION > '1.9.0' # need ordered hashes here... :)
-  frame.elements[:change_resolution].on_clicked {
+  elements[:change_resolution].on_clicked {
     # want to have our own names here, as requested...  
 	english_names = ResolutionOptions.map{|k, v| resolution_english_string(v)}
     idx = DropDownSelector.new(nil, english_names, "Select new resolution").go_selected_index
@@ -129,7 +134,7 @@ def show_options_frame
 	reset_options_frame
   }
   
-  frame.elements[:change_fps].on_clicked {
+  elements[:change_fps].on_clicked {
     options = [default_fps_string] + (5..30).step(5).to_a   # TODO didn't I have code somewhere that enumerated this on the fly? That would be better...
     fps = DropDownSelector.new(nil, options, "Select new video fps").go_selected_value
     if fps == default_fps_string
@@ -140,12 +145,14 @@ def show_options_frame
 	reset_options_frame
   }
   
-  frame.elements[:close].on_clicked { 
+  close_proc = proc { 
     frame.close
     setup_ui # reset parent	
   }
+  elements[:close].on_clicked &close_proc
+  elements[:close2].on_clicked &close_proc
 
-  frame.elements[:stop_time_button].on_clicked {  
+  elements[:stop_time_button].on_clicked {  
     stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage['stop_time'], true
     storage['stop_time'] = stop_time
 	reset_options_frame
