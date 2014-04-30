@@ -38,6 +38,7 @@ def show_options_frame
   EOL
   
   if video_device_name_or_nil == ScreenCapturerDeviceName
+    template += %!"Screen Capture Recorder specific options:"\n!
     template += %!"            " [Configure screen recorder bounds box:configure_screen_capturer_window]\n!
     template += %!"            " "Advanced:" [Configure screen recorder by numbers:configure_screen_capturer_numbers]\n!
 	template += %!"            " [✓:show_resize_window_each_time_button] "Display select window before every recording."\n!
@@ -47,7 +48,7 @@ def show_options_frame
   template += <<-EOL  
   [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set directory :set_directory]
-   "             " [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
+  [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
   [✓:tune_latency] "Tune for low latency"
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]

@@ -101,7 +101,7 @@ def setup_ui
   @next_filename = "#{current_storage_dir}/#{next_number}.#{ext}"
   
   @frame.title = 'Will record to: ' + get_title_suffix
-  
+  p 'setting up'
   if(@current_process)
     elements[:stop].enable 
     elements[:start].disable
