@@ -1,8 +1,7 @@
 require 'setup_screen_tracker_params.rb'
 require 'add_vendored_gems_to_load_path.rb' # for swinghelpers' sane
 
-# no delete functionality in this one...
-def do_command_line
+def do_setup_via_numbers
   setter = SetupScreenTrackerParams.new
   for type in SetupScreenTrackerParams::Settings
     previous_setting = setter.read_single_setting type
@@ -56,7 +55,7 @@ if $0 == __FILE__
     puts "syntax: [--just-display-current-settings] or #{SetupScreenTrackerParams::Settings.join(' ')} or nothing to be prompted for the various settings/values"
     exit 0
   end
-  do_command_line
+  do_setup_via_numbers
   if ARGV.index('--just-display-current-settings')
     p 'hit enter to continue' # pause :P
     STDIN.getc

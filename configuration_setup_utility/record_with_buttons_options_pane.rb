@@ -4,9 +4,9 @@ require 'common_recording.rb'
 def reset_options_frame  
   @options_frame.close
   show_options_frame # show a new one--it's just barely too jarring otherwise, even with a single checkbox, it just disappears, and we have useful information in that options window now...
-  # SimpleGuiCreator.show_message "Options saved! You're ready to go..."
+  # show_message "Options saved! You're ready to go..."
   if should_save_file? && should_stream?
-    SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added\n[for now, please uncheck one of the file or stream checkboxes]!"	  
+    show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added\n[for now, please uncheck one of the file or stream checkboxes]!"	  
   end
   setup_ui # reset the main frame too, why not, though we don't have to...
 end
@@ -35,6 +35,14 @@ def show_options_frame
   ------------ Recording Options -------------
   [Close Options Window :close]
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
+  EOL
+  
+  if video_device_name_or_nil == ScreenCapturerDeviceName
+    template += %!"            " [Configure screen recorder bounds box:configure_screen_capturer_window]\n!
+    template += %!"            " [Configure screen recorder by numbers:configure_screen_capturer_numbers]\n!
+  end
+  
+  template += <<-EOL  
   [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set directory :set_directory]
    "             " [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
@@ -52,6 +60,17 @@ def show_options_frame
   @options_frame = ParseTemplate.new.parse_setup_string template
   frame = @options_frame
   elements = frame.elements
+  
+  if video_device_name_or_nil == ScreenCapturerDeviceName
+    elements[:configure_screen_capturer_numbers].on_clicked {
+      require './setup_via_numbers'
+	  do_setup_via_numbers
+    }
+	elements[:configure_screen_capturer_window].on_clicked {
+	  window = WindowResize.go false, false
+      window.after_closed { show_message('ok, future recordings will be from there, to reset it to full screen, run setup via numbers and clear the values for height and width') }
+	}
+  end
   
   if storage['should_record_to_file']
     elements[:record_to_file].set_checked!
@@ -181,9 +200,8 @@ def choose_video
   storage['video_name'] = video_device
   
   if video_device_name_or_nil == ScreenCapturerDeviceName
-    SimpleGuiCreator.show_blocking_message_dialog "you can setup parameters [like frames per second, size] for the screen capture recorder\n in its separate setup configuration utility"
       if SimpleGuiCreator.show_select_buttons_prompt("screen capture recorder: Would you like to display a resizable setup window before each recording?") == :yes
-        storage['show_transparent_window_first'] = true
+         = true
       else
         storage['show_transparent_window_first'] = false
       end

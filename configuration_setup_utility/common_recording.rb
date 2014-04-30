@@ -8,5 +8,9 @@ require 'jruby-swing-helpers/lib/simple_gui_creator'
 require 'ffmpeg_helpers'
 include SimpleGuiCreator # ::DropDownSelector, etc.
 
+def show_message m
+  SimpleGuiCreator.show_message m
+end
+
 VirtualAudioDeviceName = 'virtual-audio-capturer'
 ScreenCapturerDeviceName = 'screen-capture-recorder' 

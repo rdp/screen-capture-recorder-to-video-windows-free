@@ -39,7 +39,7 @@ elements[:reveal_save_to_dir].on_clicked {
   if last_filename
     SimpleGuiCreator.show_in_explorer last_filename
   else
-    SimpleGuiCreator.show_message "none have been recorded yet, so revealing the directory they will be recorded to"
+    show_message "none have been recorded yet, so revealing the directory they will be recorded to"
     SimpleGuiCreator.show_in_explorer current_storage_dir	
   end
 }
@@ -125,12 +125,13 @@ def process_input_mutex
   @process_input_mutex
 end
 
+require 'window_resize'
+
 elements[:start].on_clicked {
  if @current_process
    raise 'unexpected double start?'
  else
    if video_device && storage['show_transparent_window_first'] # don't display window if not recording video
-     require 'window_resize'
      elements[:start].disable
      window = WindowResize.go false, false, 'CLICK HERE WHEN READY TO START RECORDING'
      window.after_closed { start_recording_with_current_settings }
@@ -142,7 +143,7 @@ elements[:start].on_clicked {
 
 @frame.after_closed {
  if @current_process
-   SimpleGuiCreator.show_message "an ffmpeg instance was left running, will close it for you..."
+   show_message "an ffmpeg instance was left running, will close it for you..."
    elements[:stop].click! # just in case :P
  end
 }
@@ -150,7 +151,7 @@ elements[:start].on_clicked {
 def start_recording_with_current_settings just_preview = false
 
    unless video_device || audio_devices_or_nil
-     SimpleGuiCreator.show_message('must select at least one of video or audio') # just in case...
+     show_message('must select at least one of video or audio') # just in case...
      return
    end
    
@@ -183,7 +184,7 @@ def start_recording_with_current_settings just_preview = false
    if just_preview
      # doesn't take audio, lame...
 	 if !storage['video_name']
-	    SimpleGuiCreator.show_message('you only have audio, this button only previews video for now, ping me to have it improved...') # just in case...
+	    show_message 'you only have audio, this button only previews video for now, ping me to have it improved...' # just in case...
         return
 	 end
 	 # lessen volume in case of feedback during preview...
@@ -199,7 +200,7 @@ def start_recording_with_current_settings just_preview = false
    c = "ffmpeg -loglevel info #{stop_time} #{ffmpeg_commands} "
    
    if should_save_file? && should_stream?
-	  SimpleGuiCreator.show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
+	  show_message "warning, yours is set to both save to file *and* stream which isn't supported yet, ping me to have it added!"	  
 	  return
    end
 
@@ -336,9 +337,9 @@ end
 
 
 if ARGV.contain?('-h') || ARGV.contain?('--help')
-  puts "--options"
+  puts "[--options | -o] display options window to start"
   exit 1
 end
 bootstrap_devices
 setup_ui # init the disabled status of the buttons :)
-elements[:preferences].click! if ARGV[0] == '--options'
+elements[:preferences].click! if ARGV.contain?('--options') || ARGV.contain?('-o')
