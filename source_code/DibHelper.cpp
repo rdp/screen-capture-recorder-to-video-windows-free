@@ -158,11 +158,11 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 
 
 boolean is_config_set_to_1(LPCTSTR szValueName) {
-  return read_config_setting(szValueName, 0) == 1;
+  return read_config_setting(szValueName, 0, true) == 1;
 }
 
 // returns default if nothing is in the registry
- int read_config_setting(LPCTSTR szValueName, int default) {
+ int read_config_setting(LPCTSTR szValueName, int default, boolean zeroAllowed) {
   HKEY hKey;
   LONG i;
   i = RegOpenKeyEx(HKEY_CURRENT_USER,
@@ -180,10 +180,21 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
       // key doesn't exist in the reg at all...
 	  return default;
 	} else {
+	  if (!zeroAllowed && dwVal == 0) {
+            const size_t len = 1256;
+            wchar_t buffer[len] = {};
+	        _snwprintf_s(buffer, len - 1, L"read a zero value from registry, please delete this particular value, instead of setting it to zero: %s", szValueName);
+            writeMessageBox(buffer);
+		    ASSERT_RAISE(false); // non awesome duplication here...
+	  }
       return dwVal;
 	}
   }
  
+}
+
+void writeMessageBox(LPCWSTR lpText) {
+	 MessageBox(NULL, lpText, L"Error", MB_OK);
 }
 
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {

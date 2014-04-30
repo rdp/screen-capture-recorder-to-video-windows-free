@@ -36,12 +36,12 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	// Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
 
-	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL);
+	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);
 	if(m_iHwndToTrack) {
 	  LocalOutput("using specified hwnd: %d", m_iHwndToTrack);
 	  hScrDc = GetDC(m_iHwndToTrack);
 	} else {
-	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0);
+	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0, true);
 	  if(useForeGroundWindow) {
 		LocalOutput("using foreground window %d", GetForegroundWindow());
         hScrDc = GetDC(GetForegroundWindow());
@@ -64,9 +64,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	WarmupCounter();
     reReadCurrentPosition(0);
 
-	int config_width = read_config_setting(TEXT("capture_width"), 0);
+	int config_width = read_config_setting(TEXT("capture_width"), 0, false);
 	ASSERT_RAISE(config_width >= 0); // negatives not allowed...
-	int config_height = read_config_setting(TEXT("capture_height"), 0);
+	int config_height = read_config_setting(TEXT("capture_height"), 0, false);
 	ASSERT_RAISE(config_height >= 0); // negatives not allowed, if it's set :)
 
 	if(config_width > 0) {
@@ -96,16 +96,16 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iCaptureConfigHeight = m_rScreen.bottom - m_rScreen.top;
 	ASSERT_RAISE(m_iCaptureConfigHeight > 0);
 
-	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0);
-	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0);
-	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0);
+	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0, false);
+	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0, false);
+	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0, true); // guess it's either stretch mode 0 or 1
 	ASSERT_RAISE(m_iStretchToThisConfigWidth >= 0 && m_iStretchToThisConfigHeight >= 0 && m_iStretchMode >= 0); // sanity checks
 
-	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker"), 0) == 1;
-	m_bCaptureMouse = read_config_setting(TEXT("capture_mouse_default_1"), 1) == 1;
+	m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker"), 0, true) == 1;
+	m_bCaptureMouse = read_config_setting(TEXT("capture_mouse_default_1"), 1, true) == 1;
 
 	// default 30 fps...hmm...
-	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30); // TODO allow floats [?] when ever requested
+	int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30, false); // TODO allow floats [?] when ever requested
 	ASSERT_RAISE(config_max_fps > 0);	
 
 	// m_rtFrameLength is also re-negotiated later...
@@ -117,7 +117,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
 		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
 	}
-	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10);
+	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10, true);
 
     wchar_t out[1000];
 	swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dx%d (%dtop %db %dl %dr) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
@@ -267,11 +267,11 @@ void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
 	int old_x = m_rScreen.left;
 	int old_y = m_rScreen.top;
 
-	int config_start_x = read_config_setting(TEXT("start_x"), m_rScreen.left);
+	int config_start_x = read_config_setting(TEXT("start_x"), m_rScreen.left, true);
     m_rScreen.left = config_start_x;
 
 	// is there a better way to do this registry stuff?
-	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top);
+	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top, true);
 	m_rScreen.top = config_start_y;
 	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
 	  if(isReRead) {
@@ -557,7 +557,7 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
     version.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 	GetVersionEx((LPOSVERSIONINFO)&version);
 	if(version.dwMajorVersion >= 6) { // meaning vista +
-	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0) == 1) {
+	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0, true) == 1) {
 		printf("turning aero off/disabling aero");
 	    turnAeroOn(false);
 	  }

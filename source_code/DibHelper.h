@@ -50,7 +50,7 @@ int PalEntriesOnDevice (HDC hDC);
 WORD PaletteSize (LPSTR lpDIB);
 WORD SaveDIB (HDIB, LPSTR);
 
-int read_config_setting(LPCTSTR szValueName, int default);
+int read_config_setting(LPCTSTR szValueName, int default, boolean zeroAllowed);
 boolean is_config_set_to_1(LPCTSTR szValueName);
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis );
 
@@ -68,6 +68,8 @@ int GetTrueScreenDepth(HDC hDC);
 
 #include <stdexcept> // std::invalid_argument
 
+void writeMessageBox(LPCWSTR lpText);
+
 #define ASSERT_RAISE(cond) \
     do \
     { \
@@ -76,7 +78,7 @@ int GetTrueScreenDepth(HDC hDC);
             const size_t len = 1256;\
             wchar_t buffer[len] = {};\
 	        _snwprintf_s(buffer, len - 1, L"assert failed, please fix (or report): %s %s %d", TEXT(#cond), TEXT(__FILE__), __LINE__);\
-            MessageBox(NULL, buffer, L"Error", MB_OK);                     \
+            writeMessageBox(buffer);\
 			throw std::invalid_argument( "received negative value" );\
         } \
     } while(0);

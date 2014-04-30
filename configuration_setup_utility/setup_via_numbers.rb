@@ -16,7 +16,7 @@ def do_setup_via_numbers
       require 'java' # jruby only for getting user input...
       require 'jruby-swing-helpers/lib/simple_gui_creator'
       previous_setting ||= ''
-      received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (leave blank to reset to defaults)', previous_setting, true)
+      received = SimpleGuiCreator.get_user_input('enter desired value for:' + type + ' (leave blank to reset to defaults)', previous_setting, true)
     end
 	p "got #{received}"
 	if !received
