@@ -9,16 +9,21 @@ def do_setup_via_numbers
       puts "#{type}=#{previous_setting}"
       next
     else
-      p "previously had been set to \/", previous_setting
+      p "previously had been set to [#{previous_setting}]"
     end
-    received = given_from_command_line = ARGV.shift
+    received = ARGV.shift # if they want the CLI version :)
     unless received
       require 'java' # jruby only for getting user input...
       require 'jruby-swing-helpers/lib/simple_gui_creator'
       previous_setting ||= ''
       received = SimpleGuiCreator.get_user_input('enter desired ' + type + ' (blank resets it to the default [full screen, 30 fps, primary monitor]', previous_setting, true)
     end
-    if received == nil # allow "empty" input to mean "reset this"
+	p "got #{received}"
+	if !received
+	  p "skipping"
+	  next
+	end
+    if received == "" # allow "empty" input to mean "reset this"
       setter.delete_single_setting type
       p 'deleted ' + type.to_s
       next

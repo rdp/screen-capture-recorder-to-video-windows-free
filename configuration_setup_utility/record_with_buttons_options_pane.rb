@@ -39,7 +39,9 @@ def show_options_frame
   
   if video_device_name_or_nil == ScreenCapturerDeviceName
     template += %!"            " [Configure screen recorder bounds box:configure_screen_capturer_window]\n!
-    template += %!"            " [Configure screen recorder by numbers:configure_screen_capturer_numbers]\n!
+    template += %!"            " "Advanced:" [Configure screen recorder by numbers:configure_screen_capturer_numbers]\n!
+	template += %!"            " [✓:show_resize_window_each_time_button] "Display select window before every recording."\n!
+	
   end
   
   template += <<-EOL  
@@ -69,6 +71,10 @@ def show_options_frame
 	elements[:configure_screen_capturer_window].on_clicked {
 	  window = WindowResize.go false, false
       window.after_closed { show_message('ok, future recordings will be from there, to reset it to full screen, run setup via numbers and clear the values for height and width') }
+	}
+    elements[:show_resize_window_each_time_button].set_checked!( storage['show_transparent_window_first'] )
+	elements[:show_resize_window_each_time_button].on_clicked { |new_value|
+	  storage['show_transparent_window_first'] = new_value 
 	}
   end
   
@@ -199,13 +205,6 @@ def choose_video
   video_device = choose_media :video  
   storage['video_name'] = video_device
   
-  if video_device_name_or_nil == ScreenCapturerDeviceName
-      if SimpleGuiCreator.show_select_buttons_prompt("screen capture recorder: Would you like to display a resizable setup window before each recording?") == :yes
-         = true
-      else
-        storage['show_transparent_window_first'] = false
-      end
-  end  
   choose_extension
   reset_options_frame
 end

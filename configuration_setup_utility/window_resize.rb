@@ -41,7 +41,7 @@ class WindowResize
   
     width = setter_getter.read_single_setting('capture_width') || 300
     height = setter_getter.read_single_setting('capture_height') || 200
-    min_val = 15
+    min_val = 50 # otherwise they can't resize the window easily enough to start it!
     if(width < min_val) 
       SimpleGuiCreator.show_blocking_message_dialog 'previous width too small, using default size '+ min_val.to_s
       width = min_val
