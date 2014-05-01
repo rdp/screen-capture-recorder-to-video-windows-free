@@ -1,3 +1,6 @@
+0.12.3
+  slightly update the "config poorly, display a messagebox"
+
 0.12.2
   if config poorly, display a messagebox
   UI more preferences for screen capturer
