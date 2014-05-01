@@ -115,9 +115,14 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
         switch(pvi->bmiHeader.biBitCount)
         {
 		    case 12:     // i420
-			    m_bConvertToI420 = true;
-				ASSERT_RAISE(!m_bDeDupe); // not compatible with this yet
+				if(m_bDeDupe) {
+				     //ASSERT_RAISE(!m_bDeDupe); // not compatible with this yet // can't assert here or skype tries this, and, if m_bDeDupe is on, it raises, and kills skype :(
+					//return E_INVALIDARG;
+					m_bDeDupe = false; // just do this working around for now <sigh> so that skype will still work instead of silently fail while others work...
+					LocalOutput("warning: ignoring m_bDeDupe since it doesn't work with i420 type input, which was requested..."); 
+				}
                 hr = S_OK;
+			    m_bConvertToI420 = true;
 			    break;
             case 8:     // 8-bit palettized
             case 16:    // RGB565, RGB555

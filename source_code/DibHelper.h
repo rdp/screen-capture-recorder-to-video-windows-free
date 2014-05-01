@@ -82,3 +82,15 @@ void writeMessageBox(LPCWSTR lpText);
 			throw std::invalid_argument( "received negative value" );\
         } \
     } while(0);
+
+#define ASSERT_RETURN(cond) \
+    do \
+    { \
+        if (!(cond)) \
+        { \
+            const size_t len = 1256;\
+            wchar_t buffer[len] = {};\
+	        writeMessageBox(buffer);\
+			return E_INVALIDARG;\
+        } \
+    } while(0);

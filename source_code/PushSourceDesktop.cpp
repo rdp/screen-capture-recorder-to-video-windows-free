@@ -164,7 +164,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     pSample->GetPointer(&pData);
 
     // Make sure that we're still using video format
-    ASSERT_RAISE(m_mt.formattype == FORMAT_VideoInfo);
+    ASSERT_RETURN(m_mt.formattype == FORMAT_VideoInfo);
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*) m_mt.pbFormat;
 
@@ -498,8 +498,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 	BITMAPINFOHEADER header = pvi->bmiHeader;
-	ASSERT_RAISE(header.biPlanes == 1); // sanity check
-	// ASSERT_RAISE(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?]
+	ASSERT_RETURN(header.biPlanes == 1); // sanity check
+	// ASSERT_RAISE(header.biCompression == 0); // meaning "none" sanity check, unless we are allowing for BI_BITFIELDS [?] so leave commented out for now
 	// now try to avoid this crash [XP, VLC 1.1.11]: vlc -vvv dshow:// :dshow-vdev="screen-capture-recorder" :dshow-adev --sout  "#transcode{venc=theora,vcodec=theo,vb=512,scale=0.7,acodec=vorb,ab=128,channels=2,samplerate=44100,audio-sync}:standard{access=file,mux=ogg,dst=test.ogv}" with 10x10 or 1000x1000
 	// LODO check if biClrUsed is passed in right for 16 bit [I'd guess it is...]
 	// pProperties->cbBuffer = pvi->bmiHeader.biSizeImage; // too small. Apparently *way* too small.
@@ -520,8 +520,8 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
       ++bytesPerLine;
     }
 
-	ASSERT_RAISE(header.biHeight > 0); // sanity check
-	ASSERT_RAISE(header.biWidth > 0); // sanity check
+	ASSERT_RETURN(header.biHeight > 0); // sanity check
+	ASSERT_RETURN(header.biWidth > 0); // sanity check
 	// NB that we are adding in space for a final "pixel array" (http://en.wikipedia.org/wiki/BMP_file_format#DIB_Header_.28Bitmap_Information_Header.29) even though we typically don't need it, this seems to fix the segfaults
 	// maybe somehow down the line some VLC thing thinks it might be there...weirder than weird.. LODO debug it LOL.
 	int bitmapSize = 14 + header.biSize + (long)(bytesPerLine)*(header.biHeight) + bytesPerLine*header.biHeight;
