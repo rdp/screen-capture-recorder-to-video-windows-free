@@ -9,6 +9,8 @@ It also includes a free, general purpose, open source directshow desktop/screen 
 
 You can use this with any (directshow compatible) program to capture or stream, like VLC, etc.
 
+See also the ChangeLog.txt file for a list of changes in latest versions.
+
 == Installation ==
 
 Download installer and run, from 

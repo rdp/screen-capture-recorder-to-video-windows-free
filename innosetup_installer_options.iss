@@ -1,4 +1,4 @@
-#define AppVer "0.12.3"
+#define AppVer "0.12.4"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -31,11 +31,10 @@ Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
 Source: vendor\vcredist_*.exe; DestDir: {app}\vendor
-Source: vendor/*.dll; DestDir: {app}\vendor
-; these come from virtual audio capturer...
-Source: ..\source_code\Release\audio_sniffer.dll; DestDir: vendor\virtual-audio;
-Source: ..\source_code\x64\Release\audio_sniffer-x64.dll; DestDir: vendor\virtual-audio;
-Source: innosetup_installer_options.iss; DestDir: {app}
+
+; include latest dll's from virtual audio capturer...
+Source: ..\source_code\Release\audio_sniffer.dll; DestDir: {app}\vendor\virtual-audio;
+Source: ..\source_code\x64\Release\audio_sniffer-x64.dll; DestDir: {app}\vendor\virtual-audio;
 
 [Setup]
 AppName={#AppName}
