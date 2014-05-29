@@ -27,13 +27,13 @@ def resolution_english_string resolution
 end
 
 def default_fps_string
-  'native fps'
+  'device default fps'
 end
 
 def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
-  [Close Options Window :close]
+  [Close This Options Window :close]
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   EOL
   
@@ -55,7 +55,7 @@ def show_options_frame
   "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
   "Current video input fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
   [Preview current settings:preview] "a rough preview of how the recording will look"
-  [Close Options Window :close2]
+  [Close This Options Window :close2]
   EOL
   # print template
   # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
@@ -161,7 +161,7 @@ def show_options_frame
   }
   
   elements[:change_fps].on_clicked {
-    options = [default_fps_string] + (5..30).step(5).to_a   # TODO didn't I have code somewhere that enumerated this on the fly? That would be better...
+    options = [default_fps_string] + [1] + (5..30).step(5).to_a   # TODO didn't I have code somewhere that enumerated this on the fly? That would be better...
     fps = DropDownSelector.new(nil, options, "Select new video fps").go_selected_value
     if fps == default_fps_string
 	  storage['fps'] = nil

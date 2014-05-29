@@ -1,4 +1,4 @@
-#define AppVer "0.12.4"
+#define AppVer "0.12.5"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -31,6 +31,8 @@ Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
 Source: vendor\vcredist_*.exe; DestDir: {app}\vendor
+; ruby scripts read version from this
+Source: innosetup_installer_options.iss; DestDir: {app}\
 
 ; include latest dll's from virtual audio capturer...
 Source: ..\source_code\Release\audio_sniffer.dll; DestDir: {app}\vendor\virtual-audio;
@@ -45,7 +47,7 @@ UninstallDisplayName={#AppName} uninstall
 OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
-; remove previous versions' icons [lame innosetup, lame]
+; remove previous versions' outdated icons [lame innosetup, lame]
 [InstallDelete]
 Type: filesandordirs; Name: {group}\*;
 
