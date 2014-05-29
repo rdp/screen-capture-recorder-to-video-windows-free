@@ -1,3 +1,6 @@
+0.12.5
+  fix a few broken scripts, one corner case
+  
 0.12.4
   fix build [oops]
 
