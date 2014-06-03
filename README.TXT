@@ -97,7 +97,9 @@ Note that if your output is, say, going to be 10 fps "actually used" in the end,
 $ ffmpeg -f dshow -i video=video-capture-recorder -r 10 yo.mp4 -r 10 # output file is only 10 fps
 
 Then to save cpu, a "good" application will also instruct the "source fps" to be 10 fps
-$ ffmpeg -r 10 -f dshow -i video=video-capture-recorder -r 10 yo.mp4 # input and output are set to 10
+$ ffmpeg -framerate 10 -f dshow -i video=video-capture-recorder -r 10 yo.mp4 # input and output are set to 10
+
+for an exaplantion of why "framerate" and not "-r" here, see https://trac.ffmpeg.org/wiki/DirectShow#Specifyinginputframerate
 
 that they pass on to this filter, and everybody's in 10 fps and hopefully happy, and cpu is saved.
 ex: vlc.exe dshow:// ... :dshow-fps=10
