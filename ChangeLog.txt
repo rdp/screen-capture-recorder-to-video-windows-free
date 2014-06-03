@@ -1,3 +1,6 @@
+0.12.6
+  update README [no code changes] to remove possibly dangerous ffmpeg command line example
+
 0.12.5
   fix a few broken scripts, one corner case
   

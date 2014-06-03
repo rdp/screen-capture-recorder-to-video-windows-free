@@ -34,6 +34,7 @@ def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
   [Close This Options Window :close]
+  [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   EOL
   
@@ -46,7 +47,6 @@ def show_options_frame
   end
   
   template += <<-EOL  
-  [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set directory :set_directory]
   [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
   [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
