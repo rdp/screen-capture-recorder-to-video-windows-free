@@ -1,14 +1,29 @@
-= todo maybe =
+= todo *maybe* =
 
-the green flashing thing :)
+the green flashing thing [other improvements from gdigrab?] :)
 
 windows 8 scaling stuff DPI...
+
+can read from an ini file
+  split the default from max fps so people can understand it :)
+  
+some TODO's may be on the "ffmpeg possible improvements for moi" spreadsheet...
+
+OBS thing
+
+windows 8 super grab [unless OBS gives us that for free :) ]
+
+= maybe =
+
+the 'trust video timestamps' as an option
+
+x'ing out of the window overlay kills us :)
+
+pull the piping stuff so that it can save to .wav again, report to ffmpeg, replace with just a query prompt :)
 
 move to jruby 1.9 mode LOL
 
 accept two video inputs too :)
-
-x'ing out of the window overlay kills us :)
 
 the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4 times
   do I even really need it anymore/currently?
@@ -18,14 +33,6 @@ the text for 'resizing it up for you' seems odd, confusing, and repeats itself 4
     update scripts to not be so aggressive in adding it to multiple of 8?
   flash dies with odd numbers, at least...that's prolly good nuff then, just round up to 2 for now, prolly not even tell them...
 
-pull the piping stuff so that it can save to .wav again, report to ffmpeg, replace with just a query prompt :)
-
-can read from an ini file
-
-some todo's may be on the "ffmpeg possible improvements for moi" spreadsheet...
-
-= maybe, some actually maybe LOL =
-
 floating window (after I have the green box LOL)
 
 awesome-ize the mouse while it's going (splashes? trails?)
@@ -33,8 +40,6 @@ awesome-ize the mouse while it's going (splashes? trails?)
 record the second display of a PC (option? default?)
 
 add changes from ffmpeg's setting working one gdi-grab :)
-
-obs interface
 
 record directx boxes too LOL.  hmm...
   adding the windows 8 "thingermajigger" might be enough instead...good nuff for me?
