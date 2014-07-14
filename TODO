@@ -1,5 +1,7 @@
 = todo *maybe* =
 
+change download location :|
+
 the green flashing thing [other improvements from gdigrab?] :)
 
 windows 8 scaling stuff DPI...
@@ -15,7 +17,27 @@ windows 8 super grab [unless OBS gives us that for free :) ]'
 
 follow_mouse option :)
 
+preview current button is broken
+
+cleanup video options move them all together somehow.
+provide an image snapshot of the current video input on the options pane...
+
+several I think github thingers, including lib264rgb
+  crf 0 option
+  
 = maybe =
+
+"record audio" needs to be separate folder'ish...or at least second on the list...
+
+it needs to show some type of preview while it records, really...
+
+awful experience recording a skype call with double audio...
+
+closing to cancel "select screen capture window" closes entire program
+
+get fps possibilities from device.
+
+install checkbox for "run it" since there are no desktop icons
 
 reveal files button doesn't work unicode...
 
@@ -59,7 +81,7 @@ is there an alternative to Bitblt that works in FF flash?
 add the "super fast windows 8 grabber" ?
   is there a "notify me" option in win 8, for decreasing latency?
 
-doesn't work with skype
+doesn't work with skype?
 
 doesn't work with google plus hangouts? huh wuh?
 
@@ -76,6 +98,8 @@ test i420 with like non divisible by 2's...also non divisible by 4's?
 
 some "save your config, have multiple, can switch"
   some option "switch dynamically/on the fly" :)
+
+custom built ffmpeg so smaller
 
 counteract this: comments on http://msdn.microsoft.com/en-us/library/dd144879(v=vs.85).aspx
   even for i420 LOL
