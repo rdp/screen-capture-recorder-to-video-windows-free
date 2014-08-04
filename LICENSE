@@ -4,3 +4,6 @@ http://social.msdn.microsoft.com/Forums/en-US/windowsdirectshowdevelopment/threa
 Since you're just calling into a DLL, it might still be compatible with GPL licensed programs, 
 as long as they just call the DLL.
 See also Redistribution section in the README.
+
+If you want to pay me some money for its use, you can, but it's free and open source, so...don't feel obligated (basically,
+if you work somewhere and could easily throw me a bone for using it, feel free, I'm happy to take donations).
