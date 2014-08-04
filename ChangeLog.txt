@@ -1,3 +1,8 @@
+0.12.8
+  specifying a hwnd_to_track now ignores any start_x or start_y value set [always 0] ping me if this is not desired.
+  speciying hwnd_to_track now captures "with decoration" for the window specified.  ping me if you want the old way capability re-added [old way captures the window contents, sans decoration].
+    
+
 0.12.7
   unicode changes
 

@@ -39,7 +39,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);
 	if(m_iHwndToTrack) {
 	  LocalOutput("using specified hwnd: %d", m_iHwndToTrack);
-	  hScrDc = GetDC(m_iHwndToTrack);
+	  hScrDc = GetWindowDC(m_iHwndToTrack); // using GetDC here basically allows you to capture "just a window" without decoration, so maybe some day support both :)
 	} else {
 	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0, true);
 	  if(useForeGroundWindow) {
@@ -53,7 +53,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
-	ASSERT_RAISE(hScrDc != 0); // 0 implies failure...
+	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone!]
 	
     // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
@@ -409,7 +409,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
         // make sure we only capture 'not too much' i.e. not past the border of this HWND, for the case of Aero being turned off, it shows other windows that we don't want
 	    // a bit confusing...
         RECT p;
-	    GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
+	    GetWindowRect(m_iHwndToTrack, &p); // 0.005 ms
         //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
 	    nWidth = min(p.right-p.left, nWidth);
 	    nHeight = min(p.bottom-p.top, nHeight);
