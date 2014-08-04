@@ -53,7 +53,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
-	ASSERT_RAISE(hScrDc != 0); // failure...
+	ASSERT_RAISE(hScrDc != 0); // 0 implies failure...
 	
     // Get the dimensions of the main desktop window as the default
     m_rScreen.left   = m_rScreen.top = 0;
@@ -62,7 +62,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	// now read some custom settings...
 	WarmupCounter();
-    reReadCurrentPosition(0);
+	if(!m_iHwndToTrack) {
+      reReadCurrentStartXY(0);
+	} else {
+	  LocalOutput("ignoring startx, starty since hwnd was specified");
+	}
 
 	int config_width = read_config_setting(TEXT("capture_width"), 0, false);
 	ASSERT_RAISE(config_width >= 0); // negatives not allowed...
@@ -119,11 +123,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	}
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10, true);
 
-    wchar_t out[1000];
-	swprintf(out, 1000, L"default/from reg read config as: %dx%d -> %dx%d (%dtop %db %dl %dr) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d \n", 
-	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry);
+    wchar_t out[10000];
+	swprintf(out, 10000, L"default/from reg read config as: %dx%d -> %dx%d (%d top %d bottom %d l %d r) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d hwnd:%d \n", 
+	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry, m_iHwndToTrack);
 
-	LocalOutput(L"warmup the debugging message system");
+	// warmup the debugging message system
 	__int64 measureDebugOutputSpeed = StartCounter();
 	LocalOutput(out);
 	LocalOutput("writing a large-ish debug itself took: %.02Lf ms", GetCounterSinceStartMillis(measureDebugOutputSpeed));
@@ -142,7 +146,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     CheckPointer(pSample, E_POINTER);
 	if(m_bReReadRegistry) {
-	  reReadCurrentPosition(1);
+	  reReadCurrentStartXY(1);
 	}
 
 	
@@ -259,7 +263,7 @@ float CPushPinDesktop::GetFps() {
 	return (float) (UNITS / m_rtFrameLength);
 }
 
-void CPushPinDesktop::reReadCurrentPosition(int isReRead) {
+void CPushPinDesktop::reReadCurrentStartXY(int isReRead) {
 	__int64 start = StartCounter();
 
 	// assume 0 means not set...negative ignore :)

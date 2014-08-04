@@ -17,6 +17,8 @@ follow_mouse option :)
 
 = maybe =
 
+it should *never* crash skype to start this thing [!]
+
 reveal files button doesn't work unicode...
 
 the 'trust video timestamps' as an option

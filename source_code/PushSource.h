@@ -174,6 +174,6 @@ public:
     HRESULT STDMETHODCALLTYPE QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
 private:
-	void reReadCurrentPosition(int isReRead);
+	void reReadCurrentStartXY(int isReRead);
 
 };
