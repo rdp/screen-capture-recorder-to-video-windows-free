@@ -38,18 +38,27 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);
 	if(m_iHwndToTrack) {
-	  LocalOutput("using specified hwnd: %d", m_iHwndToTrack);
-	  hScrDc = GetWindowDC(m_iHwndToTrack); // using GetDC here basically allows you to capture "just a window" without decoration, so maybe some day support both :)
+	  LocalOutput("using specified hwnd no decoration: %d", m_iHwndToTrack);
+	  hScrDc = GetDC(m_iHwndToTrack); // using GetDC here seemingly allows you to capture "just a window" without decoration
+	  m_bHwndTrackDecoration = false;
 	} else {
-	  int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0, true);
-	  if(useForeGroundWindow) {
-		LocalOutput("using foreground window %d", GetForegroundWindow());
-        hScrDc = GetDC(GetForegroundWindow());
+      m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track_with_window_decoration"), NULL, false);
+	  if(m_iHwndToTrack) {
+	    LocalOutput("using specified hwnd with decoration: %d", m_iHwndToTrack);
+	    hScrDc = GetWindowDC(m_iHwndToTrack); 
+	    m_bHwndTrackDecoration = true;
 	  } else {
-        // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
-        // LocalOutput("using the dangerous CreateDC DISPLAY\n");
-	    // danger, CreateDC DC is only good as long as this particular thread is still alive...hmm...is it better for directdraw
-		hScrDc = GetDC(NULL);
+		int useForeGroundWindow = read_config_setting(TEXT("capture_foreground_window_if_1"), 0, true);
+	    if(useForeGroundWindow) {
+		  LocalOutput("using foreground window %d", GetForegroundWindow());
+          hScrDc = GetDC(GetForegroundWindow());
+	    } else {
+		  // the default, just capture desktop
+          // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
+          // LocalOutput("using the dangerous CreateDC DISPLAY\n");
+	      // danger, CreateDC DC is only good as long as this particular thread is still alive...hmm...is it better for directdraw
+		  hScrDc = GetDC(NULL);
+	    }
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
@@ -409,9 +418,14 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
         // make sure we only capture 'not too much' i.e. not past the border of this HWND, for the case of Aero being turned off, it shows other windows that we don't want
 	    // a bit confusing...
         RECT p;
-	    GetWindowRect(m_iHwndToTrack, &p); // 0.005 ms
-        //GetRectOfWindowIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
-	    nWidth = min(p.right-p.left, nWidth);
+		if (m_bHwndTrackDecoration) 
+		  GetWindowRectIncludingAero(m_iHwndToTrack, &p); // 0.05 ms
+	    else 
+	      GetClientRect(m_iHwndToTrack, &p); // 0.005 ms
+	    
+		//GetWindowRect(m_iHwndToTrack, &p); // 0.005 ms
+          
+		nWidth = min(p.right-p.left, nWidth);
 	    nHeight = min(p.bottom-p.top, nHeight);
       }
 

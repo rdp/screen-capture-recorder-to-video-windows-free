@@ -257,20 +257,22 @@ HRESULT turnAeroOn(boolean on) {
   return aResult;
 }
 
+HMODULE dwmapiDllHandle = LoadLibrary(L"dwmapi.dll");  // make this global so not have to reload it every time...
+
+
 // calculates rectangle of the hwnd
 // *might* no longer be necessary but...but...hmm...
-void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere) 
+void GetWindowRectIncludingAero(HWND ofThis, RECT *toHere) 
 {
   HRESULT aResult = S_OK;
 
   ::GetWindowRect(ofThis, toHere); // default to old way of getting the window rectandle
-
+ 
   // Load the dll and keep the handle to it
   // must load dynamicaly because this dll exists only in vista -- not in xp.
   // if this is running on XP then use old way.
   
-  HMODULE dwmapiDllHandle = LoadLibrary(L"dwmapi.dll");  
-  
+
   if (NULL != dwmapiDllHandle ) // not on Vista/Windows7 so no aero so no need to account for aero.
   {
    BOOL isEnabled;
@@ -295,7 +297,7 @@ void GetRectOfWindowIncludingAero(HWND ofThis, RECT *toHere)
       }
     }
    }
-   FreeLibrary(dwmapiDllHandle);
+   //FreeLibrary(dwmapiDllHandle); // we're cacheing this now...
   }
 
 }
