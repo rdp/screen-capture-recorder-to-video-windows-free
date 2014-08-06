@@ -105,11 +105,10 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
+    GetCursorPos(&p);
 	if(hwnd)
 	  ScreenToClient(hwnd, &p); // 0.010ms
-	else
-	  GetCursorPos(&p);
-
+	
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms
 
