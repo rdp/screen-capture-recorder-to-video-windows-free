@@ -121,6 +121,14 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='releasex64|x64'">.dll</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='releasex64|x64'">screen-capture-recorder-x64</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;.\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\baseclasses\;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include\</IncludePath>
+    <LibraryPath>$(VCInstallDir)lib\amd64;$(VCInstallDir)atlmfc\lib\amd64;$(WindowsSdkDir)lib\x64;.\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\baseclasses\x64\Debug;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64\</LibraryPath>
+    <TargetName>screen-capture-recorder-x64</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>screen-capture-recorder-x64</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
