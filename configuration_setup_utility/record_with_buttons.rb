@@ -159,13 +159,18 @@ def start_recording_with_current_settings just_preview = false
    end
    
    if storage['video_name']
+     quality_crf = "-crf 1" #assume best quality, but not lossless
+     if storage[:quality_lossless]
+           quality_crf = "-crf 0" #set quality to lossless
+     end
+
      pixel_type = "yuv420p" # more compatible...?
      # pixel_type = "yuv444p" # didn't help that one guy...but might be good nonetheless
 	 # just assume mp3 LOL
 	 if storage[:tune_latency]
-	   faster_streaming_start = "-g 30 -qp 10 -tune zerolatency" # also has fixed quality...wonder what that means...
+	   faster_streaming_start = "-g 30 -tune zerolatency" # also has fixed quality...wonder what that means...
 	 end
-     codecs = "-vcodec libx264 #{faster_streaming_start} -pix_fmt #{pixel_type} #{rescale_to_size} -preset ultrafast -vsync vfr -acodec libmp3lame" 
+     codecs = "-vcodec libx264rgb #{faster_streaming_start} -pix_fmt rgb24 #{rescale_to_size} -preset ultrafast #{quality_crf} -vsync vfr -acodec libmp3lame" 
 	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
      prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
