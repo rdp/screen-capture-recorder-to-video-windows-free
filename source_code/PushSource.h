@@ -123,6 +123,7 @@ protected:
 	int getCaptureDesiredFinalHeight();
 
 	HANDLE hForegroundWindowThread;
+    static bool freezeCurrentWindowHandle;
 
 public:
 

@@ -15,10 +15,11 @@ long sumMillisTook = 0;
 HWINEVENTHOOK hEvent; // foreground window change event hook
 HANDLE hForegroundWindowThread = 0;
 
+bool CPushPinDesktop::freezeCurrentWindowHandle = false;
 CPushPinDesktop *CPushPinDesktop::MostRecentCPushPinDesktopInstance = NULL;
 
 #ifdef _DEBUG 
-int show_performance = 1;
+int show_performance = 0;
 #else
 int show_performance = 0;
 #endif
@@ -166,6 +167,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 VOID CALLBACK CPushPinDesktop::WinEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime)
 {
+    if (freezeCurrentWindowHandle) return;
+
     // http://stackoverflow.com/questions/4407631/is-there-windows-system-event-on-active-window-changed
 
     LocalOutput("window handler changed to %d", hwnd);
@@ -178,6 +181,11 @@ DWORD WINAPI CPushPinDesktop::ForegroundWindowHookThreadFunction(LPVOID lpParam)
     hEvent = SetWinEventHook(EVENT_SYSTEM_FOREGROUND , EVENT_SYSTEM_FOREGROUND , NULL, CPushPinDesktop::WinEventProcCallback, 0, 0, WINEVENT_OUTOFCONTEXT); //  | WINEVENT_SKIPOWNPROCESS
     LocalOutput("using foreground window capture mode (hevent: %d)", hEvent);
 
+    if (RegisterHotKey(NULL, 1, MOD_ALT | MOD_CONTROL, 0x57))  //0x57 is 'w'
+    {
+        LocalOutput("Hotkey 'CTRL+ALT+W' registered");
+    }
+
     // we need to have a message loop in the thread in order to get the foreground window changed event
     MSG msg;
     while (true)
@@ -187,6 +195,12 @@ DWORD WINAPI CPushPinDesktop::ForegroundWindowHookThreadFunction(LPVOID lpParam)
         {
             if (msg.message == WM_QUIT)
                 break;
+
+            if (msg.message == WM_HOTKEY)
+            {
+                freezeCurrentWindowHandle = !freezeCurrentWindowHandle; 
+                LocalOutput("Freeze current window handle: %d", freezeCurrentWindowHandle);
+            }
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -201,7 +215,7 @@ bool ever_started = false;
 
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-    LocalOutput("video frame requested");
+    if (show_performance) LocalOutput("video frame requested");
 
     __int64 startThisRound = StartCounter();
     BYTE *pData;
@@ -301,7 +315,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     //pSample->SetMediaTime((REFERENCE_TIME *)&now, (REFERENCE_TIME *) &endFrame); 
     
     
-    LocalOutput("timestamping video packet as %lld -> %lld", now, endFrame);
+    if (show_performance) LocalOutput("timestamping video packet as %lld -> %lld", now, endFrame);
 
     m_iFrameNumber++;
 
@@ -319,7 +333,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
         m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
         /* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
 
-    LocalOutput(out);
+    if (show_performance) LocalOutput(out);
     set_config_string_setting(L"frame_stats", out);
 #endif
     return S_OK;
