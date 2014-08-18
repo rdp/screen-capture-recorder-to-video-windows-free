@@ -6,6 +6,30 @@
 #include <wmsdkidl.h>
 
 
+typedef BOOL (*custom_BitBlt)(
+		HDC hdcDest,
+		int nXDest,
+		int nYDest,
+		int nWidth,
+		int nHeight,
+		HDC hdcSrc,
+		int nXSrc,
+		int nYSrc,
+		DWORD dwRop);
+typedef HDC (*custom_CreateCompatibleDC)(HDC hdc);
+typedef HDC (*custom_CreateCompatibleBitmap)(
+	  	HDC hdc,
+  		nWidth,
+  		nHeight);
+  		
+  		
+//      custom_BitBlt _custom_BitBlt;
+//	hInstLibrary = LoadLibrary("BroodWarCapture.dll");
+//	_custom_BitBlt = (custom_BitBlt)GetProcAddress(hInstLibrary,"SCBW_BitBlt");
+//
+//
+//
+
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))  // danger! can evaluate "a" twice.
 
 DWORD globalStart; // for some debug performance benchmarking
@@ -430,7 +454,7 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
       }
 
 	   // Bit block transfer from screen our compatible memory DC.	Apparently this is faster than stretching.
-       BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, captureType);
+       _custom_BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, captureType);
 	   // 9.3 ms 1920x1080 -> 1920x1080 (100 fps) (11 ms? 14? random?)
 	}
 	else {
