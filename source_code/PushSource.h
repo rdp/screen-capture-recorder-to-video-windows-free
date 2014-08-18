@@ -122,6 +122,8 @@ protected:
 	int getCaptureDesiredFinalWidth();
 	int getCaptureDesiredFinalHeight();
 
+	HANDLE hForegroundWindowThread;
+
 public:
 
 	//CSourceStream
@@ -145,6 +147,11 @@ public:
 
     CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter);
     ~CPushPinDesktop();
+
+	// callback to handle foreground window change
+	static VOID CALLBACK WinEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
+	static CPushPinDesktop *MostRecentCPushPinDesktopInstance;
+	static DWORD WINAPI ForegroundWindowHookThreadFunction(LPVOID lpParam);
 
     // Override the version that offers exactly one media type
     HRESULT DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *pRequest);
