@@ -213,3 +213,22 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#############
+## User defined rules
+#############
+
+!source_code/Win32/Debug/screen-capture-recorder.dll
+!source_code/Win32/Release/screen-capture-recorder.dll
+!source_code/x64/Debug/screen-capture-recorder-x64.dll
+!source_code/x64/Release/screen-capture-recorder-x64.dll
+!source_code/Win32/Debug/*.bat
+!source_code/Win32/Release/*.bat
+!source_code/x64/Debug/*.bat
+!source_code/x64/Release/*.bat
+![Dd]ebug/*.dll
+![Rr]elease/*.dll
+![Dd]ebug/*.lib
+![Rr]elease/*.lib
+![Dd]ebug/*.bat
+![Rr]elease/*.bat
