@@ -84,7 +84,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		}
 	}
 
-	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
 	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone!]
 
 	HWND hwndDesktop = GetDesktopWindow();
@@ -106,11 +105,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	// now read some custom settings...
 	WarmupCounter();
-	//if(!m_iHwndToTrack) {
-	//    reReadCurrentStartXY(0);
-	//} else {
-	//    LocalOutput("ignoring startx, starty since hwnd was specified");
-	//}
 
 	int config_start_x = read_config_setting(TEXT("start_x"), IsRectEmpty(&m_rWindow) ? m_rDesktop.left : m_rWindow.left, true);
 	m_rBoundingBox.left = config_start_x;
@@ -177,7 +171,12 @@ VOID CALLBACK CPushPinDesktop::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
 	
 	MostRecentCPushPinDesktopInstance->m_iHwndToTrack = hwnd;
 	MostRecentCPushPinDesktopInstance->hScrDc = GetDC(hwnd);
-	GetWindowRect(MostRecentCPushPinDesktopInstance->m_iHwndToTrack, &MostRecentCPushPinDesktopInstance->m_rWindow);
+
+	if (MostRecentCPushPinDesktopInstance->m_bHwndTrackDecoration) 
+		GetWindowRectIncludingAero(MostRecentCPushPinDesktopInstance->m_iHwndToTrack, &MostRecentCPushPinDesktopInstance->m_rWindow); // 0.05 ms
+	else 
+		GetWindowRect(MostRecentCPushPinDesktopInstance->m_iHwndToTrack, &MostRecentCPushPinDesktopInstance->m_rWindow); // 0.005 ms
+
 	MostRecentCPushPinDesktopInstance->reReadCurrentStartXY();
 }
 

@@ -98,17 +98,14 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
 	POINT p;
 
-	// GetCursorPos(&p); // get current x, y 0.008 ms
+	GetCursorPos(&p); // get current x, y 0.008 ms
 	
 	CURSORINFO globalCursor;
 	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-	if(hwnd)
-	  ScreenToClient(hwnd, &p); // 0.010ms
-	else
-	  GetCursorPos(&p);
+	if(hwnd) ScreenToClient(hwnd, &p); // 0.010ms - The new coordinates are relative to the upper-left corner of the specified window's client area.
 
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms
