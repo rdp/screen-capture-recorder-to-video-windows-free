@@ -59,7 +59,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 
 	if(m_iHwndToTrack) {
 		LocalOutput("using specified hwnd no decoration (hwnd: %d)", m_iHwndToTrack);
-		hScrDc = GetDC(m_iHwndToTrack); // using GetDC here seemingly allows you to capture "just a window" without decoration
+		hScrDc = GetDCEx(m_iHwndToTrack, NULL, DCX_WINDOW); // using GetDC here seemingly allows you to capture "just a window" without decoration
 		//m_bHwndTrackDecoration = false;
 	} 
 
@@ -79,7 +79,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		if(useForeGroundWindow) {
 			// 3a, get the foreground window and set up the foreground window change event handler
 			m_iHwndToTrack = GetForegroundWindow();
-			hScrDc = GetDC(m_iHwndToTrack);
+			hScrDc = GetDCEx(m_iHwndToTrack, NULL, DCX_WINDOW);
 			LocalOutput("using foreground window capture mode (hwnd: %d)", m_iHwndToTrack);
 
 			hForegroundWindowThread = CreateThread(NULL, 0, ForegroundWindowHookThreadFunction, NULL,	0, NULL);
@@ -232,7 +232,7 @@ VOID CALLBACK CPushPinDesktop::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
 	LocalOutput("window handler changed to %d", hwnd);
 	
 	MostRecentCPushPinDesktopInstance->m_iHwndToTrack = hwnd;
-	MostRecentCPushPinDesktopInstance->hScrDc = GetDC(hwnd);
+	MostRecentCPushPinDesktopInstance->hScrDc = GetDCEx(hwnd, NULL, DCX_WINDOW);
 
 	if (MostRecentCPushPinDesktopInstance->m_bHwndTrackDecoration) 
 		GetWindowRectIncludingAero(MostRecentCPushPinDesktopInstance->m_iHwndToTrack, &MostRecentCPushPinDesktopInstance->m_rWindow); // 0.05 ms
@@ -272,14 +272,12 @@ DWORD WINAPI CPushPinDesktop::ForegroundWindowHookThreadFunction(LPVOID lpParam)
 				freezeCurrentWindowHandle = !freezeCurrentWindowHandle; 
 				LocalOutput("Freeze current window: %d", freezeCurrentWindowHandle);
 
-				/* Draw a simple blue rectangle on the desktop */
 				RECT rect = { MostRecentCPushPinDesktopInstance->m_rWindow.left, MostRecentCPushPinDesktopInstance->m_rWindow.top, MostRecentCPushPinDesktopInstance->m_rWindow.right, MostRecentCPushPinDesktopInstance->m_rWindow.bottom };
 				FrameRect(hDC_Desktop, &rect, freezeCurrentWindowHandle ? h_brushWindowFreezed : h_brushWindowReleased);
 			}
 
 			if ((msg.message == WM_HOTKEY) && (msg.wParam == 2))
 			{
-				/* Draw a simple blue rectangle on the desktop */
 				RECT rect = { MostRecentCPushPinDesktopInstance->m_rBoundingBox.left, MostRecentCPushPinDesktopInstance->m_rBoundingBox.top, MostRecentCPushPinDesktopInstance->m_rBoundingBox.right, MostRecentCPushPinDesktopInstance->m_rBoundingBox.bottom };
 				FrameRect(hDC_Desktop, &rect, h_brushBoundingBox);
 			}
