@@ -17,12 +17,19 @@ HANDLE hForegroundWindowThread = 0;
 
 bool CPushPinDesktop::freezeCurrentWindowHandle = false;
 CPushPinDesktop *CPushPinDesktop::MostRecentCPushPinDesktopInstance = NULL;
+HDC CPushPinDesktop::hDC_Desktop = NULL;
+HBRUSH CPushPinDesktop::h_brushBoundingBox = CreateSolidBrush(RGB(255,128,128));
+HBRUSH CPushPinDesktop::h_brushWindowFreezed = CreateSolidBrush(RGB(0,0,255));
+HBRUSH CPushPinDesktop::h_brushWindowReleased = CreateSolidBrush(RGB(0,255,0));
+
 
 #ifdef _DEBUG 
 int show_performance = 0;
 #else
 int show_performance = 0;
 #endif
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
@@ -42,7 +49,9 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	globalStart = GetTickCount();
 
 	CPushPinDesktop::MostRecentCPushPinDesktopInstance = this;	
+	CPushPinDesktop::hDC_Desktop = GetDC(0);
 	hScrDc = 0;
+
 
 	// 1, let's try to get the window which was set in the config by the hwnd_to_track value
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);
@@ -121,6 +130,35 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_rBoundingBox.right = m_rBoundingBox.left + config_width;
 	m_rBoundingBox.bottom = m_rBoundingBox.top + config_height;
 
+
+	//HINSTANCE hInstance = GetModuleHandle(NULL);
+
+	//// Register the window class.
+	//const wchar_t CLASS_NAME[]  = L"Sample Window Class";
+	//
+	//WNDCLASS wc = { };
+
+	//wc.lpfnWndProc   = WindowProc;
+	//wc.hInstance     = hInstance;
+	//wc.lpszClassName = CLASS_NAME;
+
+	//RegisterClass(&wc);
+
+
+	//HWND hwnd = CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE,    
+	//						   CLASS_NAME,    
+	//						   L"Frame Window",   
+	//						   WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_SYSMENU,
+	//						   CW_USEDEFAULT, CW_USEDEFAULT, 640, 480,  
+	//						   NULL, NULL, hInstance, NULL);
+
+	////hwnd = CreateWindow(szWindowClass, 0, (WS_BORDER ), 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, hInstance, NULL);
+
+	//SetWindowLong(hwnd, GWL_STYLE, WS_BORDER | WS_THICKFRAME); 
+	//SetWindowPos(hwnd, 0, m_rBoundingBox.left, m_rBoundingBox.top, m_rBoundingBox.right-m_rBoundingBox.left, m_rBoundingBox.bottom-m_rBoundingBox.top, SWP_FRAMECHANGED);
+
+	//ShowWindow(hwnd, SW_SHOW); //display window
+
 	m_iCaptureConfigWidth = m_rBoundingBox.right - m_rBoundingBox.left;
 	ASSERT_RAISE(m_iCaptureConfigWidth > 0);
 
@@ -161,6 +199,30 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	set_config_string_setting(L"last_init_config_was", out);
 }
 
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+
+	case WM_PAINT:
+		{
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hwnd, &ps);
+
+			FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW+1));
+
+			EndPaint(hwnd, &ps);
+		}
+		return 0;
+
+	}
+	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+
 VOID CALLBACK CPushPinDesktop::WinEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime)
 {
 	if (freezeCurrentWindowHandle) return;
@@ -185,9 +247,14 @@ DWORD WINAPI CPushPinDesktop::ForegroundWindowHookThreadFunction(LPVOID lpParam)
 	hEvent = SetWinEventHook(EVENT_SYSTEM_FOREGROUND , EVENT_SYSTEM_FOREGROUND , NULL, CPushPinDesktop::WinEventProcCallback, 0, 0, WINEVENT_OUTOFCONTEXT); //  | WINEVENT_SKIPOWNPROCESS
 	LocalOutput("using foreground window capture mode (hevent: %d)", hEvent);
 
-	if (RegisterHotKey(NULL, 1, MOD_ALT | MOD_CONTROL, 0x57))  //0x57 is 'w'
+	if (RegisterHotKey(NULL, 1, MOD_ALT | MOD_CONTROL, 0x57))  //virtual key 0x57 is 'w'
 	{
-		LocalOutput("Hotkey 'CTRL+ALT+W' registered");
+		LocalOutput("Hotkey 'CTRL+ALT+W' registered to freeze or release window-lock");
+	}
+
+	if (RegisterHotKey(NULL, 2, MOD_ALT | MOD_CONTROL, 0x42))  //virtual key 0x42 is 'b'
+	{
+		LocalOutput("Hotkey 'CTRL+ALT+B' registered to display boudning box");
 	}
 
 	// we need to have a message loop in the thread in order to get the foreground window changed event
@@ -200,10 +267,21 @@ DWORD WINAPI CPushPinDesktop::ForegroundWindowHookThreadFunction(LPVOID lpParam)
 			if (msg.message == WM_QUIT)
 				break;
 
-			if (msg.message == WM_HOTKEY)
+			if ((msg.message == WM_HOTKEY) && (msg.wParam == 1))
 			{
 				freezeCurrentWindowHandle = !freezeCurrentWindowHandle; 
-				LocalOutput("Freeze current window handle: %d", freezeCurrentWindowHandle);
+				LocalOutput("Freeze current window: %d", freezeCurrentWindowHandle);
+
+				/* Draw a simple blue rectangle on the desktop */
+				RECT rect = { MostRecentCPushPinDesktopInstance->m_rWindow.left, MostRecentCPushPinDesktopInstance->m_rWindow.top, MostRecentCPushPinDesktopInstance->m_rWindow.right, MostRecentCPushPinDesktopInstance->m_rWindow.bottom };
+				FrameRect(hDC_Desktop, &rect, freezeCurrentWindowHandle ? h_brushWindowFreezed : h_brushWindowReleased);
+			}
+
+			if ((msg.message == WM_HOTKEY) && (msg.wParam == 2))
+			{
+				/* Draw a simple blue rectangle on the desktop */
+				RECT rect = { MostRecentCPushPinDesktopInstance->m_rBoundingBox.left, MostRecentCPushPinDesktopInstance->m_rBoundingBox.top, MostRecentCPushPinDesktopInstance->m_rBoundingBox.right, MostRecentCPushPinDesktopInstance->m_rBoundingBox.bottom };
+				FrameRect(hDC_Desktop, &rect, h_brushBoundingBox);
 			}
 
 			TranslateMessage(&msg);

@@ -126,7 +126,10 @@ protected:
 
 	HANDLE hForegroundWindowThread;
 	static bool freezeCurrentWindowHandle;
-
+	static HDC hDC_Desktop;
+	static HBRUSH h_brushWindowFreezed;
+	static HBRUSH h_brushWindowReleased;
+	static HBRUSH h_brushBoundingBox;
 public:
 
 	//CSourceStream
