@@ -1,1 +1,0 @@
-regsvr32  %~dp0\screen-capture-recorder.dll
