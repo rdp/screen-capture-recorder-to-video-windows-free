@@ -43,9 +43,8 @@ local.properties
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
+**/[Dd]ebug/*
+**/[Rr]elease/*
 build/
 [Bb]in/
 [Oo]bj/
@@ -226,7 +225,8 @@ pip-log.txt
 !source_code/Win32/Release/*.bat
 !source_code/x64/Debug/*.bat
 !source_code/x64/Release/*.bat
-!*/baseclasses/Debug/strmbasd.lib
-!*/baseclasses/Release/strmbase.lib
-!*/baseclasses/x64/Debug/strmbasd.lib
-!*/baseclasses/x64/Release/strmbase.lib
+!**/Debug/strmbasd.lib
+!**/Release/strmbase.lib
+!**/x64/Debug/strmbasd.lib
+!**/x64/Release/strmbase.lib
+!**/vendor/**
