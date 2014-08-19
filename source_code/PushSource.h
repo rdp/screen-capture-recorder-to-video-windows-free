@@ -78,7 +78,9 @@ protected:
 	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
 
-    RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
+    RECT m_rDesktop;                     // Rect of our desktop
+    RECT m_rWindow;                      // Rect of the window we are capturing
+    RECT m_rBoundingBox;                 // Rect containing screen coordinates we are currently "capturing"
 
     int getNegotiatedFinalWidth();
     int getNegotiatedFinalHeight();                   
@@ -183,6 +185,6 @@ public:
     HRESULT STDMETHODCALLTYPE QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
 private:
-	void reReadCurrentStartXY(int isReRead);
+	void reReadCurrentStartXY();
 
 };

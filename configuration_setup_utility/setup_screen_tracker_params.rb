@@ -6,7 +6,7 @@ require 'win32/registry'
 # Weird, I know, but that's how win32ole works apparently.
 # 
 class SetupScreenTrackerParams
-  Settings = ['capture_height', 'capture_width', 'start_x', 'start_y', 'default_max_fps', 
+  Settings = ['capture_width', 'capture_height', 'start_x', 'start_y', 'default_max_fps', 
     'stretch_to_width', 'stretch_to_height',  'stretch_mode_high_quality_if_1',
 'hwnd_to_track', 'disable_aero_for_vista_plus_if_1', 
 	'track_new_x_y_coords_each_frame_if_1',
