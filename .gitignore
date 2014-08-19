@@ -226,9 +226,7 @@ pip-log.txt
 !source_code/Win32/Release/*.bat
 !source_code/x64/Debug/*.bat
 !source_code/x64/Release/*.bat
-![Dd]ebug/*.dll
-![Rr]elease/*.dll
-![Dd]ebug/*.lib
-![Rr]elease/*.lib
-![Dd]ebug/*.bat
-![Rr]elease/*.bat
+!*/baseclasses/Debug/strmbasd.lib
+!*/baseclasses/Release/strmbase.lib
+!*/baseclasses/x64/Debug/strmbasd.lib
+!*/baseclasses/x64/Release/strmbase.lib
