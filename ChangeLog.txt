@@ -1,5 +1,5 @@
-0.13.0 (2014-08-19)
- ffmpeg is updated to 2014-06-09
+0.13.0 (2014-08-24)
+ ffmpeg is updated to 2014-08-24 (32 bit)
  different CODEC (x264rgb) is used for better color matching and performance
  there is a new option for lossless compression on the configuration screen
  added a new function to follow the foreground window if "capture_foreground_window" is set to 1
