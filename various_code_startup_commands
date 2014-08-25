@@ -1,0 +1,8 @@
+c:\dev\ruby\sensible-cinema\vendor\cache\mencoder\mplayer.exe
+-nocache c:\dev\ruby\directshow-screen-capture-filter\demo_using_it\upconvert_from_screen_me2.avs
+
+C:\Program Files (x86)\VideoLAN\VLC\vlc.exe
+ dshow:// :dshow-vdev="Virtual Desktop OS Cam" :dshow-adev=none  :dshow-caching=200
+
+c:\dev\ruby\sensible-cinema\vendor\cache\ffmpeg\ffplay.exe
+-f dshow  -i video="screen-capture-recorder"

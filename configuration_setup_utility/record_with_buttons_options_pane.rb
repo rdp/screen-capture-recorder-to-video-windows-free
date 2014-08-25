@@ -1,4 +1,4 @@
-# coding: UTF-8
+﻿# coding: UTF-8
 require 'common_recording.rb'
 
 def reset_options_frame  
@@ -54,6 +54,7 @@ def show_options_frame
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
   "Current video input fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
+  [✓:quality_lossless] "Use lossless compression"
   [Preview current settings:preview] "a rough preview of how the recording will look"
   [Close This Options Window :close2]
   EOL
@@ -130,6 +131,16 @@ def show_options_frame
 	reset_options_frame # LODO never have a new one show up :)
   }
   
+  if storage[:quality_lossless]
+    elements[:quality_lossless].check!
+  else
+    elements[:quality_lossless].uncheck!
+  end
+  elements[:quality_lossless].on_clicked { |new_value|
+    storage[:quality_lossless] = new_value	  
+	reset_options_frame # LODO never have a new one show up :)
+  }
+
   elements[:set_stream_url].on_clicked {
     stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000 (ping me if you want rtmp added)\nreceive it like \nmplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000\nwith patched mplayer", storage[:url_stream], false
     storage[:url_stream] = stream_url

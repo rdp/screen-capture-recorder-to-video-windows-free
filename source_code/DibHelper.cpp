@@ -20,7 +20,7 @@
 extern int show_performance;
 
 void logToFile(char *log_this) {
-    FILE *f;
+	FILE *f;
 	fopen_s(&f, "c:\\temp\\yo2", "a"); // this call fails if using the filter within flash player...
 	fprintf(f, log_this);
 	fclose(f);
@@ -65,25 +65,25 @@ long double PCFreqMillis = 0.0;
 // who knows if this is useful or not, speed-wise...
 void WarmupCounter()
 {
-    LARGE_INTEGER li;
+	LARGE_INTEGER li;
 	BOOL ret = QueryPerformanceFrequency(&li);
 	ASSERT_RAISE(ret != 0); // only gets run in debug mode LODO
-    PCFreqMillis = (long double(li.QuadPart))/1000.0;
+	PCFreqMillis = (long double(li.QuadPart))/1000.0;
 }
 
 __int64 StartCounter() // costs 0.0041 ms to do a "start and get" of these...pretty cheap
 {
-    LARGE_INTEGER li;
-    QueryPerformanceCounter(&li);
-    return (__int64) li.QuadPart;
+	LARGE_INTEGER li;
+	QueryPerformanceCounter(&li);
+	return (__int64) li.QuadPart;
 }
 
 long double GetCounterSinceStartMillis(__int64 sinceThisTime) // see above for some timing
 {
-    LARGE_INTEGER li;
-    QueryPerformanceCounter(&li);
+	LARGE_INTEGER li;
+	QueryPerformanceCounter(&li);
 	ASSERT_RAISE(PCFreqMillis != 0.0); // make sure it's been initialized...this never happens
-    return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
+	return long double(li.QuadPart-sinceThisTime)/PCFreqMillis; //division kind of forces us to return a double of some sort...
 } // LODO do I really need long double here? no really.
 
 // use like 
@@ -98,17 +98,14 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
 	POINT p;
 
-	// GetCursorPos(&p); // get current x, y 0.008 ms
+	GetCursorPos(&p); // get current x, y 0.008 ms
 	
 	CURSORINFO globalCursor;
 	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-	if(hwnd)
-	  ScreenToClient(hwnd, &p); // 0.010ms
-	else
-	  GetCursorPos(&p);
+	if(hwnd) ScreenToClient(hwnd, &p); // 0.010ms - The new coordinates are relative to the upper-left corner of the specified window's client area.
 
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms
@@ -166,28 +163,28 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
   HKEY hKey;
   LONG i;
   i = RegOpenKeyEx(HKEY_CURRENT_USER,
-      L"SOFTWARE\\screen-capture-recorder",  0, KEY_READ, &hKey);
-    
+	  L"SOFTWARE\\screen-capture-recorder",  0, KEY_READ, &hKey);
+	
   if ( i != ERROR_SUCCESS)
   {
 	  // assume we don't have to close the key
-    return default;
+	return default;
   } else {
 	DWORD dwVal;
 	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
 	RegCloseKey(hKey); // done with that
 	if (FAILED(hr)) {
-      // key doesn't exist in the reg at all...
+	  // key doesn't exist in the reg at all...
 	  return default;
 	} else {
 	  if (!zeroAllowed && dwVal == 0) {
-            const size_t len = 1256;
-            wchar_t buffer[len] = {};
-	        _snwprintf_s(buffer, len - 1, L"read a zero value from registry, please delete this particular value, instead of setting it to zero: %s", szValueName);
-            writeMessageBox(buffer);
-		    ASSERT_RAISE(false); // non awesome duplication here...
+			const size_t len = 1256;
+			wchar_t buffer[len] = {};
+			_snwprintf_s(buffer, len - 1, L"read a zero value from registry, please delete this particular value, instead of setting it to zero: %s", szValueName);
+			writeMessageBox(buffer);
+			ASSERT_RAISE(false); // non awesome duplication here...
 	  }
-      return dwVal;
+	  return dwVal;
 	}
   }
  
@@ -199,21 +196,21 @@ void writeMessageBox(LPCWSTR lpText) {
 
 HRESULT set_config_string_setting(LPCTSTR szValueName, wchar_t *szToThis ) {
 	
-    HKEY hKey = NULL;
-    LONG i;    
-    DWORD dwDisp = 0;
-    LPDWORD lpdwDisp = &dwDisp;
+	HKEY hKey = NULL;
+	LONG i;    
+	DWORD dwDisp = 0;
+	LPDWORD lpdwDisp = &dwDisp;
 
-    i = RegCreateKeyEx(HKEY_CURRENT_USER,
-       L"SOFTWARE\\screen-capture-recorder", 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_32KEY, NULL, &hKey, lpdwDisp); // fails in flash player...
+	i = RegCreateKeyEx(HKEY_CURRENT_USER,
+	   L"SOFTWARE\\screen-capture-recorder", 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_32KEY, NULL, &hKey, lpdwDisp); // fails in flash player...
 
-    if (i == ERROR_SUCCESS)
-    {
+	if (i == ERROR_SUCCESS)
+	{
 		// bad for XP = RegSetKeyValueA(hKey, NULL, szValueName, REG_SZ, ...
-        i = RegSetValueEx(hKey, szValueName, 0, REG_SZ, (LPBYTE) szToThis, wcslen(szToThis)*2+1);
+		i = RegSetValueEx(hKey, szValueName, 0, REG_SZ, (LPBYTE) szToThis, wcslen(szToThis)*2+1);
 
-    } else {
-       // failed to set...
+	} else {
+	   // failed to set...
 	}
 
 	if(hKey)
@@ -248,7 +245,7 @@ HRESULT turnAeroOn(boolean on) {
 	  if(on)
 		aResult = DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
 	  else {
-        aResult = DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+		aResult = DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 	  }
    }
 
@@ -280,22 +277,22 @@ void GetWindowRectIncludingAero(HWND ofThis, RECT *toHere)
    DwmIsCompositionEnabled = (DwmIsCompositionEnabledFunction) ::GetProcAddress(dwmapiDllHandle, "DwmIsCompositionEnabled" );
    if( NULL != DwmIsCompositionEnabled )
    {
-    aResult = DwmIsCompositionEnabled( &isEnabled);
+	aResult = DwmIsCompositionEnabled( &isEnabled);
    }
    BOOL s = SUCCEEDED( aResult );
    if ( s && isEnabled )
    {
-    DwmGetWindowAttributeFunction DwmGetWindowAttribute;
-    DwmGetWindowAttribute = (DwmGetWindowAttributeFunction) ::GetProcAddress(dwmapiDllHandle, "DwmGetWindowAttribute" ) ;
-    if( NULL != DwmGetWindowAttribute) 
-    {
-      HRESULT aResult = DwmGetWindowAttribute( ofThis, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof( RECT) ) ;
-      if( SUCCEEDED( aResult ) )
-      {
+	DwmGetWindowAttributeFunction DwmGetWindowAttribute;
+	DwmGetWindowAttribute = (DwmGetWindowAttributeFunction) ::GetProcAddress(dwmapiDllHandle, "DwmGetWindowAttribute" ) ;
+	if( NULL != DwmGetWindowAttribute) 
+	{
+	  HRESULT aResult = DwmGetWindowAttribute( ofThis, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof( RECT) ) ;
+	  if( SUCCEEDED( aResult ) )
+	  {
 		// hopefully we're ok either way
 		// DwmGetWindowAttribute( ofThis, DWMWA_EXTENDED_FRAME_BOUNDS, toHere, sizeof(RECT));
-      }
-    }
+	  }
+	}
    }
    //FreeLibrary(dwmapiDllHandle); // we're cacheing this now...
   }
@@ -410,9 +407,9 @@ if (RetDepth = 16) { // Find out if this is 5:5:5 or 5:6:5
   HBITMAP hOldBMP = (HBITMAP)SelectObject(hDC, hBMP); // TODO do we need to delete this?
 
   if (hOldBMP != NULL) {
-    SetPixelV(hDC, 0, 0, 0x000400);
-    if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
-    SelectObject(hDC, hOldBMP);
+	SetPixelV(hDC, 0, 0, 0x000400);
+	if ((GetPixel(hDC, 0, 0) & 0x00FF00) != 0x000400) RetDepth = 15;
+	SelectObject(hDC, hOldBMP);
   }
 
   DeleteObject(hBMP);
