@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html>
-<!-- Created on June 9, 2014 by texi2html 1.82 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FFmpeg documentation</title>
+    <link rel="stylesheet" href="style.min.css" />
+
+<meta name="description" content="FFmpeg Formats Documentation: ">
+<meta name="keywords" content="FFmpeg documentation : FFmpeg Formats ">
+<meta name="Generator" content="texi2html 1.82">
+<!-- Created on August 24, 2014 by texi2html 1.82 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -11,20 +20,10 @@ Maintained by: Many creative people.
 Send bugs and suggestions to <texi2html-bug@nongnu.org>
 
 -->
-<head>
-<title>FFmpeg documentation : FFmpeg Formats </title>
-
-<meta name="description" content="FFmpeg Formats Documentation: ">
-<meta name="keywords" content="FFmpeg documentation : FFmpeg Formats ">
-<meta name="Generator" content="texi2html 1.82">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="default.css" />
-
-<link rel="icon" href="favicon.png" type="image/png" />
-</head>
-<body>
-<div id="container">
-<div id="body">
+  </head>
+  <body>
+    <div style="width: 95%; margin: auto">
 
 <a name="SEC_Top"></a>
 <h1 class="settitle">FFmpeg Formats Documentation</h1>
@@ -46,16 +45,16 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-concat-1" href="#concat-1">3.3 concat</a>
     <ul class="toc">
       <li><a name="toc-Syntax" href="#Syntax">3.3.1 Syntax</a></li>
-      <li><a name="toc-Options" href="#Options">3.3.2 Options</a></li>
+      <li><a name="toc-Options-1" href="#Options-1">3.3.2 Options</a></li>
     </ul></li>
     <li><a name="toc-flv" href="#flv">3.4 flv</a></li>
     <li><a name="toc-libgme" href="#libgme">3.5 libgme</a></li>
     <li><a name="toc-libquvi" href="#libquvi">3.6 libquvi</a></li>
-    <li><a name="toc-image2-2" href="#image2-2">3.7 image2</a>
+    <li><a name="toc-image2-1" href="#image2-1">3.7 image2</a>
     <ul class="toc">
       <li><a name="toc-Examples-6" href="#Examples-6">3.7.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-mpegts" href="#mpegts">3.8 mpegts</a></li>
+    <li><a name="toc-mpegts-1" href="#mpegts-1">3.8 mpegts</a></li>
     <li><a name="toc-rawvideo" href="#rawvideo">3.9 rawvideo</a></li>
     <li><a name="toc-sbg" href="#sbg">3.10 sbg</a></li>
     <li><a name="toc-tedcaptions" href="#tedcaptions">3.11 tedcaptions</a></li>
@@ -64,60 +63,65 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-aiff-1" href="#aiff-1">4.1 aiff</a>
     <ul class="toc">
-      <li><a name="toc-Options-7" href="#Options-7">4.1.1 Options</a></li>
+      <li><a name="toc-Options-2" href="#Options-2">4.1.1 Options</a></li>
     </ul></li>
     <li><a name="toc-crc-1" href="#crc-1">4.2 crc</a>
     <ul class="toc">
-      <li><a name="toc-Examples-5" href="#Examples-5">4.2.1 Examples</a></li>
+      <li><a name="toc-Examples-4" href="#Examples-4">4.2.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-framecrc-1" href="#framecrc-1">4.3 framecrc</a>
     <ul class="toc">
-      <li><a name="toc-Examples-1" href="#Examples-1">4.3.1 Examples</a></li>
+      <li><a name="toc-Examples-5" href="#Examples-5">4.3.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-framemd5-1" href="#framemd5-1">4.4 framemd5</a>
     <ul class="toc">
-      <li><a name="toc-Examples-2" href="#Examples-2">4.4.1 Examples</a></li>
+      <li><a name="toc-Examples-1" href="#Examples-1">4.4.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-gif-1" href="#gif-1">4.5 gif</a></li>
     <li><a name="toc-hls-1" href="#hls-1">4.6 hls</a>
     <ul class="toc">
-      <li><a name="toc-Options-4" href="#Options-4">4.6.1 Options</a></li>
+      <li><a name="toc-Options-7" href="#Options-7">4.6.1 Options</a></li>
     </ul></li>
     <li><a name="toc-ico-1" href="#ico-1">4.7 ico</a></li>
-    <li><a name="toc-image2-1" href="#image2-1">4.8 image2</a>
+    <li><a name="toc-image2-2" href="#image2-2">4.8 image2</a>
     <ul class="toc">
-      <li><a name="toc-Examples-4" href="#Examples-4">4.8.1 Examples</a></li>
-      <li><a name="toc-Options-3" href="#Options-3">4.8.2 Options</a></li>
+      <li><a name="toc-Examples-3" href="#Examples-3">4.8.1 Examples</a></li>
+      <li><a name="toc-Options-4" href="#Options-4">4.8.2 Options</a></li>
     </ul></li>
     <li><a name="toc-matroska" href="#matroska">4.9 matroska</a>
     <ul class="toc">
       <li><a name="toc-Metadata" href="#Metadata">4.9.1 Metadata</a></li>
-      <li><a name="toc-Options-2" href="#Options-2">4.9.2 Options</a></li>
+      <li><a name="toc-Options-6" href="#Options-6">4.9.2 Options</a></li>
     </ul></li>
     <li><a name="toc-md5-1" href="#md5-1">4.10 md5</a></li>
     <li><a name="toc-mov_002c-mp4_002c-ismv" href="#mov_002c-mp4_002c-ismv">4.11 mov, mp4, ismv</a>
     <ul class="toc">
-      <li><a name="toc-Options-6" href="#Options-6">4.11.1 Options</a></li>
-      <li><a name="toc-Example-1" href="#Example-1">4.11.2 Example</a></li>
+      <li><a name="toc-Options-5" href="#Options-5">4.11.1 Options</a></li>
+      <li><a name="toc-Example-2" href="#Example-2">4.11.2 Example</a></li>
     </ul></li>
     <li><a name="toc-mp3" href="#mp3">4.12 mp3</a></li>
-    <li><a name="toc-mpegts-1" href="#mpegts-1">4.13 mpegts</a>
+    <li><a name="toc-mpegts" href="#mpegts">4.13 mpegts</a>
     <ul class="toc">
-      <li><a name="toc-Options-1" href="#Options-1">4.13.1 Options</a></li>
-      <li><a name="toc-Example" href="#Example">4.13.2 Example</a></li>
+      <li><a name="toc-Options" href="#Options">4.13.1 Options</a></li>
+      <li><a name="toc-Example-1" href="#Example-1">4.13.2 Example</a></li>
     </ul></li>
     <li><a name="toc-null" href="#null">4.14 null</a></li>
     <li><a name="toc-nut" href="#nut">4.15 nut</a></li>
     <li><a name="toc-ogg" href="#ogg">4.16 ogg</a></li>
     <li><a name="toc-segment_002c-stream_005fsegment_002c-ssegment" href="#segment_002c-stream_005fsegment_002c-ssegment">4.17 segment, stream_segment, ssegment</a>
     <ul class="toc">
-      <li><a name="toc-Options-5" href="#Options-5">4.17.1 Options</a></li>
-      <li><a name="toc-Examples" href="#Examples">4.17.2 Examples</a></li>
+      <li><a name="toc-Options-8" href="#Options-8">4.17.1 Options</a></li>
+      <li><a name="toc-Examples-2" href="#Examples-2">4.17.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-smoothstreaming" href="#smoothstreaming">4.18 smoothstreaming</a></li>
     <li><a name="toc-tee" href="#tee">4.19 tee</a>
     <ul class="toc">
-      <li><a name="toc-Examples-3" href="#Examples-3">4.19.1 Examples</a></li>
+      <li><a name="toc-Examples" href="#Examples">4.19.1 Examples</a></li>
+    </ul></li>
+    <li><a name="toc-webm_005fdash_005fmanifest" href="#webm_005fdash_005fmanifest">4.20 webm_dash_manifest</a>
+    <ul class="toc">
+      <li><a name="toc-Options-3" href="#Options-3">4.20.1 Options</a></li>
+      <li><a name="toc-Example" href="#Example">4.20.2 Example</a></li>
     </ul>
 </li>
   </ul></li>
@@ -508,8 +512,8 @@ streams is not reliable.
 </dd>
 </dl>
 
-<a name="Options"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options">3.3.2 Options</a></h3>
+<a name="Options-1"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-1">3.3.2 Options</a></h3>
 
 <p>This demuxer accepts the following option:
 </p>
@@ -578,8 +582,8 @@ is by default set to <var>best</var>.
 <p>FFmpeg needs to be built with <code>--enable-libquvi</code> for this demuxer to be
 enabled.
 </p>
-<a name="image2-2"></a>
-<h2 class="section"><a href="ffmpeg-formats.html#toc-image2-2">3.7 image2</a></h2>
+<a name="image2-1"></a>
+<h2 class="section"><a href="ffmpeg-formats.html#toc-image2-1">3.7 image2</a></h2>
 
 <p>Image file demuxer.
 </p>
@@ -718,8 +722,8 @@ terminating with the &quot;.png&quot; suffix:
 </pre></td></tr></table>
 </li></ul>
 
-<a name="mpegts"></a>
-<h2 class="section"><a href="ffmpeg-formats.html#toc-mpegts">3.8 mpegts</a></h2>
+<a name="mpegts-1"></a>
+<h2 class="section"><a href="ffmpeg-formats.html#toc-mpegts-1">3.8 mpegts</a></h2>
 
 <p>MPEG-2 transport stream demuxer.
 </p>
@@ -841,8 +845,8 @@ enabled muxers.
 
 <p>Audio Interchange File Format muxer.
 </p>
-<a name="Options-7"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-7">4.1.1 Options</a></h3>
+<a name="Options-2"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-2">4.1.1 Options</a></h3>
 
 <p>It accepts the following options:
 </p>
@@ -875,8 +879,8 @@ CRC=0x<var>CRC</var>, where <var>CRC</var> is a hexadecimal number 0-padded to
 </p>
 <p>See also the <a href="#framecrc">framecrc</a> muxer.
 </p>
-<a name="Examples-5"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-5">4.2.1 Examples</a></h3>
+<a name="Examples-4"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-4">4.2.1 Examples</a></h3>
 
 <p>For example to compute the CRC of the input, and store it in the file
 &lsquo;<tt>out.crc</tt>&rsquo;:
@@ -913,8 +917,8 @@ packet of the form:
 <p><var>CRC</var> is a hexadecimal number 0-padded to 8 digits containing the
 CRC of the packet.
 </p>
-<a name="Examples-1"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-1">4.3.1 Examples</a></h3>
+<a name="Examples-5"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-5">4.3.1 Examples</a></h3>
 
 <p>For example to compute the CRC of the audio and video frames in
 &lsquo;<tt>INPUT</tt>&rsquo;, converted to raw audio and video packets, and store it
@@ -956,8 +960,8 @@ packet of the form:
 <p><var>MD5</var> is a hexadecimal number representing the computed MD5 hash
 for the packet.
 </p>
-<a name="Examples-2"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-2">4.4.1 Examples</a></h3>
+<a name="Examples-1"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-1">4.4.1 Examples</a></h3>
 
 <p>For example to compute the MD5 of the audio and video frames in
 &lsquo;<tt>INPUT</tt>&rsquo;, converted to raw audio and video packets, and store it
@@ -1026,8 +1030,8 @@ a .ts extension.
 flexible implementation of a segmenter, and can be used to perform HLS
 segmentation.
 </p>
-<a name="Options-4"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-4">4.6.1 Options</a></h3>
+<a name="Options-7"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-7">4.6.1 Options</a></h3>
 
 <p>This muxer supports the following options:
 </p>
@@ -1101,8 +1105,8 @@ If a PNG image is used, it must use the rgba pixel format
 </li></ul>
 
 <p><a name="image2"></a>
-</p><a name="image2-1"></a>
-<h2 class="section"><a href="ffmpeg-formats.html#toc-image2-1">4.8 image2</a></h2>
+</p><a name="image2-2"></a>
+<h2 class="section"><a href="ffmpeg-formats.html#toc-image2-2">4.8 image2</a></h2>
 
 <p>Image file muxer.
 </p>
@@ -1131,8 +1135,8 @@ The pattern &quot;img%%-%d.jpg&quot; will specify a sequence of filenames of the
 form &lsquo;<tt>img%-1.jpg</tt>&rsquo;, &lsquo;<tt>img%-2.jpg</tt>&rsquo;, ..., &lsquo;<tt>img%-10.jpg</tt>&rsquo;,
 etc.
 </p>
-<a name="Examples-4"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-4">4.8.1 Examples</a></h3>
+<a name="Examples-3"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-3">4.8.1 Examples</a></h3>
 
 <p>The following example shows how to use <code>ffmpeg</code> for creating a
 sequence of files &lsquo;<tt>img-001.jpeg</tt>&rsquo;, &lsquo;<tt>img-002.jpeg</tt>&rsquo;, ...,
@@ -1163,8 +1167,8 @@ can be used:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f v4l2 -r 1 -i /dev/video0 -f image2 -strftime 1 &quot;%Y-%m-%d_%H-%M-%S.jpg&quot;
 </pre></td></tr></table>
 
-<a name="Options-3"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-3">4.8.2 Options</a></h3>
+<a name="Options-4"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-4">4.8.2 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>start_number</samp>&rsquo;</dt>
@@ -1274,8 +1278,8 @@ French).
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i sample_left_right_clip.mpg -an -c:v libvpx -metadata stereo_mode=left_right -y stereo_clip.webm
 </pre></td></tr></table>
 
-<a name="Options-2"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-2">4.9.2 Options</a></h3>
+<a name="Options-6"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-6">4.9.2 Options</a></h3>
 
 <p>This muxer supports the following options:
 </p>
@@ -1342,8 +1346,8 @@ very long files (since writing normal MOV/MP4 files stores info about
 every single packet in memory until the file is closed). The downside
 is that it is less compatible with other applications.
 </p>
-<a name="Options-6"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-6">4.11.1 Options</a></h3>
+<a name="Options-5"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-5">4.11.1 Options</a></h3>
 
 <p>Fragmentation is enabled by setting one of the AVOptions that define
 how to cut the file into fragments:
@@ -1409,10 +1413,17 @@ as fragmented output, thus it is not enabled by default.
 <dt> &lsquo;<samp>-movflags rtphint</samp>&rsquo;</dt>
 <dd><p>Add RTP hinting tracks to the output file.
 </p></dd>
+<dt> &lsquo;<samp>-movflags disable_chpl</samp>&rsquo;</dt>
+<dd><p>Disable Nero chapter markers (chpl atom).  Normally, both Nero chapters
+and a QuickTime chapter track are written to the file. With this option
+set, only the QuickTime chapter track will be written. Nero chapters can
+cause failures when the file is reprocessed with certain tagging programs, like
+mp3Tag 2.61a and iTunes 11.3, most likely other versions are affected as well.
+</p></dd>
 </dl>
 
-<a name="Example-1"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Example-1">4.11.2 Example</a></h3>
+<a name="Example-2"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Example-2">4.11.2 Example</a></h3>
 
 <p>Smooth Streaming content can be pushed in real time to a publishing
 point on IIS with this muxer. Example:
@@ -1461,8 +1472,8 @@ with <code>map</code>:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i input.wav -write_xing 0 -id3v2_version 0 out.mp3
 </pre></td></tr></table>
 
-<a name="mpegts-1"></a>
-<h2 class="section"><a href="ffmpeg-formats.html#toc-mpegts-1">4.13 mpegts</a></h2>
+<a name="mpegts"></a>
+<h2 class="section"><a href="ffmpeg-formats.html#toc-mpegts">4.13 mpegts</a></h2>
 
 <p>MPEG transport stream muxer.
 </p>
@@ -1473,8 +1484,8 @@ and <code>service_name</code>. If they are not set the default for
 <code>service_provider</code> is &quot;FFmpeg&quot; and the default for
 <code>service_name</code> is &quot;Service01&quot;.
 </p>
-<a name="Options-1"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-1">4.13.1 Options</a></h3>
+<a name="Options"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options">4.13.1 Options</a></h3>
 
 <p>The muxer options are:
 </p>
@@ -1501,7 +1512,11 @@ transponder in DVB.
 <dd><p>Enable m2ts mode if set to 1. Default value is -1 which disables m2ts mode.
 </p></dd>
 <dt> &lsquo;<samp>-muxrate <var>number</var></samp>&rsquo;</dt>
-<dd><p>Set muxrate.
+<dd><p>Set a constant muxrate (default VBR).
+</p></dd>
+<dt> &lsquo;<samp>-pcr_period <var>numer</var></samp>&rsquo;</dt>
+<dd><p>Override the default PCR retransmission time (default 20ms), ignored
+if variable muxrate is selected.
 </p></dd>
 <dt> &lsquo;<samp>-pes_payload_size <var>number</var></samp>&rsquo;</dt>
 <dd><p>Set minimum PES packet payload in bytes.
@@ -1540,8 +1555,8 @@ ffmpeg -i source2.ts -codec copy -f mpegts -tables_version 1 udp://1.1.1.1:1111
 </p></dd>
 </dl>
 
-<a name="Example"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Example">4.13.2 Example</a></h3>
+<a name="Example-1"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Example-1">4.13.2 Example</a></h3>
 
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i file.mpg -c copy \
      -mpegts_original_network_id 0x1122 \
@@ -1654,8 +1669,8 @@ files.
 <p>See also the <a href="#hls">hls</a> muxer, which provides a more specific
 implementation for HLS segmentation.
 </p>
-<a name="Options-5"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-5">4.17.1 Options</a></h3>
+<a name="Options-8"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-8">4.17.1 Options</a></h3>
 
 <p>The segment muxer supports the following options:
 </p>
@@ -1693,8 +1708,16 @@ listfile is generated.
 </dl>
 
 </dd>
+<dt> &lsquo;<samp>segment_list_type <var>type</var></samp>&rsquo;</dt>
+<dd><p>Select the listing format.
+</p><dl compact="compact">
+<dt> &lsquo;<samp><var>flat</var> use a simple flat list of entries.</samp>&rsquo;</dt>
+<dt> &lsquo;<samp><var>hls</var> use a m3u8-like structure.</samp>&rsquo;</dt>
+</dl>
+
+</dd>
 <dt> &lsquo;<samp>segment_list_size <var>size</var></samp>&rsquo;</dt>
-<dd><p>Update the list file so that it contains at most the last <var>size</var>
+<dd><p>Update the list file so that it contains at most <var>size</var>
 segments. If 0 the list file will contain all the segments. Default
 value is 0.
 </p>
@@ -1702,10 +1725,6 @@ value is 0.
 <dt> &lsquo;<samp>segment_list_entry_prefix <var>prefix</var></samp>&rsquo;</dt>
 <dd><p>Prepend <var>prefix</var> to each entry. Useful to generate absolute paths.
 By default no prefix is applied.
-</p>
-</dd>
-<dt> &lsquo;<samp>segment_list_type <var>type</var></samp>&rsquo;</dt>
-<dd><p>Specify the format for the segment list file.
 </p>
 <p>The following values are recognized:
 </p><dl compact="compact">
@@ -1759,6 +1778,17 @@ specification. Default value is &quot;2&quot;. See also the
 <p>Note that splitting may not be accurate, unless you force the
 reference stream key-frames at the given time. See the introductory
 notice and the examples below.
+</p>
+</dd>
+<dt> &lsquo;<samp>segment_atclocktime <var>1|0</var></samp>&rsquo;</dt>
+<dd><p>If set to &quot;1&quot; split at regular clock time intervals starting from 00:00
+o&rsquo;clock. The <var>time</var> value specified in &lsquo;<samp>segment_time</samp>&rsquo; is
+used for setting the length of the splitting interval.
+</p>
+<p>For example with &lsquo;<samp>segment_time</samp>&rsquo; set to &quot;900&quot; this makes it possible
+to create files at 12:00 o&rsquo;clock, 12:15, 12:30, etc.
+</p>
+<p>Default value is &quot;0&quot;.
 </p>
 </dd>
 <dt> &lsquo;<samp>segment_time_delta <var>delta</var></samp>&rsquo;</dt>
@@ -1819,8 +1849,8 @@ argument must be a time duration specification, and defaults to 0.
 </p></dd>
 </dl>
 
-<a name="Examples"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples">4.17.2 Examples</a></h3>
+<a name="Examples-2"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-2">4.17.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -1944,8 +1974,8 @@ all the input streams.
 </p></dd>
 </dl>
 
-<a name="Examples-3"></a>
-<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples-3">4.19.1 Examples</a></h3>
+<a name="Examples"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Examples">4.19.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -1979,6 +2009,39 @@ character used to separate options.
 the auto-detection of this can not work with the tee muxer. The main example
 is the &lsquo;<samp>global_header</samp>&rsquo; flag.
 </p>
+<a name="webm_005fdash_005fmanifest"></a>
+<h2 class="section"><a href="ffmpeg-formats.html#toc-webm_005fdash_005fmanifest">4.20 webm_dash_manifest</a></h2>
+
+<p>WebM DASH Manifest muxer.
+</p>
+<p>This muxer implements the WebM DASH Manifest specification to generate the DASH manifest XML.
+</p>
+<a name="Options-3"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Options-3">4.20.1 Options</a></h3>
+
+<p>This muxer supports the following options:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>adaptation_sets</samp>&rsquo;</dt>
+<dd><p>This option has the following syntax: &quot;id=x,streams=a,b,c id=y,streams=d,e&quot; where x and y are the
+unique identifiers of the adaptation sets and a,b,c,d and e are the indices of the corresponding
+audio and video streams. Any number of adaptation sets can be added using this option.
+</p></dd>
+</dl>
+
+<a name="Example"></a>
+<h3 class="subsection"><a href="ffmpeg-formats.html#toc-Example">4.20.2 Example</a></h3>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f webm_dash_manifest -i video1.webm \
+       -f webm_dash_manifest -i video2.webm \
+       -f webm_dash_manifest -i audio1.webm \
+       -f webm_dash_manifest -i audio2.webm \
+       -map 0 -map 1 -map 2 -map 3 \
+       -c copy \
+       -f webm_dash_manifest \
+       -adaptation_sets &quot;id=0,streams=0,1 id=1,streams=2,3&quot; \
+       manifest.xml
+</pre></td></tr></table>
+
 <a name="Metadata-1"></a>
 <h1 class="chapter"><a href="ffmpeg-formats.html#toc-Metadata-1">5. Metadata</a></h1>
 
@@ -2080,5 +2143,7 @@ online repository at <a href="http://source.ffmpeg.org">http://source.ffmpeg.org
 &lsquo;<tt>MAINTAINERS</tt>&rsquo; in the source code tree.
 </p>
 
-<footer class="footer pagination-right">
-<span class="label label-info">This document was generated by <em>Kyle Schwarz</em> on <em>June 9, 2014</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.</span></footer></div></div></body>
+    </div>
+  </body>
+</html>
+

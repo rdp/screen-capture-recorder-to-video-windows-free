@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html>
-<!-- Created on June 9, 2014 by texi2html 1.82 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FFmpeg documentation</title>
+    <link rel="stylesheet" href="style.min.css" />
+
+<meta name="description" content="ffmpeg Documentation: ">
+<meta name="keywords" content="FFmpeg documentation : ffmpeg ">
+<meta name="Generator" content="texi2html 1.82">
+<!-- Created on August 24, 2014 by texi2html 1.82 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -11,20 +20,10 @@ Maintained by: Many creative people.
 Send bugs and suggestions to <texi2html-bug@nongnu.org>
 
 -->
-<head>
-<title>FFmpeg documentation : ffmpeg </title>
-
-<meta name="description" content="ffmpeg Documentation: ">
-<meta name="keywords" content="FFmpeg documentation : ffmpeg ">
-<meta name="Generator" content="texi2html 1.82">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="default.css" />
-
-<link rel="icon" href="favicon.png" type="image/png" />
-</head>
-<body>
-<div id="container">
-<div id="body">
+  </head>
+  <body>
+    <div style="width: 95%; margin: auto">
 
 <a name="SEC_Top"></a>
 <h1 class="settitle">ffmpeg Documentation</h1>
@@ -53,18 +52,18 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-AVOptions" href="#AVOptions">5.3 AVOptions</a></li>
     <li><a name="toc-Main-options" href="#Main-options">5.4 Main options</a></li>
     <li><a name="toc-Video-Options" href="#Video-Options">5.5 Video Options</a></li>
-    <li><a name="toc-Advanced-Video-Options" href="#Advanced-Video-Options">5.6 Advanced Video Options</a></li>
+    <li><a name="toc-Advanced-Video-options" href="#Advanced-Video-options">5.6 Advanced Video options</a></li>
     <li><a name="toc-Audio-Options" href="#Audio-Options">5.7 Audio Options</a></li>
-    <li><a name="toc-Advanced-Audio-options_003a" href="#Advanced-Audio-options_003a">5.8 Advanced Audio options:</a></li>
-    <li><a name="toc-Subtitle-options_003a" href="#Subtitle-options_003a">5.9 Subtitle options:</a></li>
-    <li><a name="toc-Advanced-Subtitle-options_003a" href="#Advanced-Subtitle-options_003a">5.10 Advanced Subtitle options:</a></li>
+    <li><a name="toc-Advanced-Audio-options" href="#Advanced-Audio-options">5.8 Advanced Audio options</a></li>
+    <li><a name="toc-Subtitle-options" href="#Subtitle-options">5.9 Subtitle options</a></li>
+    <li><a name="toc-Advanced-Subtitle-options" href="#Advanced-Subtitle-options">5.10 Advanced Subtitle options</a></li>
     <li><a name="toc-Advanced-options" href="#Advanced-options">5.11 Advanced options</a></li>
-    <li><a name="toc-Preset-files" href="#Preset-files">5.12 Preset files</a></li>
+    <li><a name="toc-Preset-files-1" href="#Preset-files-1">5.12 Preset files</a></li>
   </ul></li>
   <li><a name="toc-Tips" href="#Tips">6. Tips</a></li>
   <li><a name="toc-Examples" href="#Examples">7. Examples</a>
   <ul class="toc">
-    <li><a name="toc-Preset-files-1" href="#Preset-files-1">7.1 Preset files</a></li>
+    <li><a name="toc-Preset-files" href="#Preset-files">7.1 Preset files</a></li>
     <li><a name="toc-Video-and-Audio-grabbing" href="#Video-and-Audio-grabbing">7.2 Video and Audio grabbing</a></li>
     <li><a name="toc-X11-grabbing" href="#X11-grabbing">7.3 X11 grabbing</a></li>
     <li><a name="toc-Video-and-Audio-file-format-conversion" href="#Video-and-Audio-file-format-conversion">7.4 Video and Audio file format conversion</a></li>
@@ -343,6 +342,14 @@ program.
 <dt> &lsquo;<samp>#<var>stream_id</var> or i:<var>stream_id</var></samp>&rsquo;</dt>
 <dd><p>Match the stream by stream id (e.g. PID in MPEG-TS container).
 </p></dd>
+<dt> &lsquo;<samp>m:<var>key</var>[:<var>value</var>]</samp>&rsquo;</dt>
+<dd><p>Matches streams with the metadata tag <var>key</var> having the specified value. If
+<var>value</var> is not given, matches streams that contain the given tag with any
+value.
+</p>
+<p>Note that in <code>ffmpeg</code>, matching by metadata will only work properly for
+input files.
+</p></dd>
 </dl>
 
 <a name="Generic-options"></a>
@@ -516,6 +523,9 @@ following option is recognized:
 <dd><p>set the file name to use for the report; <code>%p</code> is expanded to the name
 of the program, <code>%t</code> is expanded to a timestamp, <code>%%</code> is expanded
 to a plain <code>%</code>
+</p></dd>
+<dt> &lsquo;<samp>level</samp>&rsquo;</dt>
+<dd><p>set the log level
 </p></dd>
 </dl>
 
@@ -753,7 +763,7 @@ also possible to delete metadata by using an empty value.
 </pre></td></tr></table>
 
 <p>To set the language of the first audio stream:
-</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -metadata:s:a:1 language=eng OUTPUT
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -metadata:s:a:0 language=eng OUTPUT
 </pre></td></tr></table>
 
 </dd>
@@ -898,6 +908,9 @@ attachments.
 </p>
 <p>As an input option, ignore any timestamps stored in the file and instead
 generate timestamps assuming constant frame rate <var>fps</var>.
+This is not the same as the &lsquo;<samp>-framerate</samp>&rsquo; option used for some input formats
+like image2 or v4l2 (it used to be the same in older versions of FFmpeg).
+If in doubt use &lsquo;<samp>-framerate</samp>&rsquo; instead of the input option &lsquo;<samp>-r</samp>&rsquo;.
 </p>
 <p>As an output option, duplicate or drop input frames to achieve constant output
 frame rate <var>fps</var>.
@@ -966,8 +979,8 @@ filter the stream.
 </p></dd>
 </dl>
 
-<a name="Advanced-Video-Options"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Video-Options">5.6 Advanced Video Options</a></h2>
+<a name="Advanced-Video-options"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Video-options">5.6 Advanced Video options</a></h2>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>-pix_fmt[:<var>stream_specifier</var>] <var>format</var> (<em>input/output,per-stream</em>)</samp>&rsquo;</dt>
@@ -1185,8 +1198,8 @@ filter the stream.
 </p></dd>
 </dl>
 
-<a name="Advanced-Audio-options_003a"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Audio-options_003a">5.8 Advanced Audio options:</a></h2>
+<a name="Advanced-Audio-options"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Audio-options">5.8 Advanced Audio options</a></h2>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>-atag <var>fourcc/tag</var> (<em>output</em>)</samp>&rsquo;</dt>
@@ -1204,8 +1217,8 @@ stereo but not 6 channels as 5.1. The default is to always try to guess. Use
 </p></dd>
 </dl>
 
-<a name="Subtitle-options_003a"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Subtitle-options_003a">5.9 Subtitle options:</a></h2>
+<a name="Subtitle-options"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Subtitle-options">5.9 Subtitle options</a></h2>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>-scodec <var>codec</var> (<em>input/output</em>)</samp>&rsquo;</dt>
@@ -1219,8 +1232,8 @@ stereo but not 6 channels as 5.1. The default is to always try to guess. Use
 </p></dd>
 </dl>
 
-<a name="Advanced-Subtitle-options_003a"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Subtitle-options_003a">5.10 Advanced Subtitle options:</a></h2>
+<a name="Advanced-Subtitle-options"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Advanced-Subtitle-options">5.10 Advanced Subtitle options</a></h2>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>-fix_sub_duration</samp>&rsquo;</dt>
@@ -1293,6 +1306,10 @@ and copy them to the output file &lsquo;<tt>out.mov</tt>&rsquo;:
 
 <p>To map all the streams except the second audio, use negative mappings
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -map 0 -map -0:a:1 OUTPUT
+</pre></td></tr></table>
+
+<p>To pick the English audio stream:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -map 0:m:language:eng OUTPUT
 </pre></td></tr></table>
 
 <p>Note that using this option disables the default mappings for this output file.
@@ -1694,8 +1711,8 @@ MPEG-TS format, delaying the subtitles by 1 second:
 <p>(0x2d0, 0x2dc and 0x2ef are the MPEG-TS PIDs of respectively the video,
 audio and subtitles streams; 0:0, 0:3 and 0:7 would have worked too)
 </p>
-<a name="Preset-files"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Preset-files">5.12 Preset files</a></h2>
+<a name="Preset-files-1"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Preset-files-1">5.12 Preset files</a></h2>
 <p>A preset file contains a sequence of <var>option</var>=<var>value</var> pairs,
 one for each line, specifying a sequence of options which would be
 awkward to specify on the command line. Lines starting with the hash
@@ -1770,8 +1787,8 @@ quality).
 <a name="Examples"></a>
 <h1 class="chapter"><a href="ffmpeg.html#toc-Examples">7. Examples</a></h1>
 
-<a name="Preset-files-1"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Preset-files-1">7.1 Preset files</a></h2>
+<a name="Preset-files"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Preset-files">7.1 Preset files</a></h2>
 
 <p>A preset file contains a sequence of <var>option=value</var> pairs, one for
 each line, specifying a sequence of options which can be specified also on
@@ -1992,5 +2009,7 @@ online repository at <a href="http://source.ffmpeg.org">http://source.ffmpeg.org
 &lsquo;<tt>MAINTAINERS</tt>&rsquo; in the source code tree.
 </p>
 
-<footer class="footer pagination-right">
-<span class="label label-info">This document was generated by <em>Kyle Schwarz</em> on <em>June 9, 2014</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.</span></footer></div></div></body>
+    </div>
+  </body>
+</html>
+

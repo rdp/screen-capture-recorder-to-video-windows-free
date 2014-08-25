@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html>
-<!-- Created on June 9, 2014 by texi2html 1.82 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FFmpeg documentation</title>
+    <link rel="stylesheet" href="style.min.css" />
+
+<meta name="description" content="FFmpeg Devices Documentation: ">
+<meta name="keywords" content="FFmpeg documentation : FFmpeg Devices ">
+<meta name="Generator" content="texi2html 1.82">
+<!-- Created on August 24, 2014 by texi2html 1.82 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -11,20 +20,10 @@ Maintained by: Many creative people.
 Send bugs and suggestions to <texi2html-bug@nongnu.org>
 
 -->
-<head>
-<title>FFmpeg documentation : FFmpeg Devices </title>
-
-<meta name="description" content="FFmpeg Devices Documentation: ">
-<meta name="keywords" content="FFmpeg documentation : FFmpeg Devices ">
-<meta name="Generator" content="texi2html 1.82">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="default.css" />
-
-<link rel="icon" href="favicon.png" type="image/png" />
-</head>
-<body>
-<div id="container">
-<div id="body">
+  </head>
+  <body>
+    <div style="width: 95%; margin: auto">
 
 <a name="SEC_Top"></a>
 <h1 class="settitle">FFmpeg Devices Documentation</h1>
@@ -43,48 +42,49 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-bktr" href="#bktr">3.3 bktr</a></li>
     <li><a name="toc-dshow" href="#dshow">3.4 dshow</a>
     <ul class="toc">
-      <li><a name="toc-Options-12" href="#Options-12">3.4.1 Options</a></li>
-      <li><a name="toc-Examples-6" href="#Examples-6">3.4.2 Examples</a></li>
+      <li><a name="toc-Options-8" href="#Options-8">3.4.1 Options</a></li>
+      <li><a name="toc-Examples-10" href="#Examples-10">3.4.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-dv1394" href="#dv1394">3.5 dv1394</a></li>
     <li><a name="toc-fbdev" href="#fbdev">3.6 fbdev</a></li>
     <li><a name="toc-gdigrab" href="#gdigrab">3.7 gdigrab</a>
     <ul class="toc">
-      <li><a name="toc-Options-7" href="#Options-7">3.7.1 Options</a></li>
+      <li><a name="toc-Options-12" href="#Options-12">3.7.1 Options</a></li>
     </ul></li>
     <li><a name="toc-iec61883" href="#iec61883">3.8 iec61883</a>
     <ul class="toc">
-      <li><a name="toc-Options-5" href="#Options-5">3.8.1 Options</a></li>
-      <li><a name="toc-Examples-8" href="#Examples-8">3.8.2 Examples</a></li>
+      <li><a name="toc-Options" href="#Options">3.8.1 Options</a></li>
+      <li><a name="toc-Examples-4" href="#Examples-4">3.8.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-jack" href="#jack">3.9 jack</a></li>
     <li><a name="toc-lavfi" href="#lavfi">3.10 lavfi</a>
     <ul class="toc">
-      <li><a name="toc-Options-10" href="#Options-10">3.10.1 Options</a></li>
-      <li><a name="toc-Examples-10" href="#Examples-10">3.10.2 Examples</a></li>
+      <li><a name="toc-Options-6" href="#Options-6">3.10.1 Options</a></li>
+      <li><a name="toc-Examples-1" href="#Examples-1">3.10.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-libdc1394" href="#libdc1394">3.11 libdc1394</a></li>
-    <li><a name="toc-openal" href="#openal">3.12 openal</a>
+    <li><a name="toc-libcdio" href="#libcdio">3.11 libcdio</a></li>
+    <li><a name="toc-libdc1394" href="#libdc1394">3.12 libdc1394</a></li>
+    <li><a name="toc-openal" href="#openal">3.13 openal</a>
     <ul class="toc">
-      <li><a name="toc-Options-13" href="#Options-13">3.12.1 Options</a></li>
-      <li><a name="toc-Examples-5" href="#Examples-5">3.12.2 Examples</a></li>
+      <li><a name="toc-Options-10" href="#Options-10">3.13.1 Options</a></li>
+      <li><a name="toc-Examples-5" href="#Examples-5">3.13.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-oss" href="#oss">3.13 oss</a></li>
-    <li><a name="toc-pulse-1" href="#pulse-1">3.14 pulse</a>
+    <li><a name="toc-oss" href="#oss">3.14 oss</a></li>
+    <li><a name="toc-pulse-1" href="#pulse-1">3.15 pulse</a>
     <ul class="toc">
-      <li><a name="toc-Options-4" href="#Options-4">3.14.1 Options</a></li>
-      <li><a name="toc-Examples-3" href="#Examples-3">3.14.2 Examples</a></li>
+      <li><a name="toc-Options-4" href="#Options-4">3.15.1 Options</a></li>
+      <li><a name="toc-Examples-6" href="#Examples-6">3.15.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-qtkit" href="#qtkit">3.15 qtkit</a></li>
-    <li><a name="toc-sndio" href="#sndio">3.16 sndio</a></li>
-    <li><a name="toc-video4linux2_002c-v4l2" href="#video4linux2_002c-v4l2">3.17 video4linux2, v4l2</a>
+    <li><a name="toc-qtkit" href="#qtkit">3.16 qtkit</a></li>
+    <li><a name="toc-sndio-1" href="#sndio-1">3.17 sndio</a></li>
+    <li><a name="toc-video4linux2_002c-v4l2" href="#video4linux2_002c-v4l2">3.18 video4linux2, v4l2</a>
     <ul class="toc">
-      <li><a name="toc-Options-6" href="#Options-6">3.17.1 Options</a></li>
+      <li><a name="toc-Options-1" href="#Options-1">3.18.1 Options</a></li>
     </ul></li>
-    <li><a name="toc-vfwcap" href="#vfwcap">3.18 vfwcap</a></li>
-    <li><a name="toc-x11grab" href="#x11grab">3.19 x11grab</a>
+    <li><a name="toc-vfwcap" href="#vfwcap">3.19 vfwcap</a></li>
+    <li><a name="toc-x11grab" href="#x11grab">3.20 x11grab</a>
     <ul class="toc">
-      <li><a name="toc-Options-2" href="#Options-2">3.19.1 Options</a></li>
+      <li><a name="toc-Options-11" href="#Options-11">3.20.1 Options</a></li>
     </ul>
 </li>
   </ul></li>
@@ -92,45 +92,45 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-alsa-1" href="#alsa-1">4.1 alsa</a>
     <ul class="toc">
-      <li><a name="toc-Examples-4" href="#Examples-4">4.1.1 Examples</a></li>
+      <li><a name="toc-Examples-7" href="#Examples-7">4.1.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-caca" href="#caca">4.2 caca</a>
     <ul class="toc">
-      <li><a name="toc-Options-9" href="#Options-9">4.2.1 Options</a></li>
+      <li><a name="toc-Options-14" href="#Options-14">4.2.1 Options</a></li>
       <li><a name="toc-Examples" href="#Examples">4.2.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-decklink" href="#decklink">4.3 decklink</a>
     <ul class="toc">
-      <li><a name="toc-Options-11" href="#Options-11">4.3.1 Options</a></li>
-      <li><a name="toc-Examples-1" href="#Examples-1">4.3.2 Examples</a></li>
+      <li><a name="toc-Options-13" href="#Options-13">4.3.1 Options</a></li>
+      <li><a name="toc-Examples-2" href="#Examples-2">4.3.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-fbdev-1" href="#fbdev-1">4.4 fbdev</a>
     <ul class="toc">
-      <li><a name="toc-Options-14" href="#Options-14">4.4.1 Options</a></li>
-      <li><a name="toc-Examples-11" href="#Examples-11">4.4.2 Examples</a></li>
+      <li><a name="toc-Options-3" href="#Options-3">4.4.1 Options</a></li>
+      <li><a name="toc-Examples-9" href="#Examples-9">4.4.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-opengl" href="#opengl">4.5 opengl</a>
     <ul class="toc">
-      <li><a name="toc-Options-3" href="#Options-3">4.5.1 Options</a></li>
-      <li><a name="toc-Examples-12" href="#Examples-12">4.5.2 Examples</a></li>
+      <li><a name="toc-Options-7" href="#Options-7">4.5.1 Options</a></li>
+      <li><a name="toc-Examples-3" href="#Examples-3">4.5.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-oss-1" href="#oss-1">4.6 oss</a></li>
     <li><a name="toc-pulse" href="#pulse">4.7 pulse</a>
     <ul class="toc">
-      <li><a name="toc-Options" href="#Options">4.7.1 Options</a></li>
-      <li><a name="toc-Examples-2" href="#Examples-2">4.7.2 Examples</a></li>
+      <li><a name="toc-Options-2" href="#Options-2">4.7.1 Options</a></li>
+      <li><a name="toc-Examples-12" href="#Examples-12">4.7.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-sdl" href="#sdl">4.8 sdl</a>
     <ul class="toc">
-      <li><a name="toc-Options-8" href="#Options-8">4.8.1 Options</a></li>
+      <li><a name="toc-Options-5" href="#Options-5">4.8.1 Options</a></li>
       <li><a name="toc-Interactive-commands" href="#Interactive-commands">4.8.2 Interactive commands</a></li>
-      <li><a name="toc-Examples-7" href="#Examples-7">4.8.3 Examples</a></li>
+      <li><a name="toc-Examples-11" href="#Examples-11">4.8.3 Examples</a></li>
     </ul></li>
-    <li><a name="toc-sndio-1" href="#sndio-1">4.9 sndio</a></li>
+    <li><a name="toc-sndio" href="#sndio">4.9 sndio</a></li>
     <li><a name="toc-xv" href="#xv">4.10 xv</a>
     <ul class="toc">
-      <li><a name="toc-Options-1" href="#Options-1">4.10.1 Options</a></li>
-      <li><a name="toc-Examples-9" href="#Examples-9">4.10.2 Examples</a></li>
+      <li><a name="toc-Options-9" href="#Options-9">4.10.1 Options</a></li>
+      <li><a name="toc-Examples-8" href="#Examples-8">4.10.2 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -230,6 +230,11 @@ A given device index will override any given device name.
 If the desired device consists of numbers only, use -video_device_index to identify it.
 The default device will be chosen if an empty string  or the device name &quot;default&quot; is given.
 The available devices can be enumerated by using -list_devices.
+The pixel format can be set using -pixel_format.
+Available formats:
+ monob, rgb555be, rgb555le, rgb565be, rgb565le, rgb24, bgr24, 0rgb, bgr0, 0bgr, rgb0,
+ bgr48be, uyvy422, yuva444p, yuva444p16le, yuv444p, yuv422p16, yuv422p10, yuv444p10,
+ yuv420p, nv12, yuyv422, gray
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -i &quot;0&quot; out.mpg
 </pre></td></tr></table>
@@ -237,7 +242,7 @@ The available devices can be enumerated by using -list_devices.
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -video_device_index 0 -i &quot;&quot; out.mpg
 </pre></td></tr></table>
 
-<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -i &quot;default&quot; out.mpg
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -pixel_format bgr0 -i &quot;default&quot; out.mpg
 </pre></td></tr></table>
 
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -list_devices true -i &quot;&quot;
@@ -267,8 +272,8 @@ opened on the same input, which should improve synchronism between them.
 <p>where <var>TYPE</var> can be either <var>audio</var> or <var>video</var>,
 and <var>NAME</var> is the device&rsquo;s name.
 </p>
-<a name="Options-12"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-12">3.4.1 Options</a></h3>
+<a name="Options-8"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-8">3.4.1 Options</a></h3>
 
 <p>If no options are specified, the device&rsquo;s defaults are used.
 If the device does not support the requested options, it will
@@ -331,8 +336,8 @@ See also
 </dd>
 </dl>
 
-<a name="Examples-6"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-6">3.4.2 Examples</a></h3>
+<a name="Examples-10"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-10">3.4.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -421,8 +426,8 @@ window, regardless of its position on the screen.
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f gdigrab -framerate 6 -i title=Calculator out.mpg
 </pre></td></tr></table>
 
-<a name="Options-7"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-7">3.7.1 Options</a></h3>
+<a name="Options-12"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-12">3.7.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>draw_mouse</samp>&rsquo;</dt>
@@ -485,8 +490,8 @@ Kernel 2.6.37 and later, since the old FireWire stack was removed.
 <p>Specify the FireWire port to be used as input file, or &quot;auto&quot;
 to choose the first port connected.
 </p>
-<a name="Options-5"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-5">3.8.1 Options</a></h3>
+<a name="Options"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options">3.8.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>dvtype</samp>&rsquo;</dt>
@@ -513,8 +518,8 @@ Look at /sys/bus/firewire/devices to find out the GUIDs.
 </dd>
 </dl>
 
-<a name="Examples-8"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-8">3.8.2 Examples</a></h3>
+<a name="Examples-4"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-4">3.8.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -592,8 +597,8 @@ corresponding stream which is mapped to the generated output. Currently
 only video data is supported. The filtergraph is specified through the
 option &lsquo;<samp>graph</samp>&rsquo;.
 </p>
-<a name="Options-10"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-10">3.10.1 Options</a></h3>
+<a name="Options-6"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-6">3.10.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>graph</samp>&rsquo;</dt>
@@ -616,8 +621,8 @@ the option <var>graph</var>.
 </dd>
 </dl>
 
-<a name="Examples-10"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-10">3.10.2 Examples</a></h3>
+<a name="Examples-1"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-1">3.10.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -650,13 +655,31 @@ Read an audio stream and a video stream and play it back with
 
 </li></ul>
 
+<a name="libcdio"></a>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-libcdio">3.11 libcdio</a></h2>
+
+<p>Audio-CD input device based on cdio.
+</p>
+<p>To enable this input device during configuration you need libcdio
+installed on your system. Requires the configure option
+<code>--enable-libcdio</code>.
+</p>
+<p>This device allows playing and grabbing from an Audio-CD.
+</p>
+<p>For example to copy with <code>ffmpeg</code> the entire Audio-CD in /dev/sr0,
+you may run the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f libcdio -i /dev/sr0 cd.wav
+</pre></td></tr></table>
+
 <a name="libdc1394"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-libdc1394">3.11 libdc1394</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-libdc1394">3.12 libdc1394</a></h2>
 
 <p>IIDC1394 input device, based on libdc1394 and libraw1394.
 </p>
+<p>Requires the configure option <code>--enable-libdc1394</code>.
+</p>
 <a name="openal"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-openal">3.12 openal</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-openal">3.13 openal</a></h2>
 
 <p>The OpenAL input device provides audio capture on all systems with a
 working OpenAL 1.1 implementation.
@@ -699,8 +722,8 @@ filename. If the empty string is provided, the device will
 automatically select the default device. You can get the list of the
 supported devices by using the option <var>list_devices</var>.
 </p>
-<a name="Options-13"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-13">3.12.1 Options</a></h3>
+<a name="Options-10"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-10">3.13.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>channels</samp>&rsquo;</dt>
@@ -728,7 +751,7 @@ Defaults to &lsquo;<samp>false</samp>&rsquo;.
 </dl>
 
 <a name="Examples-5"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-5">3.12.2 Examples</a></h3>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-5">3.13.2 Examples</a></h3>
 
 <p>Print the list of OpenAL supported devices and exit:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -list_devices true -f openal -i dummy out.ogg
@@ -750,7 +773,7 @@ within the same <code>ffmpeg</code> command:
 try the latest OpenAL Soft if the above does not work.
 </p>
 <a name="oss"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-oss">3.13 oss</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-oss">3.14 oss</a></h2>
 
 <p>Open Sound System input device.
 </p>
@@ -767,7 +790,7 @@ command:
 <a href="http://manuals.opensound.com/usersguide/dsp.html">http://manuals.opensound.com/usersguide/dsp.html</a>
 </p>
 <a name="pulse-1"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-pulse-1">3.14 pulse</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-pulse-1">3.15 pulse</a></h2>
 
 <p>PulseAudio input device.
 </p>
@@ -782,7 +805,7 @@ the command <code>pactl list sources</code>.
 <p>More information about PulseAudio can be found on <a href="http://www.pulseaudio.org">http://www.pulseaudio.org</a>.
 </p>
 <a name="Options-4"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-4">3.14.1 Options</a></h3>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-4">3.15.1 Options</a></h3>
 <dl compact="compact">
 <dt> &lsquo;<samp>server</samp>&rsquo;</dt>
 <dd><p>Connect to a specific PulseAudio server, specified by an IP address.
@@ -817,14 +840,14 @@ audio latency. By default it is unset.
 </p></dd>
 </dl>
 
-<a name="Examples-3"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-3">3.14.2 Examples</a></h3>
+<a name="Examples-6"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-6">3.15.2 Examples</a></h3>
 <p>Record a stream from default device:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f pulse -i default /tmp/pulse.wav
 </pre></td></tr></table>
 
 <a name="qtkit"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-qtkit">3.15 qtkit</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-qtkit">3.16 qtkit</a></h2>
 
 <p>QTKit input device.
 </p>
@@ -847,8 +870,8 @@ The available devices can be enumerated by using -list_devices.
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f qtkit -list_devices true -i &quot;&quot;
 </pre></td></tr></table>
 
-<a name="sndio"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-sndio">3.16 sndio</a></h2>
+<a name="sndio-1"></a>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-sndio-1">3.17 sndio</a></h2>
 
 <p>sndio input device.
 </p>
@@ -865,7 +888,7 @@ command:
 </pre></td></tr></table>
 
 <a name="video4linux2_002c-v4l2"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-video4linux2_002c-v4l2">3.17 video4linux2, v4l2</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-video4linux2_002c-v4l2">3.18 video4linux2, v4l2</a></h2>
 
 <p>Video4Linux2 input video device.
 </p>
@@ -911,8 +934,8 @@ frame rate and size as previously set:
 
 <p>For more information about Video4Linux, check <a href="http://linuxtv.org/">http://linuxtv.org/</a>.
 </p>
-<a name="Options-6"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-6">3.17.1 Options</a></h3>
+<a name="Options-1"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-1">3.18.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>standard</samp>&rsquo;</dt>
@@ -999,7 +1022,7 @@ sizes) and exit.
 </dl>
 
 <a name="vfwcap"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-vfwcap">3.18 vfwcap</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-vfwcap">3.19 vfwcap</a></h2>
 
 <p>VfW (Video for Windows) capture input device.
 </p>
@@ -1008,9 +1031,12 @@ sizes) and exit.
 other filename will be interpreted as device number 0.
 </p>
 <a name="x11grab"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-x11grab">3.19 x11grab</a></h2>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-x11grab">3.20 x11grab</a></h2>
 
 <p>X11 video input device.
+</p>
+<p>Depends on X11, Xext, and Xfixes. Requires the configure option
+<code>--enable-x11grab</code>.
 </p>
 <p>This device allows one to capture a region of an X11 display.
 </p>
@@ -1040,8 +1066,8 @@ properties of your X11 display (e.g. grep for &quot;name&quot; or &quot;dimensio
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f x11grab -framerate 25 -video_size cif -i :0.0+10,20 out.mpg
 </pre></td></tr></table>
 
-<a name="Options-2"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-2">3.19.1 Options</a></h3>
+<a name="Options-11"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-11">3.20.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>draw_mouse</samp>&rsquo;</dt>
@@ -1090,6 +1116,11 @@ know what is being grabbed if only a portion of the screen is grabbed.
 </dd>
 <dt> &lsquo;<samp>video_size</samp>&rsquo;</dt>
 <dd><p>Set the video frame size. Default value is <code>vga</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>use_shm</samp>&rsquo;</dt>
+<dd><p>Use the MIT-SHM extension for shared memory. Default value is <code>1</code>.
+It may be necessary to disable it for remote displays.
 </p></dd>
 </dl>
 
@@ -1118,8 +1149,8 @@ enabled output devices.
 
 <p>ALSA (Advanced Linux Sound Architecture) output device.
 </p>
-<a name="Examples-4"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-4">4.1.1 Examples</a></h3>
+<a name="Examples-7"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-7">4.1.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -1149,8 +1180,8 @@ libcaca is a graphics library that outputs text instead of pixels.
 <p>For more information about libcaca, check:
 <a href="http://caca.zoy.org/wiki/libcaca">http://caca.zoy.org/wiki/libcaca</a>
 </p>
-<a name="Options-9"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-9">4.2.1 Options</a></h3>
+<a name="Options-14"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-14">4.2.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>window_title</samp>&rsquo;</dt>
@@ -1238,8 +1269,8 @@ On Windows, you need to run the IDL files through <code>widl</code>.
 uyvy422, framerate and video size must be determined for your device with
 <code>-list_formats 1</code>. Audio sample rate is always 48 kHz.
 </p>
-<a name="Options-11"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-11">4.3.1 Options</a></h3>
+<a name="Options-13"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-13">4.3.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>list_devices</samp>&rsquo;</dt>
@@ -1259,8 +1290,8 @@ Defaults to &lsquo;<samp>0.5</samp>&rsquo;.
 </dd>
 </dl>
 
-<a name="Examples-1"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-1">4.3.2 Examples</a></h3>
+<a name="Examples-2"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-2">4.3.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -1298,8 +1329,8 @@ console. It is accessed through a file device node, usually
 <p>For more detailed information read the file
 &lsquo;<tt>Documentation/fb/framebuffer.txt</tt>&rsquo; included in the Linux source tree.
 </p>
-<a name="Options-14"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-14">4.4.1 Options</a></h3>
+<a name="Options-3"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-3">4.4.1 Options</a></h3>
 <dl compact="compact">
 <dt> &lsquo;<samp>xoffset</samp>&rsquo;</dt>
 <dt> &lsquo;<samp>yoffset</samp>&rsquo;</dt>
@@ -1307,8 +1338,8 @@ console. It is accessed through a file device node, usually
 </p></dd>
 </dl>
 
-<a name="Examples-11"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-11">4.4.2 Examples</a></h3>
+<a name="Examples-9"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-9">4.4.2 Examples</a></h3>
 <p>Play a file on framebuffer device &lsquo;<tt>/dev/fb0</tt>&rsquo;.
 Required pixel format depends on current framebuffer settings.
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -re -i INPUT -vcodec rawvideo -pix_fmt bgra -f fbdev /dev/fb0
@@ -1332,8 +1363,8 @@ Context may be provided by application or default SDL window is created.
 <code>AV_DEV_TO_APP_DESTROY_WINDOW_BUFFER</code> - destroy OpenGL context.
 Application is also required to inform a device about current resolution by sending <code>AV_APP_TO_DEV_WINDOW_SIZE</code> message.
 </p>
-<a name="Options-3"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-3">4.5.1 Options</a></h3>
+<a name="Options-7"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-7">4.5.1 Options</a></h3>
 <dl compact="compact">
 <dt> &lsquo;<samp>background</samp>&rsquo;</dt>
 <dd><p>Set background color. Black is a default.
@@ -1354,8 +1385,8 @@ Mostly usable when &lsquo;<samp>no_window</samp>&rsquo; is not set.
 </dd>
 </dl>
 
-<a name="Examples-12"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-12">4.5.2 Examples</a></h3>
+<a name="Examples-3"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-3">4.5.2 Examples</a></h3>
 <p>Play a file on SDL window using OpenGL rendering:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg  -i INPUT -f opengl &quot;window title&quot;
 </pre></td></tr></table>
@@ -1374,8 +1405,8 @@ Mostly usable when &lsquo;<samp>no_window</samp>&rsquo; is not set.
 </p>
 <p>More information about PulseAudio can be found on <a href="http://www.pulseaudio.org">http://www.pulseaudio.org</a>
 </p>
-<a name="Options"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options">4.7.1 Options</a></h3>
+<a name="Options-2"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-2">4.7.1 Options</a></h3>
 <dl compact="compact">
 <dt> &lsquo;<samp>server</samp>&rsquo;</dt>
 <dd><p>Connect to a specific PulseAudio server, specified by an IP address.
@@ -1429,8 +1460,8 @@ by the server.
 </dd>
 </dl>
 
-<a name="Examples-2"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-2">4.7.2 Examples</a></h3>
+<a name="Examples-12"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-12">4.7.2 Examples</a></h3>
 <p>Play a file on default device on default server:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg  -i INPUT -f pulse &quot;stream name&quot;
 </pre></td></tr></table>
@@ -1450,8 +1481,8 @@ when configuring your build.
 <p>For more information about SDL, check:
 <a href="http://www.libsdl.org/">http://www.libsdl.org/</a>
 </p>
-<a name="Options-8"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-8">4.8.1 Options</a></h3>
+<a name="Options-5"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-5">4.8.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>window_title</samp>&rsquo;</dt>
@@ -1489,16 +1520,16 @@ following interactive commands.
 </p></dd>
 </dl>
 
-<a name="Examples-7"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-7">4.8.3 Examples</a></h3>
+<a name="Examples-11"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-11">4.8.3 Examples</a></h3>
 
 <p>The following command shows the <code>ffmpeg</code> output is an
 SDL window, forcing its size to the qcif format:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -vcodec rawvideo -pix_fmt yuv420p -window_size qcif -f sdl &quot;SDL output&quot;
 </pre></td></tr></table>
 
-<a name="sndio-1"></a>
-<h2 class="section"><a href="ffmpeg-devices.html#toc-sndio-1">4.9 sndio</a></h2>
+<a name="sndio"></a>
+<h2 class="section"><a href="ffmpeg-devices.html#toc-sndio">4.9 sndio</a></h2>
 
 <p>sndio audio output device.
 </p>
@@ -1510,8 +1541,8 @@ SDL window, forcing its size to the qcif format:
 <p>This output device allows one to show a video stream in a X Window System
 window.
 </p>
-<a name="Options-1"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-1">4.10.1 Options</a></h3>
+<a name="Options-9"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Options-9">4.10.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>display_name</samp>&rsquo;</dt>
@@ -1564,8 +1595,8 @@ specified for the output device. Ignored when <var>window_id</var> is set.
 
 <p>For more information about XVideo see <a href="http://www.x.org/">http://www.x.org/</a>.
 </p>
-<a name="Examples-9"></a>
-<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-9">4.10.2 Examples</a></h3>
+<a name="Examples-8"></a>
+<h3 class="subsection"><a href="ffmpeg-devices.html#toc-Examples-8">4.10.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -1602,5 +1633,7 @@ online repository at <a href="http://source.ffmpeg.org">http://source.ffmpeg.org
 &lsquo;<tt>MAINTAINERS</tt>&rsquo; in the source code tree.
 </p>
 
-<footer class="footer pagination-right">
-<span class="label label-info">This document was generated by <em>Kyle Schwarz</em> on <em>June 9, 2014</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.</span></footer></div></div></body>
+    </div>
+  </body>
+</html>
+

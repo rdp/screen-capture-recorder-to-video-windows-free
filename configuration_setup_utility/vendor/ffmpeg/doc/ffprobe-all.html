@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html>
-<!-- Created on June 9, 2014 by texi2html 1.82 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FFmpeg documentation</title>
+    <link rel="stylesheet" href="style.min.css" />
+
+<meta name="description" content="ffprobe Documentation: ">
+<meta name="keywords" content="FFmpeg documentation : ffprobe ">
+<meta name="Generator" content="texi2html 1.82">
+<!-- Created on August 24, 2014 by texi2html 1.82 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -11,20 +20,10 @@ Maintained by: Many creative people.
 Send bugs and suggestions to <texi2html-bug@nongnu.org>
 
 -->
-<head>
-<title>FFmpeg documentation : ffprobe </title>
-
-<meta name="description" content="ffprobe Documentation: ">
-<meta name="keywords" content="FFmpeg documentation : ffprobe ">
-<meta name="Generator" content="texi2html 1.82">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="default.css" />
-
-<link rel="icon" href="favicon.png" type="image/png" />
-</head>
-<body>
-<div id="container">
-<div id="body">
+  </head>
+  <body>
+    <div style="width: 95%; margin: auto">
 
 <a name="SEC_Top"></a>
 <h1 class="settitle">ffprobe Documentation</h1>
@@ -36,7 +35,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
 <ul class="toc">
   <li><a name="toc-Synopsis" href="#Synopsis">1. Synopsis</a></li>
   <li><a name="toc-Description" href="#Description">2. Description</a></li>
-  <li><a name="toc-Options-4" href="#Options-4">3. Options</a>
+  <li><a name="toc-Options-15" href="#Options-15">3. Options</a>
   <ul class="toc">
     <li><a name="toc-Stream-specifiers-1" href="#Stream-specifiers-1">3.1 Stream specifiers</a></li>
     <li><a name="toc-Generic-options" href="#Generic-options">3.2 Generic options</a></li>
@@ -53,16 +52,16 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-xml" href="#xml">4.6 xml</a></li>
   </ul></li>
   <li><a name="toc-Timecode" href="#Timecode">5. Timecode</a></li>
-  <li><a name="toc-Syntax" href="#Syntax">6. Syntax</a>
+  <li><a name="toc-Syntax-1" href="#Syntax-1">6. Syntax</a>
   <ul class="toc">
     <li><a name="toc-Quoting-and-escaping" href="#Quoting-and-escaping">6.1 Quoting and escaping</a>
     <ul class="toc">
-      <li><a name="toc-Examples-70" href="#Examples-70">6.1.1 Examples</a></li>
+      <li><a name="toc-Examples-84" href="#Examples-84">6.1.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-Date" href="#Date">6.2 Date</a></li>
     <li><a name="toc-Time-duration" href="#Time-duration">6.3 Time duration</a>
     <ul class="toc">
-      <li><a name="toc-Examples-41" href="#Examples-41">6.3.1 Examples</a></li>
+      <li><a name="toc-Examples-55" href="#Examples-55">6.3.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-Video-size" href="#Video-size">6.4 Video size</a></li>
     <li><a name="toc-Video-rate" href="#Video-rate">6.5 Video rate</a></li>
@@ -76,9 +75,9 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <li><a name="toc-Decoders" href="#Decoders">10. Decoders</a></li>
   <li><a name="toc-Video-Decoders" href="#Video-Decoders">11. Video Decoders</a>
   <ul class="toc">
-    <li><a name="toc-rawvideo" href="#rawvideo">11.1 rawvideo</a>
+    <li><a name="toc-rawvideo-1" href="#rawvideo-1">11.1 rawvideo</a>
     <ul class="toc">
-      <li><a name="toc-Options-8" href="#Options-8">11.1.1 Options</a></li>
+      <li><a name="toc-Options-13" href="#Options-13">11.1.1 Options</a></li>
     </ul>
 </li>
   </ul></li>
@@ -93,7 +92,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-libgsm" href="#libgsm">12.4 libgsm</a></li>
     <li><a name="toc-libilbc" href="#libilbc">12.5 libilbc</a>
     <ul class="toc">
-      <li><a name="toc-Options-11" href="#Options-11">12.5.1 Options</a></li>
+      <li><a name="toc-Options-9" href="#Options-9">12.5.1 Options</a></li>
     </ul></li>
     <li><a name="toc-libopencore_002damrnb" href="#libopencore_002damrnb">12.6 libopencore-amrnb</a></li>
     <li><a name="toc-libopencore_002damrwb" href="#libopencore_002damrwb">12.7 libopencore-amrwb</a></li>
@@ -103,11 +102,11 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-dvdsub" href="#dvdsub">13.1 dvdsub</a>
     <ul class="toc">
-      <li><a name="toc-Options-15" href="#Options-15">13.1.1 Options</a></li>
+      <li><a name="toc-Options-11" href="#Options-11">13.1.1 Options</a></li>
     </ul></li>
     <li><a name="toc-libzvbi_002dteletext" href="#libzvbi_002dteletext">13.2 libzvbi-teletext</a>
     <ul class="toc">
-      <li><a name="toc-Options-12" href="#Options-12">13.2.1 Options</a></li>
+      <li><a name="toc-Options-16" href="#Options-16">13.2.1 Options</a></li>
     </ul>
 </li>
   </ul></li>
@@ -117,12 +116,12 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-chomp" href="#chomp">14.2 chomp</a></li>
     <li><a name="toc-dump_005fextra" href="#dump_005fextra">14.3 dump_extra</a></li>
     <li><a name="toc-h264_005fmp4toannexb" href="#h264_005fmp4toannexb">14.4 h264_mp4toannexb</a></li>
-    <li><a name="toc-imx_005fdump_005fheader" href="#imx_005fdump_005fheader">14.5 imx_dump_header</a></li>
+    <li><a name="toc-imxdump" href="#imxdump">14.5 imxdump</a></li>
     <li><a name="toc-mjpeg2jpeg" href="#mjpeg2jpeg">14.6 mjpeg2jpeg</a></li>
     <li><a name="toc-mjpega_005fdump_005fheader" href="#mjpega_005fdump_005fheader">14.7 mjpega_dump_header</a></li>
     <li><a name="toc-movsub" href="#movsub">14.8 movsub</a></li>
     <li><a name="toc-mp3_005fheader_005fdecompress" href="#mp3_005fheader_005fdecompress">14.9 mp3_header_decompress</a></li>
-    <li><a name="toc-noise-1" href="#noise-1">14.10 noise</a></li>
+    <li><a name="toc-noise" href="#noise">14.10 noise</a></li>
     <li><a name="toc-remove_005fextra" href="#remove_005fextra">14.11 remove_extra</a></li>
   </ul></li>
   <li><a name="toc-Format-Options" href="#Format-Options">15. Format Options</a>
@@ -133,20 +132,20 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-applehttp" href="#applehttp">16.1 applehttp</a></li>
     <li><a name="toc-asf" href="#asf">16.2 asf</a></li>
-    <li><a name="toc-concat-2" href="#concat-2">16.3 concat</a>
+    <li><a name="toc-concat-3" href="#concat-3">16.3 concat</a>
     <ul class="toc">
-      <li><a name="toc-Syntax-1" href="#Syntax-1">16.3.1 Syntax</a></li>
-      <li><a name="toc-Options" href="#Options">16.3.2 Options</a></li>
+      <li><a name="toc-Syntax" href="#Syntax">16.3.1 Syntax</a></li>
+      <li><a name="toc-Options-1" href="#Options-1">16.3.2 Options</a></li>
     </ul></li>
     <li><a name="toc-flv" href="#flv">16.4 flv</a></li>
     <li><a name="toc-libgme" href="#libgme">16.5 libgme</a></li>
     <li><a name="toc-libquvi" href="#libquvi">16.6 libquvi</a></li>
     <li><a name="toc-image2" href="#image2">16.7 image2</a>
     <ul class="toc">
-      <li><a name="toc-Examples-67" href="#Examples-67">16.7.1 Examples</a></li>
+      <li><a name="toc-Examples-41" href="#Examples-41">16.7.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-mpegts" href="#mpegts">16.8 mpegts</a></li>
-    <li><a name="toc-rawvideo-1" href="#rawvideo-1">16.9 rawvideo</a></li>
+    <li><a name="toc-rawvideo" href="#rawvideo">16.9 rawvideo</a></li>
     <li><a name="toc-sbg" href="#sbg">16.10 sbg</a></li>
     <li><a name="toc-tedcaptions" href="#tedcaptions">16.11 tedcaptions</a></li>
   </ul></li>
@@ -155,7 +154,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-bluray" href="#bluray">18.1 bluray</a></li>
     <li><a name="toc-cache" href="#cache">18.2 cache</a></li>
-    <li><a name="toc-concat-1" href="#concat-1">18.3 concat</a></li>
+    <li><a name="toc-concat-2" href="#concat-2">18.3 concat</a></li>
     <li><a name="toc-crypto" href="#crypto">18.4 crypto</a></li>
     <li><a name="toc-data" href="#data">18.5 data</a></li>
     <li><a name="toc-file" href="#file">18.6 file</a></li>
@@ -166,38 +165,40 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <ul class="toc">
       <li><a name="toc-HTTP-Cookies" href="#HTTP-Cookies">18.10.1 HTTP Cookies</a></li>
     </ul></li>
-    <li><a name="toc-mmst" href="#mmst">18.11 mmst</a></li>
-    <li><a name="toc-mmsh" href="#mmsh">18.12 mmsh</a></li>
-    <li><a name="toc-md5" href="#md5">18.13 md5</a></li>
-    <li><a name="toc-pipe" href="#pipe">18.14 pipe</a></li>
-    <li><a name="toc-rtmp" href="#rtmp">18.15 rtmp</a></li>
-    <li><a name="toc-rtmpe" href="#rtmpe">18.16 rtmpe</a></li>
-    <li><a name="toc-rtmps" href="#rtmps">18.17 rtmps</a></li>
-    <li><a name="toc-rtmpt" href="#rtmpt">18.18 rtmpt</a></li>
-    <li><a name="toc-rtmpte" href="#rtmpte">18.19 rtmpte</a></li>
-    <li><a name="toc-rtmpts" href="#rtmpts">18.20 rtmpts</a></li>
-    <li><a name="toc-libssh" href="#libssh">18.21 libssh</a></li>
-    <li><a name="toc-librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte" href="#librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">18.22 librtmp rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></li>
-    <li><a name="toc-rtp" href="#rtp">18.23 rtp</a></li>
-    <li><a name="toc-rtsp" href="#rtsp">18.24 rtsp</a>
+    <li><a name="toc-Icecast" href="#Icecast">18.11 Icecast</a></li>
+    <li><a name="toc-mmst" href="#mmst">18.12 mmst</a></li>
+    <li><a name="toc-mmsh" href="#mmsh">18.13 mmsh</a></li>
+    <li><a name="toc-md5" href="#md5">18.14 md5</a></li>
+    <li><a name="toc-pipe" href="#pipe">18.15 pipe</a></li>
+    <li><a name="toc-rtmp" href="#rtmp">18.16 rtmp</a></li>
+    <li><a name="toc-rtmpe" href="#rtmpe">18.17 rtmpe</a></li>
+    <li><a name="toc-rtmps" href="#rtmps">18.18 rtmps</a></li>
+    <li><a name="toc-rtmpt" href="#rtmpt">18.19 rtmpt</a></li>
+    <li><a name="toc-rtmpte" href="#rtmpte">18.20 rtmpte</a></li>
+    <li><a name="toc-rtmpts" href="#rtmpts">18.21 rtmpts</a></li>
+    <li><a name="toc-libsmbclient" href="#libsmbclient">18.22 libsmbclient</a></li>
+    <li><a name="toc-libssh" href="#libssh">18.23 libssh</a></li>
+    <li><a name="toc-librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte" href="#librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">18.24 librtmp rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></li>
+    <li><a name="toc-rtp" href="#rtp">18.25 rtp</a></li>
+    <li><a name="toc-rtsp" href="#rtsp">18.26 rtsp</a>
     <ul class="toc">
-      <li><a name="toc-Examples-39" href="#Examples-39">18.24.1 Examples</a></li>
+      <li><a name="toc-Examples-69" href="#Examples-69">18.26.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-sap" href="#sap">18.25 sap</a>
+    <li><a name="toc-sap" href="#sap">18.27 sap</a>
     <ul class="toc">
-      <li><a name="toc-Muxer" href="#Muxer">18.25.1 Muxer</a></li>
-      <li><a name="toc-Demuxer" href="#Demuxer">18.25.2 Demuxer</a></li>
+      <li><a name="toc-Muxer" href="#Muxer">18.27.1 Muxer</a></li>
+      <li><a name="toc-Demuxer" href="#Demuxer">18.27.2 Demuxer</a></li>
     </ul></li>
-    <li><a name="toc-sctp" href="#sctp">18.26 sctp</a></li>
-    <li><a name="toc-srtp" href="#srtp">18.27 srtp</a></li>
-    <li><a name="toc-subfile" href="#subfile">18.28 subfile</a></li>
-    <li><a name="toc-tcp" href="#tcp">18.29 tcp</a></li>
-    <li><a name="toc-tls" href="#tls">18.30 tls</a></li>
-    <li><a name="toc-udp" href="#udp">18.31 udp</a>
+    <li><a name="toc-sctp" href="#sctp">18.28 sctp</a></li>
+    <li><a name="toc-srtp" href="#srtp">18.29 srtp</a></li>
+    <li><a name="toc-subfile" href="#subfile">18.30 subfile</a></li>
+    <li><a name="toc-tcp" href="#tcp">18.31 tcp</a></li>
+    <li><a name="toc-tls" href="#tls">18.32 tls</a></li>
+    <li><a name="toc-udp" href="#udp">18.33 udp</a>
     <ul class="toc">
-      <li><a name="toc-Examples-47" href="#Examples-47">18.31.1 Examples</a></li>
+      <li><a name="toc-Examples-14" href="#Examples-14">18.33.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-unix" href="#unix">18.32 unix</a></li>
+    <li><a name="toc-unix" href="#unix">18.34 unix</a></li>
   </ul></li>
   <li><a name="toc-Device-Options" href="#Device-Options">19. Device Options</a></li>
   <li><a name="toc-Input-Devices" href="#Input-Devices">20. Input Devices</a>
@@ -207,48 +208,49 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-bktr" href="#bktr">20.3 bktr</a></li>
     <li><a name="toc-dshow" href="#dshow">20.4 dshow</a>
     <ul class="toc">
-      <li><a name="toc-Options-14" href="#Options-14">20.4.1 Options</a></li>
-      <li><a name="toc-Examples-45" href="#Examples-45">20.4.2 Examples</a></li>
+      <li><a name="toc-Options-7" href="#Options-7">20.4.1 Options</a></li>
+      <li><a name="toc-Examples-47" href="#Examples-47">20.4.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-dv1394" href="#dv1394">20.5 dv1394</a></li>
     <li><a name="toc-fbdev" href="#fbdev">20.6 fbdev</a></li>
     <li><a name="toc-gdigrab" href="#gdigrab">20.7 gdigrab</a>
     <ul class="toc">
-      <li><a name="toc-Options-9" href="#Options-9">20.7.1 Options</a></li>
+      <li><a name="toc-Options-4" href="#Options-4">20.7.1 Options</a></li>
     </ul></li>
     <li><a name="toc-iec61883" href="#iec61883">20.8 iec61883</a>
     <ul class="toc">
       <li><a name="toc-Options-10" href="#Options-10">20.8.1 Options</a></li>
-      <li><a name="toc-Examples-14" href="#Examples-14">20.8.2 Examples</a></li>
+      <li><a name="toc-Examples-36" href="#Examples-36">20.8.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-jack" href="#jack">20.9 jack</a></li>
     <li><a name="toc-lavfi" href="#lavfi">20.10 lavfi</a>
     <ul class="toc">
-      <li><a name="toc-Options-3" href="#Options-3">20.10.1 Options</a></li>
-      <li><a name="toc-Examples-24" href="#Examples-24">20.10.2 Examples</a></li>
+      <li><a name="toc-Options-8" href="#Options-8">20.10.1 Options</a></li>
+      <li><a name="toc-Examples" href="#Examples">20.10.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-libdc1394" href="#libdc1394">20.11 libdc1394</a></li>
-    <li><a name="toc-openal" href="#openal">20.12 openal</a>
+    <li><a name="toc-libcdio" href="#libcdio">20.11 libcdio</a></li>
+    <li><a name="toc-libdc1394" href="#libdc1394">20.12 libdc1394</a></li>
+    <li><a name="toc-openal" href="#openal">20.13 openal</a>
     <ul class="toc">
-      <li><a name="toc-Options-13" href="#Options-13">20.12.1 Options</a></li>
-      <li><a name="toc-Examples-86" href="#Examples-86">20.12.2 Examples</a></li>
+      <li><a name="toc-Options-2" href="#Options-2">20.13.1 Options</a></li>
+      <li><a name="toc-Examples-35" href="#Examples-35">20.13.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-oss" href="#oss">20.13 oss</a></li>
-    <li><a name="toc-pulse" href="#pulse">20.14 pulse</a>
+    <li><a name="toc-oss" href="#oss">20.14 oss</a></li>
+    <li><a name="toc-pulse" href="#pulse">20.15 pulse</a>
     <ul class="toc">
-      <li><a name="toc-Options-2" href="#Options-2">20.14.1 Options</a></li>
-      <li><a name="toc-Examples-33" href="#Examples-33">20.14.2 Examples</a></li>
+      <li><a name="toc-Options-5" href="#Options-5">20.15.1 Options</a></li>
+      <li><a name="toc-Examples-30" href="#Examples-30">20.15.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-qtkit" href="#qtkit">20.15 qtkit</a></li>
-    <li><a name="toc-sndio" href="#sndio">20.16 sndio</a></li>
-    <li><a name="toc-video4linux2_002c-v4l2" href="#video4linux2_002c-v4l2">20.17 video4linux2, v4l2</a>
+    <li><a name="toc-qtkit" href="#qtkit">20.16 qtkit</a></li>
+    <li><a name="toc-sndio" href="#sndio">20.17 sndio</a></li>
+    <li><a name="toc-video4linux2_002c-v4l2" href="#video4linux2_002c-v4l2">20.18 video4linux2, v4l2</a>
     <ul class="toc">
-      <li><a name="toc-Options-6" href="#Options-6">20.17.1 Options</a></li>
+      <li><a name="toc-Options" href="#Options">20.18.1 Options</a></li>
     </ul></li>
-    <li><a name="toc-vfwcap" href="#vfwcap">20.18 vfwcap</a></li>
-    <li><a name="toc-x11grab" href="#x11grab">20.19 x11grab</a>
+    <li><a name="toc-vfwcap" href="#vfwcap">20.19 vfwcap</a></li>
+    <li><a name="toc-x11grab" href="#x11grab">20.20 x11grab</a>
     <ul class="toc">
-      <li><a name="toc-Options-1" href="#Options-1">20.19.1 Options</a></li>
+      <li><a name="toc-Options-12" href="#Options-12">20.20.1 Options</a></li>
     </ul>
 </li>
   </ul></li>
@@ -266,37 +268,40 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-aconvert" href="#aconvert">27.1 aconvert</a>
     <ul class="toc">
-      <li><a name="toc-Examples-56" href="#Examples-56">27.1.1 Examples</a></li>
+      <li><a name="toc-Examples-76" href="#Examples-76">27.1.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-adelay" href="#adelay">27.2 adelay</a>
     <ul class="toc">
-      <li><a name="toc-Examples-52" href="#Examples-52">27.2.1 Examples</a></li>
+      <li><a name="toc-Examples-46" href="#Examples-46">27.2.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-aecho" href="#aecho">27.3 aecho</a>
     <ul class="toc">
-      <li><a name="toc-Examples-25" href="#Examples-25">27.3.1 Examples</a></li>
+      <li><a name="toc-Examples-62" href="#Examples-62">27.3.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-aeval" href="#aeval">27.4 aeval</a>
     <ul class="toc">
-      <li><a name="toc-Examples-10" href="#Examples-10">27.4.1 Examples</a></li>
+      <li><a name="toc-Examples-21" href="#Examples-21">27.4.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-afade" href="#afade">27.5 afade</a>
     <ul class="toc">
-      <li><a name="toc-Examples-60" href="#Examples-60">27.5.1 Examples</a></li>
+      <li><a name="toc-Examples-24" href="#Examples-24">27.5.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-aformat-1" href="#aformat-1">27.6 aformat</a></li>
     <li><a name="toc-allpass" href="#allpass">27.7 allpass</a></li>
     <li><a name="toc-amerge" href="#amerge">27.8 amerge</a>
     <ul class="toc">
-      <li><a name="toc-Examples-87" href="#Examples-87">27.8.1 Examples</a></li>
+      <li><a name="toc-Examples-7" href="#Examples-7">27.8.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-amix" href="#amix">27.9 amix</a></li>
     <li><a name="toc-anull" href="#anull">27.10 anull</a></li>
-    <li><a name="toc-apad" href="#apad">27.11 apad</a></li>
+    <li><a name="toc-apad" href="#apad">27.11 apad</a>
+    <ul class="toc">
+      <li><a name="toc-Examples-88" href="#Examples-88">27.11.1 Examples</a></li>
+    </ul></li>
     <li><a name="toc-aphaser" href="#aphaser">27.12 aphaser</a></li>
     <li><a name="toc-aresample-1" href="#aresample-1">27.13 aresample</a>
     <ul class="toc">
-      <li><a name="toc-Examples-31" href="#Examples-31">27.13.1 Examples</a></li>
+      <li><a name="toc-Examples-2" href="#Examples-2">27.13.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-asetnsamples" href="#asetnsamples">27.14 asetnsamples</a></li>
     <li><a name="toc-asetrate" href="#asetrate">27.15 asetrate</a></li>
@@ -304,12 +309,12 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-astats" href="#astats">27.17 astats</a></li>
     <li><a name="toc-astreamsync" href="#astreamsync">27.18 astreamsync</a>
     <ul class="toc">
-      <li><a name="toc-Examples-59" href="#Examples-59">27.18.1 Examples</a></li>
+      <li><a name="toc-Examples-34" href="#Examples-34">27.18.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-asyncts" href="#asyncts">27.19 asyncts</a></li>
     <li><a name="toc-atempo" href="#atempo">27.20 atempo</a>
     <ul class="toc">
-      <li><a name="toc-Examples-21" href="#Examples-21">27.20.1 Examples</a></li>
+      <li><a name="toc-Examples-26" href="#Examples-26">27.20.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-atrim" href="#atrim">27.21 atrim</a></li>
     <li><a name="toc-bandpass" href="#bandpass">27.22 bandpass</a></li>
@@ -321,41 +326,42 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-channelsplit" href="#channelsplit">27.28 channelsplit</a></li>
     <li><a name="toc-compand" href="#compand">27.29 compand</a>
     <ul class="toc">
-      <li><a name="toc-Examples-37" href="#Examples-37">27.29.1 Examples</a></li>
+      <li><a name="toc-Examples-80" href="#Examples-80">27.29.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-earwax" href="#earwax">27.30 earwax</a></li>
     <li><a name="toc-equalizer" href="#equalizer">27.31 equalizer</a>
     <ul class="toc">
-      <li><a name="toc-Examples-19" href="#Examples-19">27.31.1 Examples</a></li>
+      <li><a name="toc-Examples-33" href="#Examples-33">27.31.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-highpass" href="#highpass">27.32 highpass</a></li>
-    <li><a name="toc-join" href="#join">27.33 join</a></li>
-    <li><a name="toc-ladspa" href="#ladspa">27.34 ladspa</a>
+    <li><a name="toc-flanger" href="#flanger">27.32 flanger</a></li>
+    <li><a name="toc-highpass" href="#highpass">27.33 highpass</a></li>
+    <li><a name="toc-join" href="#join">27.34 join</a></li>
+    <li><a name="toc-ladspa" href="#ladspa">27.35 ladspa</a>
     <ul class="toc">
-      <li><a name="toc-Examples-23" href="#Examples-23">27.34.1 Examples</a></li>
-      <li><a name="toc-Commands-1" href="#Commands-1">27.34.2 Commands</a></li>
+      <li><a name="toc-Examples-32" href="#Examples-32">27.35.1 Examples</a></li>
+      <li><a name="toc-Commands-1" href="#Commands-1">27.35.2 Commands</a></li>
     </ul></li>
-    <li><a name="toc-lowpass" href="#lowpass">27.35 lowpass</a></li>
-    <li><a name="toc-pan" href="#pan">27.36 pan</a>
+    <li><a name="toc-lowpass" href="#lowpass">27.36 lowpass</a></li>
+    <li><a name="toc-pan" href="#pan">27.37 pan</a>
     <ul class="toc">
-      <li><a name="toc-Mixing-examples" href="#Mixing-examples">27.36.1 Mixing examples</a></li>
-      <li><a name="toc-Remapping-examples" href="#Remapping-examples">27.36.2 Remapping examples</a></li>
+      <li><a name="toc-Mixing-examples" href="#Mixing-examples">27.37.1 Mixing examples</a></li>
+      <li><a name="toc-Remapping-examples" href="#Remapping-examples">27.37.2 Remapping examples</a></li>
     </ul></li>
-    <li><a name="toc-replaygain" href="#replaygain">27.37 replaygain</a></li>
-    <li><a name="toc-resample" href="#resample">27.38 resample</a></li>
-    <li><a name="toc-silencedetect" href="#silencedetect">27.39 silencedetect</a>
+    <li><a name="toc-replaygain" href="#replaygain">27.38 replaygain</a></li>
+    <li><a name="toc-resample" href="#resample">27.39 resample</a></li>
+    <li><a name="toc-silencedetect" href="#silencedetect">27.40 silencedetect</a>
     <ul class="toc">
-      <li><a name="toc-Examples-7" href="#Examples-7">27.39.1 Examples</a></li>
+      <li><a name="toc-Examples-48" href="#Examples-48">27.40.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-treble" href="#treble">27.40 treble</a></li>
-    <li><a name="toc-volume" href="#volume">27.41 volume</a>
+    <li><a name="toc-treble" href="#treble">27.41 treble</a></li>
+    <li><a name="toc-volume" href="#volume">27.42 volume</a>
     <ul class="toc">
-      <li><a name="toc-Commands" href="#Commands">27.41.1 Commands</a></li>
-      <li><a name="toc-Examples-5" href="#Examples-5">27.41.2 Examples</a></li>
+      <li><a name="toc-Commands-5" href="#Commands-5">27.42.1 Commands</a></li>
+      <li><a name="toc-Examples-29" href="#Examples-29">27.42.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-volumedetect" href="#volumedetect">27.42 volumedetect</a>
+    <li><a name="toc-volumedetect" href="#volumedetect">27.43 volumedetect</a>
     <ul class="toc">
-      <li><a name="toc-Examples-44" href="#Examples-44">27.42.1 Examples</a></li>
+      <li><a name="toc-Examples-22" href="#Examples-22">27.43.1 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -363,23 +369,23 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-abuffer" href="#abuffer">28.1 abuffer</a>
     <ul class="toc">
-      <li><a name="toc-Examples-4" href="#Examples-4">28.1.1 Examples</a></li>
+      <li><a name="toc-Examples-6" href="#Examples-6">28.1.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-aevalsrc" href="#aevalsrc">28.2 aevalsrc</a>
     <ul class="toc">
-      <li><a name="toc-Examples-22" href="#Examples-22">28.2.1 Examples</a></li>
+      <li><a name="toc-Examples-44" href="#Examples-44">28.2.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-anullsrc" href="#anullsrc">28.3 anullsrc</a>
     <ul class="toc">
-      <li><a name="toc-Examples-77" href="#Examples-77">28.3.1 Examples</a></li>
+      <li><a name="toc-Examples-12" href="#Examples-12">28.3.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-flite" href="#flite">28.4 flite</a>
     <ul class="toc">
-      <li><a name="toc-Examples-28" href="#Examples-28">28.4.1 Examples</a></li>
+      <li><a name="toc-Examples-9" href="#Examples-9">28.4.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-sine" href="#sine">28.5 sine</a>
     <ul class="toc">
-      <li><a name="toc-Examples-66" href="#Examples-66">28.5.1 Examples</a></li>
+      <li><a name="toc-Examples-83" href="#Examples-83">28.5.1 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -398,68 +404,68 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-blackframe" href="#blackframe">30.6 blackframe</a></li>
     <li><a name="toc-blend" href="#blend">30.7 blend</a>
     <ul class="toc">
-      <li><a name="toc-Examples-36" href="#Examples-36">30.7.1 Examples</a></li>
+      <li><a name="toc-Examples-59" href="#Examples-59">30.7.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-boxblur" href="#boxblur">30.8 boxblur</a>
     <ul class="toc">
-      <li><a name="toc-Examples-78" href="#Examples-78">30.8.1 Examples</a></li>
+      <li><a name="toc-Examples-68" href="#Examples-68">30.8.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-colorbalance" href="#colorbalance">30.9 colorbalance</a>
     <ul class="toc">
-      <li><a name="toc-Examples-85" href="#Examples-85">30.9.1 Examples</a></li>
+      <li><a name="toc-Examples-27" href="#Examples-27">30.9.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-colorchannelmixer" href="#colorchannelmixer">30.10 colorchannelmixer</a>
     <ul class="toc">
-      <li><a name="toc-Examples-30" href="#Examples-30">30.10.1 Examples</a></li>
+      <li><a name="toc-Examples-40" href="#Examples-40">30.10.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-colormatrix" href="#colormatrix">30.11 colormatrix</a></li>
     <li><a name="toc-copy" href="#copy">30.12 copy</a></li>
     <li><a name="toc-crop" href="#crop">30.13 crop</a>
     <ul class="toc">
-      <li><a name="toc-Examples-26" href="#Examples-26">30.13.1 Examples</a></li>
+      <li><a name="toc-Examples-77" href="#Examples-77">30.13.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-cropdetect" href="#cropdetect">30.14 cropdetect</a></li>
     <li><a name="toc-curves-1" href="#curves-1">30.15 curves</a>
     <ul class="toc">
-      <li><a name="toc-Examples-3" href="#Examples-3">30.15.1 Examples</a></li>
+      <li><a name="toc-Examples-57" href="#Examples-57">30.15.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-dctdnoiz" href="#dctdnoiz">30.16 dctdnoiz</a>
     <ul class="toc">
-      <li><a name="toc-Examples-64" href="#Examples-64">30.16.1 Examples</a></li>
+      <li><a name="toc-Examples-54" href="#Examples-54">30.16.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-decimate-1" href="#decimate-1">30.17 decimate</a></li>
     <li><a name="toc-dejudder" href="#dejudder">30.18 dejudder</a></li>
     <li><a name="toc-delogo" href="#delogo">30.19 delogo</a>
     <ul class="toc">
-      <li><a name="toc-Examples-69" href="#Examples-69">30.19.1 Examples</a></li>
+      <li><a name="toc-Examples-16" href="#Examples-16">30.19.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-deshake" href="#deshake">30.20 deshake</a></li>
     <li><a name="toc-drawbox" href="#drawbox">30.21 drawbox</a>
     <ul class="toc">
-      <li><a name="toc-Examples-1" href="#Examples-1">30.21.1 Examples</a></li>
+      <li><a name="toc-Examples-89" href="#Examples-89">30.21.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-drawgrid" href="#drawgrid">30.22 drawgrid</a>
     <ul class="toc">
-      <li><a name="toc-Examples-84" href="#Examples-84">30.22.1 Examples</a></li>
+      <li><a name="toc-Examples-58" href="#Examples-58">30.22.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-drawtext-1" href="#drawtext-1">30.23 drawtext</a>
     <ul class="toc">
       <li><a name="toc-Syntax-2" href="#Syntax-2">30.23.1 Syntax</a></li>
       <li><a name="toc-Text-expansion" href="#Text-expansion">30.23.2 Text expansion</a></li>
-      <li><a name="toc-Examples-35" href="#Examples-35">30.23.3 Examples</a></li>
+      <li><a name="toc-Examples-82" href="#Examples-82">30.23.3 Examples</a></li>
     </ul></li>
     <li><a name="toc-edgedetect" href="#edgedetect">30.24 edgedetect</a>
     <ul class="toc">
-      <li><a name="toc-Examples-72" href="#Examples-72">30.24.1 Examples</a></li>
+      <li><a name="toc-Examples-5" href="#Examples-5">30.24.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-extractplanes" href="#extractplanes">30.25 extractplanes</a>
     <ul class="toc">
-      <li><a name="toc-Examples-51" href="#Examples-51">30.25.1 Examples</a></li>
+      <li><a name="toc-Examples-31" href="#Examples-31">30.25.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-elbg" href="#elbg">30.26 elbg</a></li>
     <li><a name="toc-fade" href="#fade">30.27 fade</a>
     <ul class="toc">
-      <li><a name="toc-Examples-74" href="#Examples-74">30.27.1 Examples</a></li>
+      <li><a name="toc-Examples-15" href="#Examples-15">30.27.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-field" href="#field">30.28 field</a></li>
     <li><a name="toc-fieldmatch" href="#fieldmatch">30.29 fieldmatch</a>
@@ -469,31 +475,31 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
         <li><a name="toc-p_002fc_002fn" href="#p_002fc_002fn">30.29.1.1 p/c/n</a></li>
         <li><a name="toc-u_002fb" href="#u_002fb">30.29.1.2 u/b</a></li>
       </ul></li>
-      <li><a name="toc-Examples-81" href="#Examples-81">30.29.2 Examples</a></li>
+      <li><a name="toc-Examples-39" href="#Examples-39">30.29.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-fieldorder" href="#fieldorder">30.30 fieldorder</a></li>
     <li><a name="toc-fifo" href="#fifo">30.31 fifo</a></li>
     <li><a name="toc-format-1" href="#format-1">30.32 format</a>
     <ul class="toc">
-      <li><a name="toc-Examples-2" href="#Examples-2">30.32.1 Examples</a></li>
+      <li><a name="toc-Examples-65" href="#Examples-65">30.32.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-fps-1" href="#fps-1">30.33 fps</a>
     <ul class="toc">
-      <li><a name="toc-Examples-12" href="#Examples-12">30.33.1 Examples</a></li>
+      <li><a name="toc-Examples-64" href="#Examples-64">30.33.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-framepack" href="#framepack">30.34 framepack</a></li>
     <li><a name="toc-framestep" href="#framestep">30.35 framestep</a></li>
     <li><a name="toc-frei0r-1" href="#frei0r-1">30.36 frei0r</a>
     <ul class="toc">
-      <li><a name="toc-Examples-80" href="#Examples-80">30.36.1 Examples</a></li>
+      <li><a name="toc-Examples-72" href="#Examples-72">30.36.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-geq" href="#geq">30.37 geq</a>
     <ul class="toc">
-      <li><a name="toc-Examples-6" href="#Examples-6">30.37.1 Examples</a></li>
+      <li><a name="toc-Examples-1" href="#Examples-1">30.37.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-gradfun" href="#gradfun">30.38 gradfun</a>
     <ul class="toc">
-      <li><a name="toc-Examples-58" href="#Examples-58">30.38.1 Examples</a></li>
+      <li><a name="toc-Examples-67" href="#Examples-67">30.38.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-haldclut-1" href="#haldclut-1">30.39 haldclut</a>
     <ul class="toc">
@@ -508,136 +514,145 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-histeq" href="#histeq">30.41 histeq</a></li>
     <li><a name="toc-histogram" href="#histogram">30.42 histogram</a>
     <ul class="toc">
-      <li><a name="toc-Examples-46" href="#Examples-46">30.42.1 Examples</a></li>
+      <li><a name="toc-Examples-87" href="#Examples-87">30.42.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-hqdn3d-1" href="#hqdn3d-1">30.43 hqdn3d</a></li>
-    <li><a name="toc-hue" href="#hue">30.44 hue</a>
+    <li><a name="toc-hqx" href="#hqx">30.44 hqx</a></li>
+    <li><a name="toc-hue" href="#hue">30.45 hue</a>
     <ul class="toc">
-      <li><a name="toc-Examples-34" href="#Examples-34">30.44.1 Examples</a></li>
-      <li><a name="toc-Commands-3" href="#Commands-3">30.44.2 Commands</a></li>
+      <li><a name="toc-Examples-60" href="#Examples-60">30.45.1 Examples</a></li>
+      <li><a name="toc-Commands" href="#Commands">30.45.2 Commands</a></li>
     </ul></li>
-    <li><a name="toc-idet" href="#idet">30.45 idet</a></li>
-    <li><a name="toc-il" href="#il">30.46 il</a></li>
-    <li><a name="toc-interlace" href="#interlace">30.47 interlace</a></li>
-    <li><a name="toc-kerndeint" href="#kerndeint">30.48 kerndeint</a>
+    <li><a name="toc-idet" href="#idet">30.46 idet</a></li>
+    <li><a name="toc-il" href="#il">30.47 il</a></li>
+    <li><a name="toc-interlace" href="#interlace">30.48 interlace</a></li>
+    <li><a name="toc-kerndeint" href="#kerndeint">30.49 kerndeint</a>
     <ul class="toc">
-      <li><a name="toc-Examples" href="#Examples">30.48.1 Examples</a></li>
+      <li><a name="toc-Examples-4" href="#Examples-4">30.49.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-lut3d-1" href="#lut3d-1">30.49 lut3d</a></li>
-    <li><a name="toc-lut_002c-lutrgb_002c-lutyuv" href="#lut_002c-lutrgb_002c-lutyuv">30.50 lut, lutrgb, lutyuv</a>
+    <li><a name="toc-lenscorrection" href="#lenscorrection">30.50 lenscorrection</a>
     <ul class="toc">
-      <li><a name="toc-Examples-53" href="#Examples-53">30.50.1 Examples</a></li>
+      <li><a name="toc-Options-3" href="#Options-3">30.50.1 Options</a></li>
     </ul></li>
-    <li><a name="toc-mergeplanes" href="#mergeplanes">30.51 mergeplanes</a>
+    <li><a name="toc-lut3d-1" href="#lut3d-1">30.51 lut3d</a></li>
+    <li><a name="toc-lut_002c-lutrgb_002c-lutyuv" href="#lut_002c-lutrgb_002c-lutyuv">30.52 lut, lutrgb, lutyuv</a>
     <ul class="toc">
-      <li><a name="toc-Examples-57" href="#Examples-57">30.51.1 Examples</a></li>
+      <li><a name="toc-Examples-85" href="#Examples-85">30.52.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-mcdeint" href="#mcdeint">30.52 mcdeint</a></li>
-    <li><a name="toc-mp" href="#mp">30.53 mp</a>
+    <li><a name="toc-mergeplanes" href="#mergeplanes">30.53 mergeplanes</a>
     <ul class="toc">
-      <li><a name="toc-Examples-42" href="#Examples-42">30.53.1 Examples</a></li>
+      <li><a name="toc-Examples-28" href="#Examples-28">30.53.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-mpdecimate" href="#mpdecimate">30.54 mpdecimate</a></li>
-    <li><a name="toc-negate" href="#negate">30.55 negate</a></li>
-    <li><a name="toc-noformat" href="#noformat">30.56 noformat</a>
+    <li><a name="toc-mcdeint" href="#mcdeint">30.54 mcdeint</a></li>
+    <li><a name="toc-mp" href="#mp">30.55 mp</a>
     <ul class="toc">
-      <li><a name="toc-Examples-75" href="#Examples-75">30.56.1 Examples</a></li>
+      <li><a name="toc-Examples-86" href="#Examples-86">30.55.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-noise" href="#noise">30.57 noise</a>
+    <li><a name="toc-mpdecimate" href="#mpdecimate">30.56 mpdecimate</a></li>
+    <li><a name="toc-negate" href="#negate">30.57 negate</a></li>
+    <li><a name="toc-noformat" href="#noformat">30.58 noformat</a>
     <ul class="toc">
-      <li><a name="toc-Examples-65" href="#Examples-65">30.57.1 Examples</a></li>
+      <li><a name="toc-Examples-74" href="#Examples-74">30.58.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-null" href="#null">30.58 null</a></li>
-    <li><a name="toc-ocv" href="#ocv">30.59 ocv</a>
+    <li><a name="toc-noise-1" href="#noise-1">30.59 noise</a>
     <ul class="toc">
-      <li><a name="toc-dilate-1" href="#dilate-1">30.59.1 dilate</a></li>
-      <li><a name="toc-erode" href="#erode">30.59.2 erode</a></li>
-      <li><a name="toc-smooth" href="#smooth">30.59.3 smooth</a></li>
+      <li><a name="toc-Examples-10" href="#Examples-10">30.59.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-overlay-1" href="#overlay-1">30.60 overlay</a>
+    <li><a name="toc-null" href="#null">30.60 null</a></li>
+    <li><a name="toc-ocv" href="#ocv">30.61 ocv</a>
     <ul class="toc">
-      <li><a name="toc-Commands-5" href="#Commands-5">30.60.1 Commands</a></li>
-      <li><a name="toc-Examples-48" href="#Examples-48">30.60.2 Examples</a></li>
+      <li><a name="toc-dilate-1" href="#dilate-1">30.61.1 dilate</a></li>
+      <li><a name="toc-erode" href="#erode">30.61.2 erode</a></li>
+      <li><a name="toc-smooth" href="#smooth">30.61.3 smooth</a></li>
     </ul></li>
-    <li><a name="toc-owdenoise" href="#owdenoise">30.61 owdenoise</a></li>
-    <li><a name="toc-pad" href="#pad">30.62 pad</a>
+    <li><a name="toc-overlay-1" href="#overlay-1">30.62 overlay</a>
     <ul class="toc">
-      <li><a name="toc-Examples-76" href="#Examples-76">30.62.1 Examples</a></li>
+      <li><a name="toc-Commands-3" href="#Commands-3">30.62.1 Commands</a></li>
+      <li><a name="toc-Examples-73" href="#Examples-73">30.62.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-perspective" href="#perspective">30.63 perspective</a></li>
-    <li><a name="toc-phase" href="#phase">30.64 phase</a></li>
-    <li><a name="toc-pixdesctest" href="#pixdesctest">30.65 pixdesctest</a></li>
-    <li><a name="toc-pp" href="#pp">30.66 pp</a>
+    <li><a name="toc-owdenoise" href="#owdenoise">30.63 owdenoise</a></li>
+    <li><a name="toc-pad" href="#pad">30.64 pad</a>
     <ul class="toc">
-      <li><a name="toc-Examples-73" href="#Examples-73">30.66.1 Examples</a></li>
+      <li><a name="toc-Examples-45" href="#Examples-45">30.64.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-psnr" href="#psnr">30.67 psnr</a></li>
-    <li><a name="toc-pullup-1" href="#pullup-1">30.68 pullup</a></li>
-    <li><a name="toc-removelogo" href="#removelogo">30.69 removelogo</a></li>
-    <li><a name="toc-rotate" href="#rotate">30.70 rotate</a>
+    <li><a name="toc-perspective" href="#perspective">30.65 perspective</a></li>
+    <li><a name="toc-phase" href="#phase">30.66 phase</a></li>
+    <li><a name="toc-pixdesctest" href="#pixdesctest">30.67 pixdesctest</a></li>
+    <li><a name="toc-pp" href="#pp">30.68 pp</a>
     <ul class="toc">
-      <li><a name="toc-Examples-54" href="#Examples-54">30.70.1 Examples</a></li>
-      <li><a name="toc-Commands-4" href="#Commands-4">30.70.2 Commands</a></li>
+      <li><a name="toc-Examples-3" href="#Examples-3">30.68.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-sab" href="#sab">30.71 sab</a></li>
-    <li><a name="toc-scale-1" href="#scale-1">30.72 scale</a>
+    <li><a name="toc-psnr" href="#psnr">30.69 psnr</a></li>
+    <li><a name="toc-pullup-1" href="#pullup-1">30.70 pullup</a></li>
+    <li><a name="toc-removelogo" href="#removelogo">30.71 removelogo</a></li>
+    <li><a name="toc-rotate" href="#rotate">30.72 rotate</a>
     <ul class="toc">
-      <li><a name="toc-Options-5" href="#Options-5">30.72.1 Options</a></li>
-      <li><a name="toc-Examples-27" href="#Examples-27">30.72.2 Examples</a></li>
+      <li><a name="toc-Examples-17" href="#Examples-17">30.72.1 Examples</a></li>
+      <li><a name="toc-Commands-4" href="#Commands-4">30.72.2 Commands</a></li>
     </ul></li>
-    <li><a name="toc-separatefields" href="#separatefields">30.73 separatefields</a></li>
-    <li><a name="toc-setdar_002c-setsar" href="#setdar_002c-setsar">30.74 setdar, setsar</a>
+    <li><a name="toc-sab" href="#sab">30.73 sab</a></li>
+    <li><a name="toc-scale-1" href="#scale-1">30.74 scale</a>
     <ul class="toc">
-      <li><a name="toc-Examples-13" href="#Examples-13">30.74.1 Examples</a></li>
+      <li><a name="toc-Options-14" href="#Options-14">30.74.1 Options</a></li>
+      <li><a name="toc-Examples-19" href="#Examples-19">30.74.2 Examples</a></li>
     </ul></li>
-    <li><a name="toc-setfield-1" href="#setfield-1">30.75 setfield</a></li>
-    <li><a name="toc-showinfo" href="#showinfo">30.76 showinfo</a></li>
-    <li><a name="toc-shuffleplanes" href="#shuffleplanes">30.77 shuffleplanes</a></li>
-    <li><a name="toc-smartblur-1" href="#smartblur-1">30.78 smartblur</a></li>
-    <li><a name="toc-stereo3d" href="#stereo3d">30.79 stereo3d</a>
+    <li><a name="toc-separatefields" href="#separatefields">30.75 separatefields</a></li>
+    <li><a name="toc-setdar_002c-setsar" href="#setdar_002c-setsar">30.76 setdar, setsar</a>
     <ul class="toc">
-      <li><a name="toc-Examples-38" href="#Examples-38">30.79.1 Examples</a></li>
+      <li><a name="toc-Examples-18" href="#Examples-18">30.76.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-spp" href="#spp">30.80 spp</a></li>
-    <li><a name="toc-subtitles-1" href="#subtitles-1">30.81 subtitles</a></li>
-    <li><a name="toc-super2xsai" href="#super2xsai">30.82 super2xsai</a></li>
-    <li><a name="toc-swapuv" href="#swapuv">30.83 swapuv</a></li>
-    <li><a name="toc-telecine" href="#telecine">30.84 telecine</a></li>
-    <li><a name="toc-thumbnail" href="#thumbnail">30.85 thumbnail</a>
+    <li><a name="toc-setfield-1" href="#setfield-1">30.77 setfield</a></li>
+    <li><a name="toc-showinfo" href="#showinfo">30.78 showinfo</a></li>
+    <li><a name="toc-shuffleplanes" href="#shuffleplanes">30.79 shuffleplanes</a></li>
+    <li><a name="toc-signalstats" href="#signalstats">30.80 signalstats</a>
     <ul class="toc">
-      <li><a name="toc-Examples-40" href="#Examples-40">30.85.1 Examples</a></li>
+      <li><a name="toc-Examples-81" href="#Examples-81">30.80.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-tile" href="#tile">30.86 tile</a>
+    <li><a name="toc-smartblur-1" href="#smartblur-1">30.81 smartblur</a></li>
+    <li><a name="toc-stereo3d" href="#stereo3d">30.82 stereo3d</a>
     <ul class="toc">
-      <li><a name="toc-Examples-55" href="#Examples-55">30.86.1 Examples</a></li>
+      <li><a name="toc-Examples-79" href="#Examples-79">30.82.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-tinterlace" href="#tinterlace">30.87 tinterlace</a></li>
-    <li><a name="toc-transpose" href="#transpose">30.88 transpose</a></li>
-    <li><a name="toc-trim" href="#trim">30.89 trim</a></li>
-    <li><a name="toc-unsharp" href="#unsharp">30.90 unsharp</a>
+    <li><a name="toc-spp" href="#spp">30.83 spp</a></li>
+    <li><a name="toc-subtitles-1" href="#subtitles-1">30.84 subtitles</a></li>
+    <li><a name="toc-super2xsai" href="#super2xsai">30.85 super2xsai</a></li>
+    <li><a name="toc-swapuv" href="#swapuv">30.86 swapuv</a></li>
+    <li><a name="toc-telecine" href="#telecine">30.87 telecine</a></li>
+    <li><a name="toc-thumbnail" href="#thumbnail">30.88 thumbnail</a>
     <ul class="toc">
-      <li><a name="toc-Examples-15" href="#Examples-15">30.90.1 Examples</a></li>
+      <li><a name="toc-Examples-53" href="#Examples-53">30.88.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-vidstabdetect-1" href="#vidstabdetect-1">30.91 vidstabdetect</a>
+    <li><a name="toc-tile" href="#tile">30.89 tile</a>
     <ul class="toc">
-      <li><a name="toc-Examples-62" href="#Examples-62">30.91.1 Examples</a></li>
+      <li><a name="toc-Examples-56" href="#Examples-56">30.89.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-vidstabtransform-1" href="#vidstabtransform-1">30.92 vidstabtransform</a>
+    <li><a name="toc-tinterlace" href="#tinterlace">30.90 tinterlace</a></li>
+    <li><a name="toc-transpose" href="#transpose">30.91 transpose</a></li>
+    <li><a name="toc-trim" href="#trim">30.92 trim</a></li>
+    <li><a name="toc-unsharp" href="#unsharp">30.93 unsharp</a>
     <ul class="toc">
-      <li><a name="toc-Options-7" href="#Options-7">30.92.1 Options</a></li>
-      <li><a name="toc-Examples-82" href="#Examples-82">30.92.2 Examples</a></li>
+      <li><a name="toc-Examples-20" href="#Examples-20">30.93.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-vflip" href="#vflip">30.93 vflip</a></li>
-    <li><a name="toc-vignette" href="#vignette">30.94 vignette</a>
+    <li><a name="toc-vidstabdetect-1" href="#vidstabdetect-1">30.94 vidstabdetect</a>
     <ul class="toc">
-      <li><a name="toc-Expressions" href="#Expressions">30.94.1 Expressions</a></li>
-      <li><a name="toc-Examples-61" href="#Examples-61">30.94.2 Examples</a></li>
+      <li><a name="toc-Examples-51" href="#Examples-51">30.94.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-w3fdif" href="#w3fdif">30.95 w3fdif</a></li>
-    <li><a name="toc-yadif-1" href="#yadif-1">30.96 yadif</a></li>
-    <li><a name="toc-zoompan" href="#zoompan">30.97 zoompan</a>
+    <li><a name="toc-vidstabtransform-1" href="#vidstabtransform-1">30.95 vidstabtransform</a>
     <ul class="toc">
-      <li><a name="toc-Examples-9" href="#Examples-9">30.97.1 Examples</a></li>
+      <li><a name="toc-Options-6" href="#Options-6">30.95.1 Options</a></li>
+      <li><a name="toc-Examples-78" href="#Examples-78">30.95.2 Examples</a></li>
+    </ul></li>
+    <li><a name="toc-vflip" href="#vflip">30.96 vflip</a></li>
+    <li><a name="toc-vignette-1" href="#vignette-1">30.97 vignette</a>
+    <ul class="toc">
+      <li><a name="toc-Expressions" href="#Expressions">30.97.1 Expressions</a></li>
+      <li><a name="toc-Examples-8" href="#Examples-8">30.97.2 Examples</a></li>
+    </ul></li>
+    <li><a name="toc-w3fdif" href="#w3fdif">30.98 w3fdif</a></li>
+    <li><a name="toc-yadif-1" href="#yadif-1">30.99 yadif</a></li>
+    <li><a name="toc-zoompan" href="#zoompan">30.100 zoompan</a>
+    <ul class="toc">
+      <li><a name="toc-Examples-38" href="#Examples-38">30.100.1 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -646,14 +661,14 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-buffer" href="#buffer">31.1 buffer</a></li>
     <li><a name="toc-cellauto" href="#cellauto">31.2 cellauto</a>
     <ul class="toc">
-      <li><a name="toc-Examples-18" href="#Examples-18">31.2.1 Examples</a></li>
+      <li><a name="toc-Examples-52" href="#Examples-52">31.2.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-mandelbrot" href="#mandelbrot">31.3 mandelbrot</a></li>
     <li><a name="toc-mptestsrc" href="#mptestsrc">31.4 mptestsrc</a></li>
     <li><a name="toc-frei0r_005fsrc" href="#frei0r_005fsrc">31.5 frei0r_src</a></li>
     <li><a name="toc-life" href="#life">31.6 life</a>
     <ul class="toc">
-      <li><a name="toc-Examples-11" href="#Examples-11">31.6.1 Examples</a></li>
+      <li><a name="toc-Examples-50" href="#Examples-50">31.6.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-color_002c-haldclutsrc_002c-nullsrc_002c-rgbtestsrc_002c-smptebars_002c-smptehdbars_002c-testsrc" href="#color_002c-haldclutsrc_002c-nullsrc_002c-rgbtestsrc_002c-smptebars_002c-smptehdbars_002c-testsrc">31.7 color, haldclutsrc, nullsrc, rgbtestsrc, smptebars, smptehdbars, testsrc</a>
     <ul class="toc">
@@ -670,57 +685,57 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
   <ul class="toc">
     <li><a name="toc-avectorscope" href="#avectorscope">33.1 avectorscope</a>
     <ul class="toc">
-      <li><a name="toc-Examples-29" href="#Examples-29">33.1.1 Examples</a></li>
+      <li><a name="toc-Examples-75" href="#Examples-75">33.1.1 Examples</a></li>
     </ul></li>
-    <li><a name="toc-concat-3" href="#concat-3">33.2 concat</a>
+    <li><a name="toc-concat-1" href="#concat-1">33.2 concat</a>
     <ul class="toc">
-      <li><a name="toc-Examples-50" href="#Examples-50">33.2.1 Examples</a></li>
+      <li><a name="toc-Examples-43" href="#Examples-43">33.2.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-ebur128" href="#ebur128">33.3 ebur128</a>
     <ul class="toc">
-      <li><a name="toc-Examples-71" href="#Examples-71">33.3.1 Examples</a></li>
+      <li><a name="toc-Examples-66" href="#Examples-66">33.3.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-interleave_002c-ainterleave" href="#interleave_002c-ainterleave">33.4 interleave, ainterleave</a>
     <ul class="toc">
-      <li><a name="toc-Examples-68" href="#Examples-68">33.4.1 Examples</a></li>
+      <li><a name="toc-Examples-63" href="#Examples-63">33.4.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-perms_002c-aperms" href="#perms_002c-aperms">33.5 perms, aperms</a></li>
     <li><a name="toc-select_002c-aselect" href="#select_002c-aselect">33.6 select, aselect</a>
     <ul class="toc">
-      <li><a name="toc-Examples-17" href="#Examples-17">33.6.1 Examples</a></li>
+      <li><a name="toc-Examples-23" href="#Examples-23">33.6.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-sendcmd_002c-asendcmd" href="#sendcmd_002c-asendcmd">33.7 sendcmd, asendcmd</a>
     <ul class="toc">
       <li><a name="toc-Commands-syntax" href="#Commands-syntax">33.7.1 Commands syntax</a></li>
-      <li><a name="toc-Examples-43" href="#Examples-43">33.7.2 Examples</a></li>
+      <li><a name="toc-Examples-70" href="#Examples-70">33.7.2 Examples</a></li>
     </ul></li>
     <li><a name="toc-setpts_002c-asetpts" href="#setpts_002c-asetpts">33.8 setpts, asetpts</a>
     <ul class="toc">
-      <li><a name="toc-Examples-83" href="#Examples-83">33.8.1 Examples</a></li>
+      <li><a name="toc-Examples-49" href="#Examples-49">33.8.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-settb_002c-asettb" href="#settb_002c-asettb">33.9 settb, asettb</a>
     <ul class="toc">
-      <li><a name="toc-Examples-20" href="#Examples-20">33.9.1 Examples</a></li>
+      <li><a name="toc-Examples-37" href="#Examples-37">33.9.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-showcqt" href="#showcqt">33.10 showcqt</a>
     <ul class="toc">
-      <li><a name="toc-Examples-16" href="#Examples-16">33.10.1 Examples</a></li>
+      <li><a name="toc-Examples-25" href="#Examples-25">33.10.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-showspectrum" href="#showspectrum">33.11 showspectrum</a>
     <ul class="toc">
-      <li><a name="toc-Examples-32" href="#Examples-32">33.11.1 Examples</a></li>
+      <li><a name="toc-Examples-11" href="#Examples-11">33.11.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-showwaves" href="#showwaves">33.12 showwaves</a>
     <ul class="toc">
-      <li><a name="toc-Examples-79" href="#Examples-79">33.12.1 Examples</a></li>
+      <li><a name="toc-Examples-61" href="#Examples-61">33.12.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-split_002c-asplit" href="#split_002c-asplit">33.13 split, asplit</a>
     <ul class="toc">
-      <li><a name="toc-Examples-49" href="#Examples-49">33.13.1 Examples</a></li>
+      <li><a name="toc-Examples-42" href="#Examples-42">33.13.1 Examples</a></li>
     </ul></li>
     <li><a name="toc-zmq_002c-azmq" href="#zmq_002c-azmq">33.14 zmq, azmq</a>
     <ul class="toc">
-      <li><a name="toc-Examples-63" href="#Examples-63">33.14.1 Examples</a></li>
+      <li><a name="toc-Examples-71" href="#Examples-71">33.14.1 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -729,7 +744,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     <li><a name="toc-amovie" href="#amovie">34.1 amovie</a></li>
     <li><a name="toc-movie-1" href="#movie-1">34.2 movie</a>
     <ul class="toc">
-      <li><a name="toc-Examples-8" href="#Examples-8">34.2.1 Examples</a></li>
+      <li><a name="toc-Examples-13" href="#Examples-13">34.2.1 Examples</a></li>
     </ul>
 </li>
   </ul></li>
@@ -778,8 +793,8 @@ and printed in the corresponding &quot;FORMAT&quot;, &quot;STREAM&quot; or &quot
 section.
 </p>
 
-<a name="Options-4"></a>
-<h1 class="chapter"><a href="ffprobe-all.html#toc-Options-4">3. Options</a></h1>
+<a name="Options-15"></a>
+<h1 class="chapter"><a href="ffprobe-all.html#toc-Options-15">3. Options</a></h1>
 
 <p>All the numerical options, if not specified otherwise, accept a string
 representing a number as input, which may be followed by one of the SI
@@ -833,6 +848,14 @@ program.
 </p></dd>
 <dt> &lsquo;<samp>#<var>stream_id</var> or i:<var>stream_id</var></samp>&rsquo;</dt>
 <dd><p>Match the stream by stream id (e.g. PID in MPEG-TS container).
+</p></dd>
+<dt> &lsquo;<samp>m:<var>key</var>[:<var>value</var>]</samp>&rsquo;</dt>
+<dd><p>Matches streams with the metadata tag <var>key</var> having the specified value. If
+<var>value</var> is not given, matches streams that contain the given tag with any
+value.
+</p>
+<p>Note that in <code>ffmpeg</code>, matching by metadata will only work properly for
+input files.
 </p></dd>
 </dl>
 
@@ -1007,6 +1030,9 @@ following option is recognized:
 <dd><p>set the file name to use for the report; <code>%p</code> is expanded to the name
 of the program, <code>%t</code> is expanded to a timestamp, <code>%%</code> is expanded
 to a plain <code>%</code>
+</p></dd>
+<dt> &lsquo;<samp>level</samp>&rsquo;</dt>
+<dd><p>set the log level
 </p></dd>
 </dl>
 
@@ -1201,6 +1227,11 @@ option affects only the options related to streams
 &lsquo;<samp>-show_streams</samp>&rsquo;, it will dump the codec extradata.
 </p>
 <p>The dump is printed as the &quot;data&quot; field. It may contain newlines.
+</p>
+</dd>
+<dt> &lsquo;<samp>-show_data_hash <var>algorithm</var></samp>&rsquo;</dt>
+<dd><p>Show a hash of payload data, for packets with &lsquo;<samp>-show_packets</samp>&rsquo; and for
+codec extradata with &lsquo;<samp>-show_streams</samp>&rsquo;.
 </p>
 </dd>
 <dt> &lsquo;<samp>-show_error</samp>&rsquo;</dt>
@@ -1705,8 +1736,8 @@ DV, GXF and AVI timecodes are available in format metadata
 
 </li></ul>
 
-<a name="Syntax"></a>
-<h1 class="chapter"><a href="ffprobe-all.html#toc-Syntax">6. Syntax</a></h1>
+<a name="Syntax-1"></a>
+<h1 class="chapter"><a href="ffprobe-all.html#toc-Syntax-1">6. Syntax</a></h1>
 
 <p>This section documents the syntax and formats employed by the FFmpeg
 libraries and tools.
@@ -1749,8 +1780,8 @@ escaped according to the rules defined above.
 <p>The tool &lsquo;<tt>tools/ffescape</tt>&rsquo; in the FFmpeg source tree can be used
 to automatically quote or escape a string in a script.
 </p>
-<a name="Examples-70"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-70">6.1.1 Examples</a></h3>
+<a name="Examples-84"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-84">6.1.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -1821,8 +1852,8 @@ maximum of 2 digits. The <var>m</var> at the end expresses decimal value for
 </p>
 <p>In both expressions, the optional &lsquo;<samp>-</samp>&rsquo; indicates negative duration.
 </p>
-<a name="Examples-41"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-41">6.3.1 Examples</a></h3>
+<a name="Examples-55"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-55">6.3.1 Examples</a></h3>
 
 <p>The following examples are all valid time duration:
 </p>
@@ -2749,6 +2780,10 @@ large numbers (usually 2^53 and larger).
 integer. For example, &quot;ceil(1.5)&quot; is &quot;2.0&quot;.
 </p>
 </dd>
+<dt> &lsquo;<samp>clip(x, min, max)</samp>&rsquo;</dt>
+<dd><p>Return the value of <var>x</var> clipped between <var>min</var> and <var>max</var>.
+</p>
+</dd>
 <dt> &lsquo;<samp>cos(x)</samp>&rsquo;</dt>
 <dd><p>Compute cosine of <var>x</var>.
 </p>
@@ -3573,6 +3608,10 @@ encode. It is of little use elsewise.
 <dt> &lsquo;<samp>int</samp>&rsquo;</dt>
 <dt> &lsquo;<samp>simple</samp>&rsquo;</dt>
 <dt> &lsquo;<samp>simplemmx</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>simpleauto</samp>&rsquo;</dt>
+<dd><p>Automatically pick a IDCT compatible with the simple one
+</p>
+</dd>
 <dt> &lsquo;<samp>arm</samp>&rsquo;</dt>
 <dt> &lsquo;<samp>altivec</samp>&rsquo;</dt>
 <dt> &lsquo;<samp>sh4</samp>&rsquo;</dt>
@@ -4062,6 +4101,10 @@ decoding starts.
 <dt> &lsquo;<samp>skiprd</samp>&rsquo;</dt>
 <dd><p>Deprecated, use mpegvideo private options instead.
 </p></dd>
+<dt> &lsquo;<samp>export_mvs</samp>&rsquo;</dt>
+<dd><p>Export motion vectors into frame side-data (see <code>AV_FRAME_DATA_MOTION_VECTORS</code>)
+for codecs that support it. See also &lsquo;<tt>doc/examples/export_mvs.c</tt>&rsquo;.
+</p></dd>
 </dl>
 
 </dd>
@@ -4330,13 +4373,28 @@ scene_change_score.
 </p>
 </dd>
 <dt> &lsquo;<samp>thread_type <var>flags</var> (<em>decoding/encoding,video</em>)</samp>&rsquo;</dt>
-<dd><p>Select multithreading type.
+<dd><p>Select which multithreading methods to use.
+</p>
+<p>Use of &lsquo;<samp>frame</samp>&rsquo; will increase decoding delay by one frame per
+thread, so clients which cannot provide future frames should not use
+it.
 </p>
 <p>Possible values:
 </p><dl compact="compact">
 <dt> &lsquo;<samp>slice</samp>&rsquo;</dt>
+<dd><p>Decode more than one part of a single frame at once.
+</p>
+<p>Multithreading using slices works only when the video was encoded with
+slices.
+</p>
+</dd>
 <dt> &lsquo;<samp>frame</samp>&rsquo;</dt>
+<dd><p>Decode more than one frame at once.
+</p></dd>
 </dl>
+
+<p>Default value is &lsquo;<samp>slice+frame</samp>&rsquo;.
+</p>
 </dd>
 <dt> &lsquo;<samp>audio_service_type <var>integer</var> (<em>encoding,audio</em>)</samp>&rsquo;</dt>
 <dd><p>Set audio service type.
@@ -4439,15 +4497,15 @@ enabled decoders.
 <p>A description of some of the currently available video decoders
 follows.
 </p>
-<a name="rawvideo"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rawvideo">11.1 rawvideo</a></h2>
+<a name="rawvideo-1"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-rawvideo-1">11.1 rawvideo</a></h2>
 
 <p>Raw video decoder.
 </p>
 <p>This decoder decodes rawvideo streams.
 </p>
-<a name="Options-8"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-8">11.1.1 Options</a></h3>
+<a name="Options-13"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-13">11.1.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>top <var>top_field_first</var></samp>&rsquo;</dt>
@@ -4546,8 +4604,8 @@ audio codec. Requires the presence of the libilbc headers and library during
 configuration. You need to explicitly configure the build with
 <code>--enable-libilbc</code>.
 </p>
-<a name="Options-11"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-11">12.5.1 Options</a></h3>
+<a name="Options-9"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-9">12.5.1 Options</a></h3>
 
 <p>The following option is supported by the libilbc wrapper.
 </p>
@@ -4596,6 +4654,9 @@ Requires the presence of the libopus headers and library during
 configuration. You need to explicitly configure the build with
 <code>--enable-libopus</code>.
 </p>
+<p>An FFmpeg native decoder for Opus exists, so users can decode Opus
+without this library.
+</p>
 
 <a name="Subtitles-Decoders"></a>
 <h1 class="chapter"><a href="ffprobe-all.html#toc-Subtitles-Decoders">13. Subtitles Decoders</a></h1>
@@ -4606,8 +4667,8 @@ configuration. You need to explicitly configure the build with
 <p>This codec decodes the bitmap subtitles used in DVDs; the same subtitles can
 also be found in VobSub file pairs and in some Matroska files.
 </p>
-<a name="Options-15"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-15">13.1.1 Options</a></h3>
+<a name="Options-11"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-11">13.1.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>palette</samp>&rsquo;</dt>
@@ -4632,8 +4693,8 @@ subtitles. Requires the presence of the libzvbi headers and library during
 configuration. You need to explicitly configure the build with
 <code>--enable-libzvbi</code>.
 </p>
-<a name="Options-12"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-12">13.2.1 Options</a></h3>
+<a name="Options-16"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-16">13.2.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>txt_page</samp>&rsquo;</dt>
@@ -4756,8 +4817,18 @@ format with <code>ffmpeg</code>, you can use the command:
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT.mp4 -codec copy -bsf:v h264_mp4toannexb OUTPUT.ts
 </pre></td></tr></table>
 
-<a name="imx_005fdump_005fheader"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-imx_005fdump_005fheader">14.5 imx_dump_header</a></h2>
+<a name="imxdump"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-imxdump">14.5 imxdump</a></h2>
+
+<p>Modifies the bitstream to fit in MOV and to be usable by the Final Cut
+Pro decoder. This filter only applies to the mpeg2video codec, and is
+likely not needed for Final Cut Pro 7 and newer with the appropriate
+&lsquo;<samp>-tag:v</samp>&rsquo;.
+</p>
+<p>For example, to remux 30 MB/sec NTSC IMX to MOV:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i input.mxf -c copy -bsf:v imxdump -tag:v mx3n output.mov
+</pre></td></tr></table>
 
 <a name="mjpeg2jpeg"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-mjpeg2jpeg">14.6 mjpeg2jpeg</a></h2>
@@ -4804,8 +4875,8 @@ ffmpeg -i frame_%d.jpg -c:v copy rotated.avi
 <a name="mp3_005fheader_005fdecompress"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-mp3_005fheader_005fdecompress">14.9 mp3_header_decompress</a></h2>
 
-<a name="noise-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-noise-1">14.10 noise</a></h2>
+<a name="noise"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-noise">14.10 noise</a></h2>
 
 <p>Damages the contents of packets without damaging the container. Can be
 used for fuzzing or testing error resilience/concealment.
@@ -5115,8 +5186,8 @@ available in a metadata key named &quot;variant_bitrate&quot;.
 </dl>
 
 <p><a name="concat"></a>
-</p><a name="concat-2"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-concat-2">16.3 concat</a></h2>
+</p><a name="concat-3"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-concat-3">16.3 concat</a></h2>
 
 <p>Virtual concatenation script demuxer.
 </p>
@@ -5137,8 +5208,8 @@ because the file is truncated, for example), it can cause artifacts. The
 <code>duration</code> directive can be used to override the duration stored in
 each file.
 </p>
-<a name="Syntax-1"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Syntax-1">16.3.1 Syntax</a></h3>
+<a name="Syntax"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Syntax">16.3.1 Syntax</a></h3>
 
 <p>The script is a text file in extended-ASCII, with one directive per line.
 Empty lines, leading spaces and lines starting with &rsquo;#&rsquo; are ignored. The
@@ -5190,8 +5261,8 @@ streams is not reliable.
 </dd>
 </dl>
 
-<a name="Options"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options">16.3.2 Options</a></h3>
+<a name="Options-1"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-1">16.3.2 Options</a></h3>
 
 <p>This demuxer accepts the following option:
 </p>
@@ -5377,8 +5448,8 @@ size is guessed from the first image file in the sequence.
 </p></dd>
 </dl>
 
-<a name="Examples-67"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-67">16.7.1 Examples</a></h3>
+<a name="Examples-41"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-41">16.7.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -5414,8 +5485,8 @@ teletext packet PTS and DTS values untouched.
 </p></dd>
 </dl>
 
-<a name="rawvideo-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rawvideo-1">16.9 rawvideo</a></h2>
+<a name="rawvideo"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-rawvideo">16.9 rawvideo</a></h2>
 
 <p>Raw video demuxer.
 </p>
@@ -5638,8 +5709,8 @@ supported protocols.
 <table><tr><td>&nbsp;</td><td><pre class="example">cache:<var>URL</var>
 </pre></td></tr></table>
 
-<a name="concat-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-concat-1">18.3 concat</a></h2>
+<a name="concat-2"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-concat-2">18.3 concat</a></h2>
 
 <p>Physical concatenation protocol.
 </p>
@@ -5747,7 +5818,7 @@ time, which is valuable for files on slow medium.
 </p>
 <dl compact="compact">
 <dt> &lsquo;<samp>timeout</samp>&rsquo;</dt>
-<dd><p>Set timeout of socket I/O operations used by the underlying low level
+<dd><p>Set timeout in microseconds of socket I/O operations used by the underlying low level
 operation. By default it is set to -1, which means that the timeout is
 not specified.
 </p>
@@ -5837,7 +5908,7 @@ string describing the libavformat build. (&quot;Lavf/&lt;version&gt;&quot;)
 </p>
 </dd>
 <dt> &lsquo;<samp>timeout</samp>&rsquo;</dt>
-<dd><p>Set timeout of socket I/O operations used by the underlying low level
+<dd><p>Set timeout in microseconds of socket I/O operations used by the underlying low level
 operation. By default it is set to -1, which means that the timeout is
 not specified.
 </p>
@@ -5850,7 +5921,7 @@ not specified.
 <dd><p>If set to 1 request ICY (SHOUTcast) metadata from the server. If the server
 supports this, the metadata has to be retrieved by the application by reading
 the &lsquo;<samp>icy_metadata_headers</samp>&rsquo; and &lsquo;<samp>icy_metadata_packet</samp>&rsquo; options.
-The default is 0.
+The default is 1.
 </p>
 </dd>
 <dt> &lsquo;<samp>icy_metadata_headers</samp>&rsquo;</dt>
@@ -5894,13 +5965,66 @@ by a newline.
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffplay -cookies &quot;nlqptid=nltid=tsn; path=/; domain=somedomain.com;&quot; http://somedomain.com/somestream.m3u8
 </pre></td></tr></table>
 
+<a name="Icecast"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-Icecast">18.11 Icecast</a></h2>
+
+<p>Icecast protocol (stream to Icecast servers)
+</p>
+<p>This protocol accepts the following options:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>ice_genre</samp>&rsquo;</dt>
+<dd><p>Set the stream genre.
+</p>
+</dd>
+<dt> &lsquo;<samp>ice_name</samp>&rsquo;</dt>
+<dd><p>Set the stream name.
+</p>
+</dd>
+<dt> &lsquo;<samp>ice_description</samp>&rsquo;</dt>
+<dd><p>Set the stream description.
+</p>
+</dd>
+<dt> &lsquo;<samp>ice_url</samp>&rsquo;</dt>
+<dd><p>Set the stream website URL.
+</p>
+</dd>
+<dt> &lsquo;<samp>ice_public</samp>&rsquo;</dt>
+<dd><p>Set if the stream should be public.
+The default is 0 (not public).
+</p>
+</dd>
+<dt> &lsquo;<samp>user_agent</samp>&rsquo;</dt>
+<dd><p>Override the User-Agent header. If not specified a string of the form
+&quot;Lavf/&lt;version&gt;&quot; will be used.
+</p>
+</dd>
+<dt> &lsquo;<samp>password</samp>&rsquo;</dt>
+<dd><p>Set the Icecast mountpoint password.
+</p>
+</dd>
+<dt> &lsquo;<samp>content_type</samp>&rsquo;</dt>
+<dd><p>Set the stream content type. This must be set if it is different from
+audio/mpeg.
+</p>
+</dd>
+<dt> &lsquo;<samp>legacy_icecast</samp>&rsquo;</dt>
+<dd><p>This enables support for Icecast versions &lt; 2.4.0, that do not support the
+HTTP PUT method but the SOURCE method.
+</p>
+</dd>
+</dl>
+
+<table><tr><td>&nbsp;</td><td><pre class="example">icecast://[<var>username</var>[:<var>password</var>]@]<var>server</var>:<var>port</var>/<var>mountpoint</var>
+</pre></td></tr></table>
+
 <a name="mmst"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mmst">18.11 mmst</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mmst">18.12 mmst</a></h2>
 
 <p>MMS (Microsoft Media Server) protocol over TCP.
 </p>
 <a name="mmsh"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mmsh">18.12 mmsh</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mmsh">18.13 mmsh</a></h2>
 
 <p>MMS (Microsoft Media Server) protocol over HTTP.
 </p>
@@ -5909,7 +6033,7 @@ by a newline.
 </pre></td></tr></table>
 
 <a name="md5"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-md5">18.13 md5</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-md5">18.14 md5</a></h2>
 
 <p>MD5 output protocol.
 </p>
@@ -5929,7 +6053,7 @@ ffmpeg -i input.flv -f avi -y md5:
 be seekable, so they will fail with the MD5 output protocol.
 </p>
 <a name="pipe"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pipe">18.14 pipe</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pipe">18.15 pipe</a></h2>
 
 <p>UNIX pipe access protocol.
 </p>
@@ -5971,7 +6095,7 @@ time, which is valuable if data transmission is slow.
 be seekable, so they will fail with the pipe output protocol.
 </p>
 <a name="rtmp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmp">18.15 rtmp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmp">18.16 rtmp</a></h2>
 
 <p>Real-Time Messaging Protocol.
 </p>
@@ -6117,7 +6241,7 @@ app names separately:
 </pre></td></tr></table>
 
 <a name="rtmpe"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmpe">18.16 rtmpe</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmpe">18.17 rtmpe</a></h2>
 
 <p>Encrypted Real-Time Messaging Protocol.
 </p>
@@ -6127,7 +6251,7 @@ consisting of Diffie-Hellman key exchange and HMACSHA256, generating
 a pair of RC4 keys.
 </p>
 <a name="rtmps"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmps">18.17 rtmps</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmps">18.18 rtmps</a></h2>
 
 <p>Real-Time Messaging Protocol over a secure SSL connection.
 </p>
@@ -6135,7 +6259,7 @@ a pair of RC4 keys.
 multimedia content across an encrypted connection.
 </p>
 <a name="rtmpt"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmpt">18.18 rtmpt</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmpt">18.19 rtmpt</a></h2>
 
 <p>Real-Time Messaging Protocol tunneled through HTTP.
 </p>
@@ -6144,7 +6268,7 @@ for streaming multimedia content within HTTP requests to traverse
 firewalls.
 </p>
 <a name="rtmpte"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmpte">18.19 rtmpte</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmpte">18.20 rtmpte</a></h2>
 
 <p>Encrypted Real-Time Messaging Protocol tunneled through HTTP.
 </p>
@@ -6153,7 +6277,7 @@ is used for streaming multimedia content within HTTP requests to traverse
 firewalls.
 </p>
 <a name="rtmpts"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtmpts">18.20 rtmpts</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtmpts">18.21 rtmpts</a></h2>
 
 <p>Real-Time Messaging Protocol tunneled through HTTPS.
 </p>
@@ -6161,8 +6285,40 @@ firewalls.
 for streaming multimedia content within HTTPS requests to traverse
 firewalls.
 </p>
+<a name="libsmbclient"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-libsmbclient">18.22 libsmbclient</a></h2>
+
+<p>libsmbclient permits one to manipulate CIFS/SMB network resources.
+</p>
+<p>Following syntax is required.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">smb://[[domain:]user[:password@]]server[/share[/path[/file]]]
+</pre></td></tr></table>
+
+<p>This protocol accepts the following options.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>timeout</samp>&rsquo;</dt>
+<dd><p>Set timeout in miliseconds of socket I/O operations used by the underlying
+low level operation. By default it is set to -1, which means that the timeout
+is not specified.
+</p>
+</dd>
+<dt> &lsquo;<samp>truncate</samp>&rsquo;</dt>
+<dd><p>Truncate existing files on write, if set to 1. A value of 0 prevents
+truncating. Default value is 1.
+</p>
+</dd>
+<dt> &lsquo;<samp>workgroup</samp>&rsquo;</dt>
+<dd><p>Set the workgroup used for making connections. By default workgroup is not specified.
+</p>
+</dd>
+</dl>
+
+<p>For more information see: <a href="http://www.samba.org/">http://www.samba.org/</a>.
+</p>
 <a name="libssh"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-libssh">18.21 libssh</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-libssh">18.23 libssh</a></h2>
 
 <p>Secure File Transfer Protocol via libssh
 </p>
@@ -6200,7 +6356,7 @@ By default libssh searches for keys in the &lsquo;<tt>~/.ssh/</tt>&rsquo; direct
 </pre></td></tr></table>
 
 <a name="librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">18.22 librtmp rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-librtmp-rtmp_002c-rtmpe_002c-rtmps_002c-rtmpt_002c-rtmpte">18.24 librtmp rtmp, rtmpe, rtmps, rtmpt, rtmpte</a></h2>
 
 <p>Real-Time Messaging Protocol and its variants supported through
 librtmp.
@@ -6238,7 +6394,7 @@ meaning as specified for the RTMP native protocol.
 </pre></td></tr></table>
 
 <a name="rtp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtp">18.23 rtp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtp">18.25 rtp</a></h2>
 
 <p>Real-time Transport Protocol.
 </p>
@@ -6314,7 +6470,7 @@ set to the the local RTP port value plus 1.
 </li></ol>
 
 <a name="rtsp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rtsp">18.24 rtsp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rtsp">18.26 rtsp</a></h2>
 
 <p>Real-Time Streaming Protocol.
 </p>
@@ -6344,7 +6500,7 @@ is 0.
 </p>
 </dd>
 <dt> &lsquo;<samp>rtsp_transport</samp>&rsquo;</dt>
-<dd><p>Set RTSP trasport protocols.
+<dd><p>Set RTSP transport protocols.
 </p>
 <p>It accepts the following values:
 </p><dl compact="compact">
@@ -6415,7 +6571,7 @@ For the muxer, only the &lsquo;<samp>tcp</samp>&rsquo; and &lsquo;<samp>udp</sam
 <dt> &lsquo;<samp>timeout</samp>&rsquo;</dt>
 <dd><p>Set maximum timeout (in seconds) to wait for incoming connections.
 </p>
-<p>A value of -1 mean infinite (default). This option implies the
+<p>A value of -1 means infinite (default). This option implies the
 &lsquo;<samp>rtsp_flags</samp>&rsquo; set to &lsquo;<samp>listen</samp>&rsquo;.
 </p>
 </dd>
@@ -6424,11 +6580,11 @@ For the muxer, only the &lsquo;<samp>tcp</samp>&rsquo; and &lsquo;<samp>udp</sam
 </p>
 </dd>
 <dt> &lsquo;<samp>stimeout</samp>&rsquo;</dt>
-<dd><p>Set socket TCP I/O timeout in micro seconds.
+<dd><p>Set socket TCP I/O timeout in microseconds.
 </p>
 </dd>
 <dt> &lsquo;<samp>user-agent</samp>&rsquo;</dt>
-<dd><p>Override User-Agent header. If not specified, it default to the
+<dd><p>Override User-Agent header. If not specified, it defaults to the
 libavformat identifier string.
 </p></dd>
 </dl>
@@ -6443,8 +6599,8 @@ streams to display can be chosen with <code>-vst</code> <var>n</var> and
 <code>-ast</code> <var>n</var> for video and audio respectively, and can be switched
 on the fly by pressing <code>v</code> and <code>a</code>.
 </p>
-<a name="Examples-39"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-39">18.24.1 Examples</a></h3>
+<a name="Examples-69"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-69">18.26.1 Examples</a></h3>
 
 <p>The following examples all make use of the <code>ffplay</code> and
 <code>ffmpeg</code> tools.
@@ -6472,7 +6628,7 @@ Receive a stream in realtime:
 </li></ul>
 
 <a name="sap"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-sap">18.25 sap</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-sap">18.27 sap</a></h2>
 
 <p>Session Announcement Protocol (RFC 2974). This is not technically a
 protocol handler in libavformat, it is a muxer and demuxer.
@@ -6480,7 +6636,7 @@ It is used for signalling of RTP streams, by announcing the SDP for the
 streams regularly on a separate port.
 </p>
 <a name="Muxer"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Muxer">18.25.1 Muxer</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Muxer">18.27.1 Muxer</a></h3>
 
 <p>The syntax for a SAP url given to the muxer is:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">sap://<var>destination</var>[:<var>port</var>][?<var>options</var>]
@@ -6537,7 +6693,7 @@ on unique ports.
 </pre></td></tr></table>
 
 <a name="Demuxer"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Demuxer">18.25.2 Demuxer</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Demuxer">18.27.2 Demuxer</a></h3>
 
 <p>The syntax for a SAP url given to the demuxer is:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">sap://[<var>address</var>][:<var>port</var>]
@@ -6563,7 +6719,7 @@ Once an announcement is received, it tries to receive that particular stream.
 </pre></td></tr></table>
 
 <a name="sctp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-sctp">18.26 sctp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-sctp">18.28 sctp</a></h2>
 
 <p>Stream Control Transmission Protocol.
 </p>
@@ -6583,7 +6739,7 @@ Once an announcement is received, it tries to receive that particular stream.
 </dl>
 
 <a name="srtp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-srtp">18.27 srtp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-srtp">18.29 srtp</a></h2>
 
 <p>Secure Real-time Transport Protocol.
 </p>
@@ -6612,7 +6768,7 @@ used as master salt.
 </dl>
 
 <a name="subfile"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-subfile">18.28 subfile</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-subfile">18.30 subfile</a></h2>
 
 <p>Virtually extract a segment of a file or another stream.
 The underlying stream must be seekable.
@@ -6638,7 +6794,7 @@ externally and multiplied by 2048):
 subfile,,start,183241728,end,366490624,,:archive.tar
 </p>
 <a name="tcp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-tcp">18.29 tcp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-tcp">18.31 tcp</a></h2>
 
 <p>Transmission Control Protocol.
 </p>
@@ -6675,7 +6831,7 @@ ffplay tcp://<var>hostname</var>:<var>port</var>
 </pre></td></tr></table>
 
 <a name="tls"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-tls">18.30 tls</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-tls">18.32 tls</a></h2>
 
 <p>Transport Layer Security (TLS) / Secure Sockets Layer (SSL)
 </p>
@@ -6738,7 +6894,7 @@ the server role in the handshake instead of the client role.
 </pre></td></tr></table>
 
 <a name="udp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-udp">18.31 udp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-udp">18.33 udp</a></h2>
 
 <p>User Datagram Protocol.
 </p>
@@ -6831,8 +6987,8 @@ a broadcast storm protection.
 </p></dd>
 </dl>
 
-<a name="Examples-47"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-47">18.31.1 Examples</a></h3>
+<a name="Examples-14"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-14">18.33.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -6853,7 +7009,7 @@ Use <code>ffmpeg</code> to receive over UDP from a remote endpoint:
 </li></ul>
 
 <a name="unix"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-unix">18.32 unix</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-unix">18.34 unix</a></h2>
 
 <p>Unix local socket
 </p>
@@ -6958,6 +7114,11 @@ A given device index will override any given device name.
 If the desired device consists of numbers only, use -video_device_index to identify it.
 The default device will be chosen if an empty string  or the device name &quot;default&quot; is given.
 The available devices can be enumerated by using -list_devices.
+The pixel format can be set using -pixel_format.
+Available formats:
+ monob, rgb555be, rgb555le, rgb565be, rgb565le, rgb24, bgr24, 0rgb, bgr0, 0bgr, rgb0,
+ bgr48be, uyvy422, yuva444p, yuva444p16le, yuv444p, yuv422p16, yuv422p10, yuv444p10,
+ yuv420p, nv12, yuyv422, gray
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -i &quot;0&quot; out.mpg
 </pre></td></tr></table>
@@ -6965,7 +7126,7 @@ The available devices can be enumerated by using -list_devices.
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -video_device_index 0 -i &quot;&quot; out.mpg
 </pre></td></tr></table>
 
-<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -i &quot;default&quot; out.mpg
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -pixel_format bgr0 -i &quot;default&quot; out.mpg
 </pre></td></tr></table>
 
 <table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f avfoundation -list_devices true -i &quot;&quot;
@@ -6995,8 +7156,8 @@ opened on the same input, which should improve synchronism between them.
 <p>where <var>TYPE</var> can be either <var>audio</var> or <var>video</var>,
 and <var>NAME</var> is the device&rsquo;s name.
 </p>
-<a name="Options-14"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-14">20.4.1 Options</a></h3>
+<a name="Options-7"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-7">20.4.1 Options</a></h3>
 
 <p>If no options are specified, the device&rsquo;s defaults are used.
 If the device does not support the requested options, it will
@@ -7059,8 +7220,8 @@ See also
 </dd>
 </dl>
 
-<a name="Examples-45"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-45">20.4.2 Examples</a></h3>
+<a name="Examples-47"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-47">20.4.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -7149,8 +7310,8 @@ window, regardless of its position on the screen.
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f gdigrab -framerate 6 -i title=Calculator out.mpg
 </pre></td></tr></table>
 
-<a name="Options-9"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-9">20.7.1 Options</a></h3>
+<a name="Options-4"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-4">20.7.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>draw_mouse</samp>&rsquo;</dt>
@@ -7241,8 +7402,8 @@ Look at /sys/bus/firewire/devices to find out the GUIDs.
 </dd>
 </dl>
 
-<a name="Examples-14"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-14">20.8.2 Examples</a></h3>
+<a name="Examples-36"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-36">20.8.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -7320,8 +7481,8 @@ corresponding stream which is mapped to the generated output. Currently
 only video data is supported. The filtergraph is specified through the
 option &lsquo;<samp>graph</samp>&rsquo;.
 </p>
-<a name="Options-3"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-3">20.10.1 Options</a></h3>
+<a name="Options-8"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-8">20.10.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>graph</samp>&rsquo;</dt>
@@ -7344,8 +7505,8 @@ the option <var>graph</var>.
 </dd>
 </dl>
 
-<a name="Examples-24"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-24">20.10.2 Examples</a></h3>
+<a name="Examples"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples">20.10.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -7378,13 +7539,31 @@ Read an audio stream and a video stream and play it back with
 
 </li></ul>
 
+<a name="libcdio"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-libcdio">20.11 libcdio</a></h2>
+
+<p>Audio-CD input device based on cdio.
+</p>
+<p>To enable this input device during configuration you need libcdio
+installed on your system. Requires the configure option
+<code>--enable-libcdio</code>.
+</p>
+<p>This device allows playing and grabbing from an Audio-CD.
+</p>
+<p>For example to copy with <code>ffmpeg</code> the entire Audio-CD in /dev/sr0,
+you may run the command:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f libcdio -i /dev/sr0 cd.wav
+</pre></td></tr></table>
+
 <a name="libdc1394"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-libdc1394">20.11 libdc1394</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-libdc1394">20.12 libdc1394</a></h2>
 
 <p>IIDC1394 input device, based on libdc1394 and libraw1394.
 </p>
+<p>Requires the configure option <code>--enable-libdc1394</code>.
+</p>
 <a name="openal"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-openal">20.12 openal</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-openal">20.13 openal</a></h2>
 
 <p>The OpenAL input device provides audio capture on all systems with a
 working OpenAL 1.1 implementation.
@@ -7427,8 +7606,8 @@ filename. If the empty string is provided, the device will
 automatically select the default device. You can get the list of the
 supported devices by using the option <var>list_devices</var>.
 </p>
-<a name="Options-13"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-13">20.12.1 Options</a></h3>
+<a name="Options-2"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-2">20.13.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>channels</samp>&rsquo;</dt>
@@ -7455,8 +7634,8 @@ Defaults to &lsquo;<samp>false</samp>&rsquo;.
 </dd>
 </dl>
 
-<a name="Examples-86"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-86">20.12.2 Examples</a></h3>
+<a name="Examples-35"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-35">20.13.2 Examples</a></h3>
 
 <p>Print the list of OpenAL supported devices and exit:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">$ ffmpeg -list_devices true -f openal -i dummy out.ogg
@@ -7478,7 +7657,7 @@ within the same <code>ffmpeg</code> command:
 try the latest OpenAL Soft if the above does not work.
 </p>
 <a name="oss"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-oss">20.13 oss</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-oss">20.14 oss</a></h2>
 
 <p>Open Sound System input device.
 </p>
@@ -7495,7 +7674,7 @@ command:
 <a href="http://manuals.opensound.com/usersguide/dsp.html">http://manuals.opensound.com/usersguide/dsp.html</a>
 </p>
 <a name="pulse"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pulse">20.14 pulse</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pulse">20.15 pulse</a></h2>
 
 <p>PulseAudio input device.
 </p>
@@ -7509,8 +7688,8 @@ the command <code>pactl list sources</code>.
 </p>
 <p>More information about PulseAudio can be found on <a href="http://www.pulseaudio.org">http://www.pulseaudio.org</a>.
 </p>
-<a name="Options-2"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-2">20.14.1 Options</a></h3>
+<a name="Options-5"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-5">20.15.1 Options</a></h3>
 <dl compact="compact">
 <dt> &lsquo;<samp>server</samp>&rsquo;</dt>
 <dd><p>Connect to a specific PulseAudio server, specified by an IP address.
@@ -7545,14 +7724,14 @@ audio latency. By default it is unset.
 </p></dd>
 </dl>
 
-<a name="Examples-33"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-33">20.14.2 Examples</a></h3>
+<a name="Examples-30"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-30">20.15.2 Examples</a></h3>
 <p>Record a stream from default device:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f pulse -i default /tmp/pulse.wav
 </pre></td></tr></table>
 
 <a name="qtkit"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-qtkit">20.15 qtkit</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-qtkit">20.16 qtkit</a></h2>
 
 <p>QTKit input device.
 </p>
@@ -7576,7 +7755,7 @@ The available devices can be enumerated by using -list_devices.
 </pre></td></tr></table>
 
 <a name="sndio"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-sndio">20.16 sndio</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-sndio">20.17 sndio</a></h2>
 
 <p>sndio input device.
 </p>
@@ -7593,7 +7772,7 @@ command:
 </pre></td></tr></table>
 
 <a name="video4linux2_002c-v4l2"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-video4linux2_002c-v4l2">20.17 video4linux2, v4l2</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-video4linux2_002c-v4l2">20.18 video4linux2, v4l2</a></h2>
 
 <p>Video4Linux2 input video device.
 </p>
@@ -7639,8 +7818,8 @@ frame rate and size as previously set:
 
 <p>For more information about Video4Linux, check <a href="http://linuxtv.org/">http://linuxtv.org/</a>.
 </p>
-<a name="Options-6"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-6">20.17.1 Options</a></h3>
+<a name="Options"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options">20.18.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>standard</samp>&rsquo;</dt>
@@ -7727,7 +7906,7 @@ sizes) and exit.
 </dl>
 
 <a name="vfwcap"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-vfwcap">20.18 vfwcap</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-vfwcap">20.19 vfwcap</a></h2>
 
 <p>VfW (Video for Windows) capture input device.
 </p>
@@ -7736,9 +7915,12 @@ sizes) and exit.
 other filename will be interpreted as device number 0.
 </p>
 <a name="x11grab"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-x11grab">20.19 x11grab</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-x11grab">20.20 x11grab</a></h2>
 
 <p>X11 video input device.
+</p>
+<p>Depends on X11, Xext, and Xfixes. Requires the configure option
+<code>--enable-x11grab</code>.
 </p>
 <p>This device allows one to capture a region of an X11 display.
 </p>
@@ -7768,8 +7950,8 @@ properties of your X11 display (e.g. grep for &quot;name&quot; or &quot;dimensio
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -f x11grab -framerate 25 -video_size cif -i :0.0+10,20 out.mpg
 </pre></td></tr></table>
 
-<a name="Options-1"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-1">20.19.1 Options</a></h3>
+<a name="Options-12"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-12">20.20.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>draw_mouse</samp>&rsquo;</dt>
@@ -7818,6 +8000,11 @@ know what is being grabbed if only a portion of the screen is grabbed.
 </dd>
 <dt> &lsquo;<samp>video_size</samp>&rsquo;</dt>
 <dd><p>Set the video frame size. Default value is <code>vga</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>use_shm</samp>&rsquo;</dt>
+<dd><p>Use the MIT-SHM extension for shared memory. Default value is <code>1</code>.
+It may be necessary to disable it for remote displays.
 </p></dd>
 </dl>
 
@@ -8583,8 +8770,8 @@ or the corresponding number value defined in &lsquo;<tt>libavutil/channel_layout
 <p>The special parameter &quot;auto&quot;, signifies that the filter will
 automatically select the output format depending on the output filter.
 </p>
-<a name="Examples-56"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-56">27.1.1 Examples</a></h3>
+<a name="Examples-76"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-76">27.1.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -8616,8 +8803,8 @@ smaller than number of channels all remaining channels will not be delayed.
 </p></dd>
 </dl>
 
-<a name="Examples-52"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-52">27.2.1 Examples</a></h3>
+<a name="Examples-46"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-46">27.2.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -8664,8 +8851,8 @@ Default is <code>0.5</code>.
 </p></dd>
 </dl>
 
-<a name="Examples-25"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-25">27.3.1 Examples</a></h3>
+<a name="Examples-62"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-62">27.3.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -8746,8 +8933,8 @@ use by default the same input channel layout.
 <p>Note: this filter is slow. For faster processing you should use a
 dedicated filter.
 </p>
-<a name="Examples-10"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-10">27.4.1 Examples</a></h3>
+<a name="Examples-21"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-21">27.4.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -8848,8 +9035,8 @@ If set this option is used instead of <var>nb_samples</var> one.
 </dd>
 </dl>
 
-<a name="Examples-60"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-60">27.5.1 Examples</a></h3>
+<a name="Examples-24"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-24">27.5.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -8968,8 +9155,8 @@ arbitrarily set to 4.0, which may or may not be the expected value.
 <p>If inputs do not have the same duration, the output will stop with the
 shortest.
 </p>
-<a name="Examples-87"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-87">27.8.1 Examples</a></h3>
+<a name="Examples-7"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-7">27.8.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -9038,9 +9225,60 @@ stream ends. The default value is 2 seconds.
 <a name="apad"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-apad">27.11 apad</a></h2>
 
-<p>Pad the end of a audio stream with silence, this can be used together with
--shortest to extend audio streams to the same length as the video stream.
+<p>Pad the end of an audio stream with silence.
 </p>
+<p>This can be used together with <code>ffmpeg</code> &lsquo;<samp>-shortest</samp>&rsquo; to
+extend audio streams to the same length as the video stream.
+</p>
+<p>A description of the accepted options follows.
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>packet_size</samp>&rsquo;</dt>
+<dd><p>Set silence packet size. Default value is 4096.
+</p>
+</dd>
+<dt> &lsquo;<samp>pad_len</samp>&rsquo;</dt>
+<dd><p>Set the number of samples of silence to add to the end. After the
+value is reached, the stream is terminated. This option is mutually
+exclusive with &lsquo;<samp>whole_len</samp>&rsquo;.
+</p>
+</dd>
+<dt> &lsquo;<samp>whole_len</samp>&rsquo;</dt>
+<dd><p>Set the minimum total number of samples in the output audio stream. If
+the value is longer than the input audio length, silence is added to
+the end, until the value is reached. This option is mutually exclusive
+with &lsquo;<samp>pad_len</samp>&rsquo;.
+</p></dd>
+</dl>
+
+<p>If neither the &lsquo;<samp>pad_len</samp>&rsquo; nor the &lsquo;<samp>whole_len</samp>&rsquo; option is
+set, the filter will add silence to the end of the input stream
+indefinitely.
+</p>
+<a name="Examples-88"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-88">27.11.1 Examples</a></h3>
+
+<ul>
+<li>
+Add 1024 samples of silence to the end of the input:
+<table><tr><td>&nbsp;</td><td><pre class="example">apad=pad_len=1024
+</pre></td></tr></table>
+
+</li><li>
+Make sure the audio output will contain at least 10000 samples, pad
+the input with silence if required:
+<table><tr><td>&nbsp;</td><td><pre class="example">apad=whole_len=10000
+</pre></td></tr></table>
+
+</li><li>
+Use <code>ffmpeg</code> to pad the audio input with silence, so that the
+video stream will always result the shortest and will be converted
+until the end in the output file when using the &lsquo;<samp>shortest</samp>&rsquo;
+option:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i VIDEO -i AUDIO -filter_complex &quot;[1:0]apad&quot; -shortest OUTPUT
+</pre></td></tr></table>
+</li></ul>
+
 <a name="aphaser"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-aphaser">27.12 aphaser</a></h2>
 <p>Add a phasing effect to the input audio.
@@ -9100,8 +9338,8 @@ expresses a sample rate and <var>resampler_options</var> is a list of
 <var>key</var>=<var>value</var> pairs, separated by &quot;:&quot;. See the
 ffmpeg-resampler manual for the complete list of supported options.
 </p>
-<a name="Examples-31"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-31">27.13.1 Examples</a></h3>
+<a name="Examples-2"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-2">27.13.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -9169,7 +9407,7 @@ The input audio is not modified.
 <p>The shown line contains a sequence of key/value pairs of the form
 <var>key</var>:<var>value</var>.
 </p>
-<p>It accepts the following parameters:
+<p>The following values are shown in the output:
 </p>
 <dl compact="compact">
 <dt> &lsquo;<samp>n</samp>&rsquo;</dt>
@@ -9302,8 +9540,8 @@ that has a smaller timestamp.
 </p></dd>
 </dl>
 
-<a name="Examples-59"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-59">27.18.1 Examples</a></h3>
+<a name="Examples-34"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-34">27.18.1 Examples</a></h3>
 
 <p>Stress-test <code>amerge</code> by randomly sending buffers on the wrong
 input, while avoiding too much of a desynchronization:
@@ -9358,8 +9596,8 @@ with a negative PTS due to encoder delay.
 specified then the filter will assume nominal 1.0 tempo. Tempo must
 be in the [0.5, 2.0] range.
 </p>
-<a name="Examples-21"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-21">27.20.1 Examples</a></h3>
+<a name="Examples-26"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-26">27.20.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -9733,8 +9971,8 @@ operate in predictive rather than reactive mode. It defaults to 0.
 </dd>
 </dl>
 
-<a name="Examples-37"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-37">27.29.1 Examples</a></h3>
+<a name="Examples-80"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-80">27.29.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -9813,8 +10051,8 @@ Beware of clipping when using a positive gain.
 </p></dd>
 </dl>
 
-<a name="Examples-19"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-19">27.31.1 Examples</a></h3>
+<a name="Examples-33"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-33">27.31.1 Examples</a></h3>
 <ul>
 <li>
 Attenuate 10 dB at 1000 Hz, with a bandwidth of 200 Hz:
@@ -9827,8 +10065,53 @@ Apply 2 dB gain at 1000 Hz with Q 1 and attenuate 5 dB at 100 Hz with Q 2:
 </pre></td></tr></table>
 </li></ul>
 
+<a name="flanger"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-flanger">27.32 flanger</a></h2>
+<p>Apply a flanging effect to the audio.
+</p>
+<p>The filter accepts the following options:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>delay</samp>&rsquo;</dt>
+<dd><p>Set base delay in milliseconds. Range from 0 to 30. Default value is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>depth</samp>&rsquo;</dt>
+<dd><p>Set added swep delay in milliseconds. Range from 0 to 10. Default value is 2.
+</p>
+</dd>
+<dt> &lsquo;<samp>regen</samp>&rsquo;</dt>
+<dd><p>Set percentage regeneneration (delayed signal feedback). Range from -95 to 95.
+Default value is 0.
+</p>
+</dd>
+<dt> &lsquo;<samp>width</samp>&rsquo;</dt>
+<dd><p>Set percentage of delayed signal mixed with original. Range from 0 to 100.
+Default valu is 71.
+</p>
+</dd>
+<dt> &lsquo;<samp>speed</samp>&rsquo;</dt>
+<dd><p>Set sweeps per second (Hz). Range from 0.1 to 10. Default value is 0.5.
+</p>
+</dd>
+<dt> &lsquo;<samp>shape</samp>&rsquo;</dt>
+<dd><p>Set swept wave shape, can be <var>triangular</var> or <var>sinusoidal</var>.
+Default value is <var>sinusoidal</var>.
+</p>
+</dd>
+<dt> &lsquo;<samp>phase</samp>&rsquo;</dt>
+<dd><p>Set swept wave percentage-shift for multi channel. Range from 0 to 100.
+Default value is 25.
+</p>
+</dd>
+<dt> &lsquo;<samp>interp</samp>&rsquo;</dt>
+<dd><p>Set delay-line interpolation, <var>linear</var> or <var>quadratic</var>.
+Default is <var>linear</var>.
+</p></dd>
+</dl>
+
 <a name="highpass"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-highpass">27.32 highpass</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-highpass">27.33 highpass</a></h2>
 
 <p>Apply a high-pass filter with 3dB point frequency.
 The filter can be either single-pole, or double-pole (the default).
@@ -9871,7 +10154,7 @@ The default is 0.707q and gives a Butterworth response.
 </dl>
 
 <a name="join"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-join">27.33 join</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-join">27.34 join</a></h2>
 
 <p>Join multiple input streams into one multi-channel stream.
 </p>
@@ -9910,7 +10193,7 @@ out
 </pre></td></tr></table>
 
 <a name="ladspa"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-ladspa">27.34 ladspa</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-ladspa">27.35 ladspa</a></h2>
 
 <p>Load a LADSPA (Linux Audio Developer&rsquo;s Simple Plugin API) plugin.
 </p>
@@ -9967,8 +10250,8 @@ Only used if plugin have zero inputs.
 </dd>
 </dl>
 
-<a name="Examples-23"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-23">27.34.1 Examples</a></h3>
+<a name="Examples-32"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-32">27.35.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -10012,7 +10295,7 @@ Apply <code>C* Eq10X2 - Stereo 10-band equaliser</code> effect:
 </li></ul>
 
 <a name="Commands-1"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-1">27.34.2 Commands</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-1">27.35.2 Commands</a></h3>
 
 <p>This filter supports the following commands:
 </p><dl compact="compact">
@@ -10024,7 +10307,7 @@ Apply <code>C* Eq10X2 - Stereo 10-band equaliser</code> effect:
 </dl>
 
 <a name="lowpass"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-lowpass">27.35 lowpass</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-lowpass">27.36 lowpass</a></h2>
 
 <p>Apply a low-pass filter with 3dB point frequency.
 The filter can be either single-pole or double-pole (the default).
@@ -10067,7 +10350,7 @@ The default is 0.707q and gives a Butterworth response.
 </dl>
 
 <a name="pan"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pan">27.36 pan</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pan">27.37 pan</a></h2>
 
 <p>Mix channels with specific gain levels. The filter accepts the output
 channel layout followed by a set of channels definitions.
@@ -10108,7 +10391,7 @@ that specification will be renormalized so that the total is 1, thus
 avoiding clipping noise.
 </p>
 <a name="Mixing-examples"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Mixing-examples">27.36.1 Mixing examples</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Mixing-examples">27.37.1 Mixing examples</a></h3>
 
 <p>For example, if you want to down-mix from stereo to mono, but with a bigger
 factor for the left channel:
@@ -10125,7 +10408,7 @@ that should be preferred (see &quot;-ac&quot; option) unless you have very speci
 needs.
 </p>
 <a name="Remapping-examples"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Remapping-examples">27.36.2 Remapping examples</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Remapping-examples">27.37.2 Remapping examples</a></h3>
 
 <p>The channel remapping will be effective if, and only if:
 </p>
@@ -10159,20 +10442,20 @@ front left and right:
 </pre></td></tr></table>
 
 <a name="replaygain"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-replaygain">27.37 replaygain</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-replaygain">27.38 replaygain</a></h2>
 
 <p>ReplayGain scanner filter. This filter takes an audio stream as an input and
 outputs it unchanged.
 At end of filtering it displays <code>track_gain</code> and <code>track_peak</code>.
 </p>
 <a name="resample"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-resample">27.38 resample</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-resample">27.39 resample</a></h2>
 
 <p>Convert the audio sample format, sample rate and channel layout. It is
 not meant to be used directly.
 </p>
 <a name="silencedetect"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-silencedetect">27.39 silencedetect</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-silencedetect">27.40 silencedetect</a></h2>
 
 <p>Detect silence in an audio stream.
 </p>
@@ -10195,8 +10478,8 @@ specified value) or amplitude ratio. Default is -60dB, or 0.001.
 </p></dd>
 </dl>
 
-<a name="Examples-7"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-7">27.39.1 Examples</a></h3>
+<a name="Examples-48"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-48">27.40.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -10212,7 +10495,7 @@ tolerance in &lsquo;<tt>silence.mp3</tt>&rsquo;:
 </li></ul>
 
 <a name="treble"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-treble">27.40 treble</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-treble">27.41 treble</a></h2>
 
 <p>Boost or cut treble (upper) frequencies of the audio using a two-pole
 shelving filter with a response similar to that of a standard
@@ -10257,7 +10540,7 @@ The default value is <code>3000</code> Hz.
 </dl>
 
 <a name="volume"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-volume">27.41 volume</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-volume">27.42 volume</a></h2>
 
 <p>Adjust the input audio volume.
 </p>
@@ -10386,8 +10669,8 @@ when the &lsquo;<samp>volume</samp>&rsquo; command is sent
 <var>sample_rate</var> and <var>tb</var> variables are available, all other
 variables will evaluate to NAN.
 </p>
-<a name="Commands"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands">27.41.1 Commands</a></h3>
+<a name="Commands-5"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-5">27.42.1 Commands</a></h3>
 
 <p>This filter supports the following commands:
 </p><dl compact="compact">
@@ -10406,8 +10689,8 @@ value.
 </dd>
 </dl>
 
-<a name="Examples-5"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-5">27.41.2 Examples</a></h3>
+<a name="Examples-29"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-29">27.42.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -10434,7 +10717,7 @@ Fade volume after time 10 with an annihilation period of 5 seconds:
 </li></ul>
 
 <a name="volumedetect"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-volumedetect">27.42 volumedetect</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-volumedetect">27.43 volumedetect</a></h2>
 
 <p>Detect the volume of the input video.
 </p>
@@ -10448,8 +10731,8 @@ the samples).
 </p>
 <p>All volumes are in decibels relative to the maximum PCM value.
 </p>
-<a name="Examples-44"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-44">27.42.1 Examples</a></h3>
+<a name="Examples-22"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-22">27.43.1 Examples</a></h3>
 
 <p>Here is an excerpt of the output:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">[Parsed_volumedetect_0 &nbsp;0xa23120] mean_volume: -27 dB
@@ -10522,8 +10805,8 @@ must be consistent.
 </dd>
 </dl>
 
-<a name="Examples-4"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-4">28.1.1 Examples</a></h3>
+<a name="Examples-6"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-6">28.1.1 Examples</a></h3>
 
 <table><tr><td>&nbsp;</td><td><pre class="example">abuffer=sample_rate=44100:sample_fmt=s16p:channel_layout=stereo
 </pre></td></tr></table>
@@ -10597,8 +10880,8 @@ default to 1024.
 </dd>
 </dl>
 
-<a name="Examples-22"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-22">28.2.1 Examples</a></h3>
+<a name="Examples-44"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-44">28.2.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -10667,8 +10950,8 @@ channel layout values.
 </dd>
 </dl>
 
-<a name="Examples-77"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-77">28.3.1 Examples</a></h3>
+<a name="Examples-12"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-12">28.3.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -10720,8 +11003,8 @@ immediately. Default value is 0.
 </p></dd>
 </dl>
 
-<a name="Examples-28"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-28">28.4.1 Examples</a></h3>
+<a name="Examples-9"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-9">28.4.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -10782,8 +11065,8 @@ the carrier frequency. Default is 0, meaning the beep is disabled.
 </p></dd>
 </dl>
 
-<a name="Examples-66"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-66">28.5.1 Examples</a></h3>
+<a name="Examples-83"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-83">28.5.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11082,8 +11365,8 @@ Default is <code>1</code>.
 </p></dd>
 </dl>
 
-<a name="Examples-36"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-36">30.7.1 Examples</a></h3>
+<a name="Examples-59"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-59">30.7.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11180,8 +11463,8 @@ corresponding value set for &lsquo;<samp>luma_power</samp>&rsquo;.
 </p></dd>
 </dl>
 
-<a name="Examples-78"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-78">30.8.1 Examples</a></h3>
+<a name="Examples-68"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-68">30.8.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11236,8 +11519,8 @@ value towards the complementary color.
 </p></dd>
 </dl>
 
-<a name="Examples-85"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-85">30.9.1 Examples</a></h3>
+<a name="Examples-27"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-27">30.9.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11295,8 +11578,8 @@ Default is <code>1</code> for <var>aa</var>, and <code>0</code> for <var>ar</var
 </p></dd>
 </dl>
 
-<a name="Examples-30"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-30">30.10.1 Examples</a></h3>
+<a name="Examples-40"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-40">30.10.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11467,8 +11750,8 @@ is approximated to the nearest valid value.
 <p>The expression for <var>x</var> may depend on <var>y</var>, and the expression
 for <var>y</var> may depend on <var>x</var>.
 </p>
-<a name="Examples-26"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-26">30.13.1 Examples</a></h3>
+<a name="Examples-77"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-77">30.13.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11650,8 +11933,8 @@ options. In this case, the unset component(s) will fallback on this
 <p>To avoid some filtergraph syntax conflicts, each key points list need to be
 defined using the following syntax: <code>x0/y0 x1/y1 x2/y2 ...</code>.
 </p>
-<a name="Examples-3"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-3">30.15.1 Examples</a></h3>
+<a name="Examples-57"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-57">30.15.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -11697,7 +11980,7 @@ Use a Photoshop preset and redefine the points of the green component:
 
 <p>Denoise frames using 2D DCT (frequency domain filtering).
 </p>
-<p>This filter is not designed for real time and can be extremely slow.
+<p>This filter is not designed for real time.
 </p>
 <p>The filter accepts the following options:
 </p>
@@ -11714,14 +11997,14 @@ coefficient (absolute value) below this threshold with be dropped.
 </p>
 </dd>
 <dt> &lsquo;<samp>overlap</samp>&rsquo;</dt>
-<dd><p>Set number overlapping pixels for each block. Each block is of size
-<code>16x16</code>. Since the filter can be slow, you may want to reduce this value,
-at the cost of a less effective filter and the risk of various artefacts.
+<dd><p>Set number overlapping pixels for each block. Since the filter can be slow, you
+may want to reduce this value, at the cost of a less effective filter and the
+risk of various artefacts.
 </p>
 <p>If the overlapping value doesn&rsquo;t allow to process the whole input width or
 height, a warning will be displayed and according borders won&rsquo;t be denoised.
 </p>
-<p>Default value is <code>15</code>.
+<p>Default value is <var>blocksize</var>-1, which is the best possible setting.
 </p>
 </dd>
 <dt> &lsquo;<samp>expr, e</samp>&rsquo;</dt>
@@ -11734,11 +12017,21 @@ multiplier value for the coefficient.
 </p>
 <p>The absolute value of the coefficient can be accessed through the <var>c</var>
 variable.
+</p>
+</dd>
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>Set the <var>blocksize</var> using the number of bits. <code>1&lt;&lt;<var>n</var></code> defines the
+<var>blocksize</var>, which is the width and height of the processed blocks.
+</p>
+<p>The default value is <var>3</var> (8x8) and can be raised to <var>4</var> for a
+<var>blocksize</var> of 16x16. Note that changing this setting has huge consequences
+on the speed processing. Also, a larger block size does not necessarily means a
+better de-noising.
 </p></dd>
 </dl>
 
-<a name="Examples-64"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-64">30.16.1 Examples</a></h3>
+<a name="Examples-54"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-54">30.16.1 Examples</a></h3>
 
 <p>Apply a denoise with a &lsquo;<samp>sigma</samp>&rsquo; of <code>4.5</code>:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">dctdnoiz=4.5
@@ -11746,6 +12039,10 @@ variable.
 
 <p>The same operation can be achieved using the expression system:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">dctdnoiz=e='gte(c, 4.5*3)'
+</pre></td></tr></table>
+
+<p>Violent denoise using a block size of <code>16x16</code>:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">dctdnoiz=15:n=4
 </pre></td></tr></table>
 
 <p><a name="decimate"></a>
@@ -11811,7 +12108,7 @@ rate video.
 <dt> &lsquo;<samp>cycle</samp>&rsquo;</dt>
 <dd><p>Specify the length of the window over which the judder repeats.
 </p>
-<p>Accepts any interger greater than 1. Useful values are:
+<p>Accepts any integer greater than 1. Useful values are:
 </p><dl compact="compact">
 <dt> &lsquo;<samp>4</samp>&rsquo;</dt>
 <dd><p>If the original was telecined from 24 to 30 fps (Film to NTSC).
@@ -11869,8 +12166,8 @@ compute the interpolated pixel values inside the rectangle.
 </dd>
 </dl>
 
-<a name="Examples-69"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-69">30.19.1 Examples</a></h3>
+<a name="Examples-16"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-16">30.19.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -12050,8 +12347,8 @@ each other, so you may for example specify <code>y=x/dar</code> or <code>h=w/dar
 </dd>
 </dl>
 
-<a name="Examples-1"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-1">30.21.1 Examples</a></h3>
+<a name="Examples-89"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-89">30.21.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -12155,8 +12452,8 @@ each other, so you may for example specify <code>y=x/dar</code> or <code>h=w/dar
 </dd>
 </dl>
 
-<a name="Examples-84"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-84">30.22.1 Examples</a></h3>
+<a name="Examples-58"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-58">30.22.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -12181,6 +12478,8 @@ libfreetype library.
 <code>--enable-libfreetype</code>.
 To enable default font fallback and the <var>font</var> option you need to
 configure FFmpeg with <code>--enable-libfontconfig</code>.
+To enable the <var>text_shaping</var> option, you need to configure FFmpeg with
+<code>--enable-libfribidi</code>.
 </p>
 <a name="Syntax-2"></a>
 <h3 class="subsection"><a href="ffprobe-all.html#toc-Syntax-2">30.23.1 Syntax</a></h3>
@@ -12231,6 +12530,12 @@ the &quot;Color&quot; section in the ffmpeg-utils manual.
 <p>The default value of <var>fontcolor</var> is &quot;black&quot;.
 </p>
 </dd>
+<dt> &lsquo;<samp>fontcolor_expr</samp>&rsquo;</dt>
+<dd><p>String which is expanded the same way as <var>text</var> to obtain dynamic
+<var>fontcolor</var> value. By default this option has empty value and is not
+processed. When this option is set, it overrides <var>fontcolor</var> option.
+</p>
+</dd>
 <dt> &lsquo;<samp>font</samp>&rsquo;</dt>
 <dd><p>The font family to be used for drawing text. By default Sans.
 </p>
@@ -12243,6 +12548,13 @@ This parameter is mandatory if the fontconfig support is disabled.
 <dt> &lsquo;<samp>fontsize</samp>&rsquo;</dt>
 <dd><p>The font size to be used for drawing text.
 The default value of <var>fontsize</var> is 16.
+</p>
+</dd>
+<dt> &lsquo;<samp>text_shaping</samp>&rsquo;</dt>
+<dd><p>If set to 1, attempt to shape the text (for example, reverse the order of
+right-to-left text and join Arabic characters) before drawing it.
+Otherwise, just draw the text exactly as given.
+By default 1 (if supported).
 </p>
 </dd>
 <dt> &lsquo;<samp>ft_load_flags</samp>&rsquo;</dt>
@@ -12469,6 +12781,16 @@ the constants <var>text_w</var> and <var>text_h</var> will have an undefined
 value.
 </p>
 </dd>
+<dt> <code>expr_int_format, eif</code></dt>
+<dd><p>Evaluate the expression&rsquo;s value and output as formatted integer.
+</p>
+<p>First argument is expression to be evaluated, same as for <var>expr</var> function.
+Second argument specifies output format. Allowed values are &rsquo;x&rsquo;, &rsquo;X&rsquo;, &rsquo;d&rsquo; and
+&rsquo;u&rsquo;, they are treated exactly as in printf function.
+Third parameter is optional and sets the number of positions taken by output.
+Effectively this allows to add padding with zeros from the left.
+</p>
+</dd>
 <dt> <code>gmtime</code></dt>
 <dd><p>The time at which the filter is running, expressed in UTC.
 It can accept an argument: a strftime() format string.
@@ -12504,8 +12826,8 @@ for a formatted <var>[-]HH:MM:SS.mmm</var> timestamp with millisecond accuracy.
 </dd>
 </dl>
 
-<a name="Examples-35"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-35">30.23.3 Examples</a></h3>
+<a name="Examples-82"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-82">30.23.3 Examples</a></h3>
 
 <ul>
 <li>
@@ -12566,6 +12888,16 @@ Print the date of a real-time encoding (see strftime(3)):
 <table><tr><td>&nbsp;</td><td><pre class="example">drawtext='fontfile=FreeSans.ttf:text=%{localtime:%a %b %d %Y}'
 </pre></td></tr></table>
 
+</li><li>
+Show text fading in and out (appearing/disappearing):
+<table><tr><td>&nbsp;</td><td><pre class="example">#!/bin/sh
+DS=1.0 # display start
+DE=10.0 # display end
+FID=1.5 # fade in duration
+FOD=5 # fade out duration
+ffplay -f lavfi &quot;color,drawtext=text=TEST:fontsize=50:fontfile=FreeSerif.ttf:fontcolor_expr=ff0000%{eif\\\\: clip(255*(1*between(t\\, $DS + $FID\\, $DE - $FOD) + ((t - $DS)/$FID)*between(t\\, $DS\\, $DS + $FID) + (-(t - $DE)/$FOD)*between(t\\, $DE - $FOD\\, $DE) )\\, 0\\, 255) \\\\: x\\\\: 2 }&quot;
+</pre></td></tr></table>
+
 </li></ul>
 
 <p>For more information about libfreetype, check:
@@ -12573,6 +12905,9 @@ Print the date of a real-time encoding (see strftime(3)):
 </p>
 <p>For more information about fontconfig, check:
 <a href="http://freedesktop.org/software/fontconfig/fontconfig-user.html">http://freedesktop.org/software/fontconfig/fontconfig-user.html</a>.
+</p>
+<p>For more information about libfribidi, check:
+<a href="http://fribidi.org/">http://fribidi.org/</a>.
 </p>
 <a name="edgedetect"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-edgedetect">30.24 edgedetect</a></h2>
@@ -12615,8 +12950,8 @@ is <code>50/255</code>.
 </p></dd>
 </dl>
 
-<a name="Examples-72"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-72">30.24.1 Examples</a></h3>
+<a name="Examples-5"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-5">30.24.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -12659,8 +12994,8 @@ with <code>y</code>, <code>u</code>, <code>v</code> planes at same time.
 </p></dd>
 </dl>
 
-<a name="Examples-51"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-51">30.25.1 Examples</a></h3>
+<a name="Examples-31"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-31">30.25.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -12751,8 +13086,8 @@ If both duration and nb_frames are specified, duration is used. Default is 0.
 </p></dd>
 </dl>
 
-<a name="Examples-74"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-74">30.27.1 Examples</a></h3>
+<a name="Examples-15"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-15">30.27.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13149,8 +13484,8 @@ Output frames:
                  2          1          3          2          2
 </pre></td></tr></table>
 
-<a name="Examples-81"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-81">30.29.2 Examples</a></h3>
+<a name="Examples-39"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-39">30.29.2 Examples</a></h3>
 
 <p>Simple IVTC of a top field first telecined stream:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">fieldmatch=order=tff:combmatch=none, decimate
@@ -13218,8 +13553,8 @@ the next filter.
 </dd>
 </dl>
 
-<a name="Examples-2"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-2">30.32.1 Examples</a></h3>
+<a name="Examples-65"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-65">30.32.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13285,8 +13620,8 @@ frames with a negative PTS.
 </p>
 <p>See also the <a href="#setpts">setpts</a> filter.
 </p>
-<a name="Examples-12"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-12">30.33.1 Examples</a></h3>
+<a name="Examples-64"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-64">30.33.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13399,8 +13734,8 @@ section in the ffmpeg-utils manual), a position (specified as <var>X</var>/<var>
 <p>The number and types of parameters depend on the loaded effect. If an
 effect parameter is not specified, the default value is set.
 </p>
-<a name="Examples-80"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-80">30.36.1 Examples</a></h3>
+<a name="Examples-72"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-72">30.36.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13531,8 +13866,8 @@ plane. Return 0 if there is no such plane.
 <p>For functions, if <var>x</var> and <var>y</var> are outside the area, the value will be
 automatically clipped to the closer edge.
 </p>
-<a name="Examples-6"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-6">30.37.1 Examples</a></h3>
+<a name="Examples-1"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-1">30.37.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13596,8 +13931,8 @@ values will be clipped to the valid range.
 <p>Alternatively, the options can be specified as a flat string:
 <var>strength</var>[:<var>radius</var>]
 </p>
-<a name="Examples-58"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-58">30.38.1 Examples</a></h3>
+<a name="Examples-67"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-67">30.38.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13858,8 +14193,8 @@ Default is <code>linear</code>.
 </p></dd>
 </dl>
 
-<a name="Examples-46"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-46">30.42.1 Examples</a></h3>
+<a name="Examples-87"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-87">30.42.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13901,8 +14236,24 @@ It defaults to 3.0*<var>luma_spatial</var>/4.0.
 </p></dd>
 </dl>
 
+<a name="hqx"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-hqx">30.44 hqx</a></h2>
+
+<p>Apply a high-quality magnification filter designed for pixel art. This filter
+was originally created by Maxim Stepin.
+</p>
+<p>It accepts the following option:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>n</samp>&rsquo;</dt>
+<dd><p>Set the scaling dimension: <code>2</code> for <code>hq2x</code>, <code>3</code> for
+<code>hq3x</code> and <code>4</code> for <code>hq4x</code>.
+Default is <code>3</code>.
+</p></dd>
+</dl>
+
 <a name="hue"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-hue">30.44 hue</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-hue">30.45 hue</a></h2>
 
 <p>Modify the hue and/or the saturation of the input.
 </p>
@@ -13958,8 +14309,8 @@ expressions containing the following constants:
 </p></dd>
 </dl>
 
-<a name="Examples-34"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-34">30.44.1 Examples</a></h3>
+<a name="Examples-60"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-60">30.45.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -13998,8 +14349,8 @@ Apply a 3 seconds saturation fade-out effect starting at 5 seconds:
 
 </li></ul>
 
-<a name="Commands-3"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-3">30.44.2 Commands</a></h3>
+<a name="Commands"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands">30.45.2 Commands</a></h3>
 
 <p>This filter supports the following commands:
 </p><dl compact="compact">
@@ -14016,7 +14367,7 @@ value.
 </dl>
 
 <a name="idet"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-idet">30.45 idet</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-idet">30.46 idet</a></h2>
 
 <p>Detect video interlacing type.
 </p>
@@ -14035,7 +14386,7 @@ top or bottom field first.
 </dl>
 
 <a name="il"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-il">30.46 il</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-il">30.47 il</a></h2>
 
 <p>Deinterleave or interleave fields.
 </p>
@@ -14078,12 +14429,11 @@ You can process (filter) them independently and then re-interleave them.
 </dl>
 
 <a name="interlace"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-interlace">30.47 interlace</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-interlace">30.48 interlace</a></h2>
 
 <p>Simple interlacing filter from progressive contents. This interleaves upper (or
 lower) lines from odd frames with lower (or upper) lines from even frames,
-halving the frame rate and preserving image height. A vertical lowpass filter
-is always applied in order to avoid twitter effects and reduce moiré patterns.
+halving the frame rate and preserving image height.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">   Original        Original             New Frame
    Frame 'j'      Frame 'j+1'             (tff)
@@ -14102,11 +14452,16 @@ New Frame + 1 will be generated by Frame 'j+2' and Frame 'j+3' and so on
 <dt> &lsquo;<samp>scan</samp>&rsquo;</dt>
 <dd><p>This determines whether the interlaced frame is taken from the even
 (tff - default) or odd (bff) lines of the progressive frame.
+</p>
+</dd>
+<dt> &lsquo;<samp>lowpass</samp>&rsquo;</dt>
+<dd><p>Enable (default) or disable the vertical lowpass filter to avoid twitter
+interlacing and reduce moire patterns.
 </p></dd>
 </dl>
 
 <a name="kerndeint"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-kerndeint">30.48 kerndeint</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-kerndeint">30.49 kerndeint</a></h2>
 
 <p>Deinterlace input video by applying Donald Graft&rsquo;s adaptive kernel
 deinterling. Work on interlaced parts of a video to produce
@@ -14141,8 +14496,8 @@ Default is 0.
 </p></dd>
 </dl>
 
-<a name="Examples"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples">30.48.1 Examples</a></h3>
+<a name="Examples-4"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-4">30.49.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -14161,9 +14516,60 @@ Paint processed pixels in white:
 </pre></td></tr></table>
 </li></ul>
 
+<a name="lenscorrection"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-lenscorrection">30.50 lenscorrection</a></h2>
+
+<p>Correct radial lens distortion
+</p>
+<p>This filter can be used to correct for radial distortion as can result from the use
+of wide angle lenses, and thereby re-rectify the image. To find the right parameters
+one can use tools available for example as part of opencv or simply trial-and-error.
+To use opencv use the calibration sample (under samples/cpp) from the opencv sources
+and extract the k1 and k2 coefficients from the resulting matrix.
+</p>
+<p>Note that effectively the same filter is available in the open-source tools Krita and
+Digikam from the KDE project.
+</p>
+<p>In contrast to the <a href="#vignette">vignette</a> filter, which can also be used to compensate lens errors,
+this filter corrects the distortion of the image, whereas <a href="#vignette">vignette</a> corrects the
+brightness distribution, so you may want to use both filters together in certain
+cases, though you will have to take care of ordering, i.e. whether vignetting should
+be applied before or after lens correction.
+</p>
+<a name="Options-3"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-3">30.50.1 Options</a></h3>
+
+<p>The filter accepts the following options:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>cx</samp>&rsquo;</dt>
+<dd><p>Relative x-coordinate of the focal point of the image, and thereby the center of the
+distrortion. This value has a range [0,1] and is expressed as fractions of the image
+width.
+</p></dd>
+<dt> &lsquo;<samp>cy</samp>&rsquo;</dt>
+<dd><p>Relative y-coordinate of the focal point of the image, and thereby the center of the
+distrortion. This value has a range [0,1] and is expressed as fractions of the image
+height.
+</p></dd>
+<dt> &lsquo;<samp>k1</samp>&rsquo;</dt>
+<dd><p>Coefficient of the quadratic correction term. 0.5 means no correction.
+</p></dd>
+<dt> &lsquo;<samp>k2</samp>&rsquo;</dt>
+<dd><p>Coefficient of the double quadratic correction term. 0.5 means no correction.
+</p></dd>
+</dl>
+
+<p>The formula that generates the correction is:
+</p>
+<p><var>r_src</var> = <var>r_tgt</var> * (1 + <var>k1</var> * (<var>r_tgt</var> / <var>r_0</var>)^2 + <var>k2</var> * (<var>r_tgt</var> / <var>r_0</var>)^4)
+</p>
+<p>where <var>r_0</var> is halve of the image diagonal and <var>r_src</var> and <var>r_tgt</var> are the
+distances from the focal point in the source and target images, respectively.
+</p>
 <p><a name="lut3d"></a>
 </p><a name="lut3d-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-lut3d-1">30.49 lut3d</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-lut3d-1">30.51 lut3d</a></h2>
 
 <p>Apply a 3D LUT to an input video.
 </p>
@@ -14209,7 +14615,7 @@ Paint processed pixels in white:
 </dl>
 
 <a name="lut_002c-lutrgb_002c-lutyuv"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-lut_002c-lutrgb_002c-lutyuv">30.50 lut, lutrgb, lutyuv</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-lut_002c-lutrgb_002c-lutyuv">30.52 lut, lutrgb, lutyuv</a></h2>
 
 <p>Compute a look-up table for binding each pixel component input value
 to an output value, and apply it to the input video.
@@ -14311,8 +14717,8 @@ expression
 
 <p>All expressions default to &quot;val&quot;.
 </p>
-<a name="Examples-53"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-53">30.50.1 Examples</a></h3>
+<a name="Examples-85"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-85">30.52.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -14363,7 +14769,7 @@ Discard least significant bits of luma:
 </li></ul>
 
 <a name="mergeplanes"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mergeplanes">30.51 mergeplanes</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mergeplanes">30.53 mergeplanes</a></h2>
 
 <p>Merge color channel components from several video streams.
 </p>
@@ -14390,8 +14796,8 @@ plane, &rsquo;Cc&rsquo; describes the mapping for the output stream third plane 
 </p></dd>
 </dl>
 
-<a name="Examples-57"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-57">30.51.1 Examples</a></h3>
+<a name="Examples-28"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-28">30.53.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -14421,7 +14827,7 @@ Cast a rgb24 clip to yuv444p:
 </li></ul>
 
 <a name="mcdeint"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mcdeint">30.52 mcdeint</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mcdeint">30.54 mcdeint</a></h2>
 
 <p>Apply motion-compensation deinterlacing.
 </p>
@@ -14473,7 +14879,7 @@ optimal individual vectors. Default value is 1.
 </dl>
 
 <a name="mp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mp">30.53 mp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mp">30.55 mp</a></h2>
 
 <p>Apply an MPlayer filter to the input video.
 </p>
@@ -14507,8 +14913,8 @@ the named filter.
 of the corresponding MPlayer filters. For detailed instructions check
 the &quot;VIDEO FILTERS&quot; section in the MPlayer manual.
 </p>
-<a name="Examples-42"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-42">30.53.1 Examples</a></h3>
+<a name="Examples-86"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-86">30.55.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -14520,7 +14926,7 @@ Adjust gamma, brightness, contrast:
 <p>See also mplayer(1), <a href="http://www.mplayerhq.hu/">http://www.mplayerhq.hu/</a>.
 </p>
 <a name="mpdecimate"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-mpdecimate">30.54 mpdecimate</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-mpdecimate">30.56 mpdecimate</a></h2>
 
 <p>Drop frames that do not differ greatly from the previous frame in
 order to reduce frame rate.
@@ -14562,7 +14968,7 @@ meaning the whole image) differ by more than a threshold of &lsquo;<samp>lo</sam
 
 
 <a name="negate"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-negate">30.55 negate</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-negate">30.57 negate</a></h2>
 
 <p>Negate input video.
 </p>
@@ -14570,7 +14976,7 @@ meaning the whole image) differ by more than a threshold of &lsquo;<samp>lo</sam
 alpha component (if available). The default value in input is 0.
 </p>
 <a name="noformat"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-noformat">30.56 noformat</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-noformat">30.58 noformat</a></h2>
 
 <p>Force libavfilter not to use any of the specified pixel formats for the
 input to the next filter.
@@ -14584,8 +14990,8 @@ apix_fmts=yuv420p|monow|rgb24&quot;.
 </dd>
 </dl>
 
-<a name="Examples-75"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-75">30.56.1 Examples</a></h3>
+<a name="Examples-74"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-74">30.58.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -14600,8 +15006,8 @@ Convert the input video to any of the formats not contained in the list:
 </pre></td></tr></table>
 </li></ul>
 
-<a name="noise"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-noise">30.57 noise</a></h2>
+<a name="noise-1"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-noise-1">30.59 noise</a></h2>
 
 <p>Add noise on video input frame.
 </p>
@@ -14650,20 +15056,20 @@ Available values for component flags are:
 </dd>
 </dl>
 
-<a name="Examples-65"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-65">30.57.1 Examples</a></h3>
+<a name="Examples-10"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-10">30.59.1 Examples</a></h3>
 
 <p>Add temporal and uniform noise to input video:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">noise=alls=20:allf=t+u
 </pre></td></tr></table>
 
 <a name="null"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-null">30.58 null</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-null">30.60 null</a></h2>
 
 <p>Pass the video source unchanged to the output.
 </p>
 <a name="ocv"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-ocv">30.59 ocv</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-ocv">30.61 ocv</a></h2>
 
 <p>Apply a video transform using libopencv.
 </p>
@@ -14692,7 +15098,7 @@ information:
 </p>
 <p><a name="dilate"></a>
 </p><a name="dilate-1"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-dilate-1">30.59.1 dilate</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-dilate-1">30.61.1 dilate</a></h3>
 
 <p>Dilate an image by using a specific structuring element.
 It corresponds to the libopencv function <code>cvDilate</code>.
@@ -14739,7 +15145,7 @@ ocv=dilate:0x0+2x2/custom=diamond.shape|2
 </pre></td></tr></table>
 
 <a name="erode"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-erode">30.59.2 erode</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-erode">30.61.2 erode</a></h3>
 
 <p>Erode an image by using a specific structuring element.
 It corresponds to the libopencv function <code>cvErode</code>.
@@ -14748,7 +15154,7 @@ It corresponds to the libopencv function <code>cvErode</code>.
 with the same syntax and semantics as the <a href="#dilate">dilate</a> filter.
 </p>
 <a name="smooth"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-smooth">30.59.3 smooth</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-smooth">30.61.3 smooth</a></h3>
 
 <p>Smooth the input video.
 </p>
@@ -14772,7 +15178,7 @@ libopencv function <code>cvSmooth</code>.
 </p>
 <p><a name="overlay"></a>
 </p><a name="overlay-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-overlay-1">30.60 overlay</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-overlay-1">30.62 overlay</a></h2>
 
 <p>Overlay one video on top of another.
 </p>
@@ -14924,8 +15330,8 @@ the <var>movie</var> filter does.
 <p>You can chain together more overlays but you should test the
 efficiency of such approach.
 </p>
-<a name="Commands-5"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-5">30.60.1 Commands</a></h3>
+<a name="Commands-3"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-3">30.62.1 Commands</a></h3>
 
 <p>This filter supports the following commands:
 </p><dl compact="compact">
@@ -14939,8 +15345,8 @@ value.
 </p></dd>
 </dl>
 
-<a name="Examples-48"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-48">30.60.2 Examples</a></h3>
+<a name="Examples-73"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-73">30.62.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -15018,7 +15424,7 @@ testsrc=s=100x100, split=4 [in0][in1][in2][in3];
 </li></ul>
 
 <a name="owdenoise"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-owdenoise">30.61 owdenoise</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-owdenoise">30.63 owdenoise</a></h2>
 
 <p>Apply Overcomplete Wavelet denoiser.
 </p>
@@ -15048,7 +15454,7 @@ slow down filtering.
 </dl>
 
 <a name="pad"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pad">30.62 pad</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pad">30.64 pad</a></h2>
 
 <p>Add paddings to the input image, and place the original input at the
 provided <var>x</var>, <var>y</var> coordinates.
@@ -15137,8 +15543,8 @@ pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
 </p></dd>
 </dl>
 
-<a name="Examples-76"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-76">30.62.1 Examples</a></h3>
+<a name="Examples-45"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-45">30.64.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -15190,7 +15596,7 @@ corner of the output padded area:
 </li></ul>
 
 <a name="perspective"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-perspective">30.63 perspective</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-perspective">30.65 perspective</a></h2>
 
 <p>Correct perspective of video not recorded perpendicular to the screen.
 </p>
@@ -15232,7 +15638,7 @@ Default values are <code>0:0:W:0:0:H:W:H</code> with which perspective will rema
 </dl>
 
 <a name="phase"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-phase">30.64 phase</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-phase">30.66 phase</a></h2>
 
 <p>Delay interlaced video by one field time so that the field order changes.
 </p>
@@ -15304,7 +15710,7 @@ Filter selects among &lsquo;<samp>t</samp>&rsquo;, &lsquo;<samp>b</samp>&rsquo; 
 </dl>
 
 <a name="pixdesctest"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pixdesctest">30.65 pixdesctest</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pixdesctest">30.67 pixdesctest</a></h2>
 
 <p>Pixel format descriptor test filter, mainly useful for internal
 testing. The output video should be equal to the input video.
@@ -15316,7 +15722,7 @@ testing. The output video should be equal to the input video.
 <p>can be used to test the monowhite pixel format descriptor definition.
 </p>
 <a name="pp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pp">30.66 pp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pp">30.68 pp</a></h2>
 
 <p>Enable the specified chain of postprocessing subfilters using libpostproc. This
 library should be automatically selected with a GPL build (<code>--enable-gpl</code>).
@@ -15498,8 +15904,8 @@ specify.
 </p></dd>
 </dl>
 
-<a name="Examples-73"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-73">30.66.1 Examples</a></h3>
+<a name="Examples-3"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-3">30.68.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -15526,7 +15932,7 @@ automatically depending on available CPU time:
 </li></ul>
 
 <a name="psnr"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-psnr">30.67 psnr</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-psnr">30.69 psnr</a></h2>
 
 <p>Obtain the average, maximum and minimum PSNR (Peak Signal to Noise
 Ratio) between two input videos.
@@ -15599,7 +16005,7 @@ is stored in &lsquo;<tt>stats.log</tt>&rsquo;.
 </p>
 <p><a name="pullup"></a>
 </p><a name="pullup-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-pullup-1">30.68 pullup</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-pullup-1">30.70 pullup</a></h2>
 
 <p>Pulldown reversal (inverse telecine) filter, capable of handling mixed
 hard-telecine, 24000/1001 fps progressive, and 30000/1001 fps progressive
@@ -15669,7 +16075,7 @@ telecine NTSC input:
 </pre></td></tr></table>
 
 <a name="removelogo"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-removelogo">30.69 removelogo</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-removelogo">30.71 removelogo</a></h2>
 
 <p>Suppress a TV station logo, using an image file to determine which
 pixels comprise the logo. It works by filling in the pixels that
@@ -15701,7 +16107,7 @@ the image and will destroy more information than necessary, and extra
 pixels will slow things down on a large logo.
 </p>
 <a name="rotate"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-rotate">30.70 rotate</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-rotate">30.72 rotate</a></h2>
 
 <p>Rotate video by an arbitrary angle expressed in radians.
 </p>
@@ -15783,8 +16189,8 @@ video rotated by <var>a</var> radians.
 </p></dd>
 </dl>
 
-<a name="Examples-54"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-54">30.70.1 Examples</a></h3>
+<a name="Examples-17"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-17">30.72.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -15827,7 +16233,7 @@ shown:
 </li></ul>
 
 <a name="Commands-4"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-4">30.70.2 Commands</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Commands-4">30.72.2 Commands</a></h3>
 
 <p>The filter supports the following commands:
 </p>
@@ -15842,7 +16248,7 @@ value.
 </dl>
 
 <a name="sab"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-sab">30.71 sab</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-sab">30.73 sab</a></h2>
 
 <p>Apply Shape Adaptive Blur.
 </p>
@@ -15886,7 +16292,7 @@ corresponding luma option value.
 </p>
 <p><a name="scale"></a>
 </p><a name="scale-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-scale-1">30.72 scale</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-scale-1">30.74 scale</a></h2>
 
 <p>Scale (resize) the input video, using the libswscale library.
 </p>
@@ -15897,8 +16303,8 @@ of the input, by changing the output sample aspect ratio.
 the next filter, the scale filter will convert the input to the
 requested format.
 </p>
-<a name="Options-5"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-5">30.72.1 Options</a></h3>
+<a name="Options-14"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-14">30.74.1 Options</a></h3>
 <p>The filter accepts the following options, or any of the options
 supported by the libswscale scaler.
 </p>
@@ -16113,8 +16519,8 @@ pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
 </p></dd>
 </dl>
 
-<a name="Examples-27"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-27">30.72.2 Examples</a></h3>
+<a name="Examples-19"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-19">30.74.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -16189,7 +16595,7 @@ keeping the same aspect ratio as the input:
 </li></ul>
 
 <a name="separatefields"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-separatefields">30.73 separatefields</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-separatefields">30.75 separatefields</a></h2>
 
 <p>The <code>separatefields</code> takes a frame-based video input and splits
 each frame into its components fields, producing a new half height clip
@@ -16200,7 +16606,7 @@ of each pair of fields to place first in the output.
 If it gets it wrong use <a href="#setfield">setfield</a> filter before <code>separatefields</code> filter.
 </p>
 <a name="setdar_002c-setsar"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-setdar_002c-setsar">30.74 setdar, setsar</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-setdar_002c-setsar">30.76 setdar, setsar</a></h2>
 
 <p>The <code>setdar</code> filter sets the Display Aspect Ratio for the filter
 output video.
@@ -16281,8 +16687,8 @@ pixel format &quot;yuv422p&quot; <var>hsub</var> is 2 and <var>vsub</var> is 1.
 </p></dd>
 </dl>
 
-<a name="Examples-13"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-13">30.74.1 Examples</a></h3>
+<a name="Examples-18"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-18">30.76.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -16307,7 +16713,7 @@ To set a display aspect ratio of 16:9, and specify a maximum integer value of
 
 <p><a name="setfield"></a>
 </p><a name="setfield-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-setfield-1">30.75 setfield</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-setfield-1">30.77 setfield</a></h2>
 
 <p>Force field for the output video frame.
 </p>
@@ -16343,7 +16749,7 @@ following filters (e.g. <code>fieldorder</code> or <code>yadif</code>).
 </dl>
 
 <a name="showinfo"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-showinfo">30.76 showinfo</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-showinfo">30.78 showinfo</a></h2>
 
 <p>Show a line containing various information for each input video frame.
 The input video is not modified.
@@ -16351,7 +16757,7 @@ The input video is not modified.
 <p>The shown line contains a sequence of key/value pairs of the form
 <var>key</var>:<var>value</var>.
 </p>
-<p>It accepts the following parameters:
+<p>The following values are shown in the output:
 </p>
 <dl compact="compact">
 <dt> &lsquo;<samp>n</samp>&rsquo;</dt>
@@ -16415,7 +16821,7 @@ expressed in the form &quot;[<var>c0</var> <var>c1</var> <var>c2</var> <var>c3</
 </dl>
 
 <a name="shuffleplanes"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-shuffleplanes">30.77 shuffleplanes</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-shuffleplanes">30.79 shuffleplanes</a></h2>
 
 <p>Reorder and/or duplicate video planes.
 </p>
@@ -16446,9 +16852,218 @@ expressed in the form &quot;[<var>c0</var> <var>c1</var> <var>c2</var> <var>c3</
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i INPUT -vf shuffleplanes=0:2:1:3 OUTPUT
 </pre></td></tr></table>
 
+<a name="signalstats"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-signalstats">30.80 signalstats</a></h2>
+<p>Evaluate various visual metrics that assist in determining issues associated
+with the digitization of analog video media.
+</p>
+<p>By default the filter will log these metadata values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>YMIN</samp>&rsquo;</dt>
+<dd><p>Display the minimal Y value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>YLOW</samp>&rsquo;</dt>
+<dd><p>Display the Y value at the 10% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>YAVG</samp>&rsquo;</dt>
+<dd><p>Display the average Y value within the input frame. Expressed in range of
+[0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>YHIGH</samp>&rsquo;</dt>
+<dd><p>Display the Y value at the 90% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>YMAX</samp>&rsquo;</dt>
+<dd><p>Display the maximum Y value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>UMIN</samp>&rsquo;</dt>
+<dd><p>Display the minimal U value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>ULOW</samp>&rsquo;</dt>
+<dd><p>Display the U value at the 10% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>UAVG</samp>&rsquo;</dt>
+<dd><p>Display the average U value within the input frame. Expressed in range of
+[0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>UHIGH</samp>&rsquo;</dt>
+<dd><p>Display the U value at the 90% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>UMAX</samp>&rsquo;</dt>
+<dd><p>Display the maximum U value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VMIN</samp>&rsquo;</dt>
+<dd><p>Display the minimal V value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VLOW</samp>&rsquo;</dt>
+<dd><p>Display the V value at the 10% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VAVG</samp>&rsquo;</dt>
+<dd><p>Display the average V value within the input frame. Expressed in range of
+[0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VHIGH</samp>&rsquo;</dt>
+<dd><p>Display the V value at the 90% percentile within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VMAX</samp>&rsquo;</dt>
+<dd><p>Display the maximum V value contained within the input frame. Expressed in
+range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>SATMIN</samp>&rsquo;</dt>
+<dd><p>Display the minimal saturation value contained within the input frame.
+Expressed in range of [0-~181.02].
+</p>
+</dd>
+<dt> &lsquo;<samp>SATLOW</samp>&rsquo;</dt>
+<dd><p>Display the saturation value at the 10% percentile within the input frame.
+Expressed in range of [0-~181.02].
+</p>
+</dd>
+<dt> &lsquo;<samp>SATAVG</samp>&rsquo;</dt>
+<dd><p>Display the average saturation value within the input frame. Expressed in range
+of [0-~181.02].
+</p>
+</dd>
+<dt> &lsquo;<samp>SATHIGH</samp>&rsquo;</dt>
+<dd><p>Display the saturation value at the 90% percentile within the input frame.
+Expressed in range of [0-~181.02].
+</p>
+</dd>
+<dt> &lsquo;<samp>SATMAX</samp>&rsquo;</dt>
+<dd><p>Display the maximum saturation value contained within the input frame.
+Expressed in range of [0-~181.02].
+</p>
+</dd>
+<dt> &lsquo;<samp>HUEMED</samp>&rsquo;</dt>
+<dd><p>Display the median value for hue within the input frame. Expressed in range of
+[0-360].
+</p>
+</dd>
+<dt> &lsquo;<samp>HUEAVG</samp>&rsquo;</dt>
+<dd><p>Display the average value for hue within the input frame. Expressed in range of
+[0-360].
+</p>
+</dd>
+<dt> &lsquo;<samp>YDIF</samp>&rsquo;</dt>
+<dd><p>Display the average of sample value difference between all values of the Y
+plane in the current frame and corresponding values of the previous input frame.
+Expressed in range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>UDIF</samp>&rsquo;</dt>
+<dd><p>Display the average of sample value difference between all values of the U
+plane in the current frame and corresponding values of the previous input frame.
+Expressed in range of [0-255].
+</p>
+</dd>
+<dt> &lsquo;<samp>VDIF</samp>&rsquo;</dt>
+<dd><p>Display the average of sample value difference between all values of the V
+plane in the current frame and corresponding values of the previous input frame.
+Expressed in range of [0-255].
+</p></dd>
+</dl>
+
+<p>The filter accepts the following options:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>stat</samp>&rsquo;</dt>
+<dt> &lsquo;<samp>out</samp>&rsquo;</dt>
+<dd>
+<p>&lsquo;<samp>stat</samp>&rsquo; specify an additional form of image analysis.
+&lsquo;<samp>out</samp>&rsquo; output video with the specified type of pixel highlighted.
+</p>
+<p>Both options accept the following values:
+</p>
+<dl compact="compact">
+<dt> &lsquo;<samp>tout</samp>&rsquo;</dt>
+<dd><p>Identify <var>temporal outliers</var> pixels. A <var>temporal outlier</var> is a pixel
+unlike the neighboring pixels of the same field. Examples of temporal outliers
+include the results of video dropouts, head clogs, or tape tracking issues.
+</p>
+</dd>
+<dt> &lsquo;<samp>vrep</samp>&rsquo;</dt>
+<dd><p>Identify <var>vertical line repetition</var>. Vertical line repetition includes
+similar rows of pixels within a frame. In born-digital video vertical line
+repetition is common, but this pattern is uncommon in video digitized from an
+analog source. When it occurs in video that results from the digitization of an
+analog source it can indicate concealment from a dropout compensator.
+</p>
+</dd>
+<dt> &lsquo;<samp>brng</samp>&rsquo;</dt>
+<dd><p>Identify pixels that fall outside of legal broadcast range.
+</p></dd>
+</dl>
+
+</dd>
+<dt> &lsquo;<samp>color, c</samp>&rsquo;</dt>
+<dd><p>Set the highlight color for the &lsquo;<samp>out</samp>&rsquo; option. The default color is
+yellow.
+</p></dd>
+</dl>
+
+<a name="Examples-81"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-81">30.80.1 Examples</a></h3>
+
+<ul>
+<li>
+Output data of various video metrics:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffprobe -f lavfi movie=example.mov,signalstats=&quot;stat=tout+vrep+brng&quot; -show_frames
+</pre></td></tr></table>
+
+</li><li>
+Output specific data about the minimum and maximum values of the Y plane per frame:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffprobe -f lavfi movie=example.mov,signalstats -show_entries frame_tags=lavfi.signalstats.YMAX,lavfi.signalstats.YMIN
+</pre></td></tr></table>
+
+</li><li>
+Playback video while highlighting pixels that are outside of broadcast range in red.
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay example.mov -vf signalstats=&quot;out=brng:color=red&quot;
+</pre></td></tr></table>
+
+</li><li>
+Playback video with signalstats metadata drawn over the frame.
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay example.mov -vf signalstats=stat=brng+vrep+tout,drawtext=fontfile=FreeSerif.ttf:textfile=signalstat_drawtext.txt
+</pre></td></tr></table>
+
+<p>The contents of signalstat_drawtext.txt used in the command are:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">time %{pts:hms}
+Y (%{metadata:lavfi.signalstats.YMIN}-%{metadata:lavfi.signalstats.YMAX})
+U (%{metadata:lavfi.signalstats.UMIN}-%{metadata:lavfi.signalstats.UMAX})
+V (%{metadata:lavfi.signalstats.VMIN}-%{metadata:lavfi.signalstats.VMAX})
+saturation maximum: %{metadata:lavfi.signalstats.SATMAX}
+
+</pre></td></tr></table>
+</li></ul>
+
 <p><a name="smartblur"></a>
 </p><a name="smartblur-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-smartblur-1">30.78 smartblur</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-smartblur-1">30.81 smartblur</a></h2>
 
 <p>Blur the input video without impacting the outlines.
 </p>
@@ -16502,7 +17117,7 @@ in [-30,0] will filter edges. Default value is 0.
 is set.
 </p>
 <a name="stereo3d"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-stereo3d">30.79 stereo3d</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-stereo3d">30.82 stereo3d</a></h2>
 
 <p>Convert between different stereoscopic image formats.
 </p>
@@ -16658,8 +17273,8 @@ is set.
 </p></dd>
 </dl>
 
-<a name="Examples-38"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-38">30.79.1 Examples</a></h3>
+<a name="Examples-79"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-79">30.82.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -16674,7 +17289,7 @@ Convert input video from above bellow (left eye above, right eye below) to side 
 </li></ul>
 
 <a name="spp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-spp">30.80 spp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-spp">30.83 spp</a></h2>
 
 <p>Apply a simple postprocessing filter that compresses and decompresses the image
 at several (or - in the case of &lsquo;<samp>quality</samp>&rsquo; level <code>6</code> - all) shifts
@@ -16718,7 +17333,7 @@ option may cause flicker since the B-Frames have often larger QP. Default is
 
 <p><a name="subtitles"></a>
 </p><a name="subtitles-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-subtitles-1">30.81 subtitles</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-subtitles-1">30.84 subtitles</a></h2>
 
 <p>Draw subtitles on top of input video using the libass library.
 </p>
@@ -16773,7 +17388,7 @@ video, use the command:
 </pre></td></tr></table>
 
 <a name="super2xsai"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-super2xsai">30.82 super2xsai</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-super2xsai">30.85 super2xsai</a></h2>
 
 <p>Scale the input by 2x and smooth using the Super2xSaI (Scale and
 Interpolate) pixel art scaling algorithm.
@@ -16781,11 +17396,11 @@ Interpolate) pixel art scaling algorithm.
 <p>Useful for enlarging pixel art images without reducing sharpness.
 </p>
 <a name="swapuv"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-swapuv">30.83 swapuv</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-swapuv">30.86 swapuv</a></h2>
 <p>Swap U &amp; V plane.
 </p>
 <a name="telecine"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-telecine">30.84 telecine</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-telecine">30.87 telecine</a></h2>
 
 <p>Apply telecine process to the video.
 </p>
@@ -16828,7 +17443,7 @@ PAL output (25i):
 </pre></td></tr></table>
 
 <a name="thumbnail"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-thumbnail">30.85 thumbnail</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-thumbnail">30.88 thumbnail</a></h2>
 <p>Select the most representative frame in a given sequence of consecutive frames.
 </p>
 <p>The filter accepts the following options:
@@ -16844,8 +17459,8 @@ the end. Default is <code>100</code>.
 <p>Since the filter keeps track of the whole frames sequence, a bigger <var>n</var>
 value will result in a higher memory usage, so a high value is not recommended.
 </p>
-<a name="Examples-40"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-40">30.85.1 Examples</a></h3>
+<a name="Examples-53"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-53">30.88.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -16860,7 +17475,7 @@ Complete example of a thumbnail creation with <code>ffmpeg</code>:
 </li></ul>
 
 <a name="tile"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-tile">30.86 tile</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-tile">30.89 tile</a></h2>
 
 <p>Tile several successive frames together.
 </p>
@@ -16895,8 +17510,8 @@ is &quot;black&quot;.
 </p></dd>
 </dl>
 
-<a name="Examples-55"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-55">30.86.1 Examples</a></h3>
+<a name="Examples-56"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-56">30.89.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -16916,7 +17531,7 @@ mixed flat and named options:
 </li></ul>
 
 <a name="tinterlace"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-tinterlace">30.87 tinterlace</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-tinterlace">30.90 tinterlace</a></h2>
 
 <p>Perform various types of temporal field interlacing.
 </p>
@@ -17000,7 +17615,7 @@ patterning.
 </dl>
 
 <a name="transpose"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-transpose">30.88 transpose</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-transpose">30.91 transpose</a></h2>
 
 <p>Transpose rows with columns in the input video and optionally flip it.
 </p>
@@ -17082,7 +17697,7 @@ layout:
 </pre></td></tr></table>
 
 <a name="trim"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-trim">30.89 trim</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-trim">30.92 trim</a></h2>
 <p>Trim the input so that the output contains one continuous subpart of the input.
 </p>
 <p>It accepts the following parameters:
@@ -17155,7 +17770,7 @@ Keep only the first second:
 
 
 <a name="unsharp"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-unsharp">30.90 unsharp</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-unsharp">30.93 unsharp</a></h2>
 
 <p>Sharpen or blur the input video.
 </p>
@@ -17212,8 +17827,8 @@ FFmpeg was configured with <code>--enable-opencl</code>. Default value is 0.
 <p>All parameters are optional and default to the equivalent of the
 string &rsquo;5:5:1.0:5:5:0.0&rsquo;.
 </p>
-<a name="Examples-15"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-15">30.90.1 Examples</a></h3>
+<a name="Examples-20"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-20">30.93.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -17229,7 +17844,7 @@ Apply a strong blur of both luma and chroma parameters:
 
 <p><a name="vidstabdetect"></a>
 </p><a name="vidstabdetect-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-vidstabdetect-1">30.91 vidstabdetect</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-vidstabdetect-1">30.94 vidstabdetect</a></h2>
 
 <p>Analyze video stabilization/deshaking. Perform pass 1 of 2, see
 <a href="#vidstabtransform">vidstabtransform</a> for pass 2.
@@ -17290,8 +17905,8 @@ visualization.
 </p></dd>
 </dl>
 
-<a name="Examples-62"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-62">30.91.1 Examples</a></h3>
+<a name="Examples-51"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-51">30.94.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -17319,7 +17934,7 @@ Analyze a video with medium shakiness using <code>ffmpeg</code>:
 
 <p><a name="vidstabtransform"></a>
 </p><a name="vidstabtransform-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-vidstabtransform-1">30.92 vidstabtransform</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-vidstabtransform-1">30.95 vidstabtransform</a></h2>
 
 <p>Video stabilization/deshaking: pass 2 of 2,
 see <a href="#vidstabdetect">vidstabdetect</a> for pass 1.
@@ -17333,8 +17948,8 @@ the unsharp filter, see below.
 <p>To enable compilation of this filter you need to configure FFmpeg with
 <code>--enable-libvidstab</code>.
 </p>
-<a name="Options-7"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-7">30.92.1 Options</a></h3>
+<a name="Options-6"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Options-6">30.95.1 Options</a></h3>
 
 <dl compact="compact">
 <dt> &lsquo;<samp>input</samp>&rsquo;</dt>
@@ -17468,8 +18083,8 @@ value is 0.
 </p></dd>
 </dl>
 
-<a name="Examples-82"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-82">30.92.2 Examples</a></h3>
+<a name="Examples-78"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-78">30.95.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -17491,7 +18106,7 @@ Smoothen the video even more:
 </li></ul>
 
 <a name="vflip"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-vflip">30.93 vflip</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-vflip">30.96 vflip</a></h2>
 
 <p>Flip the input video vertically.
 </p>
@@ -17499,8 +18114,9 @@ Smoothen the video even more:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">ffmpeg -i in.avi -vf &quot;vflip&quot; out.avi
 </pre></td></tr></table>
 
-<a name="vignette"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-vignette">30.94 vignette</a></h2>
+<p><a name="vignette"></a>
+</p><a name="vignette-1"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-vignette-1">30.97 vignette</a></h2>
 
 <p>Make or reverse a natural vignetting effect.
 </p>
@@ -17575,7 +18191,7 @@ following the dimensions of the video.
 </dl>
 
 <a name="Expressions"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Expressions">30.94.1 Expressions</a></h3>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Expressions">30.97.1 Expressions</a></h3>
 
 <p>The &lsquo;<samp>alpha</samp>&rsquo;, &lsquo;<samp>x0</samp>&rsquo; and &lsquo;<samp>y0</samp>&rsquo; expressions can contain the
 following parameters.
@@ -17610,8 +18226,8 @@ expressed in seconds, NAN if undefined
 </dl>
 
 
-<a name="Examples-61"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-61">30.94.2 Examples</a></h3>
+<a name="Examples-8"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-8">30.97.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -17627,7 +18243,7 @@ Make a flickering vignetting:
 </li></ul>
 
 <a name="w3fdif"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-w3fdif">30.95 w3fdif</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-w3fdif">30.98 w3fdif</a></h2>
 
 <p>Deinterlace the input video (&quot;w3fdif&quot; stands for &quot;Weston 3 Field
 Deinterlacing Filter&quot;).
@@ -17674,7 +18290,7 @@ be set by passing an optional parameter:
 
 <p><a name="yadif"></a>
 </p><a name="yadif-1"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-yadif-1">30.96 yadif</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-yadif-1">30.99 yadif</a></h2>
 
 <p>Deinterlace the input video (&quot;yadif&quot; means &quot;yet another deinterlacing
 filter&quot;).
@@ -17743,7 +18359,7 @@ values:
 </dl>
 
 <a name="zoompan"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-zoompan">30.97 zoompan</a></h2>
+<h2 class="section"><a href="ffprobe-all.html#toc-zoompan">30.100 zoompan</a></h2>
 
 <p>Apply Zoom &amp; Pan effect.
 </p>
@@ -17840,13 +18456,13 @@ for each input frame.
 </dd>
 </dl>
 
-<a name="Examples-9"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-9">30.97.1 Examples</a></h3>
+<a name="Examples-38"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-38">30.100.1 Examples</a></h3>
 
 <ul>
 <li>
 Zoom-in up to 1.5 and pan at same time to some spot near center of picture:
-<table><tr><td>&nbsp;</td><td><pre class="example">zoompan=z=min(zoom+0.0015\,1.5):d=700:x=if(gte(zoom\,1.5)\,x\,x+1/a):y=if(gte(zoom\,1.5)\,y\,y+1):s=640x360&quot;
+<table><tr><td>&nbsp;</td><td><pre class="example">zoompan=z='min(zoom+0.0015,1.5)':d=700:x='if(gte(zoom,1.5),x,x+1/a)':y='if(gte(zoom,1.5),y,y+1)':s=640x360
 </pre></td></tr></table>
 </li></ul>
 
@@ -18017,8 +18633,8 @@ This is the default behavior, for disabling set the value to 0.
 </p></dd>
 </dl>
 
-<a name="Examples-18"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-18">31.2.1 Examples</a></h3>
+<a name="Examples-52"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-52">31.2.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -18342,8 +18958,8 @@ ffmpeg-utils manual.
 </p></dd>
 </dl>
 
-<a name="Examples-11"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-11">31.6.1 Examples</a></h3>
+<a name="Examples-50"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-50">31.6.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -18583,8 +19199,8 @@ Allowed range is <code>[0, 255]</code>.
 </p></dd>
 </dl>
 
-<a name="Examples-29"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-29">33.1.1 Examples</a></h3>
+<a name="Examples-75"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-75">33.1.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -18594,8 +19210,8 @@ Complete example using <code>ffplay</code>:
 </pre></td></tr></table>
 </li></ul>
 
-<a name="concat-3"></a>
-<h2 class="section"><a href="ffprobe-all.html#toc-concat-3">33.2 concat</a></h2>
+<a name="concat-1"></a>
+<h2 class="section"><a href="ffprobe-all.html#toc-concat-1">33.2 concat</a></h2>
 
 <p>Concatenate audio and video streams, joining them together one after the
 other.
@@ -18652,8 +19268,8 @@ explicitly by the user.
 <p>Different frame rates are acceptable but will result in variable frame rate
 at output; be sure to configure the output file to handle it.
 </p>
-<a name="Examples-50"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-50">33.2.1 Examples</a></h3>
+<a name="Examples-43"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-43">33.2.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -18769,8 +19385,8 @@ This mode requires a build with <code>libswresample</code>.
 </dd>
 </dl>
 
-<a name="Examples-71"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-71">33.3.1 Examples</a></h3>
+<a name="Examples-66"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-66">33.3.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -18818,8 +19434,8 @@ the queue is already filled.
 </p></dd>
 </dl>
 
-<a name="Examples-68"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-68">33.4.1 Examples</a></h3>
+<a name="Examples-63"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-63">33.4.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19016,8 +19632,8 @@ value means the current frame is more likely to be one (see the example below)
 
 <p>The default value of the select expression is &quot;1&quot;.
 </p>
-<a name="Examples-17"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-17">33.6.1 Examples</a></h3>
+<a name="Examples-23"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-23">33.6.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19179,8 +19795,8 @@ follows:
 <var>INTERVALS</var>     ::= <var>INTERVAL</var>[;<var>INTERVALS</var>]
 </pre></td></tr></table>
 
-<a name="Examples-43"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-43">33.7.2 Examples</a></h3>
+<a name="Examples-70"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-70">33.7.2 Examples</a></h3>
 
 <ul>
 <li>
@@ -19309,8 +19925,8 @@ instead.
 </dd>
 </dl>
 
-<a name="Examples-83"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-83">33.8.1 Examples</a></h3>
+<a name="Examples-49"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-49">33.8.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19375,8 +19991,8 @@ rational. The expression can contain the constants &quot;AVTB&quot; (the default
 timebase), &quot;intb&quot; (the input timebase) and &quot;sr&quot; (the sample rate,
 audio only). Default value is &quot;intb&quot;.
 </p>
-<a name="Examples-20"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-20">33.9.1 Examples</a></h3>
+<a name="Examples-37"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-37">33.9.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19407,7 +20023,7 @@ Set the default timebase value:
 
 <a name="showcqt"></a>
 <h2 class="section"><a href="ffprobe-all.html#toc-showcqt">33.10 showcqt</a></h2>
-<p>Convert input audio to a video output (at full HD resolution), representing
+<p>Convert input audio to a video output representing
 frequency spectrum logarithmically (using constant Q transform with
 Brown-Puckette algorithm), with musical tone scale, from E0 to D#10 (10 octaves).
 </p>
@@ -19415,8 +20031,42 @@ Brown-Puckette algorithm), with musical tone scale, from E0 to D#10 (10 octaves)
 </p>
 <dl compact="compact">
 <dt> &lsquo;<samp>volume</samp>&rsquo;</dt>
-<dd><p>Specify the transform volume (multiplier). Acceptable value is [1.0, 100.0].
-Default value is <code>16.0</code>.
+<dd><p>Specify transform volume (multiplier) expression. The expression can contain
+variables:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>frequency, freq, f</samp>&rsquo;</dt>
+<dd><p>the frequency where transform is evaluated
+</p></dd>
+<dt> &lsquo;<samp>timeclamp, tc</samp>&rsquo;</dt>
+<dd><p>value of timeclamp option
+</p></dd>
+</dl>
+<p>and functions:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>a_weighting(f)</samp>&rsquo;</dt>
+<dd><p>A-weighting of equal loudness
+</p></dd>
+<dt> &lsquo;<samp>b_weighting(f)</samp>&rsquo;</dt>
+<dd><p>B-weighting of equal loudness
+</p></dd>
+<dt> &lsquo;<samp>c_weighting(f)</samp>&rsquo;</dt>
+<dd><p>C-weighting of equal loudness
+</p></dd>
+</dl>
+<p>Default value is <code>16</code>.
+</p>
+</dd>
+<dt> &lsquo;<samp>tlength</samp>&rsquo;</dt>
+<dd><p>Specify transform length expression. The expression can contain variables:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>frequency, freq, f</samp>&rsquo;</dt>
+<dd><p>the frequency where transform is evaluated
+</p></dd>
+<dt> &lsquo;<samp>timeclamp, tc</samp>&rsquo;</dt>
+<dd><p>value of timeclamp option
+</p></dd>
+</dl>
+<p>Default value is <code>384/f*tc/(384/f+tc)</code>.
 </p>
 </dd>
 <dt> &lsquo;<samp>timeclamp</samp>&rsquo;</dt>
@@ -19439,20 +20089,54 @@ makes the spectrum having more range. Acceptable value is [1.0, 7.0].
 Default value is <code>3.0</code>.
 </p>
 </dd>
+<dt> &lsquo;<samp>fontfile</samp>&rsquo;</dt>
+<dd><p>Specify font file for use with freetype. If not specified, use embedded font.
+</p>
+</dd>
+<dt> &lsquo;<samp>fontcolor</samp>&rsquo;</dt>
+<dd><p>Specify font color expression. This is arithmetic expression that should return
+integer value 0xRRGGBB. The expression can contain variables:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>frequency, freq, f</samp>&rsquo;</dt>
+<dd><p>the frequency where transform is evaluated
+</p></dd>
+<dt> &lsquo;<samp>timeclamp, tc</samp>&rsquo;</dt>
+<dd><p>value of timeclamp option
+</p></dd>
+</dl>
+<p>and functions:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>midi(f)</samp>&rsquo;</dt>
+<dd><p>midi number of frequency f, some midi numbers: E0(16), C1(24), C2(36), A4(69)
+</p></dd>
+<dt> &lsquo;<samp>r(x), g(x), b(x)</samp>&rsquo;</dt>
+<dd><p>red, green, and blue value of intensity x
+</p></dd>
+</dl>
+<p>Default value is <code>st(0, (midi(f)-59.5)/12);
+st(1, if(between(ld(0),0,1), 0.5-0.5*cos(2*PI*ld(0)), 0));
+r(1-ld(1)) + b(ld(1))</code>
+</p>
+</dd>
+<dt> &lsquo;<samp>fullhd</samp>&rsquo;</dt>
+<dd><p>If set to 1 (the default), the video size is 1920x1080 (full HD),
+if set to 0, the video size is 960x540. Use this option to make CPU usage lower.
+</p>
+</dd>
 <dt> &lsquo;<samp>fps</samp>&rsquo;</dt>
 <dd><p>Specify video fps. Default value is <code>25</code>.
 </p>
 </dd>
 <dt> &lsquo;<samp>count</samp>&rsquo;</dt>
 <dd><p>Specify number of transform per frame, so there are fps*count transforms
-per second. Note tha audio data rate must be divisible by fps*count.
+per second. Note that audio data rate must be divisible by fps*count.
 Default value is <code>6</code>.
 </p>
 </dd>
 </dl>
 
-<a name="Examples-16"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-16">33.10.1 Examples</a></h3>
+<a name="Examples-25"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-25">33.10.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19466,6 +20150,11 @@ Same as above, but with frame rate 30 fps:
 </pre></td></tr></table>
 
 </li><li>
+Playing at 960x540 and lower CPU usage:
+<table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi 'amovie=a.mp3, asplit [a][out1]; [a] showcqt=fullhd=0:count=3 [out0]'
+</pre></td></tr></table>
+
+</li><li>
 A1 and its harmonics: A1, A2, (near)E3, A3:
 <table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi 'aevalsrc=0.1*sin(2*PI*55*t)+0.1*sin(4*PI*55*t)+0.1*sin(6*PI*55*t)+0.1*sin(8*PI*55*t),
                  asplit[a][out1]; [a] showcqt [out0]'
@@ -19475,6 +20164,21 @@ A1 and its harmonics: A1, A2, (near)E3, A3:
 Same as above, but with more accuracy in frequency domain (and slower):
 <table><tr><td>&nbsp;</td><td><pre class="example">ffplay -f lavfi 'aevalsrc=0.1*sin(2*PI*55*t)+0.1*sin(4*PI*55*t)+0.1*sin(6*PI*55*t)+0.1*sin(8*PI*55*t),
                  asplit[a][out1]; [a] showcqt=timeclamp=0.5 [out0]'
+</pre></td></tr></table>
+
+</li><li>
+B-weighting of equal loudness
+<table><tr><td>&nbsp;</td><td><pre class="example">volume=16*b_weighting(f)
+</pre></td></tr></table>
+
+</li><li>
+Lower Q factor
+<table><tr><td>&nbsp;</td><td><pre class="example">tlength=100/f*tc/(100/f+tc)
+</pre></td></tr></table>
+
+</li><li>
+Custom fontcolor, C-note is colored green, others are colored blue
+<table><tr><td>&nbsp;</td><td><pre class="example">fontcolor='if(mod(floor(midi(f)+0.5),12), 0x0000FF, g(1))'
 </pre></td></tr></table>
 
 </li></ul>
@@ -19495,8 +20199,22 @@ the &quot;Video size&quot; section in the ffmpeg-utils manual. Default value is
 </p>
 </dd>
 <dt> &lsquo;<samp>slide</samp>&rsquo;</dt>
-<dd><p>Specify if the spectrum should slide along the window. Default value is
-<code>0</code>.
+<dd><p>Specify how the spectrum should slide along the window.
+</p>
+<p>It accepts the following values:
+</p><dl compact="compact">
+<dt> &lsquo;<samp>replace</samp>&rsquo;</dt>
+<dd><p>the samples start again on the left when they reach the right
+</p></dd>
+<dt> &lsquo;<samp>scroll</samp>&rsquo;</dt>
+<dd><p>the samples scroll from right to left
+</p></dd>
+<dt> &lsquo;<samp>fullframe</samp>&rsquo;</dt>
+<dd><p>frames are only produced when the samples reach the right
+</p></dd>
+</dl>
+
+<p>Default value is <code>replace</code>.
 </p>
 </dd>
 <dt> &lsquo;<samp>mode</samp>&rsquo;</dt>
@@ -19586,8 +20304,8 @@ Default value is <code>1</code>.
 <p>The usage is very similar to the showwaves filter; see the examples in that
 section.
 </p>
-<a name="Examples-32"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-32">33.11.1 Examples</a></h3>
+<a name="Examples-11"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-11">33.11.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19627,6 +20345,14 @@ is &quot;600x240&quot;.
 </dd>
 <dt> &lsquo;<samp>line</samp>&rsquo;</dt>
 <dd><p>Draw a vertical line for each sample.
+</p>
+</dd>
+<dt> &lsquo;<samp>p2p</samp>&rsquo;</dt>
+<dd><p>Draw a point for each sample and a line between them.
+</p>
+</dd>
+<dt> &lsquo;<samp>cline</samp>&rsquo;</dt>
+<dd><p>Draw a centered vertical line for each sample.
 </p></dd>
 </dl>
 
@@ -19645,10 +20371,14 @@ is not explicitly specified.
 option <var>n</var>. Default value is &quot;25&quot;.
 </p>
 </dd>
+<dt> &lsquo;<samp>split_channels</samp>&rsquo;</dt>
+<dd><p>Set if channels should be drawn separately or overlap. Default value is 0.
+</p>
+</dd>
 </dl>
 
-<a name="Examples-79"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-79">33.12.1 Examples</a></h3>
+<a name="Examples-61"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-61">33.12.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19674,8 +20404,8 @@ frame rate of 30 frames per second:
 <p>The filter accepts a single parameter which specifies the number of outputs. If
 unspecified, it defaults to 2.
 </p>
-<a name="Examples-49"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-49">33.13.1 Examples</a></h3>
+<a name="Examples-42"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-42">33.13.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19744,8 +20474,8 @@ will send a reply to the client, adopting the format:
 
 <p><var>MESSAGE</var> is optional.
 </p>
-<a name="Examples-63"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-63">33.14.1 Examples</a></h3>
+<a name="Examples-71"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-71">33.14.1 Examples</a></h3>
 
 <p>Look at &lsquo;<tt>tools/zmqsend</tt>&rsquo; for an example of a zmq client which can
 be used to send commands processed by these filters.
@@ -19840,8 +20570,8 @@ a filtergraph, as shown in this graph:
                                     |
 movie --&gt; scale--&gt; deltapts1 -------+
 </pre></td></tr></table>
-<a name="Examples-8"></a>
-<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-8">34.2.1 Examples</a></h3>
+<a name="Examples-13"></a>
+<h3 class="subsection"><a href="ffprobe-all.html#toc-Examples-13">34.2.1 Examples</a></h3>
 
 <ul>
 <li>
@@ -19899,5 +20629,7 @@ online repository at <a href="http://source.ffmpeg.org">http://source.ffmpeg.org
 &lsquo;<tt>MAINTAINERS</tt>&rsquo; in the source code tree.
 </p>
 
-<footer class="footer pagination-right">
-<span class="label label-info">This document was generated by <em>Kyle Schwarz</em> on <em>June 9, 2014</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.</span></footer></div></div></body>
+    </div>
+  </body>
+</html>
+
