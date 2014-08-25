@@ -1,3 +1,14 @@
+0.13.0 (2014-08-19)
+ ffmpeg is updated to 2014-06-09
+ different CODEC (x264rgb) is used for better color matching and performance
+ there is a new option for lossless compression on the configuration screen
+ added a new function to follow the foreground window if "capture_foreground_window" is set to 1
+ added a new hotkey feature (you can press Ctrl+Alt+B to show the bounding box and Ctrl+Alt+W to fix/release the foreground window following during the record session)
+ Visual Studio solution is now VS2012 compatible and the x86 and x64 projects are merged into one
+ collaborators are not forced to download the Windows Media SDK to compile the source
+ updated the git configuration files (gitattributes and gitignore)
+ various bug fixes and improvements
+
 0.12.8
   specifying a hwnd_to_track now ignores any start_x or start_y value set [always 0] ping me if this is not desired.
   specifying hwnd_to_track still captures "without decoration" for the window specified. 
