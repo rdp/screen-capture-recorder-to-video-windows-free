@@ -226,6 +226,9 @@ def choose_audio
   template = "----Audio Device choice---
   Select which audio devices to record, if any:"
   audio_pane = ParseTemplate.new.parse_setup_string template # shows by default
+  puts "originally the audio_names storage value is #{storage['audio_names']}"
+  storage['audio_names'] = []
+  puts "and now the audio_names storage value is #{storage['audio_names']}"
   all_audio_devices.each_with_index{|(audio_device_name, audio_device_idx), idx|
     audio_device = [audio_device_name, audio_device_idx]
     button_name = :"choose_audio_#{idx}"

@@ -94,9 +94,9 @@ long double GetCounterSinceStartMillis(__int64 sinceThisTime) // see above for s
 // or to debug the method call itself: printf("start %I64d end %I64d took %.02Lf ms", start, StartCounter(), elapsed); 
 
 
-void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
+void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd, RECT lpRectBoundingBox) {
 	__int64 start = StartCounter();
-	POINT p;
+	POINT p;	
 
 	GetCursorPos(&p); // get current x, y 0.008 ms
 	
@@ -105,7 +105,13 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-	if(hwnd) ScreenToClient(hwnd, &p); // 0.010ms - The new coordinates are relative to the upper-left corner of the specified window's client area.
+	//if (hwnd) 
+	//{
+	//	ScreenToClient(hwnd, &p); // 0.010ms - The new coordinates are relative to the upper-left corner of the specified window's client area.
+	//}
+
+	p.x -= lpRectBoundingBox.left;
+	p.y -= lpRectBoundingBox.top;
 
 	ICONINFO iconinfo;
 	BOOL ret = ::GetIconInfo(hcur, &iconinfo); // 0.09ms

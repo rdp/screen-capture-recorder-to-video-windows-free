@@ -229,7 +229,7 @@ VOID CALLBACK CPushPinDesktop::WinEventProcCallback(HWINEVENTHOOK hWinEventHook,
 
 	// http://stackoverflow.com/questions/4407631/is-there-windows-system-event-on-active-window-changed
 
-	LocalOutput("window handler changed to %d", hwnd);
+	LocalOutput("window handler changed to 0x%08x", hwnd);
 	
 	MostRecentCPushPinDesktopInstance->m_iHwndToTrack = hwnd;
 	MostRecentCPushPinDesktopInstance->hScrDc = GetDCEx(hwnd, NULL, DCX_WINDOW);
@@ -358,7 +358,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	CSourceStream::m_pFilter->StreamTime(now);
 	if((now > 0) && (now < previousFrameEndTime)) { // now > 0 to accomodate for if there is no reference graph clock at all...also at boot strap time to ignore it XXXX can negatives even ever happen anymore though?
 		while(now < previousFrameEndTime) { // guarantees monotonicity too :P
-			LocalOutput("sleeping because %llu < %llu", now, previousFrameEndTime);
+			//LocalOutput("sleeping because %llu < %llu", now, previousFrameEndTime);
 			Sleep(1);
 			CSourceStream::m_pFilter->StreamTime(now);
 		}
@@ -510,7 +510,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	doJustBitBltOrScaling(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalStretchWidth, iFinalStretchHeight, hScrDC, nX, nY);
 
 	if(m_bCaptureMouse) 
-		AddMouse(hMemDC, &m_rDesktop, hScrDC, m_iHwndToTrack);
+		AddMouse(hMemDC, &m_rDesktop, hScrDC, m_iHwndToTrack, m_rBoundingBox);
 
 	// select old bitmap back into memory DC and get handle to
 	// bitmap of the capture...whatever this even means...	
