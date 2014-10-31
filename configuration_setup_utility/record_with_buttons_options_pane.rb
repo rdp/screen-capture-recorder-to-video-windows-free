@@ -33,7 +33,6 @@ end
 def show_options_frame
   template = <<-EOL
   ------------ Recording Options -------------
-  [Close This Options Window :close]
   [Select audio devices:select_new_audio] " #{remove_quotes(audio_device_names_or_nil || 'none selected')} :audio_name" 
   [Select video device:select_new_video] " #{remove_quotes(video_device_name_or_nil || 'none selected')} :video_name"
   EOL
@@ -55,8 +54,12 @@ def show_options_frame
   "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
   "Current video input fps: #{storage['fps'] || default_fps_string} :fake2" [Change :change_fps]
   [✓:quality_lossless] "Use lossless compression"
-  [Preview current settings:preview] "a rough preview of how the recording will look"
-  [Close This Options Window :close2]
+  [✓:capture_foreground_window] "Capture foreground window only (improves performance)"
+  "If you use the foreground window only mode, you can:"
+  "* press Ctrl+Alt+B to show the bounding box of the recorded area"
+  "* press Ctrl+Alt+W to lock/unlock the window to record"
+  [✓:capture_mouse] "Capture mouse cursor"
+  [Close This Options Window :close]
   EOL
   # print template
   # TODO it can automatically 'bind' to a storage, and automatically 'always call this method for any element after clicked' :)
@@ -138,8 +141,48 @@ def show_options_frame
   end
   elements[:quality_lossless].on_clicked { |new_value|
     storage[:quality_lossless] = new_value	  
-	reset_options_frame # LODO never have a new one show up :)
+    storage.save!
   }
+
+  setter = SetupScreenTrackerParams.new
+
+  cfw_previous_setting = setter.read_single_setting "capture_mouse_default_1"
+  if (cfw_previous_setting == 1)
+    elements[:capture_foreground_window].check!
+  else
+    elements[:capture_foreground_window].uncheck!
+  end
+  elements[:capture_foreground_window].on_clicked { |new_value|
+    storage[:capture_foreground_window_if_1] = new_value
+    storage.save!
+
+    if storage[:capture_foreground_window_if_1]
+       elements[:capture_mouse].enable!
+       setter.set_single_setting "capture_foreground_window_if_1", 1
+    else
+      elements[:capture_mouse].set_checked!
+      elements[:capture_mouse].disable!
+      setter.set_single_setting "capture_foreground_window_if_1", 0
+    end
+  }
+
+  cm_previous_setting = setter.read_single_setting "capture_mouse_default_1"
+  if (cm_previous_setting == 1)
+    elements[:capture_mouse].check!
+  else
+    elements[:capture_mouse].uncheck!
+  end
+
+  elements[:capture_mouse].on_clicked { |new_value|
+    storage[:capture_mouse_default_1] = new_value	  
+    storage.save!
+
+  if storage[:capture_mouse_default_1]
+    setter.set_single_setting "capture_mouse_default_1", 1
+  else
+    setter.set_single_setting "capture_mouse_default_1", 0
+  end
+}
 
   elements[:set_stream_url].on_clicked {
     stream_url = SimpleGuiCreator.get_user_input "Url to stream to, like udp://236.0.0.1:2000 (ping me if you want rtmp added)\nreceive it like \nmplayer -demuxer +mpegts -framedrop -benchmark ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000\nwith patched mplayer", storage[:url_stream], false
@@ -147,11 +190,7 @@ def show_options_frame
 	# TODO audio for receipt latency?
 	reset_options_frame
   }
-  
-  elements[:preview].on_clicked {
-    start_recording_with_current_settings true
-  }
-  
+   
   elements[:select_new_video].on_clicked {
     choose_video
   }
@@ -187,7 +226,6 @@ def show_options_frame
     setup_ui # reset parent	
   }
   elements[:close].on_clicked &close_proc
-  elements[:close2].on_clicked &close_proc
 
   elements[:stop_time_button].on_clicked {  
     stop_time = SimpleGuiCreator.get_user_input "Automatically stop the recording after a certain number of seconds (leave blank and click ok for it to record till you click the stop button)", storage['stop_time'], true
