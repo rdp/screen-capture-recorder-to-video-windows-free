@@ -58,6 +58,11 @@ class WindowResize
     f.show
     f.bring_to_front
 	f.setAlwaysOnTop true # don't want to lose this in other windows...at least it bugged me once :P
+	
+	f.addComponentListener{|e|	
+		button.text = middle_text + " (" + f.width.to_s + "x" + f.height.to_s + ")"
+	}
+	
     f
   end
   
