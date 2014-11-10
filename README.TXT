@@ -32,7 +32,7 @@ Or use any 3rd party program that can read from a Directshow Capture Device (ex:
 
 VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
 
-ffmpeg example (requires ffmpeg 32 bit):
+ffmpeg example:
 
   $ ffplay -f dshow -i video="screen-capture-recorder"
 
@@ -44,6 +44,8 @@ or combine it with recording "what you hear" audio [vista/windows 7] (using ffmp
 
   $ ffmpeg -f dshow -i audio="virtual-audio-capturer":video="screen-capture-recorder" yo.mp4
   
+Note also that ffmpeg has a built in "gdigrab" input option you could use instead of screen capture recorder, as well.
+
 The audio device name can be any other dshow audio devices, as well.
 
 Avisynth also works with it.  Add it to a filter graph using graphedit, then use DirectShowSource as your 
