@@ -161,6 +161,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	
 	if(!ever_started) {
 		// allow it to startup until Run is called...so StreamTime can work see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
+		// since StreamTime anticipates that the graph's start time has already been set
 		FILTER_STATE myState;
 		CSourceStream::m_pFilter->GetState(INFINITE, &myState);
 		while(myState != State_Running) {
