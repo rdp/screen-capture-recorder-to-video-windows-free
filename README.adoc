@@ -78,25 +78,31 @@ To "reset" a value delete its key.
 
 == Trouble shooting ==
 
-it's too slow! (ex: 15 fps)
-  Run the "benchmark your capture speed" utility to see how slow your system can capture.
-  A few things that can help: if you're on vista+
-    turn off aero display manager (esp. if you have dual monitors, this can help).
-    http://www.howtogeek.com/howto/windows-vista/disable-aero-on-windows-vista
-	It captures much more quickly if aero is turned off (as 
-    in with aero, capturing a 650x976 window takes 50ms, without aero, 3ms.
-	The rest of a single screenshot capture takes about 7ms (sum 
-    10ms without aero), so you can see the relative cost it adds [!]
-	There's also a registry setting to have it turned off "automatically"
-	I have only been able to get max 15 fps when capturing aero [ping me if you want me to look into improving this somewhat, I have some ideas...]
-it's too slow! (ex: 50 fps)
-  disabling or enabling "hardware acceleration" for the desktop might help, too, or setting it to one stop above none
-  try switching from 32 to 24 bit or 16 bit input (from this), and/or switching your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
+=== It's too slow! (ex: 15 fps)
 
-It starts making the computer sluggish after awhile.
-  Make sure you have enough RAM available (virtualbox is known to hog some without telling you).  Also disable aero if possible.
+Run the "benchmark your capture speed" utility to see how slow your system can capture.
+
+If you're on vista+, turn off aero display manager (esp. if you have dual monitors, this can help).
+    http://www.howtogeek.com/howto/windows-vista/disable-aero-on-windows-vista
+    
+It captures much more quickly if aero is turned off (as in with aero, capturing a 650x976 window takes 50ms, without aero, 3ms.
+
+The rest of a single screenshot capture takes about 7ms (sum 10ms without aero), so you can see the relative cost it adds [!].
+
+There's also a registry setting to have it turned off "automatically".
+
+I have only been able to get max 15 fps when capturing aero [ping me if you want me to look into improving this somewhat, I have some ideas...].
+
+=== It's too slow! (ex: 50 fps)
+
+Disabling or enabling "hardware acceleration" for the desktop might help, too, or setting it to one stop above none
   
-  
+Try switching from 32 to 24 bit or 16 bit input (from this), and/or switching your desktop depth itself--or both! fastest is 16 bit display with capture in 16 bit mode--400 fps whoa!).  
+
+=== It starts making the computer sluggish after awhile.
+
+Make sure you have enough RAM available (virtualbox is known to hog some without telling you).  Also disable aero if possible.
+
 Note that if your output is, say, going to be 10 fps "actually used" in the end, ex:
 $ ffmpeg -f dshow -i video=video-capture-recorder -r 10 yo.mp4 -r 10 # output file is only 10 fps
 
@@ -117,10 +123,13 @@ capture frequency.
 Setting max fps to greater than 30 also allows you to get fps greater than 30 (the default max).  It "enables" them,
 by giving it a higher max default.  I didn't think people would normally care/want them so there you have.
 
-Skype users: NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
+==== Skype users
+
+NB that to use it as an input camera skype, you need to specify that it is a reasonably small capture, see
 http://betterlogic.com/roger/2012/04/skype-directshow-device-just-shows-circles-for-the-preview-capture/
 
-Q. I can't capture full screen [like starcraft type windows].
+=== I can't capture full screen [like starcraft type windows].
+
 Known limitation, try this thread: https://groups.google.com/forum/#!topic/roger-projects/uxmGV_vW4iY [or pay me a bit of money and I'll create a front end to the excellent OBS project to provide this functionality]
 
 == Feedback/Question ==
