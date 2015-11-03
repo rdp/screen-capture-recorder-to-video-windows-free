@@ -7,3 +7,5 @@ See also Redistribution section in the README.
 
 If you want to pay me some money for its use, you can, but it's free and open source, so...don't feel obligated (basically,
 if you work somewhere and could easily throw me a bone for using it, feel free, I'm happy to take donations).
+
+If you redistribute a modified DLL yourself, you will want to adjust the GUID's to make yours "Regsiter unique" as it were.
