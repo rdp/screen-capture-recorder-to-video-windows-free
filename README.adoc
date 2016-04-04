@@ -15,8 +15,9 @@ See also the ChangeLog.txt file for a list of changes in latest versions.
 
 Download installer and run, from 
 
-  https://sourceforge.net/projects/screencapturer/files
-    (sorry the files are on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
+https://sourceforge.net/projects/screencapturer/files
+  
+(sorry the files are on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
 	
 == Audio capture ==
 
