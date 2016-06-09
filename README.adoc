@@ -157,6 +157,10 @@ The code is gently based on/lifted from ("inspired by") this from the Windows 7.
   so you'll probably want to install the Windows SDK before messing around with the source code.
   To hack on the code, build the windows SDK directshow baseclasses, then open source_code/*.vcxproj in visual studio 2010
   express.  This is meant to provide a "directshow filter" you can use in your graph, not a demo of how to do graphs.
+  It outputs a .dll file that you "register" via (in administrator console) 
+  $ regsvr32 XXX.dll (and unregister when you're done with regsvr32 /u XXX.dll)
+  there are also some scripts to set the registry values (written in ruby/jruby currently for the GUI) but you don't
+  have to adjust those to mess with the filter itself.
 
 I can add features upon reasonable demand.
 
