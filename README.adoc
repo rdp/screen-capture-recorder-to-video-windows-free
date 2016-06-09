@@ -152,9 +152,11 @@ See also https://github.com/rdp/screen-capture-recorder-to-video-windows-free/is
 
 == Code/Future work/Attributions ==
 
-The code is gently based on/lifted from ("inspired by")
-  ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around the 'net.
+The code is gently based on/lifted from ("inspired by") this from the Windows 7.1 SDK
+  ....\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\filters\pushsource as well as some other dshow demos around the 'net (tmhare virtual capture).
   so you'll probably want to install the Windows SDK before messing around with the source code.
+  To hack on the code, build the windows SDK directshow baseclasses, then open source_code/*.vcxproj in visual studio 2010
+  express.
 
 I can add features upon reasonable demand.
 
