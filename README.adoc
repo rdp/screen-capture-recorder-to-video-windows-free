@@ -177,7 +177,7 @@ to point to your various baseclass directories.
 The included speed test utility was originally from http://stereopsis.com/blttest
 (bitblt is quite hardware dependent, so I'm told, so it's good to be able to test its speed).
 
-FFMpeg binaries are also included, see their site for licensing details/source: http://ffmpeg.org
+FFmpeg binaries are also included, see their site for licensing details/source: http://ffmpeg.org
 
 == Related ==
 
