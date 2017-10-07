@@ -1,5 +1,5 @@
-@rem echo Loading... we have splash for this now
-echo on
+@rem echo Loading... we have splash for this these days...
+
 @setlocal
 @rem disable any local rubyopt settings, just in case...
 @set RUBYOPT=
