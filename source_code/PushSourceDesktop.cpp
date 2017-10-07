@@ -158,21 +158,21 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	  reReadCurrentStartXY(1);
 	}
 
-	
-	if(!ever_started) {
-		// allow it to startup until Run is called...so StreamTime can work see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
-		// since StreamTime anticipates that the graph's start time has already been set
-		FILTER_STATE myState;
-		CSourceStream::m_pFilter->GetState(INFINITE, &myState);
-		while(myState != State_Running) {
-		  // TODO accomodate for pausing better, we're single run only currently [does VLC do pausing even?]
-		  Sleep(1);
-		  LocalOutput("sleeping till graph running for audio...");
-		  m_pParent->GetState(INFINITE, &myState);	  
-		}
-		ever_started = true;
+	// allow it to warmup until Run is called...so StreamTime can work right (ai ai) see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
+	FILTER_STATE myState;
+	CSourceStream::m_pFilter->GetState(INFINITE, &myState); // get parent filter state which is only set to Run "after pause" etc.
+	while(myState != State_Running) {
+		LocalOutput("sleeping till graph running for video...");
+		Sleep(1);
+		Command com;
+        if(CheckRequest(&com)) { // from http://microsoft.public.multimedia.directx.dshow.programming.narkive.com/h8ZxbM9E/csourcestream-fillbuffer-timing
+          if(com == CMD_STOP) {
+			  LocalOutput("exiting early from CMD_STOP thinger");
+              return S_FALSE;
+		  }
+        }
+		m_pParent->GetState(INFINITE, &myState);  
 	}
-
 
     // Access the sample's data buffer
     pSample->GetPointer(&pData);
@@ -224,7 +224,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 		// if there's no reference clock, it will "always" think it missed a frame
 	  if(show_performance) {
 		  if(now == 0) 
-			  LocalOutput("probable none reference clock, streaming fastly");
+			  LocalOutput("probable no reference clock, streaming fastly");
 		  else
 	          LocalOutput("it missed a frame--can't keep up %d %llu %llu", countMissed++, now, previousFrameEndTime); // we don't miss time typically I don't think, unless de-dupe is turned on, or aero, or slow computer, buffering problems downstream, etc.
 	  }
