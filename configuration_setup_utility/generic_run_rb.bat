@@ -16,7 +16,7 @@ echo on
 @GOTO DONE
 
 :INSTALL_JAVA
-echo you need to install java JRE first please install it from java.com then run again && pause
+msg "%username%" you need to install java JRE first please install it from java.com then run again
 start http://java.com
 
 :DONE
