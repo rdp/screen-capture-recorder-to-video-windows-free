@@ -48,6 +48,7 @@ OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
 ; remove previous versions' outdated icons [lame innosetup having to do this, lame]
+; TODO desktops too
 [InstallDelete]
 Type: filesandordirs; Name: {group}\*;
 

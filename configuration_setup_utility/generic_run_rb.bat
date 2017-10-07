@@ -16,7 +16,7 @@
 @GOTO DONE
 
 :INSTALL_JAVA
-msg "%username%" you need to install java JRE first please install it from java.com then run again
+msg "%username%" you need to install java first please install it from java.com then run again
 start http://java.com
 
 :DONE
