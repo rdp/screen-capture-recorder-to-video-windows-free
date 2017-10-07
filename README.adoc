@@ -3,7 +3,7 @@ This program allows one to "record" your desktop, or even stream it!
 It includes some helper "record your screen capture/stream it" and setup utilities.
 It also includes a helper (virtual-audio-capturer) to record "what you hear/see on your desktop" for vista+ system.
 
-  In order to use those you'll want/need the java JRE installed on your system first.
+  In order to use those you'll want/need the java JRE installed on your system first.  Install from java.com if you don't have it installed.
 
 It also includes a free, general purpose, open source directshow desktop/screen source capture filter.
 
@@ -15,10 +15,8 @@ See also the ChangeLog.txt file for a list of changes in latest versions.
 
 Download installer and run, from 
 
-https://sourceforge.net/projects/screencapturer/files
-  
-(sorry the files are on sourceforge: github limits their disk usage space and I'm hitting up against the limit)
-	
+https://github.com/rdp/screen-capture-recorder-to-video-windows-free/releases
+  	
 == Audio capture ==
 
 It also includes a directshow source capture filter device for recording "what you hear" in windows 7/vista--any sound card!
@@ -27,9 +25,9 @@ It also includes a directshow source capture filter device for recording "what y
 == Usage ==
 
 Use some helper programs provided in 
- Start menu -> Programs -> Screen Capture Recorder -> record/broadcast/XXX
+ Start menu -> Programs -> Screen Capture Recorder -> record desktp[/broadcast/XXX
 
-Or use any 3rd party program that can read from a Directshow Capture Device (ex: VLC).
+Or use any 3rd party program that can read from a Directshow Capture Device (ex: VLC/FFmpeg).
 
 VLC example: http://betterlogic.com/roger/2010/07/how-to-use-vlc-as-a-free-open-source-alternative-to-playon-tv
 
