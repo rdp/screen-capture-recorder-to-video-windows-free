@@ -1,4 +1,4 @@
-#define AppVer "0.12.9"
+#define AppVer "0.12.10"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -10,7 +10,7 @@ Filename: {app}\vendor\vcredist_x86.exe; Parameters: "/passive /Q:a /c:""msiexec
 Filename: {app}\vendor\vcredist_x64.exe; Parameters: "/passive /Q:a /c:""msiexec /qb /i vcredist.msi"" "; StatusMsg: Installing MSVC 2010 64 bit RunTime...; MinVersion: 0,6.0.6000; Check: IsWin64
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder.dll
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s screen-capture-recorder-x64.dll; Check: IsWin64
-; these files get sucked in from ../../... so build them too!
+; these files get sucked in from ../../... so build them manually first, too!
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\virtual-audio\audio_sniffer.dll; MinVersion: 0,6.0.6000
 Filename: regsvr32; WorkingDir: {app}; Parameters: /s vendor\virtual-audio\audio_sniffer-x64.dll; MinVersion: 0,6.0.6000; Check: IsWin64
 
