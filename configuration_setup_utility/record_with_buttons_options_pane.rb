@@ -16,7 +16,7 @@ def remove_quotes string
 end
 
 ResolutionOptions = {'native input (unscaled)' => nil, 'vga' => '640x480', 'svga' => '800x600', 'xga' => '1024x768',
-'PAL' => '768x576', 'hd720' => '1280x720', 'hd1080' => '1980x1080'}	
+'PAL' => '768x576', 'hd720' => '1280x720', 'hd1080' => '1920x1080'}	
 
 def resolution_english_string resolution
   if resolution
