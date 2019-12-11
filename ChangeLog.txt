@@ -1,3 +1,6 @@
+0.12.10
+  better sync I think
+
 0.12.9
   handle silence
   
