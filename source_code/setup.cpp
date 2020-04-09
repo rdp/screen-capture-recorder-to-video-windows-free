@@ -125,6 +125,7 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.rgPins = &sudOutputPinDesktop;
 				// this is the name that actually shows up in VLC et al. weird
                 hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"screen-capture-recorder", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
+                pMoniker->Release();
             }
             else
             {
