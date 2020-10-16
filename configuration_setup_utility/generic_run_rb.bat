@@ -11,7 +11,7 @@
 @call java -version > NUL 2>&1 || GOTO INSTALL_JAVA
 
 @rem success path
-@java -splash:audio.jpg -jar jruby-complete-1.7.12.jar --1.9 -I. %*
+@java -splash:audio.jpg -jar jruby-complete-9.2.13.0.jar -I. %*
 
 @GOTO DONE
 

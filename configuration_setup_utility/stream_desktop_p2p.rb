@@ -8,6 +8,7 @@ template=
 "   or more exotic options FFmpeg accepts, like udp://236.0.0.1:2000?pkt_size=500:fake_ui_name4"
 "  You can receive the stream via some player, ex:"
 " mplayer #{mplayer_options} ffmpeg://udp://236.0.0.1:2000?fifo_size=1000000&buffer_size=1000000:fake_ui_name3"
+" it will stream screen-capture-recorder to that address"
 [udp://localhost:2000:stream_url,width=600, height=20px]
 [                                                      ]
  "status:status_text,width=100chars" 
