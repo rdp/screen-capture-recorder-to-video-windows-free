@@ -223,13 +223,18 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::SetFormat(AM_MEDIA_TYPE *pmt)
     return S_OK;
 }
 
-// get's the current format...I guess...
-// or get default if they haven't called SetFormat yet...
-// LODO the default, which probably we don't do yet...unless they've already called GetStreamCaps then it'll be the last index they used LOL.
+// gets the current format...I guess...
+// or gets default if they haven't called SetFormat/getStreamCaps yet...
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
-
+	if (!m_bFormatAlreadySet) {
+			HRESULT hr = GetMediaType(0, &m_mt); // setup with index "0" kind of the default/preferred...I guess...
+            if(FAILED(hr))
+            {
+                return hr;
+            }
+	}
     *ppmt = CreateMediaType(&m_mt); // windows internal method, also does copy
     return S_OK;
 }
@@ -242,11 +247,11 @@ HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetNumberOfCapabilities(int *piCount,
     return S_OK;
 }
 
-// returns the "range" of fps, etc. for this index
+// returns the "range" of fps, etc. for this index [number is same as max num given by GetNumberOfCapabilities]
 HRESULT STDMETHODCALLTYPE CPushPinDesktop::GetStreamCaps(int iIndex, AM_MEDIA_TYPE **pmt, BYTE *pSCC)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
-	HRESULT hr = GetMediaType(iIndex, &m_mt); // ensure setup/re-use m_mt ...
+	HRESULT hr = GetMediaType(iIndex, &m_mt); // setup then re-use m_mt ... why not?
 	// some are indeed shared, apparently.
     if(FAILED(hr))
     {
