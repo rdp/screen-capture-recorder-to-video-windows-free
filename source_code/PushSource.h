@@ -78,7 +78,7 @@ protected:
 	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
 
-    RECT m_rScreen;                     // Rect containing screen coordinates we are currently "capturing"
+    RECT m_rCaptureCoordinates;                     // Rect containing screen coordinates we are currently "capturing"
 
     int getNegotiatedFinalWidth();
     int getNegotiatedFinalHeight();                   
@@ -97,7 +97,7 @@ protected:
 	//CCritSec m_cSharedState;            // Protects our internal state use CAutoLock cAutoLock(m_pFilter->pStateLock()); instead
 
 	bool m_bFormatAlreadySet;
-	bool m_bConvertToI420;
+	bool m_bConvertToI420; // FMLE needed this once or something freaky like that, instead of bitmap?
 	bool m_bUseCaptureBlt;
 	bool m_bCaptureMouse;
 	//int m_iScreenBitDepth;
@@ -109,7 +109,7 @@ protected:
 	int m_millisToSleepBeforePollForChanges;
 	HWND m_iHwndToTrack;
 	boolean m_bHwndTrackDecoration;
-	void CopyScreenToDataBlock(HDC hScrDc, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
+	void CopyScreenSomethingToDataBlock(HDC hScrDc, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample);
 	void doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,int nDestWidth,int nDestHeight, HDC hScrDC, int nX, int nY);
 	void doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLines, BYTE *pData, BITMAPINFO *pHeader);
 
@@ -175,6 +175,6 @@ public:
     HRESULT STDMETHODCALLTYPE QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
 private:
-	void reReadCurrentStartXY(int isReRead);
+	void reReadCurrentStartXY(boolean isReRead);
 
 };

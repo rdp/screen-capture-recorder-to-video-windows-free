@@ -65,14 +65,14 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone!]
 	
     // Get the dimensions of the main desktop window as the default
-    m_rScreen.left   = m_rScreen.top = 0;
-    m_rScreen.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
-    m_rScreen.bottom = GetDeviceCaps(hScrDc, VERTRES);
+    m_rCaptureCoordinates.left   = m_rCaptureCoordinates.top = 0;
+    m_rCaptureCoordinates.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
+    m_rCaptureCoordinates.bottom = GetDeviceCaps(hScrDc, VERTRES);
 
 	// now read some custom settings...
 	WarmupCounter();
 	if(!m_iHwndToTrack) {
-      reReadCurrentStartXY(0);
+      reReadCurrentStartXY(false);
 	} else {
 	  LocalOutput("ignoring startx, starty since hwnd was specified");
 	}
@@ -83,32 +83,33 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT_RAISE(config_height >= 0); // negatives not allowed, if it's set :)
 
 	if(config_width > 0) {
-		int desired = m_rScreen.left + config_width;
-		//int max_possible = m_rScreen.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
+		int desired = m_rCaptureCoordinates.left + config_width;
+		//int max_possible = m_rCaptureCoordinates.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
 		//if(desired < max_possible)
-			m_rScreen.right = desired;
+			m_rCaptureCoordinates.right = desired;
 		//else
-		//	m_rScreen.right = max_possible;
+		//	m_rCaptureCoordinates.right = max_possible;
 	} else {
 		// leave full screen
 	}
 
-	m_iCaptureConfigWidth = m_rScreen.right - m_rScreen.left;
+	m_iCaptureConfigWidth = m_rCaptureCoordinates.right - m_rCaptureCoordinates.left;
 	ASSERT_RAISE(m_iCaptureConfigWidth > 0);
 
 	if(config_height > 0) {
-		int desired = m_rScreen.top + config_height;
-		//int max_possible = m_rScreen.bottom; // disabled, see above.
+		int desired = m_rCaptureCoordinates.top + config_height;
+		//int max_possible = m_rCaptureCoordinates.bottom; // disabled, see above.
 		//if(desired < max_possible)
-			m_rScreen.bottom = desired;
+			m_rCaptureCoordinates.bottom = desired;
 		//else
-		//	m_rScreen.bottom = max_possible;
+		//	m_rCaptureCoordinates.bottom = max_possible;
 	} else {
 		// leave full screen
 	}
-	m_iCaptureConfigHeight = m_rScreen.bottom - m_rScreen.top;
+	m_iCaptureConfigHeight = m_rCaptureCoordinates.bottom - m_rCaptureCoordinates.top;
 	ASSERT_RAISE(m_iCaptureConfigHeight > 0);
 
+	// purpose of stretch is to "shrink" itat capture time, in case that saves cpu...I think...
 	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0, false);
 	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0, false);
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0, true); // guess it's either stretch mode 0 or 1
@@ -130,11 +131,13 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
 		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
 	}
+
+	// try to have some kind of "instantaneous capture" when changes come, like a vsync LOL
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10, true);
 
     wchar_t out[10000];
 	swprintf(out, 10000, L"default/from reg read config as: %dx%d -> %dx%d (%d top %d bottom %d l %d r) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d hwnd:%d \n", 
-	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rScreen.top, m_rScreen.bottom, m_rScreen.left, m_rScreen.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry, m_iHwndToTrack);
+	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rCaptureCoordinates.top, m_rCaptureCoordinates.bottom, m_rCaptureCoordinates.left, m_rCaptureCoordinates.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry, m_iHwndToTrack);
 
 	// warmup the debugging message system
 	__int64 measureDebugOutputSpeed = StartCounter();
@@ -155,7 +158,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     CheckPointer(pSample, E_POINTER);
 	if(m_bReReadRegistry) {
-	  reReadCurrentStartXY(1);
+	  reReadCurrentStartXY(true);
 	}
 
 	// allow it to warmup until Run is called...so StreamTime can work right (ai ai) see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
@@ -185,14 +188,14 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 	boolean gotNew = false; // dedupe stuff
 	while(!gotNew) {
 
-      CopyScreenToDataBlock(hScrDc, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
+      CopyScreenSomethingToDataBlock(hScrDc, pData, (BITMAPINFO *) &(pVih->bmiHeader), pSample);
 	
 	  if(m_bDeDupe) {
 			if(memcmp(pData, pOldData, pSample->GetSize())==0) { // took desktop:  10ms for 640x1152, still 100 fps uh guess...
 			  Sleep(m_millisToSleepBeforePollForChanges);
 			} else {
 			  gotNew = true;
-			  memcpy( /* dest */ pOldData, pData, pSample->GetSize()); // took 4ms for 640x1152, but it's worth it LOL.
+			  memcpy( /* dest */ pOldData, pData, pSample->GetSize()); // took 4ms for 640x1152, but it's worth it LOL. Wait why?
 			  // LODO memcmp and memcpy in the same loop LOL.
 			}
 	  } else {
@@ -273,24 +276,24 @@ float CPushPinDesktop::GetFps() {
 	return (float) (UNITS / m_rtFrameLength);
 }
 
-void CPushPinDesktop::reReadCurrentStartXY(int isReRead) {
+void CPushPinDesktop::reReadCurrentStartXY(boolean isReRead) {
 	__int64 start = StartCounter();
 
 	// assume 0 means not set...negative ignore :)
-	// TODO no overflows, that's a bad value too... they cause a crash, I think! [position youtube too far bottom right, track it...]
-	int old_x = m_rScreen.left;
-	int old_y = m_rScreen.top;
+	// TODO no overflows, that's a bad value too... they cause a crash, I think! [repro: position youtube too far bottom right, capture it...]
+	int old_x = m_rCaptureCoordinates.left;
+	int old_y = m_rCaptureCoordinates.top;
 
-	int config_start_x = read_config_setting(TEXT("start_x"), m_rScreen.left, true);
-    m_rScreen.left = config_start_x;
+	int config_start_x = read_config_setting(TEXT("start_x"), m_rCaptureCoordinates.left, true);
+    m_rCaptureCoordinates.left = config_start_x;
 
 	// is there a better way to do this registry stuff?
-	int config_start_y = read_config_setting(TEXT("start_y"), m_rScreen.top, true);
-	m_rScreen.top = config_start_y;
-	if(old_x != m_rScreen.left || old_y != m_rScreen.top) {
+	int config_start_y = read_config_setting(TEXT("start_y"), m_rCaptureCoordinates.top, true);
+	m_rCaptureCoordinates.top = config_start_y;
+	if(old_x != m_rCaptureCoordinates.left || old_y != m_rCaptureCoordinates.top) {
 	  if(isReRead) {
-		m_rScreen.right = m_rScreen.left + m_iCaptureConfigWidth;
-		m_rScreen.bottom = m_rScreen.top + m_iCaptureConfigHeight;
+		m_rCaptureCoordinates.right = m_rCaptureCoordinates.left + m_iCaptureConfigWidth;
+		m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.top + m_iCaptureConfigHeight;
 	  }
 	}
 
@@ -321,7 +324,8 @@ CPushPinDesktop::~CPushPinDesktop()
 	}
 }
 
-void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
+// basically copy from hScrDC to pData, with some header infointo the othertwo...
+void CPushPinDesktop::CopyScreenSomethingToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
@@ -329,27 +333,27 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	int         iFinalStretchHeight = getNegotiatedFinalHeight();
 	int         iFinalStretchWidth  = getNegotiatedFinalWidth();
 	
-    ASSERT_RAISE(!IsRectEmpty(&m_rScreen)); // that would be unexpected
+    ASSERT_RAISE(!IsRectEmpty(&m_rCaptureCoordinates)); // that would be unexpected
     // create a DC for the screen and create
     // a memory DC compatible to screen DC   
 	
     hMemDC = CreateCompatibleDC(hScrDC); //  0.02ms Anything else to reuse, this one's pretty fast...?
 
-    // determine points of where to grab from it, though I think we control these with m_rScreen
-    nX  = m_rScreen.left;
-    nY  = m_rScreen.top;
-
-	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
-	ASSERT_RAISE(m_rScreen.bottom - m_rScreen.top == iFinalStretchHeight);
-	ASSERT_RAISE(m_rScreen.right - m_rScreen.left == iFinalStretchWidth);
+    // determine points of where to grab from it, though I think we control these with m_rCaptureCoordinates
+    nX  = m_rCaptureCoordinates.left;
+    nY  = m_rCaptureCoordinates.top;
 
     // select new bitmap into memory DC
     hOldBitmap = (HBITMAP) SelectObject(hMemDC, hRawBitmap);
 
+	// sanity checks--except we don't want it apparently, to allow upstream to dynamically change the size? Can it do that?
+	ASSERT_RAISE(m_rCaptureCoordinates.bottom - m_rCaptureCoordinates.top == iFinalStretchHeight);
+	ASSERT_RAISE(m_rCaptureCoordinates.right - m_rCaptureCoordinates.left == iFinalStretchWidth);
+
 	doJustBitBltOrScaling(hMemDC, m_iCaptureConfigWidth, m_iCaptureConfigHeight, iFinalStretchWidth, iFinalStretchHeight, hScrDC, nX, nY);
 
 	if(m_bCaptureMouse) 
-	  AddMouse(hMemDC, &m_rScreen, hScrDC, m_iHwndToTrack);
+	  AddMouse(hMemDC, &m_rCaptureCoordinates, hScrDC, m_iHwndToTrack);
 
     // select old bitmap back into memory DC and get handle to
     // bitmap of the capture...whatever this even means...	
@@ -376,7 +380,7 @@ void CPushPinDesktop::CopyScreenToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO 
 	} else {
 	  doDIBits(hScrDC, hRawBitmap2, iFinalStretchHeight, pData, &tweakableHeader);
 
-	  // if we're on vlc work around for odd pixel widths and 24 bit...<sigh>, like a width of 134 breaks vlc with 24bit. wow. see also GetMediaType comments
+	  // if we're on vlc work around for odd pixel widths and 24 bit...<sigh>, like a width of 134 breaks vlc with 24bit rgb. wow. see also GetMediaType comments
 	  wchar_t buffer[MAX_PATH + 1]; // on the stack
 	  GetModuleFileName(NULL, buffer, MAX_PATH);
 	  if(wcsstr(buffer, L"vlc.exe") > 0) {
@@ -460,14 +464,14 @@ void CPushPinDesktop::doJustBitBltOrScaling(HDC hMemDC, int nWidth, int nHeight,
 }
 
 int CPushPinDesktop::getNegotiatedFinalWidth() {
-    int iImageWidth  = m_rScreen.right - m_rScreen.left;
+    int iImageWidth  = m_rCaptureCoordinates.right - m_rCaptureCoordinates.left;
 	ASSERT_RAISE(iImageWidth > 0);
 	return iImageWidth;
 }
 
 int CPushPinDesktop::getNegotiatedFinalHeight() {
 	// might be smaller than the "getCaptureDesiredFinalWidth" if they tell us to give them an even smaller setting...
-    int iImageHeight = (int) m_rScreen.bottom - m_rScreen.top;
+    int iImageHeight = (int) m_rCaptureCoordinates.bottom - m_rCaptureCoordinates.top;
 	ASSERT_RAISE(iImageHeight > 0);
 	return iImageHeight;
 }

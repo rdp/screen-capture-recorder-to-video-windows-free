@@ -144,8 +144,8 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 	  if(pvi->AvgTimePerFrame) // or should Set Format accept this? hmm...
 	    m_rtFrameLength = pvi->AvgTimePerFrame; // allow them to set whatever fps they request, i.e. if it's less than the max default.  VLC command line can specify this, for instance...
 	  // also setup scaling here, as WFMLE and ffplay and VLC all get here...
-	  m_rScreen.right = m_rScreen.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rScreen is negotiated right here]
-	  m_rScreen.bottom = m_rScreen.top + pvi->bmiHeader.biHeight;
+	  m_rCaptureCoordinates.right = m_rCaptureCoordinates.left + pvi->bmiHeader.biWidth; // allow them to set whatever "scaling size" they want [set m_rCaptureCoordinates is negotiated right here]
+	  m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.top + pvi->bmiHeader.biHeight;
 
     }
 	
