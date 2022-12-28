@@ -14,14 +14,17 @@
 #include <stdio.h>
 #include <assert.h>
 // dwm turn off shtuff
-// #pragma comment(lib,"dwmapi.lib")  // ?
 #include <dwmapi.h>
+// #pragma comment(lib,"dwmapi.lib")  // maybe I just used constants so didn't need it?
+#include <Shlobj.h> // SHGetFolderPath 
+#include "Shlwapi.h" // PathAppend
+// #pragma comment(lib, "Shlwapi.lib") doesn't actually cause linking to work?
 
 extern int show_performance;
 
 void logToFile(char *log_this) {
     FILE *f;
-	fopen_s(&f, "c:\\temp\\yo2", "a"); // this call fails if using the filter within flash player...
+	fopen_s(&f, "c:\\temp\\yo2", "a"); // this call fails if using the filter within flash player FWIW...
 	fprintf(f, "%s\n", log_this);
 	fclose(f);
 }
@@ -43,6 +46,7 @@ void LocalOutput(const char *str, ...)
 #endif
 }
 
+// to use this one with wchars call like LocalOutput(TEXT("my text"), something.wide_char, ...)
 void LocalOutput(const wchar_t *str, ...) 
 {
 #ifdef _DEBUG  // avoid in release mode...takes like 1ms each message!
@@ -53,7 +57,7 @@ void LocalOutput(const wchar_t *str, ...)
   OutputDebugString(buf);
   OutputDebugString(L"\n");
   va_end(ptr);
-  // also works: OutputDebugString(L"yo ho2");
+  // also works:
   //logToFile(buf); 
   //logToFile("\n");
 #endif
@@ -155,12 +159,11 @@ HRESULT RegGetDWord(HKEY hKey, LPCTSTR szValueName, DWORD * lpdwResult) {
 	return NOERROR;
 }
 
-
 boolean is_config_set_to_1(LPCTSTR szValueName) {
   return read_config_setting(szValueName, 0, true) == 1;
 }
 
-// returns default if nothing is in the registry
+// returns default if nothing is in the registry/ini file
  int read_config_setting(LPCTSTR szValueName, int default, boolean zeroAllowed) {
   HKEY hKey;
   LONG i;
@@ -169,7 +172,7 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
     
   if ( i != ERROR_SUCCESS)
   {
-	  // assume we don't have to close the key
+	  // assume we don't have to close the key...
     return default;
   } else {
 	DWORD dwVal;
@@ -177,7 +180,14 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
 	RegCloseKey(hKey); // done with that
 	if (FAILED(hr)) {
       // key doesn't exist in the reg at all...
-	  return default;
+	  // try ini file
+      TCHAR path[MAX_PATH]; 
+	  // lookup path for %APPDATA%\XX.ini
+      HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, path);
+	  if (result != S_OK)
+		  return default; // :|
+      PathAppend(path, TEXT("ScreenCaptureRecorder.ini"));
+	  return GetPrivateProfileInt(TEXT("all_settings"), szValueName, default, path); // lookup from file under section "all_settings" else default
 	} else {
 	  if (!zeroAllowed && dwVal == 0) {
             const size_t len = 1256;

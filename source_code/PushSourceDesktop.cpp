@@ -53,18 +53,41 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		  LocalOutput("using foreground window %d", GetForegroundWindow());
           hScrDc = GetDC(GetForegroundWindow());
 	    } else {
-		  // the default, just capture desktop
-          // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(0), supposed to be multi monitor?
-          // LocalOutput("using the dangerous CreateDC DISPLAY\n");
-	      // danger, CreateDC DC is only good as long as this particular thread is still alive...hmm...is it better for directdraw
-		  hScrDc = GetDC(NULL);
+		  int captureParticularDisplay = read_config_setting(TEXT("capture_particular_adapter_number_starting_at_zero"), -1, true);
+		  if (captureParticularDisplay != -1) {
+  	  	    // EnumDisplayMonitors or EnumDisplayDevices (yes easier) GetMonitorInfo not QueryDisplayInfo so...just index uh guess...
+		    DISPLAY_DEVICE info;
+			info.cb = sizeof(DISPLAY_DEVICE); // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumdisplaydevicesa
+			if (EnumDisplayDevices(NULL, captureParticularDisplay, &info, 0) == 0) {
+				LocalOutput("can't find that adapter %d", captureParticularDisplay);
+				ASSERT_RAISE(false);
+			}
+			LocalOutput(TEXT("using particular adapter %d %s %s"), captureParticularDisplay, info.DeviceName, info.DeviceString);
+		    DISPLAY_DEVICE info2;
+			info2.cb = sizeof(DISPLAY_DEVICE);
+			// default to 0, most of the time even if it's actually the same 'physical adapter' it's called different by windows?
+			// i.e. typically only have to set capture_particular_adapter_number_starting_at_zero
+   		    int captureParticularMonitor = read_config_setting(TEXT("capture_particular_monitor_number_starting_at_zero"), 0, true); 
+			if (EnumDisplayDevices(info.DeviceName, captureParticularMonitor, &info2, 0) == 0) { // call twice it says, to get "DeviceString" to become monitor name :|
+				LocalOutput("found adapter, can't find that monitor %d", captureParticularMonitor);
+				ASSERT_RAISE(false);
+			}
+			LocalOutput(TEXT("using particular monitor %d %s"), captureParticularMonitor, info2.DeviceName);
+			hScrDc = CreateDC(TEXT("DISPLAY"), info2.DeviceName, NULL, NULL);
+		  } else {
+  			  // the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
+			  // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor
+			  // LocalOutput("using the dangerous CreateDC DISPLAY\n");
+			  LocalOutput("using default display");
+			  hScrDc = GetDC(NULL);
+		  }
 	    }
 	  }
 	}
 	//m_iScreenBitDepth = GetTrueScreenDepth(hScrDc);
-	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone!]
+	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone/process exited!]
 	
-    // Get the dimensions of the main desktop window as the default
+    // Get the dimensions of the capture thing-er
     m_rCaptureCoordinates.left   = m_rCaptureCoordinates.top = 0;
     m_rCaptureCoordinates.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
     m_rCaptureCoordinates.bottom = GetDeviceCaps(hScrDc, VERTRES);
@@ -158,7 +181,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     CheckPointer(pSample, E_POINTER);
 	if(m_bReReadRegistry) {
-	  reReadCurrentStartXY(true);
+	  reReadCurrentStartXY(true); // prime for re-reading later
 	}
 
 	// allow it to warmup until Run is called...so StreamTime can work right (ai ai) see http://stackoverflow.com/questions/2469855/how-to-get-imediacontrol-run-to-start-a-file-playing-with-no-delay/2470548#2470548
