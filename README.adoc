@@ -75,6 +75,19 @@ I always just use regedit or the accompanying script utilities and don't edit it
 
 To "reset" a value delete its key.
 
+OR
+
+create a file named this: %APPDATA%\ScreenCaptureRecorder.ini
+
+with contents like this, all go under a section "all_settings"
+
+[all_settings]
+your_first_setting=1
+your_second_setting=100
+...
+
+By default it reads the registry first, if it doesn't find something set there, it'll look in the .ini file.
+
 == Trouble shooting ==
 
 === It's too slow! (ex: 15 fps)
