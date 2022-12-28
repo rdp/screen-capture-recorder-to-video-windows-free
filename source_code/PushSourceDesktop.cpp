@@ -79,8 +79,12 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	
     // Get the dimensions of the capture thing-er
     m_rCaptureCoordinates.left   = m_rCaptureCoordinates.top = 0;
-    m_rCaptureCoordinates.right  = GetDeviceCaps(hScrDc, HORZRES); // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
-    m_rCaptureCoordinates.bottom = GetDeviceCaps(hScrDc, VERTRES);
+	// blind guess at DPI reports?
+	int logPixelsX = GetDeviceCaps(hScrDc, LOGPIXELSX); // default 96
+	int logPixelsY = GetDeviceCaps(hScrDc, LOGPIXELSY); // default 96
+	// NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
+    m_rCaptureCoordinates.right  = logPixelsX * GetDeviceCaps(hScrDc, HORZRES)/ 96; 
+    m_rCaptureCoordinates.bottom = logPixelsY * GetDeviceCaps(hScrDc, VERTRES) / 96;
 
 	// now read some custom settings...
 	WarmupCounter();
@@ -122,7 +126,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_iCaptureConfigHeight = m_rCaptureCoordinates.bottom - m_rCaptureCoordinates.top;
 	ASSERT_RAISE(m_iCaptureConfigHeight > 0);
 
-	// purpose of stretch is to "shrink" itat capture time, in case that saves cpu...I think...
+	// purpose of stretch is to "shrink" it at capture time, in case that saves cpu...I think...
 	m_iStretchToThisConfigWidth = read_config_setting(TEXT("stretch_to_width"), 0, false);
 	m_iStretchToThisConfigHeight = read_config_setting(TEXT("stretch_to_height"), 0, false);
 	m_iStretchMode = read_config_setting(TEXT("stretch_mode_high_quality_if_1"), 0, true); // guess it's either stretch mode 0 or 1
@@ -149,7 +153,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10, true);
 
     wchar_t out[10000];
-	swprintf(out, 10000, L"default/from reg read config as: %dx%d -> %dx%d (%d top %d bottom %d l %d r) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d hwnd:%d \n", 
+	swprintf(out, 10000, L"default/from reg got config as: %dx%d -> %dx%d (%d top %d bottom %d l %d r) %dfps, dedupe? %d, millis between dedupe polling %d, m_bReReadRegistry? %d hwnd:%d \n", 
 	  m_iCaptureConfigHeight, m_iCaptureConfigWidth, getCaptureDesiredFinalHeight(), getCaptureDesiredFinalWidth(), m_rCaptureCoordinates.top, m_rCaptureCoordinates.bottom, m_rCaptureCoordinates.left, m_rCaptureCoordinates.right, config_max_fps, m_bDeDupe, m_millisToSleepBeforePollForChanges, m_bReReadRegistry, m_iHwndToTrack);
 
 	// warmup the debugging message system
@@ -277,7 +281,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     // the swprintf costs like 0.04ms (25000 fps LOL)
 	double m_fFpsSinceBeginningOfTime = ((double) m_iFrameNumber)/(GetTickCount() - globalStart)*1000;
 	swprintf(out, L"done video frame! total frames: %d this one %dx%d -> (%dx%d) took: %.02Lfms, %.02f ave fps (%.02f is the theoretical max fps based on this round, ave. possible fps %.02f, fastest round fps %.02f, negotiated fps %.06f), frame missed %d", 
-		m_iFrameNumber, m_iCaptureConfigHeight, m_iCaptureConfigWidth, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
+		m_iFrameNumber, m_iCaptureConfigWidth, m_iCaptureConfigHeight, getNegotiatedFinalWidth(), getNegotiatedFinalHeight(), millisThisRoundTook, m_fFpsSinceBeginningOfTime, 1.0*1000/millisThisRoundTook,   
 		/* average */ 1.0*1000*m_iFrameNumber/sumMillisTook, 1.0*1000/fastestRoundMillis, GetFps(), countMissed);
 	LocalOutput(out);
 	set_config_string_setting(L"frame_stats", out);
@@ -594,11 +598,11 @@ HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
 	GetVersionEx((LPOSVERSIONINFO)&version);
 	if(version.dwMajorVersion >= 6) { // meaning vista +
 	  if(read_config_setting(TEXT("disable_aero_for_vista_plus_if_1"), 0, true) == 1) {
-		printf("turning aero off/disabling aero");
+		LocalOutput("turning aero off/disabling aero");
 	    turnAeroOn(false);
 	  }
 	  else {
-		printf("leaving aero on");
+		LocalOutput("leaving aero on");
 	    turnAeroOn(true);
 	  }
 	}

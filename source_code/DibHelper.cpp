@@ -102,14 +102,12 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	__int64 start = StartCounter();
 	POINT p;
 
-	// GetCursorPos(&p); // get current x, y 0.008 ms
-	
 	CURSORINFO globalCursor;
-	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...
+	globalCursor.cbSize = sizeof(CURSORINFO); // could cache I guess...wait what if they change the cursor though? :)
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-    GetCursorPos(&p);
+    GetCursorPos(&p); // redundant?
 	if(hwnd)
 	  ScreenToClient(hwnd, &p); // 0.010ms
 	
@@ -129,9 +127,11 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 		}
 	}
 	
-	DrawIcon(hMemDC, p.x-lpRect->left, p.y-lpRect->top, hcur); // 0.042ms
+	int x= p.x-lpRect->left;
+	int y = p.y-lpRect->top;
+	DrawIcon(hMemDC, x, y, hcur); // 0.042ms
 	if(show_performance)
-	  LocalOutput("add mouse took %.02f ms", GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
+	  LocalOutput("add mouse at %d,%d took %.02f ms", x, y, GetCounterSinceStartMillis(start)); // sum takes around 0.125 ms
 }
 
 // partially from http://cboard.cprogramming.com/windows-programming/44278-regqueryvalueex.html
