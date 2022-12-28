@@ -53,7 +53,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		  LocalOutput("using foreground window %d", GetForegroundWindow());
           hScrDc = GetDC(GetForegroundWindow());
 	    } else {
-		  int captureParticularDisplay = read_config_setting(TEXT("capture_particular_adapter_number_starting_at_zero"), -1, true);
+		  int captureParticularDisplay = read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true);
 		  if (captureParticularDisplay != -1) {
   	  	    // EnumDisplayMonitors or EnumDisplayDevices (yes easier) GetMonitorInfo not QueryDisplayInfo so...just index uh guess...
 		    DISPLAY_DEVICE info;
@@ -63,17 +63,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 				ASSERT_RAISE(false);
 			}
 			LocalOutput(TEXT("using particular adapter %d %s %s"), captureParticularDisplay, info.DeviceName, info.DeviceString);
-		    DISPLAY_DEVICE info2;
-			info2.cb = sizeof(DISPLAY_DEVICE);
-			// default to 0, most of the time even if it's actually the same 'physical adapter' it's called different by windows?
-			// i.e. typically only have to set capture_particular_adapter_number_starting_at_zero
-   		    int captureParticularMonitor = read_config_setting(TEXT("capture_particular_monitor_number_starting_at_zero"), 0, true); 
-			if (EnumDisplayDevices(info.DeviceName, captureParticularMonitor, &info2, 0) == 0) { // call twice it says, to get "DeviceString" to become monitor name :|
-				LocalOutput("found adapter, can't find that monitor %d", captureParticularMonitor);
-				ASSERT_RAISE(false);
-			}
-			LocalOutput(TEXT("using particular monitor %d %s"), captureParticularMonitor, info2.DeviceName);
-			hScrDc = CreateDC(TEXT("DISPLAY"), info2.DeviceName, NULL, NULL);
+			hScrDc = CreateDC(TEXT("DISPLAY"), info.DeviceName, NULL, NULL);
 		  } else {
   			  // the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
 			  // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor

@@ -15,7 +15,7 @@ class SetupScreenTrackerParams
 	'dedup_if_1', 'millis_to_sleep_between_poll_for_dedupe_changes',
 	'capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker',
     "hwnd_to_track_with_window_decoration",
-
+	"capture_particular_display_number_starting_at_zero"
   ]
  
    def delete_single_setting name

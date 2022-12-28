@@ -22,12 +22,12 @@
 
 extern int show_performance;
 
-void logToFile(char *log_this) {
+/*void logToFile(char *log_this) {
     FILE *f;
 	fopen_s(&f, "c:\\temp\\yo2", "a"); // this call fails if using the filter within flash player FWIW...
 	fprintf(f, "%s\n", log_this);
 	fclose(f);
-}
+}*/
 
 // my very own debug output method...
 void LocalOutput(const char *str, ...)
