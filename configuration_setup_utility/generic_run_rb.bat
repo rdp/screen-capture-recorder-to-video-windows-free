@@ -28,11 +28,11 @@ for /f "delims=.-_ tokens=1-2" %%v in ("%JAVA_VERSION%") do (
   )
 )
 
-rem newer versions need help to actually send signals to child processes?
+rem extra params seem needed for jdk 9+
 if %JAVA_VERSION% LSS 9 (
-     java  -splash:audio.jpg -jar jruby-complete-9.2.13.0.jar -I. %*
+     java  -splash:audio.jpg -jar jruby-complete-9.4.1.0-SNAPSHOT.jar -I. %*
    ) else (
-     java  --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED -splash:audio.jpg -jar jruby-complete-9.2.13.0.jar -I. %*
+     java  --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED -splash:audio.jpg -jar jruby-complete-9.4.1.0-SNAPSHOT.jar -I. %*
    )
 
 GOTO DONE

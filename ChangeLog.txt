@@ -3,6 +3,7 @@
     capture_particular_display_number_starting_at_zero
   add ability to read configs from a file instead of registry, though both are supported.
     %APPDATA%\ScreenCaptureRecorder.ini
+  Work with JDK > 8
 
 0.12.10
   better sync I think

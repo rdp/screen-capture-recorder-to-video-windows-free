@@ -1,4 +1,4 @@
-#define AppVer "0.13.0"
+#define AppVer "0.13.1"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -67,7 +67,7 @@ Name: {group}\record\broadcast\setup local audio broadcast streaming server {#Ap
 Name: {group}\record\broadcast\restart local audio streaming server with same setup as was run previous {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
 Name: {group}\record\broadcast\stream desktop local LAN {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
 ; use same name as desktop
-Name: {group}\Record\{#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
+Name: {group}\Record\{#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized; IconFilename: "{app}\configuration_setup_utility\audio.ico";
 
 Name: "{userdesktop}\{#AppName}"; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; \
   Parameters: record_with_buttons.rb; Flags: runminimized; IconFilename: "{app}\configuration_setup_utility\audio.ico";
