@@ -204,7 +204,7 @@ def start_recording_with_current_settings just_preview = false
    end
 
    if should_save_file?
-	 c += " -f mp4 \"#{@next_filename}\""
+	 c += " -f matroska \"#{@next_filename}\""
      puts "writing to file: #{@next_filename}"
    end
    
@@ -293,7 +293,7 @@ def bootstrap_devices
 	  if ARGV[0] != '--just-audio-default'
 		if FFmpegHelpers.enumerate_directshow_devices[:video].include?([ScreenCapturerDeviceName, 0])
 		  storage['video_name'] = [ScreenCapturerDeviceName, 0]
-		  storage['current_ext_sans_dot'] = 'mp4'  
+		  storage['current_ext_sans_dot'] = 'mkv'  
 		else
 		  need_help = true
 		end
@@ -330,7 +330,7 @@ def choose_extension
     # TODO 'wav' here once it works with solely wav :)
     storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else
-    storage['current_ext_sans_dot'] = 'mp4' # LODO dry up ".mp4"
+    storage['current_ext_sans_dot'] = 'mkv' # LODO dry up ".mp4"
   end
 end
 
