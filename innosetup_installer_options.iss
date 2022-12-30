@@ -1,4 +1,4 @@
-#define AppVer "0.12.12"
+#define AppVer "0.13.0"
 
 #define AppName "Screen Capturer Recorder"
 ; AppId === AppName by default BTW
@@ -31,7 +31,7 @@ Source: ChangeLog.txt; DestDir: {app}
 Source: configuration_setup_utility\*.*; DestDir: {app}\configuration_setup_utility; Flags: recursesubdirs
 Source: vendor\troubleshooting_benchmarker\BltTest\Release\BltTest.exe; DestDir: {app}
 Source: vendor\vcredist_*.exe; DestDir: {app}\vendor
-; ruby scripts read version from this
+; ruby scripts read AppVer from this to show "you're on version xx"
 Source: innosetup_installer_options.iss; DestDir: {app}\
 
 ; include latest dll's from virtual audio capturer...assume they're latest
@@ -48,12 +48,12 @@ OutputBaseFilename=Setup {#AppName} v{#AppVer}
 OutputDir=releases
 
 ; remove previous versions' outdated icons [lame innosetup having to do this, lame]
-; TODO desktops too
+; TODO desktop shortcuts aren't removed still...
 [InstallDelete]
 Type: filesandordirs; Name: {group}\*;
 
 [Icons]
-; {group} is like c:\...\start menu\SCR
+; {group} is like c:\...\start menu\screen capture recorder
 Name: {group}\configure\Release Notes  {#AppName}; Filename: {app}\ChangeLog.txt
 Name: {group}\configure\Readme  {#AppName}; Filename: {app}\README.txt
 Name: {group}\configure\configure by setting specific screen capture numbers  {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: setup_via_numbers.rb; Flags: runminimized
@@ -62,13 +62,15 @@ Name: {group}\configure\configure by resizing a transparent window  {#AppName}; 
 Name: {group}\configure\Display current capture settings  {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: setup_via_numbers.rb --just-display-current-settings
 Name: {group}\configure\Uninstall {#AppName}; Filename: {uninstallexe}
 
-Name: {group}\Record\Record or stream video and or audio {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
 Name: {group}\Record\Record audio by clicking a button {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb --just-audio-default; Flags: runminimized
 Name: {group}\record\broadcast\setup local audio broadcast streaming server {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb; Flags: runminimized
 Name: {group}\record\broadcast\restart local audio streaming server with same setup as was run previous {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: broadcast_server_setup.rb --redo-with-last-run; Flags: runminimized
 Name: {group}\record\broadcast\stream desktop local LAN {#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: stream_desktop_p2p.rb; Flags: runminimized;
+; use same name as desktop
+Name: {group}\Record\{#AppName}; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
 
-Name: "{userdesktop}\Record Desktop {#AppName}"; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; Parameters: record_with_buttons.rb; Flags: runminimized
+Name: "{userdesktop}\{#AppName}"; Filename: {app}\configuration_setup_utility\generic_run_rb.bat; WorkingDir: {app}\configuration_setup_utility; \
+  Parameters: record_with_buttons.rb; Flags: runminimized; IconFilename: "{app}\configuration_setup_utility\audio.ico";
                                 
 [Languages]
 Name: fr; MessagesFile: compiler:Languages\French.isl; 

@@ -33,7 +33,6 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bUseCaptureBlt(false),
 		previousFrameEndTime(0)
 {
-	// Get the device context of the main display, just to get some metrics for it...
 	globalStart = GetTickCount();
 
 	m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);

@@ -7,7 +7,6 @@ class WindowResize
   def self.go display_instruction_message_prompt, display_round_up_warning = true, middle_text = 'CLICK HERE WHEN DONE TO SET'
     java_import 'javax.swing.JFrame'
     java_import 'javax.swing.JButton'
-    java_import 'com.sun.awt.AWTUtilities'
     JFrame.setDefaultLookAndFeelDecorated(true); # allow full window transparency for jdk 7
   
     f = JFrame.new
@@ -53,7 +52,7 @@ class WindowResize
  
     f.set_size(width, height)
     f.set_location(setter_getter.read_single_setting('start_x') || 0, setter_getter.read_single_setting('start_y') || 0)
-    AWTUtilities.set_window_opacity(f, 0.7)
+    f.set_opacity(0.7)
     f.setDefaultCloseOperation(JFrame::EXIT_ON_CLOSE) # instead of hang when they click the "X" [LODO warn?]
     f.show
     f.bring_to_front
