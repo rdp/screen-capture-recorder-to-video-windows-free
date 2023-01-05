@@ -187,7 +187,7 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
 	  if (result != S_OK)
 		  return default; // :|
       PathAppend(path, TEXT("ScreenCaptureRecorder.ini"));
-	  return GetPrivateProfileInt(TEXT("all_settings"), szValueName, default, path); // lookup from file under section "all_settings" else default
+	  return GetPrivateProfileInt(TEXT("all_settings"), szValueName, default, path); // lookup from ini file under section "all_settings", else default
 	} else {
 	  if (!zeroAllowed && dwVal == 0) {
             const size_t len = 1256;
