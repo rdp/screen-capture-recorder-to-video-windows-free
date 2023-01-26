@@ -19,6 +19,23 @@ long sumMillisTook = 0;
   int show_performance = 0;
 #endif
 
+// c++ -> callback proc
+BOOL CALLBACK Monitorenumproc(HMONITOR hMonitor, HDC unnamedParam2, LPRECT screenCoords, LPARAM objectPointer)
+{
+	MONITORINFOEX info;
+	info.cbSize = sizeof(MONITORINFOEX); // as directed
+	GetMonitorInfo(hMonitor, &info); // get monitor name for kicks and giggles, might not even need...
+	CPushPinDesktop* target = (CPushPinDesktop *) objectPointer;
+	LocalOutput(TEXT("EnumDisplayMonitors index %d %s y: %d to %d x: %d to %d\n"), target->m_iEnumDesktopsCount, info.szDevice, info.rcMonitor.top, info.rcMonitor.bottom, info.rcMonitor.left, info.rcMonitor.right);
+	if (read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true) == target->m_iEnumDesktopsCount) {
+		LocalOutput("using monitor");
+		target->m_rCaptureCoordinates = info.rcMonitor;
+		return false; // stop enumeration
+	}
+	target->m_iEnumDesktopsCount++;
+	return true; // continue enumeration
+}
+
 // the default child constructor...
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         : CSourceStream(NAME("Push Source CPushPinDesktop child/pin"), phr, pFilter, L"Capture"),
@@ -31,7 +48,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bFormatAlreadySet(false),
 		hRawBitmap(NULL),
 		m_bUseCaptureBlt(false),
-		previousFrameEndTime(0)
+		previousFrameEndTime(0),
+        m_iEnumDesktopsCount(0)
 {
 	globalStart = GetTickCount();
 
@@ -54,15 +72,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	    } else {
 		  int captureParticularDisplay = read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true);
 		  if (captureParticularDisplay != -1) {
-  	  	    // EnumDisplayMonitors or EnumDisplayDevices (yes easier) GetMonitorInfo not QueryDisplayInfo so...just index uh guess...
-		    DISPLAY_DEVICE info;
-			info.cb = sizeof(DISPLAY_DEVICE); // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumdisplaydevicesa
-			if (EnumDisplayDevices(NULL, captureParticularDisplay, &info, 0) == 0) {
-				LocalOutput("can't find that adapter %d", captureParticularDisplay);
-				ASSERT_RAISE(false);
-			}
-			LocalOutput(TEXT("using particular adapter %d %s %s"), captureParticularDisplay, info.DeviceName, info.DeviceString);
-			hScrDc = CreateDC(TEXT("DISPLAY"), info.DeviceName, NULL, NULL);
+			  EnumDisplayMonitors(NULL, NULL, Monitorenumproc, (LPARAM) this); // it'll setup the coords for the monitor...
+			  hScrDc = GetDC(NULL); // whole desktop DC, but with specific coords
 		  } else {
   			  // the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
 			  // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor

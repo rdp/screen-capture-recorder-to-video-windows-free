@@ -107,7 +107,7 @@ void AddMouse(HDC hMemDC, LPRECT lpRect, HDC hScrDC, HWND hwnd) {
 	::GetCursorInfo(&globalCursor);
 	HCURSOR hcur = globalCursor.hCursor;
 
-    GetCursorPos(&p); // redundant?
+    GetCursorPos(&p); // redundant to globalCursor.ptScreenPos?
 	if(hwnd)
 	  ScreenToClient(hwnd, &p); // 0.010ms
 	

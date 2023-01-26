@@ -70,6 +70,8 @@ class CPushPinDesktop : public CSourceStream, public IAMStreamConfig, public IKs
 
 public:
     int m_iFrameNumber;
+	int m_iEnumDesktopsCount; // used during setup
+    RECT m_rCaptureCoordinates;                     // Rect containing screen coordinates we are currently "capturing"
 
 protected:
 
@@ -78,7 +80,6 @@ protected:
 	// float m_fFps; use the method to get this now
 	REFERENCE_TIME previousFrameEndTime;
 
-    RECT m_rCaptureCoordinates;                     // Rect containing screen coordinates we are currently "capturing"
 
     int getNegotiatedFinalWidth();
     int getNegotiatedFinalHeight();                   
