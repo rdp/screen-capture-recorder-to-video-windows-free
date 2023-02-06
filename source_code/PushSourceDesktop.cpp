@@ -24,11 +24,11 @@ BOOL CALLBACK Monitorenumproc(HMONITOR hMonitor, HDC unnamedParam2, LPRECT scree
 {
 	MONITORINFOEX info;
 	info.cbSize = sizeof(MONITORINFOEX); // as directed
-	GetMonitorInfo(hMonitor, &info); // get monitor name for kicks and giggles, might not even need...
+	GetMonitorInfo(hMonitor, &info); // get monitor name for kicks and giggles, don't need...
 	CPushPinDesktop* target = (CPushPinDesktop *) objectPointer;
 	LocalOutput(TEXT("EnumDisplayMonitors index %d %s y: %d to %d x: %d to %d\n"), target->m_iEnumDesktopsCount, info.szDevice, info.rcMonitor.top, info.rcMonitor.bottom, info.rcMonitor.left, info.rcMonitor.right);
 	if (read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true) == target->m_iEnumDesktopsCount) {
-		LocalOutput("using monitor");
+		LocalOutput("using that monitor");
 		target->m_rCaptureCoordinates = info.rcMonitor;
 		return false; // stop enumeration
 	}
@@ -70,17 +70,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		  LocalOutput("using foreground window %d", GetForegroundWindow());
           hScrDc = GetDC(GetForegroundWindow());
 	    } else {
-		  int captureParticularDisplay = read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true);
-		  if (captureParticularDisplay != -1) {
-			  EnumDisplayMonitors(NULL, NULL, Monitorenumproc, (LPARAM) this); // it'll setup the coords for the monitor...
-			  hScrDc = GetDC(NULL); // whole desktop DC, but with specific coords
-		  } else {
-  			  // the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
-			  // hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor
-			  // LocalOutput("using the dangerous CreateDC DISPLAY\n");
-			  LocalOutput("using default display");
-			  hScrDc = GetDC(NULL);
-		  }
+  			// the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
+			// hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor
+			// LocalOutput("using the dangerous CreateDC DISPLAY\n");
+			LocalOutput("using default display");
+			hScrDc = GetDC(NULL);
 	    }
 	  }
 	}
@@ -88,20 +82,27 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT_RAISE(hScrDc != 0); // 0 implies failure... [if using hwnd, can mean the window is gone/process exited!]
 	
     // Get the dimensions of the capture thing-er
-    m_rCaptureCoordinates.left   = m_rCaptureCoordinates.top = 0;
+	m_rCaptureCoordinates.left = m_rCaptureCoordinates.top = m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.right = 0;
 	// blind guess at DPI reports?
 	int logPixelsX = GetDeviceCaps(hScrDc, LOGPIXELSX); // default 96
 	int logPixelsY = GetDeviceCaps(hScrDc, LOGPIXELSY); // default 96
-	// NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7 both can capture both monitors
-    m_rCaptureCoordinates.right  = logPixelsX * GetDeviceCaps(hScrDc, HORZRES)/ 96; 
-    m_rCaptureCoordinates.bottom = logPixelsY * GetDeviceCaps(hScrDc, VERTRES) / 96;
+	double ratioX = logPixelsX / 96;
+	double ratioY = logPixelsY / 96;
+	// NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7
+	// TODO use more?
 
 	// now read some custom settings...
 	WarmupCounter();
 	if(!m_iHwndToTrack) {
-      reReadCurrentStartXY(false);
+      reReadCurrentStartXY(false); // always do this even if we don't "re read" them later...
 	} else {
-	  LocalOutput("ignoring startx, starty since hwnd was specified");
+	  LocalOutput("ignoring start_x, start_y since hwnd was specified");
+	}
+
+	// assume it's either "start_x" or "start at this display" for now...
+    int captureParticularDisplay = read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true);
+	if (captureParticularDisplay != -1) {
+      EnumDisplayMonitors(NULL, NULL, Monitorenumproc, (LPARAM) this); // it'll setup all coords for the monitor...use the same DC which is for all monitors
 	}
 
 	int config_width = read_config_setting(TEXT("capture_width"), 0, false);
@@ -110,29 +111,32 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	ASSERT_RAISE(config_height >= 0); // negatives not allowed, if it's set :)
 
 	if(config_width > 0) {
-		int desired = m_rCaptureCoordinates.left + config_width;
+		int desired = m_rCaptureCoordinates.left + config_width*ratioX;
 		//int max_possible = m_rCaptureCoordinates.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
 		//if(desired < max_possible)
 			m_rCaptureCoordinates.right = desired;
 		//else
 		//	m_rCaptureCoordinates.right = max_possible;
 	} else {
-		// leave full screen
+		// leave full screen/window
+        m_rCaptureCoordinates.right = ratioX * GetDeviceCaps(hScrDc, HORZRES);
 	}
 
-	m_iCaptureConfigWidth = m_rCaptureCoordinates.right - m_rCaptureCoordinates.left;
-	ASSERT_RAISE(m_iCaptureConfigWidth > 0);
-
 	if(config_height > 0) {
-		int desired = m_rCaptureCoordinates.top + config_height;
+		int desired = m_rCaptureCoordinates.top + config_height*ratioY;
 		//int max_possible = m_rCaptureCoordinates.bottom; // disabled, see above.
 		//if(desired < max_possible)
 			m_rCaptureCoordinates.bottom = desired;
 		//else
 		//	m_rCaptureCoordinates.bottom = max_possible;
 	} else {
-		// leave full screen
+		// leave full screen/window
+        m_rCaptureCoordinates.bottom = ratioY * GetDeviceCaps(hScrDc, VERTRES);
 	}
+
+	m_iCaptureConfigWidth = m_rCaptureCoordinates.right - m_rCaptureCoordinates.left;
+	ASSERT_RAISE(m_iCaptureConfigWidth > 0);
+
 	m_iCaptureConfigHeight = m_rCaptureCoordinates.bottom - m_rCaptureCoordinates.top;
 	ASSERT_RAISE(m_iCaptureConfigHeight > 0);
 
@@ -156,10 +160,10 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 		m_bReReadRegistry = 1; // takes 0.416880ms, but I thought it took more when I made it off by default :P
 	}
 	if(is_config_set_to_1(TEXT("dedup_if_1"))) {
-		m_bDeDupe = 1; // takes 10 or 20ms...but useful to me! :)
+		m_bDeDupe = 1; // takes 10 or 20ms to calculate...but useful to me! :)
 	}
 
-	// try to have some kind of "instantaneous capture" when changes come, like a vsync LOL
+	// try to have some kind of "instantaneous capture" when changes come, like a fake vsync LOL
 	m_millisToSleepBeforePollForChanges = read_config_setting(TEXT("millis_to_sleep_between_poll_for_dedupe_changes"), 10, true);
 
     wchar_t out[10000];
