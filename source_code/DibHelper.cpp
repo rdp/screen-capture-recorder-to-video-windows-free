@@ -163,43 +163,66 @@ boolean is_config_set_to_1(LPCTSTR szValueName) {
   return read_config_setting(szValueName, 0, true) == 1;
 }
 
+BOOL FileExists(LPCTSTR szPath) // wow, C...
+{
+  DWORD dwAttrib = GetFileAttributes(szPath);
+
+  return (dwAttrib != INVALID_FILE_ATTRIBUTES && 
+         !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 // returns default if nothing is in the registry/ini file
  int read_config_setting(LPCTSTR szValueName, int default, boolean zeroAllowed) {
-  HKEY hKey;
-  LONG i;
-  i = RegOpenKeyEx(HKEY_CURRENT_USER,
-      L"SOFTWARE\\screen-capture-recorder",  0, KEY_READ, &hKey);
-    
-  if ( i != ERROR_SUCCESS)
-  {
-	  // assume we don't have to close the key...
-    return default;
-  } else {
-	DWORD dwVal;
-	HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
-	RegCloseKey(hKey); // done with that
-	if (FAILED(hr)) {
-      // key doesn't exist in the reg at all...
-	  // try ini file
-      TCHAR path[MAX_PATH]; 
-	  // lookup path for %APPDATA%\XX.ini
-      HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, path);
-	  if (result != S_OK)
-		  return default; // :|
-      PathAppend(path, TEXT("ScreenCaptureRecorder.ini"));
-	  return GetPrivateProfileInt(TEXT("all_settings"), szValueName, default, path); // lookup from ini file under section "all_settings", else default
-	} else {
-	  if (!zeroAllowed && dwVal == 0) {
-            const size_t len = 1256;
-            wchar_t buffer[len] = {};
-	        _snwprintf_s(buffer, len - 1, L"read a zero value from registry, please delete this particular value, instead of setting it to zero: %s", szValueName);
-            writeMessageBox(buffer);
-		    ASSERT_RAISE(false); // non awesome duplication here...
+  int out;
+
+  // try ini file first:
+  TCHAR path[MAX_PATH];
+  // lookup path for %APPDATA%
+  HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, path);
+  if (result != S_OK)
+  	return default; // :|
+  // add XX.ini to it:
+  PathAppend(path, TEXT("ScreenCaptureRecorder.ini"));
+
+  if (FileExists(path)) {
+  	  // there is no easy "does ini file have key" setting so it's hard to know if GetPrivateProfileInt read a value or used the default or not...probe for it instead:
+	  int yo = GetPrivateProfileInt(TEXT("all_settings"), szValueName, -777, path);
+	  if (yo == -777) {
+		  // not set in ini file but file exists, punt:
+		  return default;
 	  }
-      return dwVal;
-	}
+	  out = GetPrivateProfileInt(TEXT("all_settings"), szValueName, default, path); // lookup from ini file under section "all_settings", else default
+  } else {
+    // fallback to registry if no ini file
+    HKEY hKey;
+    LONG i;
+    i = RegOpenKeyEx(HKEY_CURRENT_USER,
+        L"SOFTWARE\\screen-capture-recorder",  0, KEY_READ, &hKey);
+    
+    if ( i != ERROR_SUCCESS)  {
+	    // reg key doesn't even exist, nothing set there, we never wrote to it yet, so..punt...	  
+      return default; // assume we don't have to close the key...
+    } else {
+	  DWORD dwVal;
+	  HRESULT hr = RegGetDWord(hKey, szValueName, &dwVal); // works from flash player, standalone...
+	  RegCloseKey(hKey); // done with that
+	  if (FAILED(hr)) {
+        // name doesn't exist in the key at all...
+	  	return default;
+	  } else {
+		out = dwVal;
+	  }
+    }
   }
- 
+  // some kind of success reading actual value, either from the file or the registry:
+  if (!zeroAllowed && out == 0) {
+      const size_t len = 1256;
+      wchar_t buffer[len] = {};
+  	  _snwprintf_s(buffer, len - 1, L"read a zero value from file/registry, please delete this particular value, instead of setting it to zero: %s", szValueName);
+      writeMessageBox(buffer);
+  	  ASSERT_RAISE(false); // non awesome duplication here...
+  }
+  return out; // success
 }
 
 void writeMessageBox(LPCWSTR lpText) {

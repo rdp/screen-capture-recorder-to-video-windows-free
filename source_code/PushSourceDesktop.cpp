@@ -24,11 +24,11 @@ BOOL CALLBACK Monitorenumproc(HMONITOR hMonitor, HDC unnamedParam2, LPRECT scree
 {
 	MONITORINFOEX info;
 	info.cbSize = sizeof(MONITORINFOEX); // as directed
-	GetMonitorInfo(hMonitor, &info); // get monitor name for kicks and giggles, don't need...
+	GetMonitorInfo(hMonitor, &info); // get monitor name for kicks and giggles, don't need/use...
 	CPushPinDesktop* target = (CPushPinDesktop *) objectPointer;
 	LocalOutput(TEXT("EnumDisplayMonitors index %d %s y: %d to %d x: %d to %d\n"), target->m_iEnumDesktopsCount, info.szDevice, info.rcMonitor.top, info.rcMonitor.bottom, info.rcMonitor.left, info.rcMonitor.right);
 	if (read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true) == target->m_iEnumDesktopsCount) {
-		LocalOutput("using that monitor");
+		LocalOutput("using requested monitor %d", target->m_iEnumDesktopsCount);
 		target->m_rCaptureCoordinates = info.rcMonitor;
 		return false; // stop enumeration
 	}
@@ -73,7 +73,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
   			// the default, which is a handle to the "whole desktop" but we get the wrong right/bottom to get all displays, see below, I think...
 			// hScrDc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL); // possibly better than GetDC(NULL), supposed to be multi monitor? nope getDC is multi monitor
 			// LocalOutput("using the dangerous CreateDC DISPLAY\n");
-			LocalOutput("using default display");
+			LocalOutput("using default DC");
 			hScrDc = GetDC(NULL);
 	    }
 	  }
@@ -84,7 +84,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     // Get the dimensions of the capture thing-er
 	m_rCaptureCoordinates.left = m_rCaptureCoordinates.top = m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.right = 0;
 	// blind guess at DPI reports?
-	int logPixelsX = GetDeviceCaps(hScrDc, LOGPIXELSX); // default 96
+	int logPixelsX = GetDeviceCaps(hScrDc, LOGPIXELSX); // default 96 XXX what if on second monitor with different LOGPIXELSX?
 	int logPixelsY = GetDeviceCaps(hScrDc, LOGPIXELSY); // default 96
 	double ratioX = logPixelsX / 96;
 	double ratioY = logPixelsY / 96;
@@ -99,39 +99,37 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
 	  LocalOutput("ignoring start_x, start_y since hwnd was specified");
 	}
 
-	// assume it's either "start_x" or "start at this display" for now...
+	// assume it's either "start_x" or "use this particular display" for now...XXXX
     int captureParticularDisplay = read_config_setting(TEXT("capture_particular_display_number_starting_at_zero"), -1, true);
 	if (captureParticularDisplay != -1) {
-      EnumDisplayMonitors(NULL, NULL, Monitorenumproc, (LPARAM) this); // it'll setup all coords for the monitor...use the same DC which is for all monitors
+      EnumDisplayMonitors(NULL, NULL, Monitorenumproc, (LPARAM) this); // it'll setup all coords for the monitor...re-uses the same DC which is for all monitors
 	}
 
 	int config_width = read_config_setting(TEXT("capture_width"), 0, false);
-	ASSERT_RAISE(config_width >= 0); // negatives not allowed...
+	ASSERT_RAISE(config_width >= 0); // negatives not allowed...zero means "not set in config at all"
 	int config_height = read_config_setting(TEXT("capture_height"), 0, false);
-	ASSERT_RAISE(config_height >= 0); // negatives not allowed, if it's set :)
+	ASSERT_RAISE(config_height >= 0);
 
 	if(config_width > 0) {
 		int desired = m_rCaptureCoordinates.left + config_width*ratioX;
-		//int max_possible = m_rCaptureCoordinates.right; // disabled check until I get dual monitor working. or should I allow off screen captures anyway?
+		//int max_possible = m_rCaptureCoordinates.right; // disabled check until I get dual monitor working. or should I allow off screen captures at all?
 		//if(desired < max_possible)
 			m_rCaptureCoordinates.right = desired;
 		//else
 		//	m_rCaptureCoordinates.right = max_possible;
 	} else {
-		// leave full screen/window
-        m_rCaptureCoordinates.right = ratioX * GetDeviceCaps(hScrDc, HORZRES);
+		// attempt fix screen size if DPI...not sure if start_x should also be ratio'ed?  The typical use for this would be "capture a full monitor" it's not working...
+		// also attempt respect previously set start_x or specific monitor
+		// XXXX this is wrong for two monitors different DPI, but using the GetDC version of EnumDisplayMonitors didn't work once for so and so? huh?
+        m_rCaptureCoordinates.right = m_rCaptureCoordinates.left + GetDeviceCaps(hScrDc, HORZRES) * ratioX;
 	}
 
 	if(config_height > 0) {
+		// see above
 		int desired = m_rCaptureCoordinates.top + config_height*ratioY;
-		//int max_possible = m_rCaptureCoordinates.bottom; // disabled, see above.
-		//if(desired < max_possible)
-			m_rCaptureCoordinates.bottom = desired;
-		//else
-		//	m_rCaptureCoordinates.bottom = max_possible;
+		m_rCaptureCoordinates.bottom = desired;
 	} else {
-		// leave full screen/window
-        m_rCaptureCoordinates.bottom = ratioY * GetDeviceCaps(hScrDc, VERTRES);
+        m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.top + GetDeviceCaps(hScrDc, VERTRES) * ratioY;
 	}
 
 	m_iCaptureConfigWidth = m_rCaptureCoordinates.right - m_rCaptureCoordinates.left;
@@ -342,7 +340,6 @@ CPushPinDesktop::~CPushPinDesktop()
 
     // Release the device context stuff
 	::ReleaseDC(NULL, hScrDc);
-    ::DeleteDC(hScrDc);
     DbgLog((LOG_TRACE, 3, TEXT("Total no. Frames written %d"), m_iFrameNumber));
 	set_config_string_setting(L"last_run_performance", out);
 

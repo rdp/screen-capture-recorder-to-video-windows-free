@@ -1,13 +1,19 @@
+0.13.2
+  if ScreenCaptureRecorder.ini file exists, assume all settings are there and use it solely, never the registry
+    attempt avoid confusion of having settings set in two different places...
+  fix capture_particular_display_number_starting_at_zero
+  
 0.13.1
   Work with JRE's > 8
 
 0.13.0
   add ability to capture a particular display (i.e. monitor)
     capture_particular_display_number_starting_at_zero
-  add ability to read configs from a file instead of registry, though both are supported.
+  add ability to read configs from a file instead of registry, though both are supported, if isn't set in .ini file, will read registry for value.
     %APPDATA%\ScreenCaptureRecorder.ini
   default to record to .mkv so that interrupted records don't produce corrupted mp4
-
+  Attempt to respect DPI more
+  
 0.12.10
   better sync I think
 
