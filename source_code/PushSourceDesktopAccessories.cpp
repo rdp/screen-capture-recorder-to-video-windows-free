@@ -540,7 +540,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pmt->SetTemporalCompression(FALSE);
 
     // Work out the GUID for the subtype from the header info.
-	if(*pmt->Subtype() == GUID_NULL) {
+	if (iPosition < 6) {
       const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
       pmt->SetSubtype(&SubTypeGUID);
 	}
