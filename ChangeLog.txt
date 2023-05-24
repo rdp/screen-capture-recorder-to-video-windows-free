@@ -1,7 +1,7 @@
 0.13.2
   if ScreenCaptureRecorder.ini file exists, assume all settings are there and use it solely, never the registry
     attempt avoid confusion of having settings set in two different places...
-  fix capture_particular_display_number_starting_at_zero
+  fix capture_particular_display_number_starting_at_zero to work when width not set (which is typically)
   
 0.13.1
   Work with JRE's > 8
