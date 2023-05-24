@@ -47,9 +47,9 @@ def show_options_frame
   end
   
   template += <<-EOL  
-  [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Set directory :set_directory]
+  [✓:record_to_file] "Save to file"  "an awesome file location!!!!!:save_to_dir_text" [ Change directory :set_directory] [Extension:choose_extension] "my_ext:current_extension"
   [✓:auto_display_files] "Automatically reveal files in windows explorer after each recording:auto_display_files_text"
-  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify url first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
+  [✓:stream_to_url_checkbox] "Stream to url:"  "Specify options first!!!!!!!!!:url_stream_text" [ Set streaming options : set_stream_url ]
   [✓:tune_latency] "Tune for low latency"
   "Stop recording after this many seconds:" "#{storage['stop_time']}" [ Click to set :stop_time_button]
   "Current scale-to resolution: #{resolution_english_string storage['resolution']} :fake" [Change :change_resolution]
@@ -100,8 +100,13 @@ def show_options_frame
   elements[:save_to_dir_text].text = shorten(storage['save_to_dir'], 20) # assume there's always one...	
   elements[:set_directory].on_clicked {  
     storage['save_to_dir'] = SimpleGuiCreator.new_existing_dir_chooser_and_go 'select save to dir', current_storage_dir
-	reset_options_frame
-  }  
+	  reset_options_frame
+  }
+  elements[:current_extension].text = storage['current_ext_sans_dot']
+  elements[:choose_extension].on_clicked {
+    choose_extension
+    reset_options_frame
+  }
   
   if storage['should_stream']
     elements[:stream_to_url_checkbox].check!
@@ -149,7 +154,7 @@ def show_options_frame
     choose_audio
   }
   
-  raise unless RUBY_VERSION > '1.9.0' # need ordered hashes here... :)
+  raise unless RUBY_VERSION > '1.9.0' # need ordered hashes here... :) plus we control the version so should be safe...
   elements[:change_resolution].on_clicked {
     # want to have our own names here, as requested...  
 	english_names = ResolutionOptions.map{|k, v| resolution_english_string(v)}
@@ -206,7 +211,7 @@ def choose_video
   video_device = choose_media :video  
   storage['video_name'] = video_device
   
-  choose_extension
+  choose_extension # in case they chose none
   reset_options_frame
 end
 

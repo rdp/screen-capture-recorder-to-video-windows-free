@@ -161,10 +161,10 @@ def start_recording_with_current_settings just_preview = false
    if storage['video_name']
      pixel_type = "yuv420p" # more compatible...?
      # pixel_type = "yuv444p" # didn't help that one guy...but might be good nonetheless
-	 # just assume mp3 LOL
-	 if storage[:tune_latency]
-	   faster_streaming_start = "-g 30 -qp 10 -tune zerolatency" # also has fixed quality...wonder what that means...
-	 end
+ 	  # just assume mp3 when we're recording both audio and video LOL
+	   if storage[:tune_latency]
+	     faster_streaming_start = "-g 30 -qp 10 -tune zerolatency" # also has fixed quality...wonder what that means...
+	   end
      codecs = "-vcodec libx264 #{faster_streaming_start} -pix_fmt #{pixel_type} #{rescale_to_size} -preset ultrafast -vsync vfr -acodec libmp3lame" 
 	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
    else
@@ -284,7 +284,6 @@ def bootstrap_devices
 	  if FFmpegHelpers.enumerate_directshow_devices[:audio].include?([VirtualAudioDeviceName, 0])
 		# some reasonable defaults :P
 		storage['audio_names'] = [[VirtualAudioDeviceName, 0]]
-		storage['current_ext_sans_dot'] = 'mp3'
 	  else
 		need_help = true
 	  end
@@ -293,13 +292,12 @@ def bootstrap_devices
 	  if ARGV[0] != '--just-audio-default'
 		if FFmpegHelpers.enumerate_directshow_devices[:video].include?([ScreenCapturerDeviceName, 0])
 		  storage['video_name'] = [ScreenCapturerDeviceName, 0]
-		  storage['current_ext_sans_dot'] = 'mkv'  
 		else
 		  need_help = true
 		end
 	  end
 	  if need_help
-	    elements[:preferences].click!
+	    elements[:preferences].click! # force them to see what's going on/configure
 	  end
 	else
 	  FFmpegHelpers.warmup_ffmpeg_so_itll_be_disk_cached # why not? my fake attempt at making ffmpeg realtime startup fast LOL
@@ -310,7 +308,7 @@ def bootstrap_devices
       if !all_audio_devices.contain?(currently_checked)
 	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound audio device #{currently_checked[0]}"
 	    storage['audio_names'].delete(currently_checked)
-	    storage.save!
+	    storage.save! # needed? if yes, why?
 	  end
     }
 	# and video...
@@ -320,17 +318,25 @@ def bootstrap_devices
 	    SimpleGuiCreator.show_blocking_message_dialog "warning: removed now unfound video device #{storage['video_name'][0]}"
 	    storage['video_name'] = nil
 	  end
-  	  choose_extension # in case we are audio only now <sigh>
 	end
-end
+  
+  if !storage['current_ext_sans_dot']
+    if audio_devices_or_nil && !video_device
+     storage['current_ext_sans_dot'] = 'mp3'
+    else
+      storage['current_ext_sans_dot'] = 'mkv'
+    end
+  end
 
+end
 
 def choose_extension
   if audio_devices_or_nil && !video_device
     # TODO 'wav' here once it works with solely wav :)
     storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
   else
-    storage['current_ext_sans_dot'] = 'mkv' # LODO dry up ".mp4"
+    # at least video
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mkv', 'mp4'], "Select file extension container save as type, mkv is more robust to interrupted recordings").go_selected_value
   end
 end
 
