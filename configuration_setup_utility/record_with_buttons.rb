@@ -327,14 +327,18 @@ def bootstrap_devices
       storage['current_ext_sans_dot'] = 'mkv'
     end
   end
-
+  # check if anything was removed/changed extension wise
+  if video_device && !storage['current_ext_sans_dot'].in?(@video_extensions)
+    choose_extension_manually
+  end
+  # I think audio is covered? LOL
 end
 
 # TODO 'wav' here once it works with solely wav :)
 @audio_extensions = ['mp3', 'aac']
 @video_extensions = ['mkv', 'mp4']
 
-def choose_extension
+def choose_extension_manually
   if audio_devices_or_nil && !video_device
     storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, @audio_extensions, "You are set to record only audio--Select audio Save as type").go_selected_value
   else

@@ -104,7 +104,7 @@ def show_options_frame
   }
   elements[:current_extension].text = storage['current_ext_sans_dot']
   elements[:choose_extension].on_clicked {
-    choose_extension
+    choose_extension_manually
     reset_options_frame
   }
   
@@ -211,7 +211,7 @@ def choose_video
   video_device = choose_media :video  
   storage['video_name'] = video_device
   
-  choose_extension # in case they chose none
+  choose_extension_manually # in case they chose none
   reset_options_frame
 end
 
@@ -248,7 +248,7 @@ def choose_audio
     audio_pane.close
   }
   audio_pane.after_closed {
-    choose_extension
+    choose_extension_manually # see comments for video
     reset_options_frame
   }
 end
