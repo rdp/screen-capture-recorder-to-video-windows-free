@@ -45,7 +45,7 @@ elements[:reveal_save_to_dir].on_clicked {
 }
 
 def get_old_files
-  old_files = Dir[current_storage_dir + '/*.{wav,mp4,mkv,ac3,mp3,mpg,mov}']  
+  old_files = Dir[current_storage_dir + "/*.{#{(@audio_extensions + @video_extensions).join(',')}}"]  
   old_files.select!{|f| File.basename(f) =~ /^\d+\..../}
   old_files = old_files.sort_by{|f| f =~ /(\d+)\....$/; $1.to_i}
   old_files
@@ -166,7 +166,7 @@ def start_recording_with_current_settings just_preview = false
 	     faster_streaming_start = "-g 30 -qp 10 -tune zerolatency" # also has fixed quality...wonder what that means...
 	   end
      codecs = "-vcodec libx264 #{faster_streaming_start} -pix_fmt #{pixel_type} #{rescale_to_size} -preset ultrafast -vsync vfr -acodec libmp3lame" 
-	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right
+	 # qtrle was 10 fps, this kept up at 15 on dual core, plus is .mp4 friendly, though lossy, looked all right, went with x264 I guess?
    else
      prefix_to_audio_codec = {'mp3' => '-acodec libmp3lame -ac 2', 'aac' => '-acodec aac -strict experimental', 'wav' => '-acodec pcm_s16le'}
      audio_type = prefix_to_audio_codec[storage['current_ext_sans_dot']]
@@ -330,13 +330,16 @@ def bootstrap_devices
 
 end
 
+# TODO 'wav' here once it works with solely wav :)
+@audio_extensions = ['mp3', 'aac']
+@video_extensions = ['mkv', 'mp4']
+
 def choose_extension
   if audio_devices_or_nil && !video_device
-    # TODO 'wav' here once it works with solely wav :)
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mp3', 'aac'], "You are set to record only audio--Select audio Save as type").go_selected_value
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, @audio_extensions, "You are set to record only audio--Select audio Save as type").go_selected_value
   else
     # at least video
-    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, ['mkv', 'mp4'], "Select file extension container save as type, mkv is more robust to interrupted recordings").go_selected_value
+    storage['current_ext_sans_dot'] = DropDownSelector.new(@frame, @video_extensions, "Select file extension container save as type, mkv is more robust to interrupted recordings").go_selected_value
   end
 end
 
