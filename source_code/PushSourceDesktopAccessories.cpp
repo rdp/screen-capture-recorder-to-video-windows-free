@@ -539,7 +539,7 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
     pmt->SetFormatType(&FORMAT_VideoInfo);
     pmt->SetTemporalCompression(FALSE);
 
-    // Work out the GUID for the subtype from the header info.
+    // Work out the GUID for the subtype from the header info.  i420 already set it
 	if (iPosition < 6) {
       const GUID SubTypeGUID = GetBitmapSubtype(&pvi->bmiHeader);
       pmt->SetSubtype(&SubTypeGUID);
