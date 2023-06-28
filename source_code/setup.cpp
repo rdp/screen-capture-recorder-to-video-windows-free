@@ -123,7 +123,7 @@ STDAPI RegisterFilters( BOOL bRegister )
                 rf2.dwMerit = MERIT_DO_NOT_USE;
                 rf2.cPins = 1;
                 rf2.rgPins = &sudOutputPinDesktop;
-				// this is the name that actually shows up in VLC et al. weird
+                // this is the name that actually shows up in VLC et al. weird
                 hr = fm->RegisterFilter(CLSID_PushSourceDesktop, L"screen-capture-recorder", &pMoniker, &CLSID_VideoInputDeviceCategory, NULL, &rf2);
                 pMoniker->Release();
             }
@@ -167,6 +167,6 @@ BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD  dwReason, 
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
