@@ -482,7 +482,6 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt) // AM_MEDI
             for(int i = 0; i < 3; i++)
                 pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
             pvi->bmiHeader.biCompression = BI_RGB;
             pvi->bmiHeader.biBitCount    = 16;
             break;
