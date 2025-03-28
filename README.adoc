@@ -152,9 +152,9 @@ Or submit to our uservoice: http://rdp.uservoice.com
 ==  Redistribution ==
 
 You can redistribute this.  See file LICENSE.TXT.
-If you do, you may just need to distribute for instance the file PushDesktop.dll
+If you do, you may just need to distribute for instance the file screen-capture-recorder.dll
 If you do, you have to register this device, via registering its dll 
-(like $ regsvr32 PushDesktop.dll--may require administrator rights) as part of your install.
+(like $ regsvr32 screen-capture-recorder.dll--may require administrator rights) as part of your install.
 Also note that end users also need the MSVC 2010 redistributable previously installed (or you have to make it available 
 in the same dir as your exe) for the dll to work/install, in case end users don't have it installed).
 If you change it and redistribute it, you may want to change the GUID's, so that it won't clash if
