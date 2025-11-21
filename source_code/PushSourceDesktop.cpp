@@ -147,8 +147,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     m_bUseCaptureBlt = read_config_setting(TEXT("capture_transparent_windows_including_mouse_in_non_aero_if_1_causes_annoying_mouse_flicker"), 0, true) == 1;
     m_bCaptureMouse = read_config_setting(TEXT("capture_mouse_default_1"), 1, true) == 1;
 
-    // default 30 fps...hmm...
-    int config_max_fps = read_config_setting(TEXT("default_max_fps"), 30, false); // TODO allow floats [?] when ever requested
+    // default 60 fps...hmm...
+    int config_max_fps = read_config_setting(TEXT("default_max_fps"), 60, false); // TODO allow floats [?] when ever requested
     ASSERT_RAISE(config_max_fps > 0);    
 
     // m_rtFrameLength is also re-negotiated later...
