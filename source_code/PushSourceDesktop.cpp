@@ -19,6 +19,34 @@ long sumMillisTook = 0;
   int show_performance = 0;
 #endif
 
+// Use physical pixels inside the filter without changing the host application's DPI mode.
+class CCaptureDpiContext
+{
+public:
+    CCaptureDpiContext() : m_previousContext(NULL)
+    {
+        // Resolve dynamically so the DLL still loads on older Windows versions.
+        m_setContext = (SetContext) GetProcAddress(GetModuleHandle(TEXT("user32.dll")), "SetThreadDpiAwarenessContext");
+        if (m_setContext)
+            m_previousContext = m_setContext((HANDLE) -3); // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE
+    }
+
+    ~CCaptureDpiContext()
+    {
+        if (m_previousContext)
+            m_setContext(m_previousContext);
+    }
+
+    bool isDpiAware() const { return m_previousContext != NULL; }
+
+private:
+    typedef HANDLE (WINAPI *SetContext)(HANDLE);
+    SetContext m_setContext;
+    HANDLE m_previousContext;
+    CCaptureDpiContext(const CCaptureDpiContext&);
+    CCaptureDpiContext& operator=(const CCaptureDpiContext&);
+};
+
 // c++ -> callback proc
 BOOL CALLBACK Monitorenumproc(HMONITOR hMonitor, HDC unnamedParam2, LPRECT screenCoords, LPARAM objectPointer)
 {
@@ -51,6 +79,8 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
         previousFrameEndTime(0),
         m_iEnumDesktopsCount(0)
 {
+    CCaptureDpiContext captureDpi;
+
     globalStart = GetTickCount();
 
     m_iHwndToTrack = (HWND) read_config_setting(TEXT("hwnd_to_track"), NULL, false);
@@ -83,11 +113,11 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CPushSourceDesktop *pFilter)
     
     // Get the dimensions of the capture thing-er
     m_rCaptureCoordinates.left = m_rCaptureCoordinates.top = m_rCaptureCoordinates.bottom = m_rCaptureCoordinates.right = 0;
-    // blind guess at DPI reports?
+    // Physical coordinates need no DPI multiplier; retain the legacy fallback on older Windows.
     int logPixelsX = GetDeviceCaps(hScrDc, LOGPIXELSX); // default 96 XXX what if on second monitor with different LOGPIXELSX?
     int logPixelsY = GetDeviceCaps(hScrDc, LOGPIXELSY); // default 96
-    double ratioX = logPixelsX / 96;
-    double ratioY = logPixelsY / 96;
+    double ratioX = captureDpi.isDpiAware() ? 1 : logPixelsX / 96;
+    double ratioY = captureDpi.isDpiAware() ? 1 : logPixelsY / 96;
     // NB this *fails* for dual monitor support currently... but we just get the wrong width by default, at least with aero windows 7
     // TODO use more?
 
@@ -353,6 +383,8 @@ CPushPinDesktop::~CPushPinDesktop()
 // basically copy from hScrDC to pData, with some header infointo the othertwo...
 void CPushPinDesktop::CopyScreenSomethingToDataBlock(HDC hScrDC, BYTE *pData, BITMAPINFO *pHeader, IMediaSample *pSample)
 {
+    CCaptureDpiContext captureDpi;
+
     HDC         hMemDC;         // screen DC and memory DC
     HBITMAP     hOldBitmap;    // handles to device-dependent bitmaps
     int         nX, nY;       // coordinates of rectangle to grab
@@ -539,6 +571,8 @@ void CPushPinDesktop::doDIBits(HDC hScrDC, HBITMAP hRawBitmap, int nHeightScanLi
 HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
                                       ALLOCATOR_PROPERTIES *pProperties)
 {
+    CCaptureDpiContext captureDpi;
+
     CheckPointer(pAlloc,E_POINTER);
     CheckPointer(pProperties,E_POINTER);
 
